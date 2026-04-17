@@ -11,6 +11,7 @@
 
 - [x] Selected project: Ecotrack Office | *19 March 2026*
 - [x] PRD generated using the BMAD method | *10 April 2026*
+- [x] Architecture generated using the BMAD method | *17 April 2026*
 
 ## To do
 
@@ -18,22 +19,15 @@
     <details>
     <summary>Next available steps</summary>
 
-    Option A — Validate before proceeding (recommended)
+    Option A — Design the UX (optional but recommended)
 
-    `skill:bmad-check-implementation-readiness` — checks whether the PRD is sufficiently detailed to start architecture or break down into epics. Identifies gaps that could block development.
+    `skill:bmad-create-ux-design` — generates wireframes and UX flows, notably for the interactive SVG map (the most visually risky feature). Not required to proceed, but strongly recommended before implementation.
 
-    Option B — Move to architecture
+    Option B — Break down into epics and stories (required next)
 
-    `skill:bmad-create-architecture` — generates the Architecture Decision Record (ADR) and the component diagram for the Angular + Spring Boot + MySQL stack.
-
-    Option C — Break down into epics and stories
-
-    `skill:bmad-create-epics-and-stories` — translates the 43 functional requirements (FRs) into BMAD epics and user stories ready for the backlog of the four students.
-
-    Option D — Design the UX
-
-    `skill:bmad-create-ux-design` — generates wireframes and UX flows, notably for the interactive SVG map (the most visually risky feature).
+    `skill:bmad-create-epics-and-stories` — translates the 43 functional requirements (FRs) and the architecture into BMAD epics and user stories ready for the backlog of the four students. This is the next required gate before sprint planning.
 
     </details>
 
-- [ ] Meeting with tutor
+- [x] Meeting with Manuel | *16 April 2026* </br>
+  [Notes](project/notes.md)
