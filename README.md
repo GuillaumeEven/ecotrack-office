@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/status-in%20development-yellow?style=flat-square" alt="Status"/>
   <img src="https://img.shields.io/badge/type-Final%20Master's%20Project-blueviolet?style=flat-square" alt="Type"/>
   <img src="https://img.shields.io/badge/PRD-complete-brightgreen?style=flat-square" alt="PRD"/>
-  <img src="https://img.shields.io/badge/architecture-pending-lightgrey?style=flat-square" alt="Architecture"/>
+  <img src="https://img.shields.io/badge/architecture-complete-brightgreen?style=flat-square" alt="Architecture"/>
 </p>
 
 <p align="center">
@@ -26,7 +26,8 @@
 
 <p align="center">
   <a href="project/roadmap.md">🗺️ Roadmap</a> &nbsp;•&nbsp;
-  <a href="_bmad-output/planning-artifacts/prd.md">📋 Product Requirements Document</a>
+  <a href="_bmad-output/planning-artifacts/prd.md">📋 Product Requirements Document</a> &nbsp;•&nbsp;
+  <a href="_bmad-output/planning-artifacts/architecture.md">🏗️ Architecture</a>
 </p>
 
 ---
@@ -97,6 +98,7 @@ See the full project roadmap → [project/roadmap.md](project/roadmap.md)
 | Document | Description |
 |---|---|
 | [📋 PRD](_bmad-output/planning-artifacts/prd.md) | Full Product Requirements Document — 43 functional requirements, 5 NFR categories, user journeys, domain constraints, phased roadmap |
+| [🏗️ Architecture](_bmad-output/planning-artifacts/architecture.md) | Architecture Decision Record — stack, 14 architectural decisions, implementation patterns, full project structure, FR mapping |
 | [🗺️ Roadmap](project/roadmap.md) | Project checklist and next BMAD workflow steps |
 
 ---
