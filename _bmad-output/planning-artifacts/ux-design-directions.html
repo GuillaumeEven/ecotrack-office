@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoTrack Office — Design Direction Showcase</title>
+<style>
+  :root {
+    --teal-600: #00897B; --teal-300: #4DB6AC; --teal-800: #005B4F;
+    --surface: #FAFAFA; --on-surface: #212121; --muted: #757575;
+    --outline: #E0E0E0;
+    --green: #4CAF50; --amber: #FFA726; --red: #EF5350; --grey: #BDBDBD;
+    --indigo: #3F51B5; --slate: #5C6BC0; --charcoal: #37474F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Roboto, sans-serif; background: #F5F5F5; color: var(--on-surface); }
+
+  /* NAV */
+  .showcase-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--teal-800); color: white;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 24px; height: 56px; overflow-x: auto;
+  }
+  .showcase-nav h1 { font-size: 16px; font-weight: 500; white-space: nowrap; margin-right: 16px; }
+  .nav-btn {
+    padding: 6px 16px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.4);
+    background: transparent; color: white; cursor: pointer; font-size: 13px; white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .nav-btn:hover, .nav-btn.active { background: rgba(255,255,255,0.15); border-color: white; }
+
+  /* SECTIONS */
+  .direction { display: none; padding: 32px 24px; max-width: 1400px; margin: 0 auto; }
+  .direction.visible { display: block; }
+  .direction-header { margin-bottom: 24px; }
+  .direction-header h2 { font-size: 24px; font-weight: 500; color: var(--on-surface); }
+  .direction-header p { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; margin-left: 8px; }
+
+  /* DIRECTION 1 — Teal Map Hub */
+  .d1-shell {
+    display: flex; flex-direction: column; height: 600px;
+    border-radius: 8px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    border: 1px solid var(--outline);
+  }
+  .d1-topbar {
+    background: var(--teal-600); color: white;
+    display: flex; align-items: center; padding: 0 20px; height: 64px; flex-shrink: 0;
+    gap: 16px;
+  }
+  .d1-logo { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+  .d1-logo span { opacity: 0.7; font-weight: 400; }
+  .d1-nav-pills { display: flex; gap: 4px; margin-left: auto; }
+  .d1-pill {
+    padding: 6px 14px; border-radius: 20px; font-size: 13px; cursor: pointer;
+    background: transparent; border: none; color: rgba(255,255,255,0.7);
+  }
+  .d1-pill.active { background: rgba(255,255,255,0.2); color: white; }
+  .d1-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--teal-300); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; }
+  .d1-body { display: flex; flex: 1; overflow: hidden; background: var(--surface); }
+  .d1-sidebar {
+    width: 260px; flex-shrink: 0; border-right: 1px solid var(--outline);
+    padding: 16px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto;
+  }
+  .d1-sidebar-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+  .d1-floor-list { display: flex; flex-direction: column; gap: 4px; }
+  .d1-floor-item {
+    padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .d1-floor-item.active { background: #E0F2F1; color: var(--teal-800); font-weight: 500; }
+  .d1-floor-item:not(.active):hover { background: #F5F5F5; }
+  .d1-floor-count { font-size: 11px; color: var(--muted); background: var(--outline); padding: 1px 7px; border-radius: 10px; }
+  .d1-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .d1-chip {
+    padding: 4px 12px; border-radius: 16px; font-size: 12px; border: 1px solid var(--outline);
+    cursor: pointer; background: white;
+  }
+  .d1-chip.active { background: #E0F2F1; border-color: var(--teal-300); color: var(--teal-800); }
+  .d1-map-area { flex: 1; position: relative; overflow: hidden; background: #ECEFF1; }
+  .d1-map-grid { position: absolute; inset: 0; }
+  .d1-room { position: absolute; background: white; border: 1px solid #CFD8DC; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); }
+  .desk-dot {
+    position: absolute; width: 22px; height: 22px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: white; font-weight: 700; transition: transform 0.15s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .desk-dot:hover { transform: scale(1.3); }
+  .desk-dot.avail { background: var(--green); }
+  .desk-dot.reserved { background: var(--amber); }
+  .desk-dot.occupied { background: var(--red); }
+  .desk-dot.mine { background: var(--teal-600); }
+  .zone-heat { position: absolute; border-radius: 6px; }
+  .d1-legend {
+    position: absolute; bottom: 12px; left: 12px; background: white;
+    border: 1px solid var(--outline); border-radius: 8px; padding: 10px 14px;
+    display: flex; gap: 14px; font-size: 11px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* DIRECTION 2 — Dark Sidebar */
+  .d2-shell {
+    display: flex; flex-direction: column; height: 600px;
+    border-radius: 8px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    border: 1px solid var(--outline);
+  }
+  .d2-topbar {
+    background: white; border-bottom: 1px solid var(--outline); color: var(--on-surface);
+    display: flex; align-items: center; padding: 0 20px; height: 56px; flex-shrink: 0; gap: 16px;
+  }
+  .d2-logo-mark { width: 32px; height: 32px; background: var(--teal-600); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 14px; }
+  .d2-logo-text { font-size: 15px; font-weight: 600; color: var(--on-surface); }
+  .d2-breadcrumb { font-size: 13px; color: var(--muted); margin-left: 8px; }
+  .d2-body { display: flex; flex: 1; overflow: hidden; }
+  .d2-sidebar {
+    width: 220px; flex-shrink: 0; background: #263238; color: white;
+    padding: 16px 0; display: flex; flex-direction: column; gap: 4px;
+  }
+  .d2-sidebar-section { padding: 8px 16px 4px; font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.8px; }
+  .d2-nav-item {
+    padding: 10px 16px; font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.7);
+    border-left: 3px solid transparent;
+  }
+  .d2-nav-item.active { color: white; background: rgba(255,255,255,0.08); border-left-color: var(--teal-300); }
+  .d2-nav-item:hover:not(.active) { background: rgba(255,255,255,0.05); }
+  .d2-nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .d2-main { flex: 1; background: var(--surface); display: flex; flex-direction: column; overflow: hidden; }
+  .d2-subbar {
+    background: white; border-bottom: 1px solid var(--outline);
+    padding: 10px 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .d2-subbar-label { font-size: 13px; font-weight: 500; color: var(--on-surface); margin-right: 4px; }
+  .d2-filter-chip {
+    padding: 4px 12px; border-radius: 16px; font-size: 12px;
+    border: 1px solid var(--outline); cursor: pointer; background: white;
+  }
+  .d2-filter-chip.active { background: #E0F2F1; border-color: var(--teal-300); color: var(--teal-800); }
+  .d2-map-area { flex: 1; position: relative; overflow: hidden; background: #F0F4F4; }
+
+  /* DIRECTION 3 — Minimal White */
+  .d3-shell {
+    height: 600px; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12); border: 1px solid var(--outline);
+    display: flex; flex-direction: column; background: white;
+  }
+  .d3-topbar {
+    display: flex; align-items: center; padding: 0 24px; height: 60px;
+    border-bottom: 1px solid var(--outline); flex-shrink: 0; gap: 16px;
+  }
+  .d3-wordmark { font-size: 16px; font-weight: 700; color: var(--teal-600); letter-spacing: -0.3px; }
+  .d3-tabs { display: flex; gap: 0; margin-left: 32px; height: 100%; align-items: flex-end; }
+  .d3-tab {
+    padding: 0 20px; height: 40px; font-size: 14px; border: none; background: transparent;
+    cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent;
+    display: flex; align-items: center;
+  }
+  .d3-tab.active { color: var(--teal-600); border-bottom-color: var(--teal-600); font-weight: 500; }
+  .d3-actions { margin-left: auto; display: flex; gap: 8px; }
+  .d3-btn-outline {
+    padding: 6px 16px; border-radius: 4px; border: 1px solid var(--teal-600);
+    color: var(--teal-600); background: transparent; font-size: 13px; cursor: pointer;
+  }
+  .d3-btn-filled {
+    padding: 6px 16px; border-radius: 4px; border: none;
+    background: var(--teal-600); color: white; font-size: 13px; cursor: pointer;
+  }
+  .d3-filter-bar {
+    display: flex; align-items: center; gap: 8px; padding: 10px 24px;
+    border-bottom: 1px solid var(--outline); background: #FAFAFA; flex-wrap: wrap;
+  }
+  .d3-filter-label { font-size: 12px; color: var(--muted); }
+  .d3-body { flex: 1; position: relative; overflow: hidden; }
+
+  /* BOOKING SHEET DEMO */
+  .booking-sheet {
+    position: absolute; bottom: 0; left: 0; right: 0; background: white;
+    border-top: 1px solid var(--outline); border-radius: 12px 12px 0 0;
+    padding: 20px 24px; box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+  }
+  .sheet-handle { width: 40px; height: 4px; background: var(--outline); border-radius: 2px; margin: 0 auto 16px; }
+  .sheet-title { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  .sheet-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .sheet-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .sheet-field label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px; }
+  .sheet-field .field-val {
+    padding: 8px 12px; border: 1px solid var(--outline); border-radius: 4px;
+    font-size: 14px; background: white;
+  }
+  .sheet-cta {
+    width: 100%; padding: 12px; background: var(--teal-600); color: white;
+    border: none; border-radius: 4px; font-size: 15px; font-weight: 500; cursor: pointer;
+  }
+
+  /* DIRECTION 4 — Dashboard Admin */
+  .d4-shell {
+    height: 600px; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12); border: 1px solid var(--outline);
+    display: flex; flex-direction: column;
+  }
+  .d4-topbar {
+    background: white; border-bottom: 1px solid var(--outline);
+    display: flex; align-items: center; padding: 0 20px; height: 56px; gap: 16px; flex-shrink: 0;
+  }
+  .d4-kpi-bar {
+    display: flex; gap: 16px; padding: 12px 20px; background: white;
+    border-bottom: 1px solid var(--outline); flex-shrink: 0;
+  }
+  .d4-kpi {
+    flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--outline);
+    background: white;
+  }
+  .d4-kpi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .d4-kpi-val { font-size: 28px; font-weight: 600; }
+  .d4-kpi-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .d4-kpi.green .d4-kpi-val { color: var(--green); }
+  .d4-kpi.amber .d4-kpi-val { color: var(--amber); }
+  .d4-kpi.red .d4-kpi-val { color: var(--red); }
+  .d4-body { flex: 1; display: flex; overflow: hidden; }
+  .d4-map { flex: 1; position: relative; background: #ECEFF1; }
+  .d4-panel { width: 300px; background: white; border-left: 1px solid var(--outline); overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .d4-panel-title { font-size: 13px; font-weight: 600; color: var(--on-surface); }
+  .incident-item { padding: 10px 12px; border-radius: 6px; border: 1px solid var(--outline); font-size: 12px; }
+  .incident-item .inc-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .incident-item .inc-loc { font-weight: 500; color: var(--on-surface); }
+  .inc-badge { font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 600; }
+  .inc-badge.open { background: #FFEBEE; color: var(--red); }
+  .inc-badge.progress { background: #FFF3E0; color: var(--amber); }
+  .incident-item .inc-desc { color: var(--muted); line-height: 1.4; }
+
+  /* CHECK-IN SCREEN */
+  .checkin-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 500px; background: linear-gradient(135deg, #E8F5E9 0%, #E0F2F1 100%);
+    border-radius: 8px; border: 1px solid var(--outline);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  .checkin-icon { font-size: 72px; margin-bottom: 16px; }
+  .checkin-title { font-size: 28px; font-weight: 600; color: var(--teal-800); margin-bottom: 8px; }
+  .checkin-sub { font-size: 16px; color: var(--muted); text-align: center; max-width: 280px; line-height: 1.5; }
+  .checkin-details { margin-top: 24px; padding: 16px 24px; background: white; border-radius: 8px; font-size: 14px; text-align: center; }
+  .checkin-detail-row { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 6px; color: var(--on-surface); }
+  .checkin-detail-row:last-child { margin-bottom: 0; }
+
+  /* LABELS */
+  .dir-label-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+  .dir-option {
+    padding: 16px; border-radius: 8px; border: 2px solid var(--outline);
+    cursor: pointer; transition: border-color 0.2s;
+    background: white;
+  }
+  .dir-option:hover { border-color: var(--teal-300); }
+  .dir-option h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--on-surface); }
+  .dir-option p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .dir-option .tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-top: 6px; display: inline-block; font-weight: 500; }
+  .tag-power { background: #E0F2F1; color: var(--teal-800); }
+  .tag-calm { background: #E8EAF6; color: var(--indigo); }
+  .tag-clean { background: #F3E5F5; color: #6A1B9A; }
+  .tag-data { background: #FFF3E0; color: #E65100; }
+
+  /* UTILS */
+  .mt8 { margin-top: 8px; }
+  .mt16 { margin-top: 16px; }
+  .mt24 { margin-top: 24px; }
+  .row { display: flex; gap: 16px; }
+  .col { flex: 1; }
+</style>
+</head>
+<body>
+
+<nav class="showcase-nav">
+  <h1>EcoTrack — Design Directions</h1>
+  <button class="nav-btn active" onclick="show('d1')">① Teal Map Hub</button>
+  <button class="nav-btn" onclick="show('d2')">② Dark Sidebar</button>
+  <button class="nav-btn" onclick="show('d3')">③ Minimal + Booking Sheet</button>
+  <button class="nav-btn" onclick="show('d4')">④ Admin Dashboard</button>
+  <button class="nav-btn" onclick="show('d5')">⑤ Check-in Screen</button>
+</nav>
+
+<!-- DIRECTION 1 — Teal Map Hub (Employee Primary) -->
+<div class="direction visible" id="d1">
+  <div class="direction-header">
+    <h2>① Teal Map Hub <span class="badge" style="background:#E0F2F1;color:#005B4F">Employee · Primary view</span></h2>
+    <p>Map-first layout. Teal topbar anchors brand. Left sidebar for floor/filter selection. Status dots directly on SVG. Booking drawer slides from bottom.</p>
+  </div>
+  <div class="d1-shell">
+    <div class="d1-topbar">
+      <div class="d1-logo">eco<span>track</span> <span style="font-size:12px;opacity:0.5;margin-left:4px">office</span></div>
+      <div class="d1-nav-pills">
+        <button class="d1-pill active">🗺 Floor Map</button>
+        <button class="d1-pill">📋 My Reservations</button>
+        <button class="d1-pill">🔔</button>
+      </div>
+      <div class="d1-avatar">GL</div>
+    </div>
+    <div class="d1-body">
+      <div class="d1-sidebar">
+        <div>
+          <div class="d1-sidebar-label">Floor</div>
+          <div class="d1-floor-list mt8">
+            <div class="d1-floor-item active">Floor 3 — RD <span class="d1-floor-count">12 free</span></div>
+            <div class="d1-floor-item">Floor 2 — Sales <span class="d1-floor-count">4 free</span></div>
+            <div class="d1-floor-item">Floor 1 — Common <span class="d1-floor-count">7 free</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="d1-sidebar-label">Amenities</div>
+          <div class="d1-chips mt8">
+            <span class="d1-chip active">⬆ Standing</span>
+            <span class="d1-chip">🖥 Dual monitor</span>
+            <span class="d1-chip">🔇 Quiet</span>
+            <span class="d1-chip">☀ Window</span>
+            <span class="d1-chip">📷 Webcam</span>
+          </div>
+        </div>
+        <div>
+          <div class="d1-sidebar-label">Status legend</div>
+          <div class="d1-legend" style="position:relative;bottom:auto;left:auto;border:none;padding:8px 0;box-shadow:none;gap:8px;flex-direction:column;">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Available</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Reserved</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Occupied</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--teal-600)"></div> Your desk</div>
+          </div>
+        </div>
+      </div>
+      <div class="d1-map-area">
+        <!-- Zone heat overlay -->
+        <div class="zone-heat" style="left:20px;top:20px;width:200px;height:160px;background:rgba(255,152,0,0.12);border:1.5px dashed rgba(255,152,0,0.5)"></div>
+        <div style="position:absolute;top:24px;left:24px;font-size:10px;color:rgba(255,152,0,0.9);font-weight:600">Zone A — Sparse</div>
+        <div class="zone-heat" style="left:230px;top:20px;width:220px;height:160px;background:rgba(76,175,80,0.1);border:1.5px dashed rgba(76,175,80,0.4)"></div>
+        <div style="position:absolute;top:24px;left:280px;font-size:10px;color:rgba(76,175,80,0.9);font-weight:600">Zone B — Good</div>
+        <!-- Rooms -->
+        <div class="d1-room" style="left:20px;top:190px;width:160px;height:60px">Meeting A</div>
+        <div class="d1-room" style="left:195px;top:190px;width:140px;height:60px">Meeting B</div>
+        <!-- Desks zone A -->
+        <div class="desk-dot avail" style="left:40px;top:60px" title="Desk A1 — Available">A1</div>
+        <div class="desk-dot avail" style="left:80px;top:60px" title="Desk A2">A2</div>
+        <div class="desk-dot occupied" style="left:120px;top:60px">A3</div>
+        <div class="desk-dot avail" style="left:40px;top:100px">A4</div>
+        <div class="desk-dot occupied" style="left:80px;top:100px">A5</div>
+        <div class="desk-dot occupied" style="left:120px;top:100px">A6</div>
+        <!-- Desks zone B -->
+        <div class="desk-dot mine" style="left:260px;top:60px" title="Your desk — B1">B1</div>
+        <div class="desk-dot avail" style="left:300px;top:60px">B2</div>
+        <div class="desk-dot avail" style="left:340px;top:60px">B3</div>
+        <div class="desk-dot reserved" style="left:380px;top:60px">B4</div>
+        <div class="desk-dot avail" style="left:260px;top:100px">B5</div>
+        <div class="desk-dot avail" style="left:300px;top:100px">B6</div>
+        <div class="desk-dot avail" style="left:340px;top:100px">B7</div>
+        <div class="desk-dot occupied" style="left:380px;top:100px">B8</div>
+        <!-- Lower zone -->
+        <div class="desk-dot avail" style="left:60px;top:280px">C1</div>
+        <div class="desk-dot avail" style="left:100px;top:280px">C2</div>
+        <div class="desk-dot reserved" style="left:140px;top:280px">C3</div>
+        <div class="desk-dot avail" style="left:250px;top:280px">C4</div>
+        <div class="desk-dot avail" style="left:290px;top:280px">C5</div>
+      </div>
+    </div>
+  </div>
+  <div class="dir-label-grid mt24">
+    <div class="dir-option">
+      <h4>✅ Strengths</h4>
+      <p>Brand instantly visible. Sidebar consolidates all controls without cluttering the map. Teal primary creates calm authority.</p>
+    </div>
+    <div class="dir-option">
+      <h4>🎯 Best for</h4>
+      <p>Guillermo's daily flow. First-time users landing on the app. Default experience.</p>
+      <span class="tag tag-power">Primary recommendation</span>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECTION 2 — Dark Sidebar -->
+<div class="direction" id="d2">
+  <div class="direction-header">
+    <h2>② Dark Sidebar <span class="badge" style="background:#ECEFF1;color:#37474F">Enterprise · Power-user feel</span></h2>
+    <p>White topbar, charcoal sidebar. More enterprise/SaaS feel. Clear navigation hierarchy. Filter chips in subbar above map.</p>
+  </div>
+  <div class="d2-shell">
+    <div class="d2-topbar">
+      <div class="d2-logo-mark">E</div>
+      <div style="display:flex;flex-direction:column">
+        <div class="d2-logo-text">EcoTrack Office</div>
+        <div class="d2-breadcrumb">Floor 3 — R&D</div>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <span style="font-size:13px;color:var(--muted)">Mon 20 Apr</span>
+        <div class="d1-avatar" style="background:#263238;color:var(--teal-300)">GL</div>
+      </div>
+    </div>
+    <div class="d2-body">
+      <div class="d2-sidebar">
+        <div class="d2-sidebar-section">Navigation</div>
+        <div class="d2-nav-item active"><span class="d2-nav-icon">🗺</span> Floor Map</div>
+        <div class="d2-nav-item"><span class="d2-nav-icon">📋</span> My Bookings</div>
+        <div class="d2-nav-item"><span class="d2-nav-icon">🔔</span> Notifications</div>
+        <div class="d2-sidebar-section" style="margin-top:16px">Floors</div>
+        <div class="d2-nav-item active"><span class="d2-nav-icon">3</span> Floor 3 — R&D</div>
+        <div class="d2-nav-item"><span class="d2-nav-icon">2</span> Floor 2 — Sales</div>
+        <div class="d2-nav-item"><span class="d2-nav-icon">1</span> Floor 1 — Common</div>
+        <div class="d2-sidebar-section" style="margin-top:16px">Admin</div>
+        <div class="d2-nav-item"><span class="d2-nav-icon">📊</span> Analytics</div>
+        <div class="d2-nav-item"><span class="d2-nav-icon">⚙</span> Manage Assets</div>
+      </div>
+      <div class="d2-main">
+        <div class="d2-subbar">
+          <span class="d2-subbar-label">Filters:</span>
+          <span class="d2-filter-chip active">⬆ Standing desk</span>
+          <span class="d2-filter-chip">🖥 Dual monitor</span>
+          <span class="d2-filter-chip">🔇 Quiet zone</span>
+          <span class="d2-filter-chip">☀ Window</span>
+          <div style="margin-left:auto;font-size:12px;color:var(--muted)">23 desks · 12 available</div>
+        </div>
+        <div class="d2-map-area">
+          <div class="zone-heat" style="left:20px;top:20px;width:180px;height:140px;background:rgba(255,152,0,0.12);border:1.5px dashed rgba(255,152,0,0.5)"></div>
+          <div style="position:absolute;top:24px;left:24px;font-size:10px;color:rgba(255,152,0,0.9);font-weight:600">Sparse zone</div>
+          <div class="desk-dot avail" style="left:40px;top:60px">A1</div>
+          <div class="desk-dot avail" style="left:80px;top:60px">A2</div>
+          <div class="desk-dot occupied" style="left:120px;top:60px">A3</div>
+          <div class="desk-dot avail" style="left:40px;top:100px">A4</div>
+          <div class="desk-dot mine" style="left:230px;top:60px">B1</div>
+          <div class="desk-dot avail" style="left:270px;top:60px">B2</div>
+          <div class="desk-dot avail" style="left:310px;top:60px">B3</div>
+          <div class="desk-dot reserved" style="left:350px;top:60px">B4</div>
+          <div class="desk-dot avail" style="left:230px;top:100px">B5</div>
+          <div class="desk-dot avail" style="left:270px;top:100px">B6</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dir-label-grid mt24">
+    <div class="dir-option">
+      <h4>✅ Strengths</h4>
+      <p>Familiar enterprise SaaS pattern. More navigation space. Admin and employee sections clearly separated.</p>
+      <span class="tag tag-calm">Good for José Luis</span>
+    </div>
+    <div class="dir-option">
+      <h4>⚠️ Tradeoff</h4>
+      <p>Dark sidebar takes 220px from map width. Less "eco/light" feeling. Eduardo may find it more intimidating.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECTION 3 — Minimal + Booking Sheet -->
+<div class="direction" id="d3">
+  <div class="direction-header">
+    <h2>③ Minimal White + Booking Sheet <span class="badge" style="background:#F3E5F5;color:#6A1B9A">Focused · Clean</span></h2>
+    <p>Maximally clean. Tab navigation. Full-width map. Booking bottom sheet slides up on desk click.</p>
+  </div>
+  <div class="d3-shell">
+    <div class="d3-topbar">
+      <div class="d3-wordmark">EcoTrack</div>
+      <div class="d3-tabs">
+        <button class="d3-tab active">Floor Map</button>
+        <button class="d3-tab">My Bookings</button>
+        <button class="d3-tab">Dashboard</button>
+        <button class="d3-tab">Settings</button>
+      </div>
+      <div class="d3-actions">
+        <div class="d1-avatar" style="background:var(--teal-600)">GL</div>
+      </div>
+    </div>
+    <div class="d3-filter-bar">
+      <span class="d3-filter-label">Floor:</span>
+      <span class="d2-filter-chip active">Floor 3 — R&D</span>
+      <span style="color:var(--outline);margin:0 4px">|</span>
+      <span class="d3-filter-label">Amenities:</span>
+      <span class="d2-filter-chip active">⬆ Standing</span>
+      <span class="d2-filter-chip">☀ Window</span>
+      <span class="d2-filter-chip">🖥 Dual monitor</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--teal-600);font-weight:500">12 desks match</span>
+    </div>
+    <div class="d3-body">
+      <div style="position:absolute;inset:0;background:#F0F4F4">
+        <div class="zone-heat" style="left:20px;top:15px;width:200px;height:150px;background:rgba(255,152,0,0.10);border:1.5px dashed rgba(255,152,0,0.4)"></div>
+        <div class="desk-dot avail" style="left:40px;top:50px">A1</div>
+        <div class="desk-dot avail" style="left:80px;top:50px">A2</div>
+        <div class="desk-dot occupied" style="left:120px;top:50px">A3</div>
+        <div class="desk-dot avail" style="left:160px;top:50px">A4</div>
+        <div class="desk-dot mine" style="left:250px;top:50px">B1</div>
+        <div class="desk-dot avail" style="left:290px;top:50px">B2</div>
+        <div class="desk-dot avail" style="left:330px;top:50px">B3</div>
+        <div class="desk-dot reserved" style="left:370px;top:50px">B4</div>
+        <div class="desk-dot avail" style="left:250px;top:90px">B5</div>
+        <div class="desk-dot avail" style="left:290px;top:90px">B6</div>
+      </div>
+      <!-- Booking sheet -->
+      <div class="booking-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Book Desk B2 <span style="font-size:14px;color:var(--muted);font-weight:400">· Zone B, Floor 3</span></div>
+        <div class="sheet-sub">🖥 Dual monitor · ⬆ Standing desk · ☀ Window seat</div>
+        <div class="sheet-fields">
+          <div class="sheet-field">
+            <label>Date</label>
+            <div class="field-val">Mon, April 20</div>
+          </div>
+          <div class="sheet-field">
+            <label>Time slot</label>
+            <div class="field-val">09:00 – 18:00</div>
+          </div>
+        </div>
+        <button class="sheet-cta">Reserve Desk B2</button>
+      </div>
+    </div>
+  </div>
+  <div class="dir-label-grid mt24">
+    <div class="dir-option">
+      <h4>✅ Strengths</h4>
+      <p>Maximum map real estate. Booking sheet is the defining moment. Extremely clean, zero distraction. Eduardo-friendly.</p>
+      <span class="tag tag-clean">Most minimal</span>
+    </div>
+    <div class="dir-option">
+      <h4>⚠️ Tradeoff</h4>
+      <p>Less room for admin features in the same view. Tab navigation hides floor selector. Less visual hierarchy for power users.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECTION 4 — Admin Dashboard -->
+<div class="direction" id="d4">
+  <div class="direction-header">
+    <h2>④ Admin Dashboard View <span class="badge" style="background:#FFF3E0;color:#E65100">José Luis · Facilities Manager</span></h2>
+    <p>KPI bar above the map. Incident panel on the right. 3 key numbers immediately visible. Map shows zone heat prominently.</p>
+  </div>
+  <div class="d4-shell">
+    <div class="d4-topbar">
+      <div class="d2-logo-mark">E</div>
+      <div class="d2-logo-text">EcoTrack Office</div>
+      <div style="margin-left:16px;padding:4px 12px;background:#FFF3E0;border-radius:12px;font-size:12px;color:#E65100;font-weight:500">Admin View</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <span style="font-size:13px;color:var(--muted)">Mon 20 Apr 2026</span>
+        <div class="d1-avatar" style="background:#37474F">JL</div>
+      </div>
+    </div>
+    <div class="d4-kpi-bar">
+      <div class="d4-kpi green">
+        <div class="d4-kpi-label">Building Occupancy</div>
+        <div class="d4-kpi-val">67%</div>
+        <div class="d4-kpi-sub">↑ 12% from yesterday</div>
+      </div>
+      <div class="d4-kpi amber">
+        <div class="d4-kpi-label">Ghost Desks Recovered</div>
+        <div class="d4-kpi-val">8</div>
+        <div class="d4-kpi-sub">auto-released today</div>
+      </div>
+      <div class="d4-kpi red">
+        <div class="d4-kpi-label">Open Incidents</div>
+        <div class="d4-kpi-val">3</div>
+        <div class="d4-kpi-sub">2 pending, 1 in progress</div>
+      </div>
+      <div class="d4-kpi">
+        <div class="d4-kpi-label">Energy Nudge Alert</div>
+        <div class="d4-kpi-val" style="color:var(--teal-600)">2</div>
+        <div class="d4-kpi-sub">zones under 30% capacity</div>
+      </div>
+    </div>
+    <div class="d4-body">
+      <div class="d4-map">
+        <!-- Heat zones prominent -->
+        <div class="zone-heat" style="left:15px;top:15px;width:220px;height:180px;background:rgba(255,152,0,0.2);border:2px dashed rgba(255,152,0,0.7)"></div>
+        <div style="position:absolute;top:18px;left:18px;font-size:11px;color:rgba(230,81,0,0.9);font-weight:700;background:rgba(255,243,224,0.9);padding:2px 8px;border-radius:10px">⚠ Zone A — 28% capacity</div>
+        <div class="zone-heat" style="left:250px;top:15px;width:200px;height:180px;background:rgba(76,175,80,0.1);border:2px dashed rgba(76,175,80,0.5)"></div>
+        <div style="position:absolute;top:18px;left:280px;font-size:11px;color:rgba(27,94,32,0.9);font-weight:600;background:rgba(232,245,233,0.9);padding:2px 8px;border-radius:10px">✓ Zone B — 72% capacity</div>
+        <div class="desk-dot avail" style="left:30px;top:70px;width:18px;height:18px;font-size:9px">A1</div>
+        <div class="desk-dot occupied" style="left:60px;top:70px;width:18px;height:18px;font-size:9px">A2</div>
+        <div class="desk-dot avail" style="left:90px;top:70px;width:18px;height:18px;font-size:9px">A3</div>
+        <div class="desk-dot avail" style="left:120px;top:70px;width:18px;height:18px;font-size:9px">A4</div>
+        <div class="desk-dot avail" style="left:30px;top:100px;width:18px;height:18px;font-size:9px">A5</div>
+        <div class="desk-dot avail" style="left:60px;top:100px;width:18px;height:18px;font-size:9px">A6</div>
+        <div class="desk-dot occupied" style="left:265px;top:70px;width:18px;height:18px;font-size:9px">B1</div>
+        <div class="desk-dot occupied" style="left:295px;top:70px;width:18px;height:18px;font-size:9px">B2</div>
+        <div class="desk-dot mine" style="left:325px;top:70px;width:18px;height:18px;font-size:9px">B3</div>
+        <div class="desk-dot reserved" style="left:355px;top:70px;width:18px;height:18px;font-size:9px">B4</div>
+        <div class="desk-dot occupied" style="left:265px;top:100px;width:18px;height:18px;font-size:9px">B5</div>
+        <div class="desk-dot occupied" style="left:295px;top:100px;width:18px;height:18px;font-size:9px">B6</div>
+      </div>
+      <div class="d4-panel">
+        <div class="d4-panel-title">🚨 Open Incidents</div>
+        <div class="incident-item">
+          <div class="inc-header">
+            <span class="inc-loc">Desk B4 — Floor 3</span>
+            <span class="inc-badge open">Open</span>
+          </div>
+          <div class="inc-desc">Broken monitor reported. Desk automatically blocked.</div>
+        </div>
+        <div class="incident-item">
+          <div class="inc-header">
+            <span class="inc-loc">Zone A — Floor 2</span>
+            <span class="inc-badge progress">In Progress</span>
+          </div>
+          <div class="inc-desc">AC unit not working. Raimundo assigned.</div>
+        </div>
+        <div class="incident-item">
+          <div class="inc-header">
+            <span class="inc-loc">Desk C2 — Floor 1</span>
+            <span class="inc-badge open">Open</span>
+          </div>
+          <div class="inc-desc">Chair damaged. Awaiting assignment.</div>
+        </div>
+        <div class="d4-panel-title" style="margin-top:8px">💡 Consolidation Suggestions</div>
+        <div class="incident-item" style="border-color:#E0F2F1">
+          <div class="inc-header">
+            <span class="inc-loc">Zone A, Floor 3</span>
+            <span class="inc-badge" style="background:#E0F2F1;color:#005B4F">Suggestion</span>
+          </div>
+          <div class="inc-desc">28% capacity. Consider closing Zone A and nudging users to Zone B.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dir-label-grid mt24">
+    <div class="dir-option">
+      <h4>✅ Strengths</h4>
+      <p>José Luis sees everything in 3 seconds. KPIs above the fold. Incident panel adjacent to map. Zone heat prominent.</p>
+      <span class="tag tag-data">Admin-first</span>
+    </div>
+    <div class="dir-option">
+      <h4>🎯 Note</h4>
+      <p>This is the admin-specific view. Employees see Direction ① or ③. Role-based default home screen switches the layout.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIRECTION 5 — Check-in Screen -->
+<div class="direction" id="d5">
+  <div class="direction-header">
+    <h2>⑤ Check-in Confirmation Screen <span class="badge" style="background:#E8F5E9;color:#1B5E20">Mobile · Standalone</span></h2>
+    <p>Accessed via QR scan or email link. No app shell, no navigation, no login. Single-purpose screen.</p>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="checkin-screen">
+        <div class="checkin-icon">✅</div>
+        <div class="checkin-title">You're checked in!</div>
+        <div class="checkin-sub">Your workspace is confirmed for today. Enjoy your day.</div>
+        <div class="checkin-details">
+          <div class="checkin-detail-row">🏢 <strong>Desk B2</strong> — Zone B, Floor 3</div>
+          <div class="checkin-detail-row">📅 Monday, April 20, 2026</div>
+          <div class="checkin-detail-row">🕘 09:00 – 18:00</div>
+        </div>
+      </div>
+      <div class="dir-option mt16">
+        <h4>✅ Email link check-in (Eduardo's scenario)</h4>
+        <p>One tap from the reminder email. No login required. Token validated server-side. This screen is the entire experience for reluctant users.</p>
+        <span class="tag tag-clean">Zero friction</span>
+      </div>
+    </div>
+    <div class="col">
+      <div style="height:500px;border-radius:8px;border:1px solid var(--outline);background:linear-gradient(135deg,#E8F5E9 0%,#E0F2F1 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.08)">
+        <div style="text-align:center;padding:32px">
+          <div style="font-size:48px;margin-bottom:12px">📷</div>
+          <div style="font-size:18px;font-weight:600;color:var(--teal-800);margin-bottom:8px">Scan QR code</div>
+          <div style="font-size:14px;color:var(--muted);max-width:220px;margin:0 auto;line-height:1.5">Scan the QR code on your desk to confirm your presence</div>
+          <div style="margin-top:24px;padding:12px 24px;background:white;border-radius:8px;border:1px solid var(--outline)">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Or open your booking email and tap the check-in link</div>
+            <div style="font-size:13px;color:var(--teal-600);text-decoration:underline;cursor:pointer">Resend check-in email →</div>
+          </div>
+        </div>
+      </div>
+      <div class="dir-option mt16">
+        <h4>✅ QR check-in (Guillermo's scenario)</h4>
+        <p>QR code printed on each desk. Phone camera scan → immediate redirect to confirmation. Same screen, different entry point.</p>
+        <span class="tag tag-power">Primary check-in</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.direction').forEach(d => d.classList.remove('visible'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

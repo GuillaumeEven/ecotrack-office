@@ -106,3 +106,8 @@ See the full project roadmap → [project/roadmap.md](project/roadmap.md)
 <p align="center">
   Built with the <a href="https://github.com/bmad-method/bmad-method">BMAD Method</a> v6.2.2
 </p>
+
+
+#00897B
+#5C6BC0
+#47474F
