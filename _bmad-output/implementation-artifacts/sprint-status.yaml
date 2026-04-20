@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-20T09:09
-last_updated: 2026-04-20T09:09
+last_updated: 2026-04-20T09:27
 project: ecotrack_office
 project_key: NOKEY
 tracking_system: file-system
@@ -45,8 +45,8 @@ development_status:
   # ─────────────────────────────────────────────────────────────
   # Epic 0: Project Foundation & Infrastructure
   # ─────────────────────────────────────────────────────────────
-  epic-0: backlog
-  0-1-initialize-angular-frontend-workspace: backlog
+  epic-0: in-progress
+  0-1-initialize-angular-frontend-workspace: ready-for-dev
   0-2-initialize-spring-boot-backend: backlog
   0-3-local-development-environment-setup: backlog
   epic-0-retrospective: optional
