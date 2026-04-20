@@ -47,8 +47,8 @@ development_status:
   # ─────────────────────────────────────────────────────────────
   epic-0: in-progress
   0-1-initialize-angular-frontend-workspace: ready-for-dev
-  0-2-initialize-spring-boot-backend: backlog
-  0-3-local-development-environment-setup: backlog
+  0-2-initialize-spring-boot-backend: ready-for-dev
+  0-3-local-development-environment-setup: ready-for-dev
   epic-0-retrospective: optional
 
   # ─────────────────────────────────────────────────────────────
