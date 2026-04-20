@@ -14,6 +14,8 @@
   <img src="https://img.shields.io/badge/type-Final%20Master's%20Project-blueviolet?style=flat-square" alt="Type"/>
   <img src="https://img.shields.io/badge/PRD-complete-brightgreen?style=flat-square" alt="PRD"/>
   <img src="https://img.shields.io/badge/architecture-complete-brightgreen?style=flat-square" alt="Architecture"/>
+  <img src="https://img.shields.io/badge/epics%20%26%20stories-complete-brightgreen?style=flat-square" alt="Epics"/>
+  <img src="https://img.shields.io/badge/UX%20design-complete-brightgreen?style=flat-square" alt="UX Design"/>
 </p>
 
 <p align="center">
@@ -26,8 +28,10 @@
 
 <p align="center">
   <a href="project/roadmap.md">🗺️ Roadmap</a> &nbsp;•&nbsp;
-  <a href="_bmad-output/planning-artifacts/prd.md">📋 Product Requirements Document</a> &nbsp;•&nbsp;
-  <a href="_bmad-output/planning-artifacts/architecture.md">🏗️ Architecture</a>
+  <a href="_bmad-output/planning-artifacts/prd.md">📋 PRD</a> &nbsp;•&nbsp;
+  <a href="_bmad-output/planning-artifacts/architecture.md">🏗️ Architecture</a> &nbsp;•&nbsp;
+  <a href="_bmad-output/planning-artifacts/epics.md">📚 Epics & Stories</a> &nbsp;•&nbsp;
+  <a href="_bmad-output/planning-artifacts/ux-design-specification.md">🎨 UX Design</a>
 </p>
 
 ---
@@ -99,6 +103,10 @@ See the full project roadmap → [project/roadmap.md](project/roadmap.md)
 |---|---|
 | [📋 PRD](_bmad-output/planning-artifacts/prd.md) | Full Product Requirements Document — 43 functional requirements, 5 NFR categories, user journeys, domain constraints, phased roadmap |
 | [🏗️ Architecture](_bmad-output/planning-artifacts/architecture.md) | Architecture Decision Record — stack, 14 architectural decisions, implementation patterns, full project structure, FR mapping |
+| [📚 Epics & Stories](_bmad-output/planning-artifacts/epics.md) | 5 epics, 23 user stories with full acceptance criteria mapped to all 43 FRs |
+| [🎨 UX Design Specification](_bmad-output/planning-artifacts/ux-design-specification.md) | 14-section UX spec — design system, component strategy, user journeys, visual foundation, accessibility (WCAG 2.2 AA) |
+| [🗓️ Sprint Calendar](_bmad-output/planning-artifacts/sprint-calendar.md) | 9 sprints, 23 stories organized by technical dependencies with complexity indicators |
+| [📊 Sprint Status](_bmad-output/implementation-artifacts/sprint-status.yaml) | Live sprint tracking — story statuses updated throughout development |
 | [🗺️ Roadmap](project/roadmap.md) | Project checklist and next BMAD workflow steps |
 
 ---
