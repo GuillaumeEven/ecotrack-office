@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-20T09:09
-last_updated: 2026-04-20T09:27
+last_updated: 2026-04-21T00:00
 project: ecotrack_office
 project_key: NOKEY
 tracking_system: file-system
@@ -54,8 +54,8 @@ development_status:
   # ─────────────────────────────────────────────────────────────
   # Epic 1: User Management & Authentication
   # ─────────────────────────────────────────────────────────────
-  epic-1: backlog
-  1-1-user-registration-with-gdpr-consent: backlog
+  epic-1: in-progress
+  1-1-user-registration-with-gdpr-consent: ready-for-dev
   1-2-user-login-and-secure-session-management: backlog
   1-3-employee-profile-and-saved-search-preferences: backlog
   1-4-facilities-manager-user-administration: backlog

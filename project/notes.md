@@ -8,8 +8,13 @@
 
 - Presentation of the TFM (Final Master's Project): individual or group?
 - Meeting cadence: weekly?
-- Use of AI: according to the first meeting, it is considered a good practice.
 - Real-time notifications: should we use Server-Sent Events (SSE)? The AI suggested it is the simplest approach.
+- use of bruno testing
+- assign role to each people ?
+
+### Answered
+---
+- Use of AI: according to the first meeting, it is considered a good practice.
 
 ## Points of attention in the architecture document
 
