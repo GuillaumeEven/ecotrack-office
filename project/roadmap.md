@@ -80,8 +80,8 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 | Story | Title | Layer | Student | Note |
 |-------|-------|-------|---------|------|
 | 1.3 | Employee Profile & Saved Search Preferences 🟢 | FE+BE | Student 1 | Small story — one student covers both layers |
-| 1.4 | Facilities Manager — User Administration 🟡 | 🔵 FE | Student 3 | User management UI, role assignment |
-| 1.4 | Facilities Manager — User Administration 🟡 | 🟠 BE | Student 4 | Admin endpoints + `@PreAuthorize` enforcement |
+| 1.4 | Organization Admin — User Administration 🟡 | 🔵 FE | Student 3 | User management UI, role assignment |
+| 1.4 | Organization Admin — User Administration 🟡 | 🟠 BE | Student 4 | Admin endpoints + `@PreAuthorize` enforcement |
 | 2.1 | Floor & Zone Management 🟡 | FE+BE | Student 2 | Asset foundation; no dependency on auth UI |
 
 ---
@@ -126,7 +126,7 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 | 8 | 4.1 | Incident Reporting & Automatic Resource Blocking 🟡 | 🔵 FE | Student 2 |
 | 8 | 4.1 | Incident Reporting & Automatic Resource Blocking 🟡 | 🟠 BE | Student 4 |
 | 8 | 4.2 | Real-time Technician Notification & Incident Lifecycle 🟡 | FE+BE | Students 2 + 4 |
-| 8 | 4.3 | Facilities Manager — Incident Overview 🟡 | FE+BE | Students 2 + 4 |
+| 8 | 4.3 | Organization Admin — Incident Overview 🟡 | FE+BE | Students 2 + 4 |
 
 ---
 

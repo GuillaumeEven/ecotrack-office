@@ -20,7 +20,7 @@ inputDocuments:
 
 ### Project Vision
 
-EcoTrack Office is a smart workspace management platform for large hybrid-work office buildings. It resolves two simultaneous problems: employees cannot easily find available workspaces across multi-floor buildings, while facilities managers battle daily energy waste from ghost reservations and underused zones. The building floor plan is the primary interaction surface — not a list, not a calendar. Color-coded zone overlays nudge employees toward energy-efficient clustering, making the sustainable choice the obvious choice without mandating it. The system is designed for users who will not fully comply with procedures; non-compliance is made harmless through automation.
+EcoTrack Office is a smart workspace management platform for large hybrid-work office buildings. It resolves two simultaneous problems: employees cannot easily find available workspaces across multi-floor buildings, while Organization Admins battle daily energy waste from ghost reservations and underused zones. The building floor plan is the primary interaction surface — not a list, not a calendar. Color-coded zone overlays nudge employees toward energy-efficient clustering, making the sustainable choice the obvious choice without mandating it. The system is designed for users who will not fully comply with procedures; non-compliance is made harmless through automation.
 
 ### Target Users
 
@@ -33,7 +33,7 @@ EcoTrack Office is a smart workspace management platform for large hybrid-work o
 **Raimundo — The Concierge Technician (Operations)**
 52-year-old maintenance technician, reactive by nature, currently informed by word of mouth. Needs: instant push notification on incident with location, photo, and one-tap status update. Success metric: notified in seconds, desk blocked automatically before he arrives.
 
-**José Luis — The Facilities Manager (Admin)**
+**José Luis — The Organization Admin (Admin)**
 48-year-old head of general services, currently managing via spreadsheets nobody fills in. Needs: at-a-glance dashboard showing occupancy, incidents, and consolidation suggestions — without requiring employee compliance. Success metric: zero manual interventions for ghost desk recovery; weekly report in 2 clicks.
 
 ### Key Design Challenges
@@ -406,7 +406,7 @@ Five directions were generated and evaluated via interactive HTML showcase (`ux-
 
 ### Chosen Direction
 
-**Role-based dual layout:** Direction ① for employees, Direction ④ for facilities managers.
+**Role-based dual layout:** Direction ① for employees, Direction ④ for Organization Admins.
 
 - **Employee default** (`/floor-map`): Teal Map Hub — teal 64px topbar, 280px collapsible left sidebar (floor selector + amenity filter chips + legend), full SVG map with desk dot markers and zone heat overlay, booking bottom sheet on desk click
 - **Admin default** (`/dashboard`): Admin Dashboard — white 56px topbar with "Admin" badge, 4-KPI bar above fold, split view with map (zone heat prominent) and 300px right panel (incidents + consolidation suggestions)

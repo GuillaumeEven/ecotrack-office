@@ -10,7 +10,7 @@ classDiagram
     class Role {
         <<enumeration>>
         EMPLOYEE
-        FACILITIES_MANAGER
+        ORGANIZATION_ADMIN
         TECHNICIAN
     }
 

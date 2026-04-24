@@ -61,6 +61,7 @@ The most architecturally complex domains are the Interactive Floor Map
 ### Cross-Cutting Concerns Identified
 
 1. **Authentication & RBAC** — JWT token flow + Spring Security role enforcement across all 4 blocks
+  Note: For SaaS Demo Mode the tenant-level admin role is `Organization Admin` (combines facilities management and tenant administration responsibilities: maps/assets, user accounts, tenant settings and demo plan).
 2. **GDPR Compliance** — consent, erasure, export, and pseudonymization touch all data-producing modules
 3. **Audit Trail** — all reservation and incident state-change events logged (Blocks 1, 3, 4)
 4. **Async Event Processing** — auto-release scheduler, incident push notifications, photo upload (Blocks 3, 4)
@@ -712,7 +713,7 @@ ecotrack-office/
 | Employee self-service | `/api/v1/reservations/**`, `/api/v1/floor-plans/**` | Yes | EMPLOYEE+ |
 | Incident reporting | `POST /api/v1/incidents` | Yes | Any authenticated |
 | Technician actions | `/api/v1/incidents/*/resolve` | Yes | TECHNICIAN+ |
-| Admin / Manager | `/api/v1/users/**`, `/api/v1/reports/**` | Yes | FACILITIES_MANAGER |
+| Admin / Manager | `/api/v1/users/**`, `/api/v1/reports/**` | Yes | ORGANIZATION_ADMIN |
 | SSE stream | `/api/v1/sse/incidents` | Yes | TECHNICIAN |
 
 **Data flow (synchronous)**

@@ -38,14 +38,14 @@
 
 ## The Problem
 
-Large hybrid offices are wasting space and energy every day. Employees book desks and don't show up — desks sit empty and "reserved" simultaneously. Facilities managers spend mornings manually recovering abandoned bookings from a spreadsheet nobody fills in. Nobody knows which floors are actually occupied until someone walks through them.
+Large hybrid offices are wasting space and energy every day. Employees book desks and don't show up — desks sit empty and "reserved" simultaneously. Organization Admins spend mornings manually recovering abandoned bookings from a spreadsheet nobody fills in. Nobody knows which floors are actually occupied until someone walks through them.
 
 ## The Solution
 
 EcoTrack Office is a web platform that solves both sides of the problem at once:
 
 - **Employees** see a live interactive floor map, filter by their criteria (near restrooms, south-facing, specific equipment), and reserve in two taps.
-- **Facilities managers** get automated ghost-desk recovery, zone consolidation suggestions, occupancy dashboards, and exportable reports — without chasing anyone.
+-- **Organization Admins** get automated ghost-desk recovery, zone consolidation suggestions, occupancy dashboards, and exportable reports — without chasing anyone.
 
 ## What Makes It Different
 
@@ -53,7 +53,7 @@ EcoTrack Office is a web platform that solves both sides of the problem at once:
 |---|---|
 | 🗺️ **Map-first booking** | The building floor plan *is* the UI. Color-coded zones nudge users toward energy-efficient clustering — the sustainable choice is the obvious choice. |
 | 🤖 **Friction-tolerant automation** | Missed check-in? Desk auto-releases after 15 min. No login? Check in via email link. The system absorbs non-compliance instead of fighting it. |
-| ⚡ **Zero manual recovery** | Ghost desks, faulty resources, zone shutdowns — all handled automatically. Facilities managers supervise, they don't intervene. |
+| ⚡ **Zero manual recovery** | Ghost desks, faulty resources, zone shutdowns — all handled automatically. Organization Admins supervise, they don't intervene. |
 
 ## Key Metrics (MVP Targets)
 
@@ -79,7 +79,7 @@ Auth       JWT (stateless, HttpOnly cookies)
 | **Guillermo** | R&D Engineer | Book a desk matching personal criteria in seconds, from his phone on the bus |
 | **Eduardo** | Sales Rep | Never think about the tool — it works around his habits |
 | **Raimundo** | Building Technician | Get instantly notified when something breaks, with photo and location |
-| **José Luis** | Facilities Manager | Replace his morning walk-through with a 30-second dashboard |
+| **José Luis** | Organization Admin | Replace his morning walk-through with a 30-second dashboard |
 
 ## Project Context
 

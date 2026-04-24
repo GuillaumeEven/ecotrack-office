@@ -58,7 +58,7 @@ development_status:
   1-1-user-registration-with-gdpr-consent: ready-for-dev
   1-2-user-login-and-secure-session-management: backlog
   1-3-employee-profile-and-saved-search-preferences: backlog
-  1-4-facilities-manager-user-administration: backlog
+  1-4-organization-admin-user-administration: backlog
   epic-1-retrospective: optional
 
   # ─────────────────────────────────────────────────────────────
@@ -89,7 +89,7 @@ development_status:
   epic-4: backlog
   4-1-incident-reporting-and-automatic-resource-blocking: backlog
   4-2-real-time-technician-notification-and-incident-lifecycle: backlog
-  4-3-facilities-manager-incident-overview: backlog
+  4-3-organization-admin-incident-overview: backlog
   4-4-occupancy-dashboard: backlog
   4-5-zone-consolidation-suggestions-and-targeted-notifications: backlog
   4-6-reporting-data-export-and-gdpr-governance: backlog

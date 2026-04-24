@@ -42,7 +42,7 @@ graph LR
 
 ## Sprint 2 — Authentication
 
-**Goal:** A user can register, log in, and be routed by role (EMPLOYEE / ADMIN / TECHNICIAN).
+**Goal:** A user can register, log in, and be routed by role (EMPLOYEE / Organization Admin / TECHNICIAN).
 
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|
@@ -60,7 +60,7 @@ graph LR
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|
 | 1.3 | Employee Profile & Saved Search Preferences | 🟢 | 1.2 |
-| 1.4 | Facilities Manager — User Administration | 🟡 | 1.2 |
+| 1.4 | Organization Admin — User Administration | 🟡 | 1.2 |
 | 2.1 | Floor & Zone Management | 🟡 | Sprint 1 |
 
 **Sprint 3 Dates:** `______ → ______`
@@ -130,7 +130,7 @@ graph LR
 |-------|-------|------------|------------|
 | 4.1 | Incident Reporting & Automatic Resource Blocking | 🟡 | 2.4 |
 | 4.2 | Real-time Technician Notification & Incident Lifecycle | 🟡 | 4.1 |
-| 4.3 | Facilities Manager — Incident Overview | 🟡 | 4.2 |
+| 4.3 | Organization Admin — Incident Overview | 🟡 | 4.2 |
 
 **Sprint 8 Dates:** `______ → ______`
 
@@ -138,7 +138,7 @@ graph LR
 
 ## Sprint 9 — Analytics & Governance
 
-**Goal:** Admin has full occupancy visibility, consolidation suggestions, and GDPR-compliant data tools.
+**Goal:** Organization Admin has full occupancy visibility, consolidation suggestions, and GDPR-compliant data tools.
 
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|

@@ -26,9 +26,9 @@ classification:
 
 ## Executive Summary
 
-EcoTrack Office is a smart workspace management platform for large office buildings navigating the shift to hybrid and flexible work. Unpredictable attendance has made space utilization chaotic: employees cannot easily find available workspaces in multi-floor buildings, while facilities managers battle daily energy waste from ghost reservations and underused zones.
+EcoTrack Office is a smart workspace management platform for large office buildings navigating the shift to hybrid and flexible work. Unpredictable attendance has made space utilization chaotic: employees cannot easily find available workspaces in multi-floor buildings, while Organization Admins battle daily energy waste from ghost reservations and underused zones.
 
-EcoTrack resolves both problems simultaneously. Employees get real-time visual clarity — an interactive floor map showing exactly what is available, where, and with what equipment. Facilities managers get automated enforcement — check-in timeouts release abandoned desks automatically, zone consolidation suggestions eliminate manual coordination, and occupancy dashboards replace spreadsheet-based guesswork.
+EcoTrack resolves both problems simultaneously. Employees get real-time visual clarity — an interactive floor map showing exactly what is available, where, and with what equipment. Organization Admins get automated enforcement — check-in timeouts release abandoned desks automatically, zone consolidation suggestions eliminate manual coordination, and occupancy dashboards replace spreadsheet-based guesswork.
 
 ### What Makes This Special
 
@@ -50,7 +50,7 @@ Two capabilities distinguish EcoTrack from standard booking tools:
 - Recovers an available desk automatically when a no-show occurs — without contacting the facilities team
 - Understands zone activity at a glance via color-coded floor map
 
-**Facilities Manager:**
+**Organization Admin:**
 - Zero manual intervention for ghost-desk recovery (handled automatically by check-in timeout)
 - Occupancy and energy-zone reports available without manual data extraction
 - Faulty resources excluded from booking in under 2 minutes via incident workflow
@@ -129,7 +129,7 @@ Two capabilities distinguish EcoTrack from standard booking tools:
 
 ---
 
-### Journey 4 — José Luis: The Worn-Down Facilities Manager (Admin User)
+### Journey 4 — José Luis: The Worn-Down Organization Admin (Admin User)
 
 **Persona:** José Luis, 48, head of general services. Twelve years managing the building. His spreadsheet-based reservation system is universally described as "badly designed" — in practice, nobody fills it in. His day starts with a walk-through to see who is in and who has taken which desk.
 
@@ -163,13 +163,13 @@ EcoTrack operates as a business-logic and analytics layer over a managed office 
 ### Compliance & Regulatory
 
 - **GDPR (EU 2016/679):** Platform collects PII (name, presence history, booking patterns, in-building location by zone). Requirements: explicit consent on registration, right to access and erasure, data minimization, privacy policy surfaced at onboarding.
-- **Data retention:** Reservation history and occupancy logs retained for a maximum of 12 months, then anonymized or deleted. Configurable by Facilities Manager.
-- **Role-based access control:** Three permission levels enforced at API level — Employee (self-service booking), Facilities Manager (full admin + reports), Technician (incident management only). No role escalation without admin action.
+- **Data retention:** Reservation history and occupancy logs retained for a maximum of 12 months, then anonymized or deleted. Configurable by Organization Admin.
+- **Role-based access control:** Three permission levels enforced at API level — Employee (self-service booking), Organization Admin (tenant-level admin: manages building assets, users, tenant settings and demo plan), Technician (incident management only). No role escalation without admin action.
 
 ### Technical Constraints
 
 - **Authentication:** JWT stateless auth; tokens expire after 8 hours; refresh token strategy required for continuous sessions.
-- **Audit trail:** All reservation create/update/cancel events and incident state changes logged with timestamp and user ID; accessible to Facilities Manager; minimum retention 90 days.
+- **Audit trail:** All reservation create/update/cancel events and incident state changes logged with timestamp and user ID; accessible to Organization Admin; minimum retention 90 days.
 - **Input validation:** All user-submitted text sanitized server-side. Incident photos: images only (JPEG, PNG, WebP), ≤ 5MB, MIME-type validated server-side.
 
 ### Integration Requirements
@@ -183,7 +183,7 @@ EcoTrack operates as a business-logic and analytics layer over a managed office 
 | Risk | Mitigation |
 |---|---|
 | Ghost desks despite auto-release | Configurable timeout (default 15 min); reminder sent at T−10 min before release |
-| Personal data exposure in reports | Occupancy reports aggregate by zone only; individual data visible only to the user and Facilities Manager |
+| Personal data exposure in reports | Occupancy reports aggregate by zone only; individual data visible only to the user and Organization Admin |
 | App unavailability on arrival | Email-link check-in fallback requires no active app session |
 | Scope creep toward hardware integration | Hardware control scoped to Vision tier; MVP API layer is read-only toward any future BAS integration |
 
@@ -291,7 +291,7 @@ No formal WCAG certification required. Documented baseline practices:
 
 All four user journeys (Guillermo, Eduardo, Raimundo, José Luis) supported at happy-path level.
 
-1. User registration, login, and role management (Employee / Facilities Manager / Technician)
+1. User registration, login, and role management (Employee / Organization Admin / Technician)
 2. Physical asset management: floors, zones, desks, meeting rooms, equipment attributes
 3. Interactive SVG floor map with real-time color-coded availability and zone heat overlay
 4. Desk/room reservation with criteria-based filtering
@@ -320,23 +320,25 @@ All four user journeys (Guillermo, Eduardo, Raimundo, José Luis) supported at h
 
 ## Functional Requirements
 
+Note: For SaaS Demo Mode the tenant-level admin role is `Organization Admin`. This role combines facilities management and tenant administration responsibilities (manage maps/assets, user accounts, tenant settings and demo plan). All occurrences of the legacy term "Facilities Manager" in these planning artifacts have been replaced with `Organization Admin` for clarity in demo deployments.
+
 ### User Management & Authentication
 
 - **FR1:** A visitor can register an account with name, email, and password
 - **FR2:** A registered user can log in and receive a session token valid for 8 hours
 - **FR3:** An authenticated user can log out and invalidate their session
-- **FR4:** A Facilities Manager can create, update, deactivate, and delete user accounts
-- **FR5:** A Facilities Manager can assign and change roles (Employee, Facilities Manager, Technician) for any user
-- **FR6:** The system enforces role-based access at API level: Employees (self-service only), Facilities Managers (full admin), Technicians (incident management only)
+- **FR4:** An Organization Admin can create, update, deactivate, and delete user accounts
+- **FR5:** An Organization Admin can assign and change roles (Employee, Organization Admin, Technician) for any user
+- **FR6:** The system enforces role-based access at API level: Employees (self-service only), Organization Admins (full admin), Technicians (incident management only)
 - **FR7:** An Employee can view and update their own profile and saved search preferences
 
 ### Physical Asset Management
 
-- **FR8:** A Facilities Manager can create, update, and deactivate floors within the building
-- **FR9:** A Facilities Manager can create, update, and deactivate zones within a floor, each with an energy-management flag
-- **FR10:** A Facilities Manager can create, update, and deactivate individual desks and meeting rooms with attributes (equipment list, capacity, floor plan position)
-- **FR11:** A Facilities Manager can upload and replace the SVG floor plan for any floor
-- **FR12:** A Facilities Manager can associate desks and rooms with their SVG anchor positions on the floor plan
+- **FR8:** An Organization Admin can create, update, and deactivate floors within the building
+- **FR9:** An Organization Admin can create, update, and deactivate zones within a floor, each with an energy-management flag
+- **FR10:** An Organization Admin can create, update, and deactivate individual desks and meeting rooms with attributes (equipment list, capacity, floor plan position)
+- **FR11:** An Organization Admin can upload and replace the SVG floor plan for any floor
+- **FR12:** An Organization Admin can associate desks and rooms with their SVG anchor positions on the floor plan
 
 ### Interactive Floor Map
 
@@ -359,7 +361,7 @@ All four user journeys (Guillermo, Eduardo, Raimundo, José Luis) supported at h
 
 - **FR24:** An Employee can confirm check-in by scanning a QR code displayed at the desk
 - **FR25:** An Employee can confirm check-in via a unique email link, without requiring an active app session
-- **FR26:** The system automatically releases a reservation if check-in is not confirmed within 15 minutes of start time (timeout configurable by Facilities Manager)
+- **FR26:** The system automatically releases a reservation if check-in is not confirmed within 15 minutes of start time (timeout configurable by Organization Admin)
 - **FR27:** The system sends a reminder to the Employee 10 minutes before the auto-release deadline
 - **FR28:** A released desk becomes immediately available for new bookings in real time
 
@@ -370,22 +372,22 @@ All four user journeys (Guillermo, Eduardo, Raimundo, José Luis) supported at h
 - **FR31:** The system sends an immediate push notification to all Technicians when a new incident is submitted, with location and description
 - **FR32:** A Technician can update incident status (open → in progress → resolved)
 - **FR33:** When a Technician marks an incident resolved, the resource is automatically re-enabled for booking
-- **FR34:** A Facilities Manager can view all incidents with status, resolution time, and technician assignment
+- **FR34:** An Organization Admin can view all incidents with status, resolution time, and technician assignment
 
 ### Analytics & Occupancy Dashboard
 
-- **FR35:** A Facilities Manager can view total reservations per zone for the current day and current week
-- **FR36:** A Facilities Manager can view occupancy rate (confirmed check-ins vs. total reservations) per zone per day
+- **FR35:** An Organization Admin can view total reservations per zone for the current day and current week
+- **FR36:** An Organization Admin can view occupancy rate (confirmed check-ins vs. total reservations) per zone per day
 - **FR37:** The system generates a zone consolidation suggestion when daily attendance falls below a configurable threshold, identifying zones to activate and zones to shut down
-- **FR38:** A Facilities Manager can send a targeted notification to Employees booked in a zone recommended for shutdown
-- **FR39:** A Facilities Manager can export an occupancy summary report for a selected date range
+- **FR38:** An Organization Admin can send a targeted notification to Employees booked in a zone recommended for shutdown
+- **FR39:** An Organization Admin can export an occupancy summary report for a selected date range
 
 ### Data & Privacy
 
 - **FR40:** The system displays a privacy notice and requests explicit consent during registration
 - **FR41:** An Employee can request the export of their personal data (reservations, profile)
-- **FR42:** A Facilities Manager can configure the data retention period for reservation history (default: 12 months)
-- **FR43:** The system maintains an audit log of all reservation and incident state-change events, accessible to the Facilities Manager
+- **FR42:** An Organization Admin can configure the data retention period for reservation history (default: 12 months)
+- **FR43:** The system maintains an audit log of all reservation and incident state-change events, accessible to the Organization Admin
 
 ---
 
@@ -427,3 +429,48 @@ All four user journeys (Guillermo, Eduardo, Raimundo, José Luis) supported at h
 - OpenAPI/Swagger specification maintained in sync with Spring Boot controllers; serves as the binding frontend–backend contract
 - Each of the four functional blocks deployable independently with its own database schema prefix
 - All environment-specific values provided via environment variables — no hardcoded configuration
+
+## SaaS (Demo Mode)
+
+### Statement
+
+This release will be offered as a SaaS-style demo only. No real payment processing, invoicing, or tax handling will be implemented in this phase. The public-facing Pricing page and Subscribe flows are informational: "Subscribe" starts a demo signup, not a live billing transaction.
+
+### Scope Boundaries for Demo Mode
+
+- Payment and billing integration: OUT OF SCOPE for this release. Billing, invoicing, and payment provider integration deferred to a future release.
+- Tenant provisioning: demo tenants only. Provisioning is simplified for evaluation and does not include production-grade automation or tenant isolation guarantees.
+- Legal and contractual artifacts (DPA, production SLA): noted but deferred. A clear disclaimer will appear on signup and marketing pages: "Demo environment — no live payments."
+
+### Tenant & Data Model (Demo)
+
+- Use a simplified tenant model: demo organizations seeded manually or via an admin console. Data segmentation is logical for evaluation, but not hardened for production multi-tenant isolation.
+- Demo data must be labelled clearly in the UI and export files. A visible banner will indicate the environment is a demo.
+
+### Signup & Onboarding (Demo Flow)
+
+- Public pages required: Marketing Home, Pricing (informational), Signup, Login, Demo Dashboard. "Subscribe" on Pricing triggers demo signup and account creation without payment collection.
+- Signup flow: create organization/account, accept demo terms, optional sample data import, immediate trial activation.
+
+### Operational & Legal Notes
+
+- Status page and support contact must clarify this is a demo deployment.
+- No financial transactions will be accepted; any references to invoices or billing in UI are disabled or replaced with "Demo only" placeholders.
+
+-### Impact on Functional Requirements
+
+- Authentication/Authorization: use a single `Organization Admin` role per tenant that manages building assets, user accounts, tenant settings and demo plan (maps, users, tenant-level settings and demo payment placeholders).
+- Reservations, check-in, incidents, and analytics remain functional; any billing-related FRs are deferred.
+- Update FRs to clarify that subscription management UI is informational in demo mode.
+
+### Telemetry & Metring
+
+- Usage telemetry may be recorded for evaluation and product decisions, but telemetry will not be used for billing or chargeback during demo.
+
+### Quick Implementation Priorities (Minimal)
+
+1. Add demo banner and environment labeling across the app and exported reports.
+2. Implement demo signup flow that creates a demo tenant and demo admin account.
+3. Add informational Pricing page and disable any real payment action — wire "Subscribe" to demo signup.
+4. Update PRD FRs and NFRs to mark billing-related items as deferred and note demo behavior.
+

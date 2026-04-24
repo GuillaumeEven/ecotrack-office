@@ -18,15 +18,15 @@ This document provides the complete epic and story breakdown for EcoTrack Office
 FR1: A visitor can register an account with name, email, and password
 FR2: A registered user can log in and receive a session token valid for 8 hours
 FR3: An authenticated user can log out and invalidate their session
-FR4: A Facilities Manager can create, update, deactivate, and delete user accounts
-FR5: A Facilities Manager can assign and change roles (Employee, Facilities Manager, Technician) for any user
-FR6: The system enforces role-based access at API level: Employees (self-service only), Facilities Managers (full admin), Technicians (incident management only)
+FR4: An Organization Admin can create, update, deactivate, and delete user accounts
+FR5: An Organization Admin can assign and change roles (Employee, Organization Admin, Technician) for any user
+FR6: The system enforces role-based access at API level: Employees (self-service only), Organization Admins (full admin), Technicians (incident management only)
 FR7: An Employee can view and update their own profile and saved search preferences
-FR8: A Facilities Manager can create, update, and deactivate floors within the building
-FR9: A Facilities Manager can create, update, and deactivate zones within a floor, each with an energy-management flag
-FR10: A Facilities Manager can create, update, and deactivate individual desks and meeting rooms with attributes (equipment list, capacity, floor plan position)
-FR11: A Facilities Manager can upload and replace the SVG floor plan for any floor
-FR12: A Facilities Manager can associate desks and rooms with their SVG anchor positions on the floor plan
+FR8: An Organization Admin can create, update, and deactivate floors within the building
+FR9: An Organization Admin can create, update, and deactivate zones within a floor, each with an energy-management flag
+FR10: An Organization Admin can create, update, and deactivate individual desks and meeting rooms with attributes (equipment list, capacity, floor plan position)
+FR11: An Organization Admin can upload and replace the SVG floor plan for any floor
+FR12: An Organization Admin can associate desks and rooms with their SVG anchor positions on the floor plan
 FR13: An Employee can view any floor as an interactive SVG map
 FR14: The map displays each resource with a real-time color-coded status (available, reserved, unavailable/incident)
 FR15: The map displays a zone heat overlay showing zones with active reservations to nudge energy-efficient clustering
@@ -40,7 +40,7 @@ FR22: An Employee can cancel their own reservation before the reservation start 
 FR23: The system saves an Employee's last-used search criteria and pre-fills them on subsequent visits
 FR24: An Employee can confirm check-in by scanning a QR code displayed at the desk
 FR25: An Employee can confirm check-in via a unique email link, without requiring an active app session
-FR26: The system automatically releases a reservation if check-in is not confirmed within 15 minutes of start time (timeout configurable by Facilities Manager)
+FR26: The system automatically releases a reservation if check-in is not confirmed within 15 minutes of start time (timeout configurable by Organization Admin)
 FR27: The system sends a reminder to the Employee 10 minutes before the auto-release deadline
 FR28: A released desk becomes immediately available for new bookings in real time
 FR29: Any authenticated user can report an incident on a specific resource with a text description and optional photo
@@ -48,16 +48,16 @@ FR30: Upon incident submission, the system automatically marks the resource as u
 FR31: The system sends an immediate push notification to all Technicians when a new incident is submitted, with location and description
 FR32: A Technician can update incident status (open → in progress → resolved)
 FR33: When a Technician marks an incident resolved, the resource is automatically re-enabled for booking
-FR34: A Facilities Manager can view all incidents with status, resolution time, and technician assignment
-FR35: A Facilities Manager can view total reservations per zone for the current day and current week
-FR36: A Facilities Manager can view occupancy rate (confirmed check-ins vs. total reservations) per zone per day
+FR34: An Organization Admin can view all incidents with status, resolution time, and technician assignment
+FR35: An Organization Admin can view total reservations per zone for the current day and current week
+FR36: An Organization Admin can view occupancy rate (confirmed check-ins vs. total reservations) per zone per day
 FR37: The system generates a zone consolidation suggestion when daily attendance falls below a configurable threshold, identifying zones to activate and zones to shut down
-FR38: A Facilities Manager can send a targeted notification to Employees booked in a zone recommended for shutdown
-FR39: A Facilities Manager can export an occupancy summary report for a selected date range
+FR38: An Organization Admin can send a targeted notification to Employees booked in a zone recommended for shutdown
+FR39: An Organization Admin can export an occupancy summary report for a selected date range
 FR40: The system displays a privacy notice and requests explicit consent during registration
 FR41: An Employee can request the export of their personal data (reservations, profile)
-FR42: A Facilities Manager can configure the data retention period for reservation history (default: 12 months)
-FR43: The system maintains an audit log of all reservation and incident state-change events, accessible to the Facilities Manager
+FR42: An Organization Admin can configure the data retention period for reservation history (default: 12 months)
+FR43: The system maintains an audit log of all reservation and incident state-change events, accessible to the Organization Admin
 
 ### NonFunctional Requirements
 
@@ -155,7 +155,7 @@ FR30: Epic 4 — Automatic resource blocking on incident
 FR31: Epic 4 — Real-time SSE push notification to technicians
 FR32: Epic 4 — Incident status lifecycle (open → in progress → resolved)
 FR33: Epic 4 — Resource re-enabled on incident resolution
-FR34: Epic 4 — Facilities Manager incident overview
+FR34: Epic 4 — Organization Admin incident overview
 FR35: Epic 4 — Occupancy dashboard (reservations per zone)
 FR36: Epic 4 — Check-in rate per zone per day
 FR37: Epic 4 — Zone consolidation suggestion engine
@@ -173,11 +173,11 @@ Establish the full development environment and project scaffold so all four deve
 **FRs covered:** _(none — technical foundation enabling all epics)_
 
 ### Epic 1: User Management & Authentication
-Users can register, log in, manage their profiles, and access the platform according to their role; Facilities Managers can administer accounts and assign roles; RBAC is enforced at the API layer.
+Users can register, log in, manage their profiles, and access the platform according to their role; Organization Admins can administer accounts and assign roles; RBAC is enforced at the API layer.
 **FRs covered:** FR1, FR2, FR3, FR4, FR5, FR6, FR7, FR40
 
 ### Epic 2: Physical Asset Management & Interactive Floor Map
-Facilities Managers can manage the complete building inventory (floors, zones, desks, rooms) and upload SVG floor plans; Employees can explore the building via an interactive map with real-time availability, zone heat overlay, and criteria-based filters.
+Organization Admins can manage the complete building inventory (floors, zones, desks, rooms) and upload SVG floor plans; Employees can explore the building via an interactive map with real-time availability, zone heat overlay, and criteria-based filters.
 **FRs covered:** FR8, FR9, FR10, FR11, FR12, FR13, FR14, FR15, FR16, FR17, FR18
 
 ### Epic 3: Reservations, Check-in & Auto-release
@@ -185,7 +185,7 @@ Employees can reserve desks and rooms, confirm their presence via QR code or ema
 **FRs covered:** FR19, FR20, FR21, FR22, FR23, FR24, FR25, FR26, FR27, FR28
 
 ### Epic 4: Incidents, Analytics & Data Governance
-Any user can report a resource incident; technicians are notified in real time via SSE; the Facilities Manager has a full occupancy dashboard, zone consolidation suggestions, exportable reports, and GDPR-compliant data governance tools.
+Any user can report a resource incident; technicians are notified in real time via SSE; the Organization Admin has a full occupancy dashboard, zone consolidation suggestions, exportable reports, and GDPR-compliant data governance tools.
 **FRs covered:** FR29, FR30, FR31, FR32, FR33, FR34, FR35, FR36, FR37, FR38, FR39, FR41, FR42, FR43
 
 <!-- Repeat for each epic in epics_list (N = 1, 2, 3...) -->
@@ -256,7 +256,7 @@ So that every team member has an identical, reproducible dev environment ready i
 
 ## Epic 1: User Management & Authentication
 
-Users can register, log in, manage their profiles, and access the platform according to their role; Facilities Managers can administer accounts and assign roles; RBAC is enforced at the API layer.
+Users can register, log in, manage their profiles, and access the platform according to their role; Organization Admins can administer accounts and assign roles; RBAC is enforced at the API layer.
 
 ### Story 1.1: User Registration with GDPR Consent
 
@@ -320,22 +320,22 @@ So that EcoTrack pre-fills my criteria on subsequent visits and I can keep my in
 
 ---
 
-### Story 1.4: Facilities Manager — User Administration
+### Story 1.4: Organization Admin — User Administration
 
-As a Facilities Manager,
+As an Organization Admin,
 I want to create, update, deactivate, and delete user accounts, and assign roles,
 So that I can manage who has access to the platform and what they are authorized to do.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated as a Facilities Manager
+**Given** I am authenticated as an Organization Admin
 **When** I navigate to the user management admin panel
 **Then** `GET /api/v1/users` returns a paginated list of all users with name, email, role, and active status
-**And** `POST /api/v1/users` creates a new account with a specified role (EMPLOYEE, MANAGER, or TECHNICIAN)
+**And** `POST /api/v1/users` creates a new account with a specified role (EMPLOYEE, ORGANIZATION_ADMIN, or TECHNICIAN)
 **And** `PUT /api/v1/users/{id}` updates name, email, or role of any user
 **And** `PATCH /api/v1/users/{id}/deactivate` sets `is_active = false`; the user receives 403 on their next login attempt
 **And** `DELETE /api/v1/users/{id}` permanently removes the user and all associated personal data (GDPR erasure)
-**And** every role change is recorded in the audit log (`anl_audit_log`) with timestamp and acting manager's user_id
+**And** every role change is recorded in the audit log (`anl_audit_log`) with timestamp and acting admin's user_id
 **And** attempting any of these actions as EMPLOYEE or TECHNICIAN returns 403 Forbidden
 **And** the Angular admin component displays a confirmation dialog before deactivation or deletion
 
@@ -343,17 +343,17 @@ So that I can manage who has access to the platform and what they are authorized
 
 ## Epic 2: Physical Asset Management & Interactive Floor Map
 
-Facilities Managers can manage the complete building inventory (floors, zones, desks, rooms) and upload SVG floor plans; Employees can explore the building via an interactive map with real-time availability, zone heat overlay, and criteria-based filters.
+Organization Admins can manage the complete building inventory (floors, zones, desks, rooms) and upload SVG floor plans; Employees can explore the building via an interactive map with real-time availability, zone heat overlay, and criteria-based filters.
 
 ### Story 2.1: Floor & Zone Management
 
-As a Facilities Manager,
+As an Organization Admin,
 I want to create, update, and deactivate floors and zones within the building,
 So that the building structure is accurately modelled and zones can be flagged for energy management.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated as a Facilities Manager
+**Given** I am authenticated as an Organization Admin
 **When** I use the asset admin panel to manage building structure
 **Then** `GET/POST /api/v1/floors` and `PUT/PATCH /api/v1/floors/{id}` manage floors (Flyway `V3__assets.sql` creates `ast_floors`: id, name, level_number, is_active, created_at)
 **And** `GET/POST /api/v1/zones` and `PUT/PATCH /api/v1/zones/{id}` manage zones within a floor (`ast_zones`: id, floor_id FK, name, energy_managed boolean, is_active)
@@ -366,13 +366,13 @@ So that the building structure is accurately modelled and zones can be flagged f
 
 ### Story 2.2: Desk & Meeting Room Management
 
-As a Facilities Manager,
+As an Organization Admin,
 I want to create, update, and deactivate individual desks and meeting rooms with their full attributes,
 So that employees have accurate resource information when browsing and booking.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated as a Facilities Manager
+**Given** I am authenticated as an Organization Admin
 **When** I manage resources via the asset admin panel
 **Then** `GET/POST /api/v1/desks` and `PUT/PATCH /api/v1/desks/{id}` manage desks (`ast_desks`: id, zone_id FK, name, equipment JSON array, is_window_facing, is_near_restroom, svg_anchor_id, status ENUM(AVAILABLE/UNAVAILABLE), is_active)
 **And** `GET/POST /api/v1/rooms` and `PUT/PATCH /api/v1/rooms/{id}` manage meeting rooms (`ast_rooms`: id, zone_id FK, name, capacity, equipment JSON array, svg_anchor_id, status, is_active)
@@ -384,13 +384,13 @@ So that employees have accurate resource information when browsing and booking.
 
 ### Story 2.3: SVG Floor Plan Upload & Anchor Association
 
-As a Facilities Manager,
+As an Organization Admin,
 I want to upload an SVG floor plan for a floor and associate desks and rooms with their SVG anchor positions,
 So that employees see an accurate visual representation of the physical layout.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated as a Facilities Manager
+**Given** I am authenticated as an Organization Admin
 **When** I upload an SVG file for a specific floor
 **Then** `POST /api/v1/floor-plans/{floorId}` accepts multipart/form-data, validates MIME type (image/svg+xml), and stores the file at `{UPLOAD_DIR}/{floorId}.svg`
 **And** an existing SVG for that floor is replaced atomically
@@ -539,7 +539,7 @@ So that ghost desks are eliminated and abandoned spaces become immediately avail
 **Then** all eligible reservations are fetched: `SELECT WHERE status = PENDING AND start_time < NOW() - auto_release_minutes`
 **And** each eligible reservation status is set to RELEASED and its resource status is set back to AVAILABLE in the same transaction
 **And** the auto-release timeout defaults to 15 minutes, configurable via environment variable `AUTO_RELEASE_MINUTES`
-**And** `PUT /api/v1/config/auto-release-minutes` (MANAGER role only) allows the Facilities Manager to update the timeout value at runtime
+**And** `PUT /api/v1/config/auto-release-minutes` (ORGANIZATION_ADMIN role only) allows the Organization Admin to update the timeout value at runtime
 **And** on server restart, the scheduler reads all PENDING reservations from DB and processes any that became eligible during downtime — no in-memory job state
 **And** each auto-release event is written to the audit log (`anl_audit_log`: id, event_type, entity_type, entity_id, actor SYSTEM, timestamp)
 **And** released resources propagate to the floor map availability within the next 30-second poll cycle
@@ -548,7 +548,7 @@ So that ghost desks are eliminated and abandoned spaces become immediately avail
 
 ## Epic 4: Incidents, Analytics & Data Governance
 
-Any user can report a resource incident; technicians are notified in real time via SSE; the Facilities Manager has a full occupancy dashboard, zone consolidation suggestions, exportable reports, and GDPR-compliant data governance tools.
+Any user can report a resource incident; technicians are notified in real time via SSE; the Organization Admin has a full occupancy dashboard, zone consolidation suggestions, exportable reports, and GDPR-compliant data governance tools.
 
 ### Story 4.1: Incident Reporting & Automatic Resource Blocking
 
@@ -582,7 +582,7 @@ So that I can act immediately and the resource is re-enabled for booking once fi
 **When** the incident is persisted
 **Then** the backend sends an SSE event via `SseEmitterRegistry` to all connected Technician clients: `event: INCIDENT_CREATED` with data: incidentId, resourceId, resourceType, location, description, timestamp
 **And** the Angular `SseNotificationService` (native `EventSource`) subscribes to `GET /api/v1/sse/notifications` for TECHNICIAN-role users and displays an in-app toast notification
-**And** `GET /api/v1/incidents` (TECHNICIAN and MANAGER roles) returns a paginated list filterable by status
+**And** `GET /api/v1/incidents` (TECHNICIAN and ORGANIZATION_ADMIN roles) returns a paginated list filterable by status
 **And** `PATCH /api/v1/incidents/{id}/status` allows a Technician to transition: OPEN → IN_PROGRESS → RESOLVED
 **And** when status becomes RESOLVED, the resource status is set back to AVAILABLE in the same transaction
 **And** the resolution timestamp is recorded in `anl_incidents.resolved_at` and the technician in `resolved_by`
@@ -591,15 +591,15 @@ So that I can act immediately and the resource is re-enabled for booking once fi
 
 ---
 
-### Story 4.3: Facilities Manager — Incident Overview
+### Story 4.3: Organization Admin — Incident Overview
 
-As a Facilities Manager,
+As an Organization Admin,
 I want to view all incidents with their status, resolution time, and technician information,
 So that I can monitor operational health and identify recurring problems.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated as a Facilities Manager
+**Given** I am authenticated as an Organization Admin
 **When** I navigate to the incident management view
 **Then** `GET /api/v1/incidents` returns a paginated list filterable by status, resource, and date range, with: resource name and location, reporter name, description, status, created_at, resolved_at, resolution duration, resolved_by name
 **And** open incidents appear at the top sorted by created_at descending
@@ -612,13 +612,13 @@ So that I can monitor operational health and identify recurring problems.
 
 ### Story 4.4: Occupancy Dashboard
 
-As a Facilities Manager,
+As an Organization Admin,
 I want to view occupancy statistics per zone for the current day and week including the check-in rate,
 So that I have data-driven visibility into actual space utilization without manual data extraction.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated as a Facilities Manager
+**Given** I am authenticated as an Organization Admin
 **When** I open the occupancy dashboard
 **Then** `GET /api/v1/analytics/occupancy?date={date}&granularity={day|week}` returns per-zone: total reservations, confirmed check-ins, check-in rate (%), and peak hour
 **And** the Angular `OccupancyDashboardComponent` provides a daily view (today) and weekly view (current week) switchable via tabs
@@ -631,18 +631,18 @@ So that I have data-driven visibility into actual space utilization without manu
 
 ### Story 4.5: Zone Consolidation Suggestions & Targeted Notifications
 
-As a Facilities Manager,
+As an Organization Admin,
 I want the system to suggest which zones to activate or shut down on low-attendance days and notify affected employees with one action,
 So that I can concentrate occupancy into fewer zones without manual coordination.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated as a Facilities Manager and daily attendance is below the configurable threshold
+**Given** I am authenticated as an Organization Admin and daily attendance is below the configurable threshold
 **When** I open the zone consolidation panel
 **Then** `GET /api/v1/analytics/consolidation-suggestions?date={date}` returns: zones recommended to keep active, zones to shut down, and count of affected employees per zone
 **And** the suggestion algorithm identifies zones with the fewest reservations and recommends consolidating employees into the most occupied zones
-**And** the attendance threshold defaults to the value of `CONSOLIDATION_THRESHOLD_PERCENT` env var and is adjustable by the Facilities Manager
-**And** `POST /api/v1/notifications/zone-shutdown` (MANAGER role only) sends a targeted email to all employees with a reservation in the specified zone informing them of the suggestion
+**And** the attendance threshold defaults to the value of `CONSOLIDATION_THRESHOLD_PERCENT` env var and is adjustable by the Organization Admin
+**And** `POST /api/v1/notifications/zone-shutdown` (ORGANIZATION_ADMIN role only) sends a targeted email to all employees with a reservation in the specified zone informing them of the suggestion
 **And** the notification is a recommendation only — no reservations are automatically cancelled
 **And** the Angular `ConsolidationSuggestionsComponent` shows affected employee count and a "Notify employees" button guarded by a confirmation dialog
 **And** each notification send event is recorded in the audit log
@@ -651,13 +651,13 @@ So that I can concentrate occupancy into fewer zones without manual coordination
 
 ### Story 4.6: Reporting, Data Export & GDPR Governance
 
-As a Facilities Manager and as an Employee,
+As an Organization Admin and as an Employee,
 I want to export occupancy reports and personal data, configure data retention, and access the full audit log,
 So that EcoTrack complies with GDPR obligations and management has exportable operational data.
 
 **Acceptance Criteria:**
 
-**Given** I am authenticated as a Facilities Manager
+**Given** I am authenticated as an Organization Admin
 **When** I request an occupancy export
 **Then** `GET /api/v1/analytics/export?from={date}&to={date}&format=csv` returns a CSV with: date, zone, total reservations, confirmed check-ins, check-in rate, open incidents — as a file download with `Content-Disposition: attachment; filename=occupancy-{from}-{to}.csv`
 
@@ -665,9 +665,9 @@ So that EcoTrack complies with GDPR obligations and management has exportable op
 **When** I request my personal data export
 **Then** `GET /api/v1/users/me/export` returns a JSON file containing my full profile, all reservations, and saved preferences (GDPR Article 20 data portability)
 
-**Given** I am authenticated as a Facilities Manager
+**Given** I am authenticated as an Organization Admin
 **When** I configure data retention
-**Then** `PUT /api/v1/config/data-retention-months` (MANAGER only) sets the retention period (default: 12 months)
+**Then** `PUT /api/v1/config/data-retention-months` (ORGANIZATION_ADMIN only) sets the retention period (default: 12 months)
 **And** a scheduled job anonymizes `rsv_reservations` records older than the retention period by replacing personal identifiers with pseudonymized tokens
-**And** `GET /api/v1/audit-log` (MANAGER only) returns a paginated audit log with: event_type, entity_type, entity_id, actor (user_id or SYSTEM), timestamp — retained for a minimum of 90 days regardless of the general retention setting
+**And** `GET /api/v1/audit-log` (ORGANIZATION_ADMIN only) returns a paginated audit log with: event_type, entity_type, entity_id, actor (user_id or SYSTEM), timestamp — retained for a minimum of 90 days regardless of the general retention setting
 **And** purge job executions and all data deletion events are themselves written to the audit log
