@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Booking — EcoTrack</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script>/* set theme early to avoid flash */(function(){try{var t=localStorage.getItem('ecotrack-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+</head>
+<body>
+  <header class="topbar"><div class="brand">EcoTrack Office — Booking</div><button id="theme-toggle-btn" aria-label="Switch theme" style="margin-left:auto;padding:6px 10px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);background:transparent;cursor:pointer">🌓</button></header>
+  <main style="padding:24px;max-width:720px;margin:24px auto;">
+    <h1>Reserve a desk</h1>
+    <form>
+      <label>Desk
+        <select style="width:100%;padding:8px;margin-top:6px;"><option>Desk 4B</option><option>Desk 1A</option></select>
+      </label>
+      <label style="display:block;margin-top:12px;">Date
+        <input type="date" style="width:100%;padding:8px;margin-top:6px;" value="2026-04-24">
+      </label>
+      <label style="display:block;margin-top:12px;">Time
+        <select style="width:100%;padding:8px;margin-top:6px;"><option>09:00–18:00</option></select>
+      </label>
+      <div style="margin-top:14px;display:flex;gap:8px;">
+        <button class="primary" type="button">Reserve</button>
+        <a href="floormap.html">Back to map</a>
+      </div>
+    </form>
+  </main>
+  <script src="../theme-toggle.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="600" height="360">
+  <rect width="100%" height="100%" fill="#f3f9f6"/>
+  <rect x="40" y="40" width="520" height="280" rx="8" fill="#ffffff" stroke="#e0e0e0"/>
+  <text x="70" y="90" font-family="Roboto,Arial" font-size="20" fill="#2e7d32">Admin Dashboard</text>
+  <rect x="70" y="120" width="160" height="80" rx="8" fill="#e8f5e9" stroke="#cfeadf"/>
+  <rect x="250" y="120" width="160" height="80" rx="8" fill="#fff3e0" stroke="#fbe9df"/>
+  <rect x="430" y="120" width="160" height="80" rx="8" fill="#ffebee" stroke="#ffcccc"/>
+</svg>

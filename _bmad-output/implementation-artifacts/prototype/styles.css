@@ -1,0 +1,81 @@
+:root{
+  --bg: #0b1220;
+  --surface: #0f1724;
+  --primary: #26c6a6;
+  --available: #27ae60;
+  --reserved: #ffb74d;
+  --occupied: #e74c3c;
+  --muted: #9aa6b2;
+  --card-border: #17202a;
+  --input-bg: #081426;
+  --input-border: #22303b;
+  --text-color: #e6eef6;
+}
+
+/* Light theme override applied when documentElement has data-theme="light" */
+:root[data-theme="light"]{
+  --bg: #f6fbf8;
+  --surface: #ffffff;
+  --primary: #00897B;
+  --available: #4CAF50;
+  --reserved: #FFA726;
+  --occupied: #EF5350;
+  --muted: #757575;
+  --card-border: #eee;
+  --input-bg: #ffffff;
+  --input-border: #ddd;
+  --text-color: #222222;
+}
+*{box-sizing:border-box;font-family:Roboto,Arial,Helvetica,sans-serif}
+.body{margin:0}
+.body{margin:0}
+body{margin:0;background:var(--bg);color:var(--text-color)}
+.topbar{height:64px;background:var(--surface);display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--card-border)}
+
+/* Theme toggle button styling */
+.topbar #theme-toggle-btn{margin-left:12px;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text-color);font-weight:600}
+[data-theme="light"] .topbar #theme-toggle-btn{border:1px solid rgba(0,0,0,0.08)}
+.layout{display:flex;height:calc(100vh - 64px)}
+.sidebar{width:280px;padding:20px;border-right:1px solid var(--card-border);background:linear-gradient(180deg,var(--surface),#081218)}
+.main{flex:1;display:flex;flex-direction:column}
+.map-area{flex:1;padding:16px}
+.floor-title{font-size:18px;fill:#e6eef6}
+.chips{display:flex;gap:8px;margin-top:8px}
+.chip{background:transparent;border:1px solid var(--card-border);padding:6px 10px;border-radius:16px;color:var(--muted)}
+.statusbar{height:44px;background:var(--surface);display:flex;align-items:center;justify-content:flex-end;padding:0 20px;border-top:1px solid var(--card-border)}
+#floor-svg{width:100%;height:100%;border-radius:6px}
+.desk{cursor:pointer}
+.desk rect{transition:transform .12s;transform-box:fill-box;transform-origin:center center}
+.desk:hover rect{transform:scale(1.12)}
+.desk.available{fill:var(--available)}
+.desk.reserved{fill:var(--reserved)}
+.desk.occupied{fill:var(--occupied)}
+.drawer{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--surface),#081218);box-shadow:0 -12px 36px rgba(0,0,0,.6);max-width:720px;margin:auto;border-top-left-radius:12px;border-top-right-radius:12px;border:1px solid var(--card-border)}
+.drawer.hidden{display:none}
+.drawer-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--card-border)}
+.drawer-body{padding:16px;display:flex;flex-direction:column;gap:8px}
+.drawer-actions{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--card-border)}
+.primary{background:var(--primary);color:#071718;border:none;padding:10px 14px;border-radius:6px}
+.snackbar{position:fixed;left:50%;transform:translateX(-50%);bottom:80px;background:#0f1b26;color:#e6eef6;padding:10px 16px;border-radius:6px;border:1px solid var(--card-border)}
+.snackbar.hidden{display:none}
+.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6)}
+.overlay.hidden{display:none}
+.checkin-card{background:linear-gradient(180deg,#0f1724,#081020);padding:28px;border-radius:10px;text-align:center;min-width:280px;border:1px solid var(--card-border)}
+.checkmark{font-size:48px;color:var(--available)}
+input, textarea, select { background: var(--input-bg); border: 1px solid var(--input-border); color: var(--text-color); padding:8px; border-radius:6px }
+#booking-note{min-height:60px;width:100%;padding:8px;border:1px solid var(--input-border);border-radius:6px;background:var(--input-bg);color:var(--text-color)}
+label{display:block}
+button{cursor:pointer}
+
+/* Additional styles for higher-fidelity SVG */
+.room-label{font-size:14px;fill:#e6eef6;font-weight:600}
+.monitor{fill:#e6eef6;opacity:0.95}
+.legend-title{font-size:13px;fill:#e6eef6;font-weight:600}
+.legend-label{font-size:12px;fill:#cfe6d6}
+.floor-title{font-size:18px;fill:#e6eef6;font-weight:700}
+.desk rect{stroke:#0b1220;stroke-width:1}
+.desk:hover rect{filter:drop-shadow(0 4px 12px rgba(0,0,0,0.6))}
+.desk.available rect{fill:var(--available)}
+.desk.reserved rect{fill:var(--reserved)}
+.desk.occupied rect{fill:var(--occupied)}
+.desk .monitor{fill:#e6eef6}
