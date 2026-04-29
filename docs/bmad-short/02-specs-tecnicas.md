@@ -1,5 +1,13 @@
 # Especificaciones Técnicas — EcoTrack Office
 
+## Contenido
+
+- [Stack tecnológico](#stack-tecnológico)
+- [Inicialización del proyecto](#inicialización-del-proyecto)
+- [Árbol de archivos](#árbol-de-archivos)
+- [Prefijos de tablas MySQL](#prefijos-de-tablas-mysql)
+- [Variables de entorno obligatorias](#variables-de-entorno-obligatorias)
+
 ---
 
 ## Stack tecnológico

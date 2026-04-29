@@ -3,6 +3,13 @@
 > Basado en el sprint-calendar. 9 sprints · 23 historias · 4 estudiantes.
 > Cada estudiante es propietario de un bloque completo: frontend Angular + API Spring Boot + esquema MySQL.
 
+## Contenido
+
+- [Responsabilidades por estudiante](#responsabilidades-por-estudiante)
+- [Tabla de historias por sprint y estudiante](#tabla-de-historias-por-sprint-y-estudiante)
+- [Dependencias críticas entre bloques](#dependencias-críticas-entre-bloques)
+- [Leyenda de dificultad](#leyenda-de-dificultad)
+
 ---
 
 ## Responsabilidades por estudiante

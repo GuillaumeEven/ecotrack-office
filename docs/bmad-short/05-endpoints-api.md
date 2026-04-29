@@ -3,6 +3,14 @@
 > Todos los endpoints están bajo el prefijo `/api/v1/`.
 > La documentación completa está disponible en Swagger UI: `http://localhost:8080/swagger-ui.html`
 
+## Contenido
+
+- [Bloque 1 — Usuarios y Autenticación](#bloque-1--usuarios-y-autenticación)
+- [Bloque 2 — Recursos Físicos y Mapa](#bloque-2--recursos-físicos-y-mapa)
+- [Bloque 3 — Reservas y Check-in](#bloque-3--reservas-y-check-in)
+- [Bloque 4 — Incidencias y Analítica](#bloque-4--incidencias-y-analítica)
+- [Formato de respuestas](#formato-de-respuestas)
+
 ---
 
 ## Bloque 1 — Usuarios y Autenticación

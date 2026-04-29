@@ -2,6 +2,14 @@
 
 > 43 requisitos funcionales, organizados por bloque.
 
+## Contenido
+
+- [Bloque 1 — Usuarios y Autenticación](#bloque-1--usuarios-y-autenticación)
+- [Bloque 2 — Recursos Físicos y Mapa](#bloque-2--recursos-físicos-y-mapa)
+- [Bloque 3 — Reservas y Check-in](#bloque-3--reservas-y-check-in)
+- [Bloque 4 — Incidencias y Analítica](#bloque-4--incidencias-y-analítica)
+- [Requisitos No Funcionales clave](#requisitos-no-funcionales-clave)
+
 ---
 
 ## Bloque 1 — Usuarios y Autenticación
