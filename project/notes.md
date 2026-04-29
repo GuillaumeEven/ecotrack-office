@@ -35,47 +35,19 @@ The two technologies we have not covered in class are:
 
   We met Manuel, our project tutor. He requested a clearer overview of our current knowledge, the course content, and our initial project idea. We plan to share our completed exercises and the project draft and invite him to the GitHub repository for more details. Manuel also agreed with our stance on the role of AI: useful for documentation and organizing work, but not to be used for coding while we are still in a learning phase.
 
+- [x] Meeting with Manuel | *21 April 2026*
+  Attendees: Edu, Rai, José Luis, and Guillaume.
+  Outcomes:
+  1. The documents provided by Guillaume were too dense and did not give the team a clear, high-level view of the project or indicate where to start.
+  2. Manuel will provide a collaborative work tool (a Jira) and the necessary resources to begin working.
+  3. The team will meet before the next tutor meeting (Thursday, 30 April 2026) to advance the project definition, focusing in particular on sketching the different pages to be implemented.
 
-- hacer los wireframe
-- roles:
-  - usuario: consultar mapa/crear reservas
-  - tecnico = usuario + incidencias
-  - manager = tecnico + crear mapa
-- incidencia tiene una foto ? Quien la sube ?
-
-
-- panatallas:
-  - sin cuenta
-    1 - home (
-        - mensaje welcome
-        - buton login
-        - sobre nosotros
-        - pricing
-        )
-    2 - login
-        - login-form (usuario/contraseña/enviar)
-        - link hasta registro
-    3 - registro
-       3.1 - register-form (usuario):
-            - codigo usuario
-            - codigo empresa
-            - contraseña
-            - contradeña 2
-          - registrar-form (empresa)
-            - nombre
-            - cif
-            - direccion
-            - email
-            - contraseña
-            - contraseña 2
-    4.1 - home empresa a pagar
-        - planes (tarifa 1/funcionalidades/precio)
-        - planes (tarifa 2/funcionalidades/precio)
-        - planes (tarifa 3/funcionalidades/precio)
-    5.1 - perfil empresa 
-    4 - usuario/tecnico/manager
-      - home/dashboard (= mapa/reservas)
-      - crear perfil
-      - modificar perfil
-    - tecnico/manager
-      - dashboard incidencias
+- [x] Work session | *22 April 2026*
+  Attendees: Rai, José Luis, and Guillaume.
+  Activities:
+  - Began sketching pages (see Rai's deliverables and the list of pages sketched).
+  Questions and decisions:
+  1. Is the app intended A) to be delivered to clients for internal use, or B) a SaaS where new users can sign up, pay, and use the service without our intervention? We chose option B and started designing the landing/home pages.
+  2. How can we limit table reservations so that a malicious user cannot reserve the same table for the next six months?
+  3. Is it possible to reserve an entire room?
+  4. Who resolves booking conflicts? For now we decided to allow the technician to modify everyone’s reservations from their account to resolve conflicts.

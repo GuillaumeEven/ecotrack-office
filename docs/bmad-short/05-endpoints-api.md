@@ -1,0 +1,117 @@
+# Endpoints API — EcoTrack Office
+
+> Todos los endpoints están bajo el prefijo `/api/v1/`.
+> La documentación completa está disponible en Swagger UI: `http://localhost:8080/swagger-ui.html`
+
+---
+
+## Bloque 1 — Usuarios y Autenticación
+
+| Método | URL | Rol requerido | Descripción |
+|---|---|---|---|
+| `POST` | `/auth/register` | Público | Registro con consentimiento GDPR |
+| `POST` | `/auth/login` | Público | Login → devuelve cookie JWT |
+| `POST` | `/auth/logout` | Autenticado | Cierra sesión e invalida token |
+| `POST` | `/auth/refresh` | Autenticado | Renueva el token JWT |
+| `GET` | `/users/me` | EMPLOYEE | Ver mi perfil |
+| `PATCH` | `/users/me` | EMPLOYEE | Actualizar mi perfil y preferencias |
+| `GET` | `/users` | ADMIN | Listar todos los usuarios |
+| `POST` | `/users` | ADMIN | Crear usuario |
+| `PATCH` | `/users/{id}` | ADMIN | Actualizar usuario (rol, estado) |
+| `DELETE` | `/users/{id}` | ADMIN | Eliminar usuario |
+| `GET` | `/users/me/data-export` | EMPLOYEE | Exportar mis datos (GDPR) |
+
+---
+
+## Bloque 2 — Recursos Físicos y Mapa
+
+| Método | URL | Rol requerido | Descripción |
+|---|---|---|---|
+| `GET` | `/floors` | Autenticado | Listar plantas |
+| `POST` | `/floors` | ADMIN | Crear planta |
+| `PATCH` | `/floors/{id}` | ADMIN | Actualizar planta |
+| `GET` | `/floors/{id}/zones` | Autenticado | Listar zonas de una planta |
+| `POST` | `/zones` | ADMIN | Crear zona |
+| `PATCH` | `/zones/{id}` | ADMIN | Actualizar zona (indicador energético) |
+| `GET` | `/floors/{id}/desks` | Autenticado | Escritorios de una planta (con estado en tiempo real) |
+| `POST` | `/desks` | ADMIN | Crear escritorio |
+| `PATCH` | `/desks/{id}` | ADMIN | Actualizar escritorio |
+| `GET` | `/meeting-rooms` | Autenticado | Listar salas de reunión |
+| `POST` | `/meeting-rooms` | ADMIN | Crear sala |
+| `POST` | `/floors/{id}/floor-plan` | ADMIN | Subir plano SVG |
+| `PATCH` | `/desks/{id}/anchor` | ADMIN | Asociar escritorio a posición SVG |
+
+---
+
+## Bloque 3 — Reservas y Check-in
+
+| Método | URL | Rol requerido | Descripción |
+|---|---|---|---|
+| `POST` | `/reservations` | EMPLOYEE | Crear reserva |
+| `GET` | `/reservations/me` | EMPLOYEE | Mis reservas (futuras y pasadas) |
+| `DELETE` | `/reservations/{id}` | EMPLOYEE | Cancelar mi reserva |
+| `PATCH` | `/reservations/{id}/check-in` | EMPLOYEE | Check-in por QR (autenticado) |
+| `GET` | `/reservations/checkin/{token}` | Público | Check-in por enlace de email (token único) |
+
+---
+
+## Bloque 4 — Incidencias y Analítica
+
+| Método | URL | Rol requerido | Descripción |
+|---|---|---|---|
+| `POST` | `/incidents` | Autenticado | Reportar una incidencia (+ foto opcional) |
+| `GET` | `/incidents` | ADMIN | Listar todas las incidencias |
+| `PATCH` | `/incidents/{id}/status` | TECHNICIAN | Actualizar estado (open→in_progress→resolved) |
+| `GET` | `/incidents/stream` | TECHNICIAN | Stream SSE de notificaciones en tiempo real |
+| `GET` | `/analytics/zones/occupancy` | ADMIN | Ocupación por zona (día / semana) |
+| `GET` | `/analytics/zones/consolidation` | ADMIN | Sugerencias de consolidación de zonas |
+| `POST` | `/analytics/zones/{id}/notify` | ADMIN | Notificar empleados en una zona |
+| `GET` | `/analytics/reports` | ADMIN | Exportar informe de ocupación (CSV/PDF) |
+| `GET` | `/audit-logs` | ADMIN | Consultar registro de auditoría |
+
+---
+
+## Formato de respuestas
+
+### Éxito — colección (con paginación)
+```json
+{
+  "content": [...],
+  "page": 0,
+  "size": 20,
+  "totalElements": 47
+}
+```
+
+### Éxito — objeto único
+```json
+{ "id": 1, "email": "g@ecotrack.com", "role": "EMPLOYEE" }
+```
+
+### Éxito — acción sin datos
+```
+HTTP 204 No Content
+```
+
+### Error — formato RFC 7807
+```json
+{
+  "type": "https://ecotrack.com/errors/desk-unavailable",
+  "title": "Desk Unavailable",
+  "status": 409,
+  "detail": "Desk 42 is already reserved for this time slot.",
+  "instance": "/api/v1/reservations"
+}
+```
+
+### Códigos HTTP
+| Situación | Código |
+|---|---|
+| Recurso creado | `201 Created` |
+| Lectura / actualización | `200 OK` |
+| Acción sin datos de retorno | `204 No Content` |
+| Error de validación | `400 Bad Request` |
+| No autenticado | `401 Unauthorized` |
+| Rol incorrecto | `403 Forbidden` |
+| No encontrado | `404 Not Found` |
+| Doble reserva / conflicto | `409 Conflict` |
