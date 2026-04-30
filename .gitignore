@@ -1,3 +1,12 @@
 _bmad/
 .claude/
 .github/
+
+# Spring Boot backend
+back/**/target/
+back/**/.env
+back/**/*.class
+back/**/*.jar
+back/**/*.war
+back/**/*.log
+back/**/spring-shell.log
