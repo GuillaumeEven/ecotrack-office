@@ -7,8 +7,8 @@ spring:
     name: usuarios
   datasource:
     url: jdbc:mysql://localhost:3306/ecotrack
-    username: turist
-    password: L0$tInTime
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: none
