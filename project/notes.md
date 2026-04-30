@@ -66,3 +66,7 @@ Mapa: un rectangulo con rectangulos representando salas, solo se puede pinchar l
 Como estimamos el beneficio ?
 Alguien de la empresa cliente debe diseñar su empresa.
 El admin puede crear sala. Tenemos que programar las vistas 'crear plantas/salas/mesas' acciessible en la cuenta administrador.
+Añadir encima de reservar une mesa el hecho de teletrabajar. Asi se puede valorar el ahorro de co2.
+La etimacion se hace por sala cerrada. La sala debe de tener los metros cuadrados como atributos. Nos basamos en un año de 365 días.
+Volvemos a la pregunta de la cancelacion por el tecnico: dadas todas implicaciones (notificacion al usuario, es un cambio o una cancelacion... ?). No implemntamos este aspecto.
+Quitamos la vista de los planes. Suscripcion = llegada a la cuenta admin.
