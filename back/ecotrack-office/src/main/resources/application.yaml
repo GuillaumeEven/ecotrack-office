@@ -1,0 +1,35 @@
+spring:
+  config:
+    import: optional:dotenv:.env
+  main:
+    allow-circular-references: true
+  application:
+    name: usuarios
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecotrack
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      javax:
+        persistence:
+          schema-generation:
+            scripts:
+              # action: create
+              action: none
+              create-target: schema.sql
+      hibernate:
+        format_sql: true
+  flyway:
+    # enabled: true
+    enabled: false
+    locations: classpath:db/migration
+    # baseline-on-migrate: true
+    baseline-on-migrate: false
+springdoc:
+  swagger-ui:
+    path: /misproductos.html
+    operationsSorter: method
