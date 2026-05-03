@@ -34,21 +34,21 @@
 | **2** | Autenticación | 1.2 — Login + sesión JWT | Est. 1 | 🟡 |
 | **3** | Perfil + Base activos | 1.3 — Perfil de empleado | Est. 1 | 🟢 |
 | **3** | Perfil + Base activos | 1.4 — Admin gestión usuarios | Est. 1 | 🟡 |
-| **3** | Perfil + Base activos | 2.1 — Plantas y zonas | Est. 2 | 🟡 |
+| **3** | Perfil + Base activos | 2.1 — Plantas y salas (política 80%) | Est. 2 | 🟡 |
 | **4** | Gestión de activos | 2.2 — Escritorios y salas | Est. 2 | 🟡 |
 | **4** | Gestión de activos | 2.3 — Subida SVG + posiciones | Est. 2 | 🔴 |
-| **5** | Mapa interactivo ⚠️ | 2.4 — Visor mapa SVG | Est. 2 | 🔴 |
-| **5** | Mapa interactivo ⚠️ | 2.5 — Capa de calor + filtros | Est. 2 | 🔴 |
-| **6** | Reservas | 3.1 — Reserva + prevención doble | Est. 3 | 🔴 |
-| **6** | Reservas | 3.2 — Mis reservas + cancelación | Est. 3 | 🟡 |
-| **7** | Check-in | 3.3 — QR check-in | Est. 3 | 🟡 |
-| **7** | Check-in | 3.4 — Check-in por email + recordatorio | Est. 3 | 🟡 |
+| **5** | Mapa interactivo ⚠️ | 2.4 — Room Tiles & Desk Drill-down | Est. 2 | 🔴 |
+| **5** | Mapa interactivo ⚠️ | 2.5 — Vista lista y ficha de detalle | Est. 2 | 🟡 |
+| **6** | Reservas | 3.1 — Reserva por turnos + prevención doble | Est. 3 | 🔴 |
+| **6** | Reservas | 3.2 — Mis reservas, cancelación e indicador remoto | Est. 3 | 🟡 |
+| **7** | Check-in | 3.3 — App-based check-in | Est. 3 | 🟡 |
+| **7** | Check-in | *(Post-MVP)* 3.4 — Check-in por email + recordatorio | — | — |
 | **7** | Auto-liberación | 3.5 — Scheduler liberación automática | Est. 3 | 🟡 |
 | **8** | Incidencias | 4.1 — Reporte incidencia + bloqueo recurso | Est. 4 | 🟡 |
 | **8** | Incidencias | 4.2 — Notificación técnico (SSE) + ciclo vida | Est. 4 | 🟡 |
 | **8** | Incidencias | 4.3 — Vista admin incidencias | Est. 4 | 🟡 |
-| **9** | Analítica | 4.4 — Dashboard ocupación | Est. 4 | 🔴 |
-| **9** | Analítica | 4.5 — Consolidación zonas + notificaciones | Est. 4 | 🔴 |
+| **9** | Analítica | 4.4 — Dashboard ocupación + ahorro energético/CO₂ | Est. 4 | 🔴 |
+| **9** | Analítica | 4.5 — Consolidación de zonas | Est. 4 | 🟡 |
 | **9** | Gobernanza | 4.6 — Exportar informes + GDPR | Est. 4 | 🟡 |
 
 ---
