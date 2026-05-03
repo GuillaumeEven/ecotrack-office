@@ -1,6 +1,7 @@
 _bmad/
 .claude/
 .github/
+.DS_Store
 
 # Spring Boot backend
 back/**/target/
