@@ -15,7 +15,7 @@ This document provides the complete epic and story breakdown for EcoTrack Office
 
 ### Functional Requirements
 
-FR1: A visitor can register an account with name, email, and password
+FR1: A visitor can register an account with name, email, password, and a valid company invitation code
 FR2: A registered user can log in and receive a session token valid for 8 hours
 FR3: An authenticated user can log out and invalidate their session
 FR4: An Organization Admin can create, update, deactivate, and delete user accounts
@@ -23,25 +23,29 @@ FR5: An Organization Admin can assign and change roles (Employee, Organization A
 FR6: The system enforces role-based access at API level: Employees (self-service only), Organization Admins (full admin), Technicians (incident management only)
 FR7: An Employee can view and update their own profile and saved search preferences
 FR8: An Organization Admin can create, update, and deactivate floors within the building
-FR9: An Organization Admin can create, update, and deactivate zones within a floor, each with an energy-management flag
-FR10: An Organization Admin can create, update, and deactivate individual desks and meeting rooms with attributes (equipment list, capacity, floor plan position)
+FR9: An Organization Admin can create, update, and deactivate rooms (Desk area / Meeting room) within a floor, with energy-management flag and surface area in m²
+FR9b: The system enforces 80%-capacity opening policy; a room/floor opens automatically when current active capacity reaches 80%; Technician can manually open/close
+FR10: An Organization Admin can create, update, and deactivate individual desks with attributes (equipment list, floor plan position)
 FR11: An Organization Admin can upload and replace the SVG floor plan for any floor
 FR12: An Organization Admin can associate desks and rooms with their SVG anchor positions on the floor plan
-FR13: An Employee can view any floor as an interactive SVG map
+FR13: An Employee can view the building as an interactive map with rectangular tiles representing floors and rooms; only available rooms are selectable
 FR14: The map displays each resource with a real-time color-coded status (available, reserved, unavailable/incident)
-FR15: The map displays a zone heat overlay showing zones with active reservations to nudge energy-efficient clustering
-FR16: An Employee can filter the map by criteria (proximity to restrooms, window-facing, equipment type)
+FR15: When a room tile is clicked, a room-level view opens showing individual desks as available or reserved; a tooltip allows booking by shift
+FR16: *(Nice-to-have — post-MVP)* An Employee can filter the map by criteria (proximity to restrooms, window-facing, equipment type)
 FR17: An Employee can access a list/table view of available spaces as an alternative to the map
 FR18: An Employee can view a detail card for any desk or room (equipment, capacity, zone, current status)
-FR19: An Employee can reserve an available desk or meeting room for a specific date and time slot
-FR20: The system prevents double-booking: a reserved resource cannot be booked by another user for the same slot
+FR19: An Employee can reserve an available desk or meeting room for a specific date and shift (morning 08:00–14:00 / afternoon 14:00–20:00); maximum 7 days in advance
+FR19b: The system prevents booking more than 7 days in advance (configurable)
+FR20: The system prevents double-booking: a reserved resource cannot be booked by another user for the same shift
 FR21: An Employee can view their upcoming and past reservations
 FR22: An Employee can cancel their own reservation before the reservation start time
+FR22b: A Technician can modify or cancel any reservation to resolve conflicts; no automatic user notification in demo
 FR23: The system saves an Employee's last-used search criteria and pre-fills them on subsequent visits
-FR24: An Employee can confirm check-in by scanning a QR code displayed at the desk
-FR25: An Employee can confirm check-in via a unique email link, without requiring an active app session
+FR23b: An Employee can mark a workday as remote work; the system records it for CO₂ savings estimation
+FR24: An Employee can confirm check-in directly from within the app on their active reservation (no QR code)
+FR25: *(Nice-to-have — post-MVP)* An Employee can confirm check-in via a unique email link, without requiring an active app session
 FR26: The system automatically releases a reservation if check-in is not confirmed within 15 minutes of start time (timeout configurable by Organization Admin)
-FR27: The system sends a reminder to the Employee 10 minutes before the auto-release deadline
+FR27: *(Nice-to-have — post-MVP)* The system sends a reminder to the Employee 10 minutes before the auto-release deadline
 FR28: A released desk becomes immediately available for new bookings in real time
 FR29: Any authenticated user can report an incident on a specific resource with a text description and optional photo
 FR30: Upon incident submission, the system automatically marks the resource as unavailable and removes it from booking availability
@@ -52,7 +56,7 @@ FR34: An Organization Admin can view all incidents with status, resolution time,
 FR35: An Organization Admin can view total reservations per zone for the current day and current week
 FR36: An Organization Admin can view occupancy rate (confirmed check-ins vs. total reservations) per zone per day
 FR37: The system generates a zone consolidation suggestion when daily attendance falls below a configurable threshold, identifying zones to activate and zones to shut down
-FR38: An Organization Admin can send a targeted notification to Employees booked in a zone recommended for shutdown
+FR38: *(Nice-to-have — post-MVP)* An Organization Admin can send a targeted notification to Employees booked in a zone recommended for shutdown
 FR39: An Organization Admin can export an occupancy summary report for a selected date range
 FR40: The system displays a privacy notice and requests explicit consent during registration
 FR41: An Employee can request the export of their personal data (reservations, profile)
@@ -100,8 +104,9 @@ NFR21: All environment-specific values provided via environment variables — no
 - **GDPR compliance:** Explicit consent at registration; right to access/erasure; data minimization; 12-month configurable retention; audit log minimum 90 days
 - **Angular architecture:** Feature module per block (lazy-loaded); `core/` for singleton services/guards/interceptors; `shared/` for common components and Angular Material re-exports
 - **Two HTTP interceptors:** `AuthInterceptor` (JWT cookie injection) + `ErrorInterceptor` (global RFC 7807 parsing)
-- **QR code generation:** `qrcode` npm library on frontend; encodes one-time check-in URL; no backend cost
-- **Email check-in token:** One-time token stored in DB table `rsv_checkin_tokens` with 15-minute expiry; stateless link, no session required
+- **App-based check-in:** Authenticated employee confirms check-in directly from the active reservation view via `PATCH /api/v1/reservations/{id}/check-in`; no QR code, no external token
+- **Remote-work indicator:** `rsv_remote_work` table stores one row per user per date; used to calculate CO₂ savings in the analytics dashboard
+- **Shift-based booking:** Reservations use `Shift` ENUM (MORNING / AFTERNOON) instead of arbitrary start/end times; unique constraint on (resource_id, date, shift)
 
 ### UX Design Requirements
 
@@ -109,12 +114,12 @@ _(No UX Design document found — UX requirements are derived from user journeys
 
 UX-DR1: Map-first booking interface — the building floor plan is the primary interaction surface for finding and reserving workspaces
 UX-DR2: Color-coded resource status overlay on the floor map (green = available, orange = active zone / energy nudge, red = unavailable/incident)
-UX-DR3: Zone heat overlay nudging employees toward energy-efficient clustering without mandating it
-UX-DR4: Criteria-based filter panel on the map (proximity to restrooms, window-facing, equipment type)
+UX-DR3: *(Nice-to-have — post-MVP)* Zone heat overlay nudging employees toward energy-efficient clustering without mandating it
+UX-DR4: *(Nice-to-have — post-MVP)* Criteria-based filter panel on the map (proximity to restrooms, window-facing, equipment type)
 UX-DR5: List/table fallback view for all available spaces (accessibility + low-bandwidth scenario)
 UX-DR6: Desk/room detail card with equipment, capacity, zone, and current status
 UX-DR7: Onboarding tooltip overlay on first login (map-first UX is unfamiliar to non-technical users)
-UX-DR8: Pre-release reminder email sent at T−10 min with email-link check-in (no session required)
+UX-DR8: *(Nice-to-have — post-MVP)* Pre-release reminder email sent at T−10 min with email-link check-in (no session required)
 UX-DR9: Incident report form with text description + optional photo attachment, completable in under 30 seconds
 UX-DR10: Admin dashboard with daily/weekly occupancy summary, open incidents count, and zone consolidation suggestion card
 UX-DR11: WCAG AA color contrast (4.5:1 minimum) enforced via Angular Material theme; all primary actions keyboard-navigable; `aria-label` on all icons and status indicators
@@ -130,25 +135,29 @@ FR5: Epic 1 — Role assignment
 FR6: Epic 1 — RBAC enforcement at API layer
 FR7: Epic 1 — Employee profile & saved preferences
 FR8: Epic 2 — Floor CRUD
-FR9: Epic 2 — Zone CRUD with energy flag
-FR10: Epic 2 — Desk & meeting room CRUD
+FR9: Epic 2 — Room CRUD (Desk area / Meeting room) with energy flag and m²
+FR9b: Epic 2 — 80%-capacity opening policy (auto + manual by Technician)
+FR10: Epic 2 — Desk CRUD with equipment attributes
 FR11: Epic 2 — SVG floor plan upload
 FR12: Epic 2 — Desk ↔ SVG anchor association
-FR13: Epic 2 — Interactive floor map viewer
+FR13: Epic 2 — Interactive floor map viewer (building-level room tiles)
 FR14: Epic 2 — Real-time color-coded status overlay
-FR15: Epic 2 — Zone heat overlay (energy nudge)
-FR16: Epic 2 — Map criteria filters
+FR15: Epic 2 — Room drill-down with desk view and shift tooltip
+FR16: *(post-MVP)* Epic 2 — Map criteria filters
 FR17: Epic 2 — List/table fallback view
 FR18: Epic 2 — Desk/room detail card
-FR19: Epic 3 — Desk/room reservation
-FR20: Epic 3 — Double-booking prevention
+FR19: Epic 3 — Shift-based desk/room reservation (morning / afternoon)
+FR19b: Epic 3 — 7-day advance booking limit
+FR20: Epic 3 — Double-booking prevention (per shift)
 FR21: Epic 3 — My reservations view
 FR22: Epic 3 — Reservation cancellation
+FR22b: Epic 3 — Technician modifies/cancels reservations (conflict resolution)
 FR23: Epic 3 — Saved search preferences
-FR24: Epic 3 — QR code check-in
-FR25: Epic 3 — Email link check-in
+FR23b: Epic 3 — Remote-work day indicator (CO₂ savings input)
+FR24: Epic 3 — App-based check-in (from active reservation view)
+FR25: *(post-MVP)* Epic 3 — Email link check-in
 FR26: Epic 3 — Auto-release scheduler (15 min timeout)
-FR27: Epic 3 — Pre-release reminder email (T−10 min)
+FR27: *(post-MVP)* Epic 3 — Pre-release reminder email (T−10 min)
 FR28: Epic 3 — Immediate desk availability after release
 FR29: Epic 4 — Incident reporting with photo
 FR30: Epic 4 — Automatic resource blocking on incident
@@ -159,8 +168,10 @@ FR34: Epic 4 — Organization Admin incident overview
 FR35: Epic 4 — Occupancy dashboard (reservations per zone)
 FR36: Epic 4 — Check-in rate per zone per day
 FR37: Epic 4 — Zone consolidation suggestion engine
-FR38: Epic 4 — Targeted employee notification (zone shutdown)
+FR38: *(post-MVP)* Epic 4 — Targeted employee notification (zone shutdown)
 FR39: Epic 4 — Occupancy report export
+FR40b: Epic 4 — Energy savings estimate per closed room (m² formula)
+FR40c: Epic 4 — CO₂ savings estimate (closed rooms + remote-work days)
 FR40: Epic 1 — GDPR consent at registration
 FR41: Epic 4 — Personal data export (GDPR)
 FR42: Epic 4 — Data retention configuration
@@ -177,16 +188,16 @@ Users can register, log in, manage their profiles, and access the platform accor
 **FRs covered:** FR1, FR2, FR3, FR4, FR5, FR6, FR7, FR40
 
 ### Epic 2: Physical Asset Management & Interactive Floor Map
-Organization Admins can manage the complete building inventory (floors, zones, desks, rooms) and upload SVG floor plans; Employees can explore the building via an interactive map with real-time availability, zone heat overlay, and criteria-based filters.
-**FRs covered:** FR8, FR9, FR10, FR11, FR12, FR13, FR14, FR15, FR16, FR17, FR18
+Organization Admins can manage the complete building inventory (floors, rooms, desks) via dedicated admin views; rooms have a type (Desk area / Meeting room), surface area in m², and an 80%-capacity opening policy. Employees explore the building via an interactive map of rectangular room tiles with a desk drill-down view; real-time color-coded availability; list/table fallback.
+**FRs covered:** FR8, FR9, FR9b, FR10, FR11, FR12, FR13, FR14, FR15, FR17, FR18 — FR16 post-MVP
 
 ### Epic 3: Reservations, Check-in & Auto-release
-Employees can reserve desks and rooms, confirm their presence via QR code or email link, and abandoned reservations are released automatically — returning desks to the available pool without manual intervention.
-**FRs covered:** FR19, FR20, FR21, FR22, FR23, FR24, FR25, FR26, FR27, FR28
+Employees reserve desks and rooms by shift (morning / afternoon) up to 7 days in advance, mark remote-work days, and confirm presence directly from within the app. Technicians can modify or cancel reservations to resolve conflicts. Abandoned reservations are released automatically.
+**FRs covered:** FR19, FR19b, FR20, FR21, FR22, FR22b, FR23, FR23b, FR24, FR26, FR28 — FR25, FR27 post-MVP
 
 ### Epic 4: Incidents, Analytics & Data Governance
-Any user can report a resource incident; technicians are notified in real time via SSE; the Organization Admin has a full occupancy dashboard, zone consolidation suggestions, exportable reports, and GDPR-compliant data governance tools.
-**FRs covered:** FR29, FR30, FR31, FR32, FR33, FR34, FR35, FR36, FR37, FR38, FR39, FR41, FR42, FR43
+Any user can report a resource incident; technicians are notified in real time via SSE; the Organization Admin has a full occupancy dashboard, energy/CO₂ savings estimates per closed room, zone consolidation suggestions, and GDPR-compliant data governance tools.
+**FRs covered:** FR29, FR30, FR31, FR32, FR33, FR34, FR35, FR36, FR37, FR39, FR40b, FR40c, FR41, FR42, FR43 — FR38 post-MVP
 
 <!-- Repeat for each epic in epics_list (N = 1, 2, 3...) -->
 
@@ -261,19 +272,20 @@ Users can register, log in, manage their profiles, and access the platform accor
 ### Story 1.1: User Registration with GDPR Consent
 
 As a visitor,
-I want to register an account with my name, email, and password, and provide explicit GDPR consent,
-So that I can access the platform and my personal data is processed lawfully.
+I want to register an account with my name, email, password, and a valid company invitation code, and provide explicit GDPR consent,
+So that I can access the platform tied to my organization and my personal data is processed lawfully.
 
 **Acceptance Criteria:**
 
 **Given** I am on the registration page
-**When** I submit a valid name, email, and password with the consent checkbox ticked
-**Then** my account is created with the EMPLOYEE role by default
+**When** I submit a valid name, email, password, company invitation code, and the consent checkbox ticked
+**Then** my account is created with the EMPLOYEE role by default and is linked to the organization associated with the invitation code
 **And** my password is stored hashed with bcrypt (cost factor ≥ 12) — never in plain text
-**And** the `usr_users` table (Flyway `V2__users.sql`) stores: id, name, email, hashed_password, role, gdpr_consent, consent_at, is_active, created_at, search_preferences (JSON)
+**And** the `usr_users` table (Flyway `V2__users.sql`) stores: id, name, email, hashed_password, role, organization_id FK, gdpr_consent, consent_at, is_active, created_at, search_preferences (JSON)
 **And** a 201 Created response returns the user profile (no password field)
+**And** if the invitation code is invalid or does not exist, a 400 Bad Request Problem Detail is returned
 **And** if the email already exists, a 409 Conflict Problem Detail is returned
-**And** if any field fails validation (empty name, invalid email, password < 8 chars), a 400 Bad Request Problem Detail with field-level errors is returned
+**And** if any field fails validation (empty name, invalid email, password < 8 chars, missing code), a 400 Bad Request Problem Detail with field-level errors is returned
 **And** the Angular registration form shows inline validation errors before submission
 **And** the consent checkbox is required — form cannot be submitted without it
 
@@ -343,41 +355,42 @@ So that I can manage who has access to the platform and what they are authorized
 
 ## Epic 2: Physical Asset Management & Interactive Floor Map
 
-Organization Admins can manage the complete building inventory (floors, zones, desks, rooms) and upload SVG floor plans; Employees can explore the building via an interactive map with real-time availability, zone heat overlay, and criteria-based filters.
+Organization Admins can manage the complete building inventory (floors, rooms, desks) via dedicated admin views; rooms have a type (Desk area / Meeting room), surface area in m², and an 80%-capacity opening policy. Employees explore the building via an interactive map of rectangular room tiles with a desk drill-down view and list/table fallback.
 
-### Story 2.1: Floor & Zone Management
+### Story 2.1: Floor & Room Management
 
 As an Organization Admin,
-I want to create, update, and deactivate floors and zones within the building,
-So that the building structure is accurately modelled and zones can be flagged for energy management.
+I want to create, update, and deactivate floors and rooms (Desk area or Meeting room) within the building, with the system automatically opening new rooms when capacity reaches 80%,
+So that the building structure is accurately modelled, energy management is tracked, and bookings are consolidated by default.
 
 **Acceptance Criteria:**
 
 **Given** I am authenticated as an Organization Admin
 **When** I use the asset admin panel to manage building structure
 **Then** `GET/POST /api/v1/floors` and `PUT/PATCH /api/v1/floors/{id}` manage floors (Flyway `V3__assets.sql` creates `ast_floors`: id, name, level_number, is_active, created_at)
-**And** `GET/POST /api/v1/zones` and `PUT/PATCH /api/v1/zones/{id}` manage zones within a floor (`ast_zones`: id, floor_id FK, name, energy_managed boolean, is_active)
-**And** deactivating a floor automatically deactivates all its zones and desks
+**And** `GET/POST /api/v1/rooms` and `PUT/PATCH /api/v1/rooms/{id}` manage rooms within a floor (`ast_rooms`: id, floor_id FK, name, type ENUM(DESK_AREA/MEETING_ROOM), surface_area_m2 DECIMAL, energy_managed BOOLEAN, is_open BOOLEAN, capacity INT, is_active, created_at)
+**And** the system enforces the **80%-opening policy**: `GET /api/v1/rooms/open-next` returns the next room to open when active rooms reach ≥80% capacity; this is applied at booking-creation time automatically
+**And** `PATCH /api/v1/rooms/{id}/open` and `PATCH /api/v1/rooms/{id}/close` allow a Technician to manually override the open/closed state of any room
+**And** deactivating a floor automatically deactivates all its rooms and desks
 **And** all responses return DTOs — never JPA entities directly
 **And** all CRUD operations return correct HTTP codes: 201 Created, 200 OK, 204 No Content
-**And** attempting these actions as EMPLOYEE or TECHNICIAN returns 403 Forbidden
+**And** attempting these actions as EMPLOYEE returns 403 Forbidden
 
 ---
 
-### Story 2.2: Desk & Meeting Room Management
+### Story 2.2: Desk Management
 
 As an Organization Admin,
-I want to create, update, and deactivate individual desks and meeting rooms with their full attributes,
+I want to create, update, and deactivate individual desks with their full attributes,
 So that employees have accurate resource information when browsing and booking.
 
 **Acceptance Criteria:**
 
 **Given** I am authenticated as an Organization Admin
-**When** I manage resources via the asset admin panel
-**Then** `GET/POST /api/v1/desks` and `PUT/PATCH /api/v1/desks/{id}` manage desks (`ast_desks`: id, zone_id FK, name, equipment JSON array, is_window_facing, is_near_restroom, svg_anchor_id, status ENUM(AVAILABLE/UNAVAILABLE), is_active)
-**And** `GET/POST /api/v1/rooms` and `PUT/PATCH /api/v1/rooms/{id}` manage meeting rooms (`ast_rooms`: id, zone_id FK, name, capacity, equipment JSON array, svg_anchor_id, status, is_active)
-**And** the Angular asset form allows adding and removing equipment items from a tag list
-**And** deactivating a desk or room that has an active upcoming reservation returns 409 Conflict with a descriptive Problem Detail
+**When** I manage desks via the asset admin panel
+**Then** `GET/POST /api/v1/desks` and `PUT/PATCH /api/v1/desks/{id}` manage desks (`ast_desks`: id, room_id FK, name, equipment JSON array, svg_anchor_id, status ENUM(AVAILABLE/UNAVAILABLE), is_active)
+**And** the Angular desk form allows adding and removing equipment items (chairs, tables, TV, etc.) from a tag list
+**And** deactivating a desk that has an active upcoming reservation returns 409 Conflict with a descriptive Problem Detail
 **And** all responses are DTOs; entity classes are never serialized directly to the API
 
 ---
@@ -404,63 +417,64 @@ So that employees see an accurate visual representation of the physical layout.
 ### Story 2.4: Interactive Floor Map Viewer
 
 As an employee,
-I want to view any floor as an interactive SVG map showing real-time resource availability with color-coded status,
-So that I can instantly understand what is available and plan my workspace choice visually.
+I want to view the building as an interactive map of rectangular room tiles with real-time color-coded availability, and drill into a room to see individual desks and book by shift,
+So that I can visually find and reserve a workspace in a few taps.
 
 **Acceptance Criteria:**
 
 **Given** I am authenticated as any user and navigate to the floor map
-**When** the map loads for a floor
-**Then** the SVG floor plan is fetched via `GET /api/v1/floor-plans/{floorId}` and rendered inside `FloorMapComponent`
-**And** `DeskMarkerComponent` overlays each SVG anchor: green = AVAILABLE, orange = RESERVED, red = UNAVAILABLE/incident
-**And** desk availability is polled every 30 seconds via `interval(30000) + switchMap` in `FloorMapService`; polling cancels on component destroy
+**When** the map loads
+**Then** the `BuildingMapComponent` renders a grid of rectangular tiles, one per room on each floor; only open rooms are selectable
+**And** each tile is color-coded: green = at least one desk AVAILABLE, orange = fully RESERVED, red = UNAVAILABLE/incident, grey = closed
+**And** room availability is polled every 30 seconds via `interval(30000) + switchMap` in `FloorMapService`; polling cancels on component destroy
+**And** clicking an available room tile opens the `RoomDrillDownComponent` showing individual desk markers (green/orange/red) overlaid on the room SVG
+**And** clicking a desk marker displays a tooltip with desk name, equipment list, and two booking buttons: **Morning** / **Afternoon** (disabled if already reserved for that shift)
 **And** if the API is unreachable during a poll, a "Live data unavailable" banner appears while the last-known state is preserved; booking actions are disabled
-**And** clicking a desk or room opens a detail card showing: name, zone, equipment list, capacity, and current status
-**And** the map (floor plan SVG + desk data for the active floor only) loads within ≤ 3 seconds on a 50 Mbps connection
+**And** the map (floor list + open rooms + desks for the clicked room) loads within ≤ 3 seconds on a 50 Mbps connection
 **And** a dismissible tooltip overlay explains the map interface on first login and never reappears after dismissal
-**And** all desk markers carry `aria-label` with desk name and status; primary interactions are keyboard-navigable
+**And** all markers carry `aria-label` with name and status; primary interactions are keyboard-navigable
 
 ---
 
-### Story 2.5: Zone Heat Overlay, Map Filters & List View
+### Story 2.5: List View & Room Detail Card
+
+> **Note — post-MVP:** Map criteria filters (FR16), zone heat overlay (UX-DR3), and filter panel (UX-DR4) are deferred to Growth. This story covers the MVP list/table fallback and the desk/room detail card.
 
 As an employee,
-I want to filter the floor map by my preferences, see a zone activity heat overlay, and switch to a list view,
-So that I can quickly find spaces matching my needs and make energy-conscious choices.
+I want to browse available spaces in a list/table view and view a detail card for any desk or room,
+So that I can find and assess workspaces even without the map interface or on low-bandwidth connections.
 
 **Acceptance Criteria:**
 
 **Given** I am on the floor map page
-**When** I open the filter panel
-**Then** I can filter by: near_restrooms (boolean), window_facing (boolean), equipment_type (multi-select); the panel is pre-filled from my saved preferences
-**And** desks not matching all active filters are dimmed on the map; only matching desks are highlighted as bookable
-**And** `ZoneOverlayComponent` renders a semi-transparent color layer per zone: intensity reflects active reservation count returned by `GET /api/v1/zones/{floorId}/activity`
-**And** the zone overlay nudges clustering without blocking the map or desk markers
-**And** switching to list/table view fetches `GET /api/v1/desks?floorId={id}&available=true&{filters}` and displays: name, zone, equipment, status in a sortable table
+**When** I switch to list/table view
+**Then** `GET /api/v1/desks?floorId={id}&available=true` and `GET /api/v1/rooms?floorId={id}&available=true` return open, bookable resources
+**And** the `ResourceListComponent` displays: name, room/floor, equipment, type, and current status in a sortable table
 **And** the list view is the default when no SVG floor plan has been uploaded for a floor
-**And** both views are fully responsive across desktop, tablet, and mobile (Chrome, Firefox, Safari, Edge — latest 2 stable versions)
+**And** clicking any row opens a `ResourceDetailCard` showing: name, room, floor, equipment list, capacity (rooms), status, and booking buttons (Morning / Afternoon) for available resources
+**And** both views are fully responsive across desktop, tablet, and mobile
 **And** all status colors maintain WCAG AA contrast ratio (≥ 4.5:1)
 
 ---
 
 ## Epic 3: Reservations, Check-in & Auto-release
 
-Employees can reserve desks and rooms, confirm their presence via QR code or email link, and abandoned reservations are released automatically — returning desks to the available pool without manual intervention.
+Employees reserve desks and rooms by shift (morning / afternoon) up to 7 days in advance, mark remote-work days, and confirm presence from within the app. Technicians can modify or cancel reservations to resolve conflicts. Abandoned reservations are released automatically.
 
 ### Story 3.1: Desk/Room Reservation & Conflict Prevention
 
 As an employee,
-I want to reserve an available desk or meeting room for a specific date and time slot,
+I want to reserve an available desk or meeting room for a specific date and shift (morning or afternoon), up to 7 days in advance,
 So that I am guaranteed a workspace when I arrive at the office.
 
 **Acceptance Criteria:**
 
 **Given** I am authenticated as an employee and have selected an available resource on the map or list
-**When** I submit the reservation form with a valid date and time slot
-**Then** `POST /api/v1/reservations` creates the reservation (Flyway `V4__reservations.sql` creates `rsv_reservations`: id, user_id FK, resource_type ENUM(DESK/ROOM), resource_id, date, start_time, end_time, status ENUM(PENDING/CONFIRMED/CANCELLED/RELEASED), created_at)
-**And** a database unique constraint on (resource_type, resource_id, date, start_time, end_time) prevents double-booking; a concurrent duplicate returns 409 Conflict Problem Detail
+**When** I tap Morning or Afternoon on the desk tooltip / detail card
+**Then** `POST /api/v1/reservations` creates the reservation (Flyway `V4__reservations.sql` creates `rsv_reservations`: id, user_id FK, resource_type ENUM(DESK/ROOM), resource_id, date, shift ENUM(MORNING/AFTERNOON), status ENUM(PENDING/CONFIRMED/CANCELLED/RELEASED), created_at)
+**And** a database unique constraint on (resource_type, resource_id, date, shift) prevents double-booking; a concurrent duplicate returns 409 Conflict Problem Detail
+**And** attempting to book more than 7 days in advance returns 400 Bad Request Problem Detail
 **And** the resource status is immediately reflected as RESERVED in the next availability poll response
-**And** the reservation form is pre-filled with the employee's saved search preferences for resource selection
 **And** the API responds within ≤ 500ms at p95
 **And** an employee can only create reservations for themselves; booking on behalf of another user returns 403 Forbidden
 
@@ -487,17 +501,22 @@ So that I can manage my schedule and free up spaces I no longer need.
 
 ---
 
-### Story 3.3: QR Code Generation & Desk Check-in
+### Story 3.3: App-based Check-in
 
 As an employee,
-I want to scan a QR code at the desk to confirm my check-in,
-So that the system knows I have arrived and my reservation is not auto-released.
+I want to confirm my check-in directly from the app when I arrive at my reserved desk,
+So that the system logs my presence and my reservation is not auto-released.
 
 **Acceptance Criteria:**
 
-**Given** I have an upcoming reservation and am physically at the desk
-**When** I scan the QR code displayed at the desk
-**Then** the QR code encodes the URL `/check-in?token={one-time-token}` generated via the `qrcode` npm library from a token stored in `rsv_checkin_tokens` (Flyway `V5__checkin_tokens.sql`: token_hash, reservation_id, expires_at)
+**Given** I have an upcoming reservation with status PENDING and I am in the app
+**When** I navigate to "My Reservations" and tap "Check in" on the active reservation
+**Then** `PATCH /api/v1/reservations/{id}/check-in` sets the reservation status to CONFIRMED (204 No Content)
+**And** only the reservation owner can check in; other users receive 403 Forbidden
+**And** attempting to check in more than 15 minutes before the reservation start time returns 400 Bad Request Problem Detail
+**And** attempting to check in on a CANCELLED or RELEASED reservation returns 409 Conflict Problem Detail
+**And** on successful check-in, the desk status updates to CONFIRMED in the floor map within the next poll cycle
+**And** the check-in event is written to the audit log with user_id and timestamp
 **And** `PATCH /api/v1/reservations/{id}/check-in` validates the token, sets status = CONFIRMED, and deletes the used token (204 No Content)
 **And** an expired token (> 15 min after reservation start) returns 410 Gone Problem Detail
 **And** an already-used token returns 409 Conflict Problem Detail
@@ -507,11 +526,13 @@ So that the system knows I have arrived and my reservation is not auto-released.
 
 ---
 
-### Story 3.4: Email Link Check-in & Pre-release Reminder
+### Story 3.4: *(Post-MVP — Nice-to-have)* Email Link Check-in & Pre-release Reminder
+
+> This story is **deferred to Growth**. It depends on an email infrastructure (SMTP / MailHog) and token management (`rsv_checkin_tokens`) that are not required for the MVP.
 
 As an employee,
-I want to receive a reminder email before my reservation is auto-released and check in via a link in that email without needing to be logged in,
-So that I can confirm my presence frictionlessly even if I forgot to scan the QR code.
+I want to receive a reminder email before my reservation is auto-released and check in via a link without needing to be logged in,
+So that I can confirm my presence frictionlessly when I cannot open the app.
 
 **Acceptance Criteria:**
 
@@ -536,7 +557,7 @@ So that ghost desks are eliminated and abandoned spaces become immediately avail
 
 **Given** a reservation has status PENDING and its start time + the auto-release timeout has elapsed
 **When** the Spring `@Scheduled(fixedDelay = 60_000)` job runs
-**Then** all eligible reservations are fetched: `SELECT WHERE status = PENDING AND start_time < NOW() - auto_release_minutes`
+**Then** all eligible reservations are fetched: `SELECT WHERE status = PENDING AND start_time_of_shift < NOW() - auto_release_minutes`
 **And** each eligible reservation status is set to RELEASED and its resource status is set back to AVAILABLE in the same transaction
 **And** the auto-release timeout defaults to 15 minutes, configurable via environment variable `AUTO_RELEASE_MINUTES`
 **And** `PUT /api/v1/config/auto-release-minutes` (ORGANIZATION_ADMIN role only) allows the Organization Admin to update the timeout value at runtime
@@ -629,11 +650,13 @@ So that I have data-driven visibility into actual space utilization without manu
 
 ---
 
-### Story 4.5: Zone Consolidation Suggestions & Targeted Notifications
+### Story 4.5: Zone Consolidation Suggestions
+
+> **Note — post-MVP:** The "Notify employees" button (FR38) is deferred to Growth. This story covers suggestion display and manual action only.
 
 As an Organization Admin,
-I want the system to suggest which zones to activate or shut down on low-attendance days and notify affected employees with one action,
-So that I can concentrate occupancy into fewer zones without manual coordination.
+I want the system to suggest which zones to activate or shut down on low-attendance days,
+So that I can concentrate occupancy into fewer zones and reduce energy waste.
 
 **Acceptance Criteria:**
 
@@ -642,10 +665,9 @@ So that I can concentrate occupancy into fewer zones without manual coordination
 **Then** `GET /api/v1/analytics/consolidation-suggestions?date={date}` returns: zones recommended to keep active, zones to shut down, and count of affected employees per zone
 **And** the suggestion algorithm identifies zones with the fewest reservations and recommends consolidating employees into the most occupied zones
 **And** the attendance threshold defaults to the value of `CONSOLIDATION_THRESHOLD_PERCENT` env var and is adjustable by the Organization Admin
-**And** `POST /api/v1/notifications/zone-shutdown` (ORGANIZATION_ADMIN role only) sends a targeted email to all employees with a reservation in the specified zone informing them of the suggestion
-**And** the notification is a recommendation only — no reservations are automatically cancelled
-**And** the Angular `ConsolidationSuggestionsComponent` shows affected employee count and a "Notify employees" button guarded by a confirmation dialog
-**And** each notification send event is recorded in the audit log
+**And** the Angular `ConsolidationSuggestionsComponent` shows: recommended active zones, zones to close, and a list of employees booked per zone (for manual outreach if needed)
+**And** no automatic notification is sent to employees in demo scope (FR38 post-MVP)
+**And** each consolidation suggestion view event is recorded in the audit log
 
 ---
 

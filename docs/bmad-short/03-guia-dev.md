@@ -17,25 +17,26 @@
 ### Sprint 3 — Perfil + Base de activos
 - [ ] **1.3** Perfil del empleado y preferencias de búsqueda
 - [ ] **1.4** Panel de administración de usuarios (Admin)
-- [ ] **2.1** Gestión de plantas y zonas (Flyway V2)
+- [ ] **2.1** Gestión de plantas y salas (tipo, m², política 80%) (Flyway V2)
 
 ### Sprint 4 — Gestión de recursos físicos
 - [ ] **2.2** CRUD de escritorios y salas de reunión
 - [ ] **2.3** Subida del plano SVG y asociación de posiciones
 
 ### Sprint 5 — Mapa interactivo ⚠️ SPRINT CRÍTICO
-- [ ] **2.4** Visor del mapa SVG con estado en tiempo real por color
-- [ ] **2.5** Capa de calor por zonas, filtros y vista lista
+- [ ] **2.4** Room tiles — mapa de salas con código de colores y drill-down de escritorios
+- [ ] **2.5** Vista lista y ficha de detalle de sala
 > Los Sprints 6 y 8 están bloqueados hasta que 2.4 esté completo.
+> 🚧 Filtros de mapa (FR16) y capa de calor son **post-MVP** — no en este sprint.
 
 ### Sprint 6 — Reservas
-- [ ] **3.1** Reserva de escritorio/sala con prevención de doble reserva (Flyway V3)
-- [ ] **3.2** Mis reservas y cancelación
+- [ ] **3.1** Reserva por **turnos** (Mañana 08:00–14:00 / Tarde 14:00–20:00) con prevención de doble reserva y límite de 7 días (Flyway V3)
+- [ ] **3.2** Mis reservas, cancelación e indicador de trabajo remoto
 
 ### Sprint 7 — Check-in y liberación automática
-- [ ] **3.3** Generación QR y check-in en escritorio
-- [ ] **3.4** Check-in por enlace de email y recordatorio pre-liberación
-- [ ] **3.5** Scheduler de liberación automática (récupère l'état depuis la DB au redémarrage)
+- [ ] **3.3** App-based check-in (confirmación en un toque, autenticado)
+- *(Post-MVP: 3.4 check-in por enlace de email y recordatorio pre-liberación)*
+- [ ] **3.5** Scheduler de liberación automática (dep. de 3.3; recüpera estado desde la DB al reiniciar)
 
 ### Sprint 8 — Incidencias
 - [ ] **4.1** Notificación de incidencia + bloqueo automático del recurso (Flyway V4)
@@ -43,8 +44,8 @@
 - [ ] **4.3** Vista de incidencias para el Administrador
 
 ### Sprint 9 — Analítica y Gobernanza
-- [ ] **4.4** Dashboard de ocupación (reservas + check-ins por zona)
-- [ ] **4.5** Sugerencias de consolidación de zonas + notificaciones a empleados
+- [ ] **4.4** Dashboard de ocupación + estimaciones de ahorro energético y CO₂
+- [ ] **4.5** Sugerencias de consolidación de zonas *(notificaciones a empleados: post-MVP)*
 - [ ] **4.6** Exportar informes y gestión GDPR (exportación de datos, auditoría)
 
 ---

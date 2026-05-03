@@ -38,14 +38,14 @@
 | `GET` | `/floors` | Autenticado | Listar plantas |
 | `POST` | `/floors` | ADMIN | Crear planta |
 | `PATCH` | `/floors/{id}` | ADMIN | Actualizar planta |
-| `GET` | `/floors/{id}/zones` | Autenticado | Listar zonas de una planta |
-| `POST` | `/zones` | ADMIN | Crear zona |
-| `PATCH` | `/zones/{id}` | ADMIN | Actualizar zona (indicador energético) |
+| `GET` | `/floors/{id}/rooms` | Autenticado | Listar salas de una planta |
+| `POST` | `/rooms` | ADMIN | Crear sala (tipo, m², capacidad) |
+| `PATCH` | `/rooms/{id}` | ADMIN | Actualizar sala (indicador energético, capacidad) |
+| `PATCH` | `/rooms/{id}/open` | TECHNICIAN | Abrir sala manualmente |
+| `PATCH` | `/rooms/{id}/close` | TECHNICIAN | Cerrar sala manualmente |
 | `GET` | `/floors/{id}/desks` | Autenticado | Escritorios de una planta (con estado en tiempo real) |
 | `POST` | `/desks` | ADMIN | Crear escritorio |
 | `PATCH` | `/desks/{id}` | ADMIN | Actualizar escritorio |
-| `GET` | `/meeting-rooms` | Autenticado | Listar salas de reunión |
-| `POST` | `/meeting-rooms` | ADMIN | Crear sala |
 | `POST` | `/floors/{id}/floor-plan` | ADMIN | Subir plano SVG |
 | `PATCH` | `/desks/{id}/anchor` | ADMIN | Asociar escritorio a posición SVG |
 
@@ -55,11 +55,12 @@
 
 | Método | URL | Rol requerido | Descripción |
 |---|---|---|---|
-| `POST` | `/reservations` | EMPLOYEE | Crear reserva |
+| `POST` | `/reservations` | EMPLOYEE | Crear reserva (turno + fecha) |
 | `GET` | `/reservations/me` | EMPLOYEE | Mis reservas (futuras y pasadas) |
 | `DELETE` | `/reservations/{id}` | EMPLOYEE | Cancelar mi reserva |
-| `PATCH` | `/reservations/{id}/check-in` | EMPLOYEE | Check-in por QR (autenticado) |
-| `GET` | `/reservations/checkin/{token}` | Público | Check-in por enlace de email (token único) |
+| `PATCH` | `/reservations/{id}` | TECHNICIAN | Modificar o cancelar cualquier reserva |
+| `PATCH` | `/reservations/{id}/check-in` | EMPLOYEE | Check-in en la app (un solo toque; autenticado) |
+| `POST` | `/remote-work` | EMPLOYEE | Registrar día de trabajo remoto |
 
 ---
 
@@ -73,7 +74,7 @@
 | `GET` | `/incidents/stream` | TECHNICIAN | Stream SSE de notificaciones en tiempo real |
 | `GET` | `/analytics/zones/occupancy` | ADMIN | Ocupación por zona (día / semana) |
 | `GET` | `/analytics/zones/consolidation` | ADMIN | Sugerencias de consolidación de zonas |
-| `POST` | `/analytics/zones/{id}/notify` | ADMIN | Notificar empleados en una zona |
+| `POST` | `/analytics/zones/{id}/notify` | ADMIN | *(Post-MVP)* Notificar empleados en una zona |
 | `GET` | `/analytics/reports` | ADMIN | Exportar informe de ocupación (CSV/PDF) |
 | `GET` | `/audit-logs` | ADMIN | Consultar registro de auditoría |
 
