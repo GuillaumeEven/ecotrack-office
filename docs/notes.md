@@ -1,149 +1,79 @@
-# Miscellaneous notes
+# Notas misceláneas
 
-## Considerations
+## Consideraciones
 
-- Role of AI within the project: presenting it upfront could be an advantage.
+- Papel de la IA en el proyecto: presentarla desde el inicio podría ser una ventaja.
 
-## Questions
+## Preguntas
 
-- Presentation of the TFM (Final Master's Project): individual or group?
-- Meeting cadence: weekly?
-- Real-time notifications: should we use Server-Sent Events (SSE)? The AI suggested it is the simplest approach.
-- use of bruno testing
-- assign role to each people ?
-- la app es interna a una empresa, o es un sas ?
-- como se crea la primera cuenta, la del empresario
-- es posible reservar mesas de forma permanente ?
-- es posible reservar salas enteras ?
-- con que antelación se puede reservar ?
+- Presentación del TFM (Trabajo Fin de Máster): ¿individual o en grupo?
+- Cadencia de reuniones: ¿semanal?
+- Notificaciones en tiempo real: ¿usar SSE (Server-Sent Events)? La IA sugirió que es la opción más sencilla.
+- Uso de la herramienta de testing «bruno» (mencionar y evaluar)
+- ¿Asignar roles a cada persona del equipo?
+- ¿La app es interna para una empresa o es un SaaS?
+- ¿Cómo se crea la primera cuenta (la del propietario/empresa)?
+- ¿Es posible reservar mesas de forma permanente?
+- ¿Es posible reservar salas completas?
+- ¿Con qué antelación se puede reservar?
 
-### Answered
+### Respondidas
 ---
-- Use of AI: according to the first meeting, it is considered a good practice.
+- Uso de la IA: según la primera reunión, se considera una buena práctica.
 
-## Points of attention in the architecture document
+## Puntos de atención en el documento de arquitectura
 
-The two technologies we have not covered in class are:
+Las dos tecnologías que no hemos tratado en clase son:
 
-- Flyway migrations: making changes to the database is sensitive, and the database schema is not versioned in the Git repository. To be able to roll back changes, a migration tool is necessary; it acts like Git for database changes. The AI recommended Flyway.
+- Migraciones con Flyway: los cambios en la base de datos son sensibles y el esquema no está versionado en el repositorio Git. Para poder revertir cambios es necesario un gestor de migraciones; actúa como Git para la base de datos. La IA recomendó Flyway.
 
-- Notifications: the document mentions SSE and the EventSource API in Angular. This is new to me and should be clarified with Manuel.
+- Notificaciones: el documento menciona SSE y la API EventSource en Angular. Esto es nuevo para mí y debe aclararse con Manuel.
 
-## Meetings
+## Reuniones
 
-- [x] Meeting with Manuel | *16 April 2026*
+- [x] Reunión con Manuel | *16 de abril de 2026*
 
-  We met Manuel, our project tutor. He requested a clearer overview of our current knowledge, the course content, and our initial project idea. We plan to share our completed exercises and the project draft and invite him to the GitHub repository for more details. Manuel also agreed with our stance on the role of AI: useful for documentation and organizing work, but not to be used for coding while we are still in a learning phase.
+  Nos reunimos con Manuel, nuestro tutor de proyecto. Pidió una visión más clara de nuestros conocimientos actuales, el contenido del curso y la idea inicial del proyecto. Planeamos compartir los ejercicios completados y el borrador del proyecto e invitarle al repositorio de GitHub para más detalles. Manuel también coincidió en el papel de la IA: útil para documentación y organización del trabajo, pero no para programar mientras estamos en fase de aprendizaje.
 
-- [x] Meeting with Manuel | *21 April 2026*
-  Attendees: Edu, Rai, José Luis, and Guillaume.
-  Outcomes:
-  1. The documents provided by Guillaume were too dense and did not give the team a clear, high-level view of the project or indicate where to start.
-  2. Manuel will provide a collaborative work tool (a Jira) and the necessary resources to begin working.
-  3. The team will meet before the next tutor meeting (Thursday, 30 April 2026) to advance the project definition, focusing in particular on sketching the different pages to be implemented.
+- [x] Reunión con Manuel | *21 de abril de 2026*
+  Asistentes: Edu, Rai, José Luis y Guillaume.
+  Resultados:
+  1. Los documentos proporcionados por Guillaume eran demasiado densos y no daban al equipo una visión clara y de alto nivel ni un punto de partida.
+  2. Manuel facilitará una herramienta colaborativa (Jira) y los recursos necesarios para comenzar a trabajar.
+  3. El equipo se reunirá antes de la siguiente tutoría (jueves 30 de abril de 2026) para avanzar en la definición del proyecto, con especial foco en esbozar las diferentes páginas a implementar.
 
-- [x] Work session | *22 April 2026*
-  Attendees: Rai, José Luis, and Guillaume.
-  Activities:
-  - Began sketching pages (see Rai's deliverables and the list of pages sketched).
-  Questions and decisions:
-  1. Is the app intended A) to be delivered to clients for internal use, or B) a SaaS where new users can sign up, pay, and use the service without our intervention? We chose option B and started designing the landing/home pages.
-  2. How can we limit table reservations so that a malicious user cannot reserve the same table for the next six months?
-  3. Is it possible to reserve an entire room?
-  4. Who resolves booking conflicts? For now we decided to allow the technician to modify everyone’s reservations from their account to resolve conflicts.
+- [x] Sesión de trabajo | *22 de abril de 2026*
+  Asistentes: Rai, José Luis y Guillaume.
+  Actividades:
+  - Empezamos a esbozar páginas (ver entregables de Rai y la lista de pantallas esbozadas).
+  Preguntas y decisiones:
+  1. ¿La app se entregará A) a clientes para uso interno, o B) será un SaaS donde nuevos usuarios pueden registrarse, pagar y usar el servicio sin nuestra intervención? Elegimos la opción B y empezamos a diseñar las páginas de aterrizaje/home.
+  2. ¿Cómo limitar reservas de mesas para que un usuario malintencionado no reserve la misma mesa durante seis meses?
+  3. ¿Es posible reservar una sala completa?
+  4. ¿Quién resuelve los conflictos de reserva? De momento decidimos permitir que el técnico modifique las reservas desde su cuenta para resolver conflictos.
 
-Edu/Gui: para inscribirse, solo hace falta un codigo de empresa, luego veremos si nos da tiempo a mejorarlo
-Se puede reservar con una semana de antelacion como maximo
-Valor eco: unir las reservas el maximo posible: ahorro de luz, climatization, limpieza y agua. pero como medir ese beneficio: se ahorra los gastos de una planta, por ejemplo. Calculo volando de Edu: 8.2K/año/sala + el beneficio ecologica, en termas de carbono (calculo por hacer)
-Otro sistema ? -> las reservas estan restringidas a una planta hasta que este completa o casi (80%), el sistema abre nuevas plantas automaticamente. Y eso a la escala de salas tambien
-(llega Jose luis)
-Dos tipos de sala:
-  - puestos de trabajo
-  - reunion
-Elementos: Sillas, mesas, tv...
-Precision de las reservas: no por hora, sino por turno mañana/tarde
-Mapa: un rectangulo con rectangulos representando salas, solo se puede pinchar las disponibles a la reserva. Pinchas en una sala, aparece el mapa de esta sala con mesas disponibles y reservadas. al pasar encima de una mesa libre se abre un tooltip para reservar mañana o tarde segun disponibilidad. Si una mesa lleva una incidencia no se puede reservar, igual con las salas. El tecinco puede abrir o cerrar una sala a la reserva.
-Como estimamos el beneficio ?
-Alguien de la empresa cliente debe diseñar su empresa.
-El admin puede crear sala. Tenemos que programar las vistas 'crear plantas/salas/mesas' acciessible en la cuenta administrador.
-Añadir encima de reservar une mesa el hecho de teletrabajar. Asi se puede valorar el ahorro de co2.
-La etimacion se hace por sala cerrada. La sala debe de tener los metros cuadrados como atributos. Nos basamos en un año de 365 días.
-Volvemos a la pregunta de la cancelacion por el tecnico: dadas todas implicaciones (notificacion al usuario, es un cambio o una cancelacion... ?). No implemntamos este aspecto.
-Quitamos la vista de los planes. Suscripcion = llegada a la cuenta admin.
-# Miscellaneous notes
+ - [x] Sesión de trabajo | *30 de abril de 2026*
 
-## Considerations
+  Decisiones:
 
-- Role of AI within the project: presenting it upfront could be an advantage.
+  - MVP (A implementar):
+    - Registro: Edu/Guillaume — para inscribirse solo hace falta un código de empresa; más adelante se evaluará mejorarlo.
+    - Antelación máxima: se puede reservar con una semana de antelación como máximo (decisión provisional).
+    - Valor ecológico: agrupar las reservas al máximo para ahorrar electricidad, climatización, limpieza y agua. Estimación rápida (Edu): 8,2K €/año/sala; cálculo de emisiones de CO₂ pendiente.
+    - Política de apertura de plantas/salas: restringir reservas a una planta hasta que esté completa o casi (80%); el sistema abrirá nuevas plantas automáticamente. Aplicable también a salas.
+    - Tipos de sala:
+      - Puestos de trabajo
+      - Reunión
+    - Elementos por sala: sillas, mesas, TV, etc.
+    - Precisión de reservas: turno (mañana/tarde).
+    - Interfaz de reserva (mapa): vista con rectángulos que representan plantas y salas; se seleccionan solo las disponibles. Al clicar una sala se muestra el plano con mesas disponibles/reservadas; tooltip para reservar según turno. Incidencias bloquean la mesa/sala. El técnico puede abrir/cerrar salas.
+    - Estimación del ahorro: requiere que el cliente defina su estructura (plantas, m2 por sala). La estimación se calcula por sala cerrada, usando m2 y 365 días al año.
+    - Vistas administrativas: el administrador puede crear plantas, salas y mesas; implementar vistas "Crear plantas/salas/mesas" en la cuenta admin.
+    - Teletrabajo: añadir un indicador de teletrabajo para valorar ahorro de CO₂.
+    - Cancelaciones: gestionadas por técnico — cuestión abierta (notificación al usuario, ¿cambio o cancelación?). Por ahora, no implementado.
 
-## Questions
+  - Suscripción / Planes:
+    - Se elimina la vista de planes en el flujo público; la suscripción se gestiona desde la cuenta admin.
 
-- Presentation of the TFM (Final Master's Project): individual or group?
-- Meeting cadence: weekly?
-- Real-time notifications: should we use Server-Sent Events (SSE)? The AI suggested it is the simplest approach.
-- use of bruno testing
-- assign role to each people ?
-- la app es interna a una empresa, o es un sas ?
-- como se crea la primera cuenta, la del empresario
-- es posible reservar mesas de forma permanente ?
-- es posible reservar salas enteras ?
-- con que antelación se puede reservar ?
-
-### Answered
 ---
-- Use of AI: according to the first meeting, it is considered a good practice.
-
-## Points of attention in the architecture document
-
-The two technologies we have not covered in class are:
-
-- Flyway migrations: making changes to the database is sensitive, and the database schema is not versioned in the Git repository. To be able to roll back changes, a migration tool is necessary; it acts like Git for database changes. The AI recommended Flyway.
-
-- Notifications: the document mentions SSE and the EventSource API in Angular. This is new to me and should be clarified with Manuel.
-
-## Meetings
-
-- [x] Meeting with Manuel | *16 April 2026*
-
-  We met Manuel, our project tutor. He requested a clearer overview of our current knowledge, the course content, and our initial project idea. We plan to share our completed exercises and the project draft and invite him to the GitHub repository for more details. Manuel also agreed with our stance on the role of AI: useful for documentation and organizing work, but not to be used for coding while we are still in a learning phase.
-
-- [x] Meeting with Manuel | *21 April 2026*
-  Attendees: Edu, Rai, José Luis, and Guillaume.
-  Outcomes:
-  1. The documents provided by Guillaume were too dense and did not give the team a clear, high-level view of the project or indicate where to start.
-  2. Manuel will provide a collaborative work tool (a Jira) and the necessary resources to begin working.
-  3. The team will meet before the next tutor meeting (Thursday, 30 April 2026) to advance the project definition, focusing in particular on sketching the different pages to be implemented.
-
-- [x] Work session | *22 April 2026*
-  Attendees: Rai, José Luis, and Guillaume.
-  Activities:
-  - Began sketching pages (see Rai's deliverables and the list of pages sketched).
-  Questions and decisions:
-  1. Is the app intended A) to be delivered to clients for internal use, or B) a SaaS where new users can sign up, pay, and use the service without our intervention? We chose option B and started designing the landing/home pages.
-  2. How can we limit table reservations so that a malicious user cannot reserve the same table for the next six months?
-  3. Is it possible to reserve an entire room?
-  4. Who resolves booking conflicts? For now we decided to allow the technician to modify everyone’s reservations from their account to resolve conflicts.
-
-Edu/Gui: para inscribirse, solo hace falta un codigo de empresa, luego veremos si nos da tiempo a mejorarlo
-Se puede reservar con una semana de antelacion como maximo
-Valor eco: unir las reservas el maximo posible: ahorro de luz, climatization, limpieza y agua. pero como medir ese beneficio: se ahorra los gastos de una planta, por ejemplo. Calculo volando de Edu: 8.2K/año/sala + el beneficio ecologica, en termas de carbono (calculo por hacer)
-Otro sistema ? -> las reservas estan restringidas a una planta hasta que este completa o casi (80%), el sistema abre nuevas plantas automaticamente. Y eso a la escala de salas tambien
-(llega Jose luis)
-Dos tipos de sala:
-  - puestos de trabajo
-  - reunion
-Elementos: Sillas, mesas, tv...
-Precision de las reservas: no por hora, sino por turno mañana/tarde
-Mapa: un rectangulo con rectangulos representando salas, solo se puede pinchar las disponibles a la reserva. Pinchas en una sala, aparece el mapa de esta sala con mesas disponibles y reservadas. al pasar encima de una mesa libre se abre un tooltip para reservar mañana o tarde segun disponibilidad. Si una mesa lleva una incidencia no se puede reservar, igual con las salas. El tecinco puede abrir o cerrar una sala a la reserva.
-Como estimamos el beneficio ?
-Alguien de la empresa cliente debe diseñar su empresa.
-El admin puede crear sala. Tenemos que programar las vistas 'crear plantas/salas/mesas' acciessible en la cuenta administrador.
-Añadir encima de reservar une mesa el hecho de teletrabajar. Asi se puede valorar el ahorro de co2.
-La etimacion se hace por sala cerrada. La sala debe de tener los metros cuadrados como atributos. Nos basamos en un año de 365 días.
-Volvemos a la pregunta de la cancelacion por el tecnico: dadas todas implicaciones (notificacion al usuario, es un cambio o una cancelacion... ?). No implemntamos este aspecto.
-Quitamos la vista de los planes. Suscripcion = llegada a la cuenta admin.
-
-Tutoria:
-
-- el otro grupo (grupo de la casa) ya tienen un esqueleto
-- 
+Fin de las notas.
