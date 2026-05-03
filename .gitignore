@@ -11,3 +11,5 @@ back/**/*.jar
 back/**/*.war
 back/**/*.log
 back/**/spring-shell.log
+
+_bmad-output/
