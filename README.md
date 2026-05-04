@@ -72,6 +72,43 @@ Database   MySQL
 Auth       JWT (stateless, HttpOnly cookies)
 ```
 
+## Installation and development
+
+### Configure environment variables
+
+You must have a MySQL database dedicated to the project.
+
+```yml
+# .env
+DB_USERNAME=yourUsername
+DB_PASSWORD=YourPassword
+DB_URL=jdbc:postgresql://localhost:5432/yourDatabaseName
+```
+
+### Back-end
+
+```bash
+cd back/
+mvn spring-boot:run
+```
+
+### Front-end
+
+#### Install
+
+```bash
+cd font/ecotrack-office/
+npm install
+```
+
+#### Run server
+
+```bash
+# from /font/ecotrack-office
+npm run start
+```
+
+
 ## Personas
 
 | Name | Role | Core need |
