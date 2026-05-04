@@ -10,7 +10,7 @@ classDiagram
     class Role {
         <<enumeration>>
         EMPLOYEE
-        ORGANIZATION_ADMIN
+        ADMIN
         TECHNICIAN
     }
 
@@ -23,74 +23,67 @@ classDiagram
 
     class ReservationStatus {
         <<enumeration>>
-        PENDING
         CONFIRMED
         CANCELLED
         RELEASED
         CHECKED_IN
     }
 
-    class Shift {
-        <<enumeration>>
-        MORNING
-        AFTERNOON
-    }
-
     class IncidentStatus {
         <<enumeration>>
-        OPEN
         IN_PROGRESS
         RESOLVED
     }
 
-    %% ── Block 1 – Users & Auth (usr_) ────────────────────────────────
+    %% ── Block 1 – Users & Organization (usr_) ────────────────────────────────
     class User {
-        +Long id
-        +String email
-        +String passwordHash
-        +String firstName
-        +String lastName
-        +Role role
-        +Long organizationId
-        +Boolean isActive
-        +Boolean consentGiven
-        +String savedPreferencesJson
-        +LocalDateTime createdAt
+        -Long id
+        -String email
+        -String passwordHash
+        -String firstName
+        -String lastName
+        -Role role
+        -Long organizationId
+        -Boolean isActive
+        -Boolean consentGiven
+        -String savedPreferencesJson
+        -LocalDateTime createdAt
     }
 
-    class RefreshToken {
-        +Long id
-        +String token
-        +LocalDateTime expiresAt
-        +LocalDateTime revokedAt
-        +Long userId
+    class Organization {
+        -Long id
+        -String name
+        -String CIF
+        -String adress
+        -String emais
+        -Date endSubscription
+        -Boolean isActive
+        -LocalDateTime createdAt
     }
 
     %% ── Block 2 – Physical Assets (ast_) ─────────────────────────────
-    class Building {
-        +Long id
-        +String name
-        +String address
-        +Boolean isActive
-    }
 
     class Floor {
-        +Long id
-        +String name
-        +Integer level
-        +Boolean isActive
-        +String svgFloorPlanPath
+        -Long id
+        -Integer level
+        -Boolean isActive
+        -Long organizationId
+    }
+
+    class Resource {
+        <<abstract>>
+        -Long id
+        -String name
+        -ResourceStatus status
+        -Boolean isActive
+        -Long floorId
     }
 
     class Room {
-        +Long id
-        +String name
-        +RoomType type
-        +Float surfaceAreaM2
-        +Integer capacity
-        +Boolean energyFlag
-        +Boolean isOpen
-        +Boolean isActive
+        -RoomType type
+        -Float surfaceAreaM2
+        -Integer capacity
+        -Boolean isActive
     }
 
     class RoomType {
@@ -99,80 +92,60 @@ classDiagram
         MEETING_ROOM
     }
 
-    class Resource {
-        <<abstract>>
-        +Long id
-        +String name
-        +Float svgAnchorX
-        +Float svgAnchorY
-        +ResourceStatus status
-        +Boolean isActive
-    }
-
     class Desk {
-        +String equipmentList
+        -String equipmentList
+        -Long RoomId
     }
 
     %% ── Block 3 – Reservations (rsv_) ────────────────────────────────
     class Reservation {
-        +Long id
-        +LocalDate date
-        +Shift shift
-        +ReservationStatus status
-        +LocalDateTime createdAt
-    }
-
-    class RemoteWorkEntry {
-        +Long id
-        +Long userId
-        +LocalDate date
-        +LocalDateTime createdAt
+        -Long id
+        -LocalDate date
+        -ReservationStatus status
+        -LocalDateTime createdAt
+        -Long userId
+        -Long resourceId
     }
 
     %% ── Block 4 – Analytics & Incidents (anl_) ───────────────────────
     class Incident {
-        +Long id
-        +String description
-        +String photoPath
-        +IncidentStatus status
-        +LocalDateTime createdAt
-        +LocalDateTime resolvedAt
+        -Long id
+        -String description
+        -IncidentStatus status
+        -LocalDateTime createdAt
+        -LocalDateTime resolvedAt
+        -Long userId
+        -Long resourceId
     }
 
-    class AuditLog {
-        +Long id
-        +String entityType
-        +Long entityId
-        +String action
-        +LocalDateTime timestamp
-    }
+    class AnaliticReport {
+        -Long id
+        -Double co2SavingsKg
+        -Double energySavingsEuros
+        -Integer totalReservations
+        -Integer confirmedCheckIns
+        -Integer emptyRooms
+        -LocalDateTime generatedAt
+        -Lond organizationId
 
-    class ZoneOccupancy {
-        +Long id
-        +Long roomId
-        +LocalDate date
-        +Integer totalReservations
-        +Integer confirmedCheckIns
-        +Float energySavingsEuros
-        +Float co2SavingsKg
-        +LocalDateTime generatedAt
     }
 
     %% ── Inheritance ──────────────────────────────────────────────────
     Resource <|-- Desk
+    Resource <|-- Room
 
     %% ── Block 1 Relationships ────────────────────────────────────────
-    User "1" --> "0..*" RefreshToken : owns
     User "1" --> "0..*" Reservation : makes
-    User "1" --> "0..*" RemoteWorkEntry : logs
     User "1" --> "0..*" Incident : reports
-    User "1" --> "0..*" Incident : resolves
-    User "1" --> "0..*" AuditLog : actor
+    Organization "1" --> "0..*" Floor : has
+    Organization "1" --> "1..*" User : hire
+    Organization "1" --> "0..*" AnaliticsReport : generates
 
     %% ── Block 2 Relationships ────────────────────────────────────────
-    Building "1" --> "1..*" Floor : has
     Floor "1" --> "1..*" Room : contains
-    Room "1" --> "0..*" Resource : groups
+    Room "1" --> "0..*" Desk : groups
+    Resource "1" --> "0..*" Reservation : has
+    Resource "1" --> "0..*" Incident : has
 
     %% ── Block 3 Relationships ────────────────────────────────────────
     Reservation "0..*" --> "1" User : booked by
@@ -180,5 +153,5 @@ classDiagram
 
     %% ── Block 4 Relationships ────────────────────────────────────────
     Incident "0..*" --> "1" Resource : targets
-    Room "1" --> "0..*" ZoneOccupancy : tracked by
+    
 ```
