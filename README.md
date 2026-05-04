@@ -88,7 +88,7 @@ DB_URL=jdbc:postgresql://localhost:5432/yourDatabaseName
 ### Back-end
 
 ```bash
-cd back/
+cd back/ecotrack-office/
 mvn spring-boot:run
 ```
 
