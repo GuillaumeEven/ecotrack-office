@@ -44,15 +44,15 @@ Large hybrid offices are wasting space and energy every day. Employees book desk
 
 EcoTrack Office is a web platform that solves both sides of the problem at once:
 
-- **Employees** see a live interactive floor map, filter by their criteria (near restrooms, south-facing, specific equipment), and reserve in two taps.
--- **Organization Admins** get automated ghost-desk recovery, zone consolidation suggestions, occupancy dashboards, and exportable reports — without chasing anyone.
+- **Employees** see a live interactive floor map of rectangular room tiles, drill into a room to see available desks, and reserve by shift in two taps.
+- **Organization Admins** get automated ghost-desk recovery, zone consolidation suggestions, energy/CO₂ savings estimates, and occupancy dashboards — without chasing anyone.
 
 ## What Makes It Different
 
 | Feature | How it works |
 |---|---|
-| 🗺️ **Map-first booking** | The building floor plan *is* the UI. Color-coded zones nudge users toward energy-efficient clustering — the sustainable choice is the obvious choice. |
-| 🤖 **Friction-tolerant automation** | Missed check-in? Desk auto-releases after 15 min. No login? Check in via email link. The system absorbs non-compliance instead of fighting it. |
+| 🗺️ **Map-first booking** | The building appears as a grid of room tiles. Click a room to see individual desks. Tap Morning or Afternoon to book — done. |
+| 🤖 **Friction-tolerant automation** | Missed check-in? Desk auto-releases after 15 min. Check-in is a single tap from within the app — no QR scanner, no email. The system absorbs non-compliance instead of fighting it. |
 | ⚡ **Zero manual recovery** | Ghost desks, faulty resources, zone shutdowns — all handled automatically. Organization Admins supervise, they don't intervene. |
 
 ## Key Metrics (MVP Targets)
@@ -125,10 +125,10 @@ Team: 4 students × 8 weeks. Each student owns one full-stack vertical (Angular 
 
 | Block | Domain |
 |---|---|
-| Block 1 | Users & Authentication |
-| Block 2 | Physical Assets & SVG Floor Map |
-| Block 3 | Reservations, Check-in & Auto-release |
-| Block 4 | Analytics, Dashboard & Incidents |
+| Block 1 | Users & Authentication (company invitation code, JWT, RBAC) |
+| Block 2 | Physical Assets — rooms (Desk area / Meeting room, m², 80%-opening policy) & interactive map |
+| Block 3 | Reservations (shift-based), app-based check-in, auto-release, remote-work indicator |
+| Block 4 | Analytics, energy/CO₂ savings estimates, dashboard & incidents |
 
 ## Roadmap
 

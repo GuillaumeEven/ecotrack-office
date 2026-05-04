@@ -55,13 +55,13 @@ graph LR
 
 ## Sprint 3 — User Profile + Asset Foundation
 
-**Goal:** Users manage their profile; admin can structure the organisation (floors, zones, users).
+**Goal:** Users manage their profile; admin can structure the organisation (floors, rooms, users).
 
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|
 | 1.3 | Employee Profile & Saved Search Preferences | 🟢 | 1.2 |
 | 1.4 | Organization Admin — User Administration | 🟡 | 1.2 |
-| 2.1 | Floor & Zone Management | 🟡 | Sprint 1 |
+| 2.1 | Floor & Room Management (80%-opening policy) | 🟡 | Sprint 1 |
 
 **Sprint 3 Dates:** `______ → ______`
 
@@ -69,11 +69,11 @@ graph LR
 
 ## Sprint 4 — Asset Management
 
-**Goal:** Admin can configure all physical resources and upload the floor plan SVG with anchor positions.
+**Goal:** Admin can configure all physical resources (rooms + desks) and upload the floor plan SVG with anchor positions.
 
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|
-| 2.2 | Desk & Meeting Room Management | 🟡 | 2.1 |
+| 2.2 | Desk Management | 🟡 | 2.1 |
 | 2.3 | SVG Floor Plan Upload & Anchor Association | 🔴 | 2.2 |
 
 **Sprint 4 Dates:** `______ → ______`
@@ -82,14 +82,15 @@ graph LR
 
 ## Sprint 5 — Interactive Floor Map
 
-**Goal:** Employees see the live floor map with colour-coded desk availability and zone filters.
+**Goal:** Employees see the live building map with rectangular room tiles, drill into a room to see desks, and book by shift. List/table fallback included.
 
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|
-| 2.4 | Interactive Floor Map Viewer | 🔴 | 2.3 |
-| 2.5 | Zone Heat Overlay, Map Filters & List View | 🔴 | 2.4 |
+| 2.4 | Interactive Floor Map — Room Tiles & Desk Drill-down | 🔴 | 2.3 |
+| 2.5 | List View & Room Detail Card | 🟡 | 2.4 |
 
-> ⚠️ **Critical sprint** — `FloorMapComponent` and `DeskMarkerComponent` built here. Sprints 6 and 8 are blocked until 2.4 is done.
+> ⚠️ **Critical sprint** — `BuildingMapComponent`, `RoomDrillDownComponent`, and `DeskMarkerComponent` built here. Sprints 6 and 8 are blocked until 2.4 is done.
+> 🚧 Map criteria filters (FR16) and zone heat overlay (UX-DR3) are **post-MVP** and not part of this sprint.
 
 **Sprint 5 Dates:** `______ → ______`
 
@@ -97,12 +98,12 @@ graph LR
 
 ## Sprint 6 — Reservations
 
-**Goal:** Employees can book a desk from the map and manage their reservations.
+**Goal:** Employees book a desk by shift (morning / afternoon) from the map or list, with 7-day limit and remote-work indicator.
 
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|
-| 3.1 | Desk/Room Reservation & Conflict Prevention | 🔴 | 2.4 |
-| 3.2 | My Reservations & Cancellation | 🟡 | 3.1 |
+| 3.1 | Shift-based Reservation & Conflict Prevention | 🔴 | 2.4 |
+| 3.2 | My Reservations, Cancellation & Remote-work Indicator | 🟡 | 3.1 |
 
 **Sprint 6 Dates:** `______ → ______`
 
@@ -110,13 +111,14 @@ graph LR
 
 ## Sprint 7 — Check-in & Auto-release
 
-**Goal:** Full attendance cycle: QR check-in, email fallback, automatic release of ghost reservations.
+**Goal:** Full attendance cycle: in-app check-in, automatic release of ghost reservations. Email check-in and pre-release reminder are post-MVP.
 
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|
-| 3.3 | QR Code Generation & Desk Check-in | 🟡 | 3.1 |
-| 3.4 | Email Link Check-in & Pre-release Reminder | 🟡 | 3.1 |
-| 3.5 | Auto-release Scheduler | 🟡 | 3.3 + 3.4 |
+| 3.3 | App-based Check-in | 🟢 | 3.1 |
+| 3.5 | Auto-release Scheduler | 🟡 | 3.3 |
+
+> 🚧 **Post-MVP (Growth):** Story 3.4 — Email link check-in & pre-release reminder (FR25, FR27) — not in scope for this sprint.
 
 **Sprint 7 Dates:** `______ → ______`
 
@@ -138,13 +140,15 @@ graph LR
 
 ## Sprint 9 — Analytics & Governance
 
-**Goal:** Organization Admin has full occupancy visibility, consolidation suggestions, and GDPR-compliant data tools.
+**Goal:** Organization Admin has full occupancy visibility, energy/CO₂ savings estimates, consolidation suggestions, and GDPR-compliant data tools.
 
 | Story | Title | Complexity | Depends on |
 |-------|-------|------------|------------|
-| 4.4 | Occupancy Dashboard | 🔴 | 3.1 + 4.3 |
-| 4.5 | Zone Consolidation Suggestions & Targeted Notifications | 🔴 | 4.4 |
+| 4.4 | Occupancy Dashboard & Energy/CO₂ Savings Estimates | 🔴 | 3.1 + 4.3 |
+| 4.5 | Zone Consolidation Suggestions | 🟡 | 4.4 |
 | 4.6 | Reporting, Data Export & GDPR Governance | 🟡 | 4.4 |
+
+> 🚧 **Post-MVP (Growth):** Targeted zone-shutdown notification to employees (FR38) — not in scope for Story 4.5.
 
 **Sprint 9 Dates:** `______ → ______`
 
@@ -158,11 +162,11 @@ graph LR
 | 2 | Authentication | 1.1, 1.2 | 🟡🟡 |
 | 3 | Profile + Assets foundation | 1.3, 1.4, 2.1 | 🟢🟡🟡 |
 | 4 | Asset Management | 2.2, 2.3 | 🟡🔴 |
-| 5 | Interactive Floor Map | 2.4, 2.5 | 🔴🔴 |
-| 6 | Reservations | 3.1, 3.2 | 🔴🟡 |
-| 7 | Check-in & Auto-release | 3.3, 3.4, 3.5 | 🟡🟡🟡 |
+| 5 | Interactive Floor Map (room tiles + drill-down) | 2.4, 2.5 | 🔴🟡 |
+| 6 | Reservations (shift-based) | 3.1, 3.2 | 🔴🟡 |
+| 7 | Check-in & Auto-release | 3.3, 3.5 | 🟢🟡 |
 | 8 | Incidents | 4.1, 4.2, 4.3 | 🟡🟡🟡 |
-| 9 | Analytics & Governance | 4.4, 4.5, 4.6 | 🔴🔴🟡 |
+| 9 | Analytics & Governance | 4.4, 4.5, 4.6 | 🔴🟡🟡 |
 
 **🔴 Critical path:** Sprint 5 (Floor Map) blocks Sprints 6 and 8 — prioritise it.  
 **💡 Tip:** Sprints 6–8 can run in parallel across students once Sprint 5 is done.

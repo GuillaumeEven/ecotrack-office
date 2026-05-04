@@ -82,7 +82,7 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 | 1.3 | Employee Profile & Saved Search Preferences 🟢 | FE+BE | Student 1 | Small story — one student covers both layers |
 | 1.4 | Organization Admin — User Administration 🟡 | 🔵 FE | Student 3 | User management UI, role assignment |
 | 1.4 | Organization Admin — User Administration 🟡 | 🟠 BE | Student 4 | Admin endpoints + `@PreAuthorize` enforcement |
-| 2.1 | Floor & Zone Management 🟡 | FE+BE | Student 2 | Asset foundation; no dependency on auth UI |
+| 2.1 | Floor & Room Management (80%-opening policy) 🟡 | FE+BE | Student 2 | Asset foundation; no dependency on auth UI |
 
 ---
 
@@ -92,8 +92,8 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 
 | Story | Title | Layer | Student |
 |-------|-------|-------|---------|
-| 2.2 | Desk & Meeting Room Management 🟡 | 🔵 FE | Student 1 |
-| 2.2 | Desk & Meeting Room Management 🟡 | 🟠 BE | Student 3 |
+| 2.2 | Desk Management 🟡 | 🔵 FE | Student 1 |
+| 2.2 | Desk Management 🟡 | 🟠 BE | Student 3 |
 | 2.3 | SVG Floor Plan Upload & Anchor Association 🔴 | 🔵 FE | Student 2 |
 | 2.3 | SVG Floor Plan Upload & Anchor Association 🔴 | 🟠 BE | Student 4 |
 
@@ -105,12 +105,13 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 
 | Story | Title | Layer | Student |
 |-------|-------|-------|---------|
-| 2.4 | Interactive Floor Map Viewer 🔴 | 🔵 FE | Student 2 |
-| 2.4 | Interactive Floor Map Viewer 🔴 | 🟠 BE | Student 1 |
-| 2.5 | Zone Heat Overlay, Map Filters & List View 🔴 | 🔵 FE | Student 3 |
-| 2.5 | Zone Heat Overlay, Map Filters & List View 🔴 | 🟠 BE | Student 4 |
+| 2.4 | Floor Map — Room Tiles & Desk Drill-down 🔴 | 🔵 FE | Student 2 |
+| 2.4 | Floor Map — Room Tiles & Desk Drill-down 🔴 | 🟠 BE | Student 1 |
+| 2.5 | List View & Room Detail Card 🟡 | 🔵 FE | Student 3 |
+| 2.5 | List View & Room Detail Card 🟡 | 🟠 BE | Student 4 |
 
 > Once story 2.4 is merged, Sprints 6 and 8 unlock simultaneously.
+> 🚧 Map criteria filters (FR16) and zone heat overlay are **post-MVP** — not in this sprint.
 
 ---
 
@@ -120,9 +121,9 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 
 | Sprint | Story | Title | Layer | Student |
 |--------|-------|-------|-------|---------|
-| 6 | 3.1 | Desk/Room Reservation & Conflict Prevention 🔴 | 🔵 FE | Student 1 |
-| 6 | 3.1 | Desk/Room Reservation & Conflict Prevention 🔴 | 🟠 BE | Student 3 |
-| 6 | 3.2 | My Reservations & Cancellation 🟡 | FE+BE | Students 1 + 3 |
+| 6 | 3.1 | Shift-based Reservation & Conflict Prevention 🔴 | 🔵 FE | Student 1 |
+| 6 | 3.1 | Shift-based Reservation & Conflict Prevention 🔴 | 🟠 BE | Student 3 |
+| 6 | 3.2 | My Reservations, Cancellation & Remote-work Indicator 🟡 | FE+BE | Students 1 + 3 |
 | 8 | 4.1 | Incident Reporting & Automatic Resource Blocking 🟡 | 🔵 FE | Student 2 |
 | 8 | 4.1 | Incident Reporting & Automatic Resource Blocking 🟡 | 🟠 BE | Student 4 |
 | 8 | 4.2 | Real-time Technician Notification & Incident Lifecycle 🟡 | FE+BE | Students 2 + 4 |
@@ -132,12 +133,12 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 
 ### Sprint 7 — Check-in & Auto-release (Students 1 + 3)
 
+> 🚧 **Post-MVP:** Story 3.4 (email link check-in & pre-release reminder) is deferred to Growth and is **not** in this sprint.
+
 | Story | Title | Layer | Student |
 |-------|-------|-------|---------|
-| 3.3 | QR Code Generation & Desk Check-in 🟡 | 🔵 FE | Student 1 |
-| 3.3 | QR Code Generation & Desk Check-in 🟡 | 🟠 BE | Student 3 |
-| 3.4 | Email Link Check-in & Pre-release Reminder 🟡 | 🔵 FE | Student 1 |
-| 3.4 | Email Link Check-in & Pre-release Reminder 🟡 | 🟠 BE | Student 3 |
+| 3.3 | App-based Check-in 🟢 | 🔵 FE | Student 1 |
+| 3.3 | App-based Check-in 🟢 | 🟠 BE | Student 3 |
 | 3.5 | Auto-release Scheduler 🟡 | 🟠 BE | Student 3 |
 
 ---
@@ -146,10 +147,10 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 
 | Story | Title | Layer | Student |
 |-------|-------|-------|---------|
-| 4.4 | Occupancy Dashboard 🔴 | 🔵 FE | Student 2 |
-| 4.4 | Occupancy Dashboard 🔴 | 🟠 BE | Student 4 |
-| 4.5 | Zone Consolidation Suggestions & Targeted Notifications 🔴 | 🔵 FE | Student 2 |
-| 4.5 | Zone Consolidation Suggestions & Targeted Notifications 🔴 | 🟠 BE | Student 4 |
+| 4.4 | Occupancy Dashboard & Energy/CO₂ Savings Estimates 🔴 | 🔵 FE | Student 2 |
+| 4.4 | Occupancy Dashboard & Energy/CO₂ Savings Estimates 🔴 | 🟠 BE | Student 4 |
+| 4.5 | Zone Consolidation Suggestions 🟡 | 🔵 FE | Student 2 |
+| 4.5 | Zone Consolidation Suggestions 🟡 | 🟠 BE | Student 4 |
 | 4.6 | Reporting, Data Export & GDPR Governance 🟡 | FE+BE | Students 2 + 4 |
 
 ---

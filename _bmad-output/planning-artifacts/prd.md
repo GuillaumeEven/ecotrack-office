@@ -1,13 +1,28 @@
 ---
-stepsCompleted: ['step-01-init', 'step-02-discovery', 'step-02b-vision', 'step-02c-executive-summary', 'step-03-success', 'step-04-journeys', 'step-05-domain', 'step-06-innovation', 'step-07-project-type', 'step-08-scoping', 'step-09-functional', 'step-10-nonfunctional', 'step-11-polish', 'step-12-complete']
+stepsCompleted: ['step-01-init', 'step-02-discovery', 'step-02b-vision', 'step-02c-executive-summary', 'step-03-success', 'step-04-journeys', 'step-05-domain', 'step-06-innovation', 'step-07-project-type', 'step-08-scoping', 'step-09-functional', 'step-10-nonfunctional', 'step-11-polish', 'step-12-complete', 'step-e-01-discovery', 'step-e-02-review', 'step-e-03-edit']
 workflowStatus: complete
 completedAt: '2026-04-10'
-inputDocuments: ['project/initial_suggestion.md']
+lastEdited: '2026-05-03'
+editHistory:
+  - date: '2026-05-03'
+    changes: >
+      Round 1 — Integrated team decisions from sessions 2026-04-22 and 2026-04-30:
+      company-code registration (FR1), shift-based booking morning/afternoon (FR19),
+      7-day advance booking limit (FR19b), technician can modify/cancel reservations (FR22b),
+      remote-work day indicator (FR23b), room/floor 80% capacity-opening policy (FR9b),
+      admin UI for floors/rooms/desks (FR8 updated), map interface with rectangular tiles
+      and shift tooltip (FR13/FR15), energy savings formula per m² (FR40b),
+      CO₂ estimate from remote work (FR40c), pricing/plans removed from public nav (SaaS section).
+      Round 2 — Scope corrections: removed FR15 heat overlay (not discussed); FR15b merged
+      into FR15 (room drill-down); FR16 (map filters) → nice-to-have post-MVP; FR22b no user
+      notification in demo; FR24 app-based check-in (no QR); FR25 email check-in → nice-to-have;
+      FR27 pre-release reminder → nice-to-have; FR38 zone shutdown notification → nice-to-have.
+inputDocuments: ['project/initial_suggestion.md', 'docs/notes.md']
 workflowType: 'prd'
 briefCount: 0
 researchCount: 0
 brainstormingCount: 0
-projectDocsCount: 1
+projectDocsCount: 2
 classification:
   projectType: web_app
   domain: building_automation
@@ -36,7 +51,7 @@ Two capabilities distinguish EcoTrack from standard booking tools:
 
 **Map-first booking with behavioral nudging.** The building floor plan is the primary interaction surface. Color-coded zone overlays nudge employees toward energy-efficient clustering — desks near already-occupied zones are highlighted, making the sustainable choice the obvious choice without mandating it.
 
-**Friction-tolerant automation.** The system is designed for users who will not comply with procedures. Non-compliance is made harmless: missed check-ins trigger auto-release, check-in works via email link with no session required, and zone suggestions are recommendations rather than enforced rules. The tool adapts to human behavior rather than demanding humans adapt to the tool.
+**Friction-tolerant automation.** The system is designed for users who will not comply with procedures. Non-compliance is made harmless: auto-release handles missed check-ins, app-based check-in requires no QR or email, and zone consolidation suggestions are recommendations rather than enforced rules. The tool adapts to human behavior rather than demanding humans adapt to the tool.
 
 ---
 
@@ -89,11 +104,11 @@ Two capabilities distinguish EcoTrack from standard booking tools:
 
 **Rising Action:** He filters the floor map: *near restrooms* + *south-facing window*. Green spots match his criteria; orange spots mark zones where colleagues are already concentrated (energy bonus). He spots a third-floor desk by the window, fifteen meters from the restrooms. Two taps to book.
 
-**Climax:** At 9:05 AM he arrives and scans the desk QR code to confirm check-in. The view is there. He has spoken to no one and sent no emails.
+**Climax:** At 9:05 AM he arrives and opens the app to confirm check-in on his active reservation. The view is there. He has spoken to no one and sent no emails.
 
 **Resolution:** Guillermo comes when he wants, on his own terms. Tomorrow his usual search will be pre-filled.
 
-**Capabilities revealed:** Advanced map filters, interactive floor map with criteria matching, QR check-in, persistent user preferences.
+**Capabilities revealed:** Interactive floor map with rectangular tiles and room drill-down, shift-based booking, app-based check-in, persistent user preferences.
 
 ---
 
@@ -109,7 +124,7 @@ Two capabilities distinguish EcoTrack from standard booking tools:
 
 **Resolution:** Eduardo does not change his habits — and that is fine. EcoTrack was built for people like him.
 
-**Capabilities revealed:** Auto-release timeout (15 min), lightweight check-in via email link, real-time map updates, reservation conflict management.
+**Capabilities revealed:** Auto-release timeout (15 min), app-based check-in from reservation view, real-time map updates, reservation conflict management.
 
 ---
 
@@ -135,13 +150,13 @@ Two capabilities distinguish EcoTrack from standard booking tools:
 
 **Opening Scene:** Monday, 8:00 AM. José Luis opens his EcoTrack dashboard: 23 confirmed reservations for today, 2 open incidents, and an automatic suggestion: *"Low attendance forecast — activate zones A and C only, shut down zone B."*
 
-**Rising Action:** He approves the zone consolidation with one click. The system notifies the 4 people in zone B, suggesting they move. Three accept; one replies "I'll stay" — José Luis sees the update in real time.
+**Rising Action:** He approves the zone consolidation with one click. The system surfaces the list of people still booked in zone B — José Luis can reach out manually if needed. He logs the decision.
 
 **Climax:** At 5:30 PM he generates the weekly report — occupancy by zone, energy savings estimate, incidents resolved — and sends the PDF to management in two clicks.
 
 **Resolution:** For the first time in years, José Luis does not spend his morning chasing people. The tool gives him visibility without demanding compliance.
 
-**Capabilities revealed:** Real-time admin dashboard, zone consolidation with automated suggestions, targeted employee notifications, exportable weekly reports, multi-incident management.
+**Capabilities revealed:** Real-time admin dashboard, zone consolidation suggestions, energy/CO₂ savings estimates, occupancy reports, multi-incident management.
 
 ---
 
@@ -149,10 +164,10 @@ Two capabilities distinguish EcoTrack from standard booking tools:
 
 | Journey | Capabilities Required |
 |---|---|
-| Guillermo | Filtered interactive map, criteria-based search, QR check-in, persistent preferences |
-| Eduardo | Auto-release timeout, lightweight check-in (email link), real-time conflict handling |
+| Guillermo | Interactive map (room tiles + desk drill-down), shift-based booking, app-based check-in, persistent preferences |
+| Eduardo | Auto-release timeout, app-based check-in, real-time conflict handling |
 | Raimundo | In-app incident reporting with photo, push notification to technician, auto resource block |
-| José Luis | Admin dashboard, zone consolidation suggestions, targeted notifications, exportable reports |
+| José Luis | Admin dashboard, zone consolidation suggestions, energy/CO₂ savings estimates, occupancy reports |
 
 ---
 
@@ -274,38 +289,41 @@ No formal WCAG certification required. Documented baseline practices:
 
 | Block | Domain | Core CRUD | Dependencies |
 |---|---|---|---|
-| **Block 1** | Users & Security | User accounts, roles, JWT authentication | None — foundational |
-| **Block 2** | Physical Assets | Floors, zones, desks, rooms, SVG floor plan | Block 1 (auth) |
-| **Block 3** | Reservations & Logic | Bookings, check-in, auto-release, schedules | Blocks 1 + 2 |
-| **Block 4** | Analytics & Incidents | Dashboard, occupancy reports, incident lifecycle | Block 3 |
+| **Block 1** | Users & Security | User accounts (with company code), roles, JWT authentication | None — foundational |
+| **Block 2** | Physical Assets | Floors, rooms (desk area / meeting room, m²), desks, 80%-opening policy, SVG floor plan | Block 1 (auth) |
+| **Block 3** | Reservations & Logic | Shift-based bookings (morning/afternoon), app-based check-in, auto-release, remote-work indicator | Blocks 1 + 2 |
+| **Block 4** | Analytics & Incidents | Dashboard, energy/CO₂ savings estimates, occupancy reports, incident lifecycle | Block 3 |
 
 ### Delivery Risks
 
 | Risk | Mitigation |
 |---|---|
-| Block 2 SVG complexity | Week 1 spike to validate SVG-as-Angular-component; grid/table fallback if needed; nudge overlay delivered incrementally |
+| Block 2 SVG / map complexity | Week 1 spike to validate room-tile + desk drill-down; list/table fallback always available |
 | Integration week (6–7) | Shared component library from Week 1; API mocks from Week 2; integration testing starts Week 6 |
-| Block 4 scope creep | Hard limit: occupancy-per-zone view + incident list + one exportable report; CO₂ estimation is Growth, not MVP |
+| Block 4 scope creep | Hard limit: energy/CO₂ savings per closed room + occupancy view + incident list; zone-shutdown notification and exportable report are Growth |
 
 ### Phase 1 — MVP (8-Week Delivery)
 
 All four user journeys (Guillermo, Eduardo, Raimundo, José Luis) supported at happy-path level.
 
-1. User registration, login, and role management (Employee / Organization Admin / Technician)
-2. Physical asset management: floors, zones, desks, meeting rooms, equipment attributes
-3. Interactive SVG floor map with real-time color-coded availability and zone heat overlay
-4. Desk/room reservation with criteria-based filtering
-5. Check-in via QR code and email link fallback, with 15-minute auto-release
+1. User registration (with company invitation code), login, and role management (Employee / Organization Admin / Technician)
+2. Physical asset management: floors, rooms (desk area / meeting room, m², 80%-opening policy), desks, equipment attributes; admin views Create Floor / Create Room / Create Desk
+3. Interactive floor map with rectangular room tiles and real-time color-coded availability; room drill-down showing individual desks with shift-booking tooltip
+4. Shift-based desk/room reservation (morning / afternoon); 7-day advance booking limit; remote-work day indicator
+5. App-based check-in from the active reservation view; 15-minute auto-release for no-shows; technician can modify/cancel reservations
 6. Incident reporting with photo, automatic resource blocking, technician push notification
-7. Occupancy dashboard: reservations and check-in rates per zone, daily/weekly view
+7. Occupancy dashboard: reservations and check-in rates per zone, daily/weekly view; energy savings estimate per closed room (m²-based formula); CO₂ estimate from closed rooms and remote-work days
 8. Zone consolidation suggestion engine for low-attendance days
 
 ### Phase 2 — Growth (Post-MVP)
 
-- Recurring reservations and calendar sync (Google Calendar, Outlook)
-- Email/push notification system for reminders and desk-release warnings
-- Advanced map filters (equipment type, proximity, floor)
+- Advanced map filters (proximity to restrooms, window-facing, equipment type) — FR16
+- Email check-in link (no active session required) — FR25
+- Pre-release reminder notification (10 min before auto-release) — FR27
+- Targeted zone-shutdown notification to affected employees — FR38
 - Exportable weekly reports (PDF/CSV)
+- Recurring reservations and calendar sync
+- Email/push notification system for reminders
 - WebSocket-based real-time map updates
 
 ### Phase 3 — Vision (Future)
@@ -324,7 +342,7 @@ Note: For SaaS Demo Mode the tenant-level admin role is `Organization Admin`. Th
 
 ### User Management & Authentication
 
-- **FR1:** A visitor can register an account with name, email, and password
+- **FR1:** A visitor can register an account with name, email, password, and a valid **company invitation code**; the invitation code is required to complete registration and ties the account to an existing organization (no self-serve open registration)
 - **FR2:** A registered user can log in and receive a session token valid for 8 hours
 - **FR3:** An authenticated user can log out and invalidate their session
 - **FR4:** An Organization Admin can create, update, deactivate, and delete user accounts
@@ -334,35 +352,39 @@ Note: For SaaS Demo Mode the tenant-level admin role is `Organization Admin`. Th
 
 ### Physical Asset Management
 
-- **FR8:** An Organization Admin can create, update, and deactivate floors within the building
-- **FR9:** An Organization Admin can create, update, and deactivate zones within a floor, each with an energy-management flag
-- **FR10:** An Organization Admin can create, update, and deactivate individual desks and meeting rooms with attributes (equipment list, capacity, floor plan position)
+- **FR8:** An Organization Admin can create, update, and deactivate floors within the building; the admin console provides dedicated **Create Floor / Create Room / Create Desk** views
+- **FR9:** An Organization Admin can create, update, and deactivate rooms within a floor; room types are **Desk area** (puestos de trabajo) or **Meeting room** (sala de reunión), each with an energy-management flag and a **surface area in m²** (required for savings estimation)
+- **FR9b:** The system enforces a **capacity-based opening policy**: reservations are restricted to the fewest rooms/floors needed; a new room or floor is automatically opened for bookings only when the current active capacity reaches **80%** (configurable threshold). The Technician can manually open or close any room at any time.
+- **FR10:** An Organization Admin can create, update, and deactivate individual desks with attributes (equipment list: chairs, tables, TV, etc.; floor plan position)
 - **FR11:** An Organization Admin can upload and replace the SVG floor plan for any floor
 - **FR12:** An Organization Admin can associate desks and rooms with their SVG anchor positions on the floor plan
 
 ### Interactive Floor Map
 
-- **FR13:** An Employee can view any floor as an interactive SVG map
+- **FR13:** An Employee can view the building as an interactive map with **rectangular tiles representing floors and rooms**; only available rooms are selectable; unavailable rooms (incident, closed) are visually distinct and non-interactive
 - **FR14:** The map displays each resource with a real-time color-coded status (available, reserved, unavailable/incident)
-- **FR15:** The map displays a zone heat overlay showing zones with active reservations to nudge energy-efficient clustering
-- **FR16:** An Employee can filter the map by criteria (proximity to restrooms, window-facing, equipment type)
+- **FR15:** When a room tile is clicked on the floor map, a **room-level view** opens showing individual desks as available or reserved; a **tooltip** on each desk allows booking by shift (morning / afternoon) in a single click
+- **FR16:** *(Nice-to-have — post-MVP)* An Employee can filter the map by criteria (proximity to restrooms, window-facing, equipment type)
 - **FR17:** An Employee can access a list/table view of available spaces as an alternative to the map
 - **FR18:** An Employee can view a detail card for any desk or room (equipment, capacity, zone, current status)
 
 ### Reservation & Booking
 
-- **FR19:** An Employee can reserve an available desk or meeting room for a specific date and time slot
-- **FR20:** The system prevents double-booking: a reserved resource cannot be booked by another user for the same slot
+- **FR19:** An Employee can reserve an available desk or meeting room for a specific date and **shift (morning: 08:00–14:00 / afternoon: 14:00–20:00)**; time-slot granularity is limited to shifts, not arbitrary hours
+- **FR19b:** The system prevents booking more than **7 days in advance** (configurable by Organization Admin; provisional default)
+- **FR20:** The system prevents double-booking: a reserved resource cannot be booked by another user for the same shift
 - **FR21:** An Employee can view their upcoming and past reservations
 - **FR22:** An Employee can cancel their own reservation before the reservation start time
+- **FR22b:** A **Technician** can modify or cancel any reservation to resolve booking conflicts; no automatic notification to affected employees in demo scope
 - **FR23:** The system saves an Employee's last-used search criteria and pre-fills them on subsequent visits
+- **FR23b:** An Employee can mark a workday as **remote work**; the system records remote days and includes them in CO₂ savings estimates
 
 ### Check-in & Auto-release
 
-- **FR24:** An Employee can confirm check-in by scanning a QR code displayed at the desk
-- **FR25:** An Employee can confirm check-in via a unique email link, without requiring an active app session
+- **FR24:** An Employee can confirm check-in directly **from within the app** (no QR code, no external link required); check-in is a single action for their active reservation
+- **FR25:** *(Nice-to-have — post-MVP)* An Employee can confirm check-in via a unique email link, without requiring an active app session
 - **FR26:** The system automatically releases a reservation if check-in is not confirmed within 15 minutes of start time (timeout configurable by Organization Admin)
-- **FR27:** The system sends a reminder to the Employee 10 minutes before the auto-release deadline
+- **FR27:** *(Nice-to-have — post-MVP)* The system sends a reminder to the Employee 10 minutes before the auto-release deadline
 - **FR28:** A released desk becomes immediately available for new bookings in real time
 
 ### Incident Management
@@ -379,8 +401,10 @@ Note: For SaaS Demo Mode the tenant-level admin role is `Organization Admin`. Th
 - **FR35:** An Organization Admin can view total reservations per zone for the current day and current week
 - **FR36:** An Organization Admin can view occupancy rate (confirmed check-ins vs. total reservations) per zone per day
 - **FR37:** The system generates a zone consolidation suggestion when daily attendance falls below a configurable threshold, identifying zones to activate and zones to shut down
-- **FR38:** An Organization Admin can send a targeted notification to Employees booked in a zone recommended for shutdown
+- **FR38:** *(Nice-to-have — post-MVP)* An Organization Admin can send a targeted notification to Employees booked in a zone recommended for shutdown
 - **FR39:** An Organization Admin can export an occupancy summary report for a selected date range
+- **FR40b:** The dashboard displays an **energy savings estimate** per closed room; the formula is: `savings = room_m2 × cost_per_m2_per_day × closure_days`; the cost-per-m² figure is set by the Organization Admin during onboarding (quick estimate reference: ~8,200 €/year/room). A quick input step at setup collects the building structure (floors, room m²) needed for this calculation.
+- **FR40c:** The dashboard includes a **CO₂ savings estimate** derived from: (a) closed rooms (energy saved) and (b) employee remote-work days recorded via FR23b; CO₂ factors are configurable constants
 
 ### Data & Privacy
 
@@ -449,8 +473,9 @@ This release will be offered as a SaaS-style demo only. No real payment processi
 
 ### Signup & Onboarding (Demo Flow)
 
-- Public pages required: Marketing Home, Pricing (informational), Signup, Login, Demo Dashboard. "Subscribe" on Pricing triggers demo signup and account creation without payment collection.
+- Public pages required: Marketing Home, Signup, Login, Demo Dashboard. **The Pricing / Plans view is removed from the public navigation flow**; subscription and plan management is accessible only from the **Organization Admin account** settings.
 - Signup flow: create organization/account, accept demo terms, optional sample data import, immediate trial activation.
+- "Subscribe" / plan upgrade actions are accessible only once logged in as Organization Admin — not surfaced in the public marketing pages.
 
 ### Operational & Legal Notes
 

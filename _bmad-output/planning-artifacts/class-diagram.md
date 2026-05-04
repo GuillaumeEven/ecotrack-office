@@ -23,10 +23,17 @@ classDiagram
 
     class ReservationStatus {
         <<enumeration>>
+        PENDING
         CONFIRMED
         CANCELLED
         RELEASED
         CHECKED_IN
+    }
+
+    class Shift {
+        <<enumeration>>
+        MORNING
+        AFTERNOON
     }
 
     class IncidentStatus {
@@ -44,6 +51,7 @@ classDiagram
         +String firstName
         +String lastName
         +Role role
+        +Long organizationId
         +Boolean isActive
         +Boolean consentGiven
         +String savedPreferencesJson
@@ -74,11 +82,21 @@ classDiagram
         +String svgFloorPlanPath
     }
 
-    class Zone {
+    class Room {
         +Long id
         +String name
+        +RoomType type
+        +Float surfaceAreaM2
+        +Integer capacity
         +Boolean energyFlag
+        +Boolean isOpen
         +Boolean isActive
+    }
+
+    class RoomType {
+        <<enumeration>>
+        DESK_AREA
+        MEETING_ROOM
     }
 
     class Resource {
@@ -95,26 +113,20 @@ classDiagram
         +String equipmentList
     }
 
-    class MeetingRoom {
-        +Integer capacity
-        +String equipmentList
-    }
-
     %% ── Block 3 – Reservations (rsv_) ────────────────────────────────
     class Reservation {
         +Long id
         +LocalDate date
-        +LocalTime startTime
-        +LocalTime endTime
+        +Shift shift
         +ReservationStatus status
         +LocalDateTime createdAt
     }
 
-    class CheckInToken {
+    class RemoteWorkEntry {
         +Long id
-        +String token
-        +LocalDateTime expiresAt
-        +LocalDateTime usedAt
+        +Long userId
+        +LocalDate date
+        +LocalDateTime createdAt
     }
 
     %% ── Block 4 – Analytics & Incidents (anl_) ───────────────────────
@@ -137,34 +149,36 @@ classDiagram
 
     class ZoneOccupancy {
         +Long id
+        +Long roomId
         +LocalDate date
         +Integer totalReservations
         +Integer confirmedCheckIns
+        +Float energySavingsEuros
+        +Float co2SavingsKg
         +LocalDateTime generatedAt
     }
 
     %% ── Inheritance ──────────────────────────────────────────────────
     Resource <|-- Desk
-    Resource <|-- MeetingRoom
 
     %% ── Block 1 Relationships ────────────────────────────────────────
     User "1" --> "0..*" RefreshToken : owns
     User "1" --> "0..*" Reservation : makes
+    User "1" --> "0..*" RemoteWorkEntry : logs
     User "1" --> "0..*" Incident : reports
     User "1" --> "0..*" Incident : resolves
     User "1" --> "0..*" AuditLog : actor
 
     %% ── Block 2 Relationships ────────────────────────────────────────
     Building "1" --> "1..*" Floor : has
-    Floor "1" --> "1..*" Zone : contains
-    Zone "1" --> "0..*" Resource : groups
+    Floor "1" --> "1..*" Room : contains
+    Room "1" --> "0..*" Resource : groups
 
     %% ── Block 3 Relationships ────────────────────────────────────────
     Reservation "0..*" --> "1" User : booked by
     Reservation "0..*" --> "1" Resource : books
-    Reservation "1" --> "0..1" CheckInToken : confirmed via
 
     %% ── Block 4 Relationships ────────────────────────────────────────
     Incident "0..*" --> "1" Resource : targets
-    Zone "1" --> "0..*" ZoneOccupancy : tracked by
+    Room "1" --> "0..*" ZoneOccupancy : tracked by
 ```
