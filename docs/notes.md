@@ -72,17 +72,14 @@ Las dos tecnologías que no hemos tratado en clase son:
   - Suscripción / Planes:
     - Se elimina la vista de planes en el flujo público; la suscripción se gestiona desde la cuenta admin.
   
-- [ ] Seción de trabajo | *4 de mayo de 2026*
-  - Dividir el trabjo en quatro processos verticales:
-    - usuarios
-    - resevaciones
-    - assets (salas, mesas...)
-    - incidencias / analytics
-  - Check class diagram/erd
-  - Recuerdatorio de la nomenclaturas: endpoints, nombres tablas
-  - UX design ?
-  - cuestion de la notificaciones de cancelación
-  - organisación code review ?
+- [x] Seción de trabajo | *4 de mayo de 2026*
+  - Decisiones:
+    - el diagrama de clase ha sido puesto al dia (_bmad-output/planning-artifacts/class-diagram.md)
+    - el reparto del trabajo es el siguiente:
+      - Rai: CRUD Reservas
+      - Jose Luis: CRUD Usuarios
+      - Edu: CRUD Incidencias/analytics
+      - Guillaume: CRUD assets (plantas, salas, mesas...)
+    - el codigo debe ser escrito en ingles, y la documentacion, el front y los comentarios en el codigo en español
 
----
-Fin de las notas.
+
