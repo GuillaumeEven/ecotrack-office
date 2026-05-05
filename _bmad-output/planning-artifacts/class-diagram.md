@@ -2,183 +2,142 @@
 
 _Generated from PRD and Architecture Decision Document._
 
-```mermaid
-classDiagram
-    direction TB
+```plantuml
+@startuml
+title EcoTrack Office — Class Diagram (PlantUML)
 
-    %% ── Enumerations ─────────────────────────────────────────────────
-    class Role {
-        <<enumeration>>
-        EMPLOYEE
-        ORGANIZATION_ADMIN
-        TECHNICIAN
-    }
+' Enumerations
+enum Role {
+    EMPLOYEE
+    ADMIN
+    TECHNICIAN
+}
+enum ResourceStatus {
+    AVAILABLE
+    RESERVED
+    UNAVAILABLE
+}
+enum ReservationStatus {
+    CONFIRMED
+    CANCELLED
+    RELEASED
+    CHECKED_IN
+}
+enum IncidentStatus {
+    IN_PROGRESS
+    RESOLVED
+}
+enum RoomType {
+    DESK_AREA
+    MEETING_ROOM
+}
 
-    class ResourceStatus {
-        <<enumeration>>
-        AVAILABLE
-        RESERVED
-        UNAVAILABLE
-    }
+' Users & Organization (usr_)
+class User {
+    - id : Long
+    - email : String
+    - passwordHash : String
+    - firstName : String
+    - lastName : String
+    - role : Role
+    - organizationId : Long
+    - isActive : Boolean
+    - consentGiven : Boolean
+    - savedPreferencesJson : String
+    - createdAt : LocalDateTime
+}
 
-    class ReservationStatus {
-        <<enumeration>>
-        PENDING
-        CONFIRMED
-        CANCELLED
-        RELEASED
-        CHECKED_IN
-    }
+class Organization {
+    - id : Long
+    - name : String
+    - CIF : String
+    - address : String
+    - email : String
+    - endSubscription : Date
+    - isActive : Boolean
+    - createdAt : LocalDateTime
+}
 
-    class Shift {
-        <<enumeration>>
-        MORNING
-        AFTERNOON
-    }
+' Physical Assets (ast_)
+class Floor {
+    - id : Long
+    - level : Integer
+    - isActive : Boolean
+    - organizationId : Long
+}
 
-    class IncidentStatus {
-        <<enumeration>>
-        OPEN
-        IN_PROGRESS
-        RESOLVED
-    }
+abstract class Resource {
+    - id : Long
+    - name : String
+    - status : ResourceStatus
+    - isActive : Boolean
+    - floorId : Long
+}
 
-    %% ── Block 1 – Users & Auth (usr_) ────────────────────────────────
-    class User {
-        +Long id
-        +String email
-        +String passwordHash
-        +String firstName
-        +String lastName
-        +Role role
-        +Long organizationId
-        +Boolean isActive
-        +Boolean consentGiven
-        +String savedPreferencesJson
-        +LocalDateTime createdAt
-    }
+class Room {
+    - type : RoomType
+    - surfaceAreaM2 : Float
+    - capacity : Integer
+    - isActive : Boolean
+}
 
-    class RefreshToken {
-        +Long id
-        +String token
-        +LocalDateTime expiresAt
-        +LocalDateTime revokedAt
-        +Long userId
-    }
+class Desk {
+    - equipmentList : String
+    - roomId : Long
+}
 
-    %% ── Block 2 – Physical Assets (ast_) ─────────────────────────────
-    class Building {
-        +Long id
-        +String name
-        +String address
-        +Boolean isActive
-    }
+' Reservations (rsv_)
+class Reservation {
+    - id : Long
+    - date : LocalDate
+    - status : ReservationStatus
+    - createdAt : LocalDateTime
+    - userId : Long
+    - resourceId : Long
+}
 
-    class Floor {
-        +Long id
-        +String name
-        +Integer level
-        +Boolean isActive
-        +String svgFloorPlanPath
-    }
+' Analytics & Incidents (anl_)
+class Incident {
+    - id : Long
+    - description : String
+    - status : IncidentStatus
+    - createdAt : LocalDateTime
+    - resolvedAt : LocalDateTime
+    - userId : Long
+    - resourceId : Long
+}
 
-    class Room {
-        +Long id
-        +String name
-        +RoomType type
-        +Float surfaceAreaM2
-        +Integer capacity
-        +Boolean energyFlag
-        +Boolean isOpen
-        +Boolean isActive
-    }
+class AnaliticReport {
+    - id : Long
+    - co2SavingsKg : Double
+    - energySavingsEuros : Double
+    - totalReservations : Integer
+    - confirmedCheckIns : Integer
+    - emptyRooms : Integer
+    - generatedAt : LocalDateTime
+    - organizationId : Long
+}
 
-    class RoomType {
-        <<enumeration>>
-        DESK_AREA
-        MEETING_ROOM
-    }
+' Inheritance
+Resource <|-- Desk
+Resource <|-- Room
 
-    class Resource {
-        <<abstract>>
-        +Long id
-        +String name
-        +Float svgAnchorX
-        +Float svgAnchorY
-        +ResourceStatus status
-        +Boolean isActive
-    }
+' Relationships
+User "1" --> "0..*" Reservation : makes
+User "1" --> "0..*" Incident : reports
+Organization "1" --> "0..*" Floor : has
+Organization "1" --> "1..*" User : hire
+Organization "1" --> "0..*" AnaliticsReport : generates
 
-    class Desk {
-        +String equipmentList
-    }
+Floor "1" --> "1..*" Room : contains
+Room "1" --> "0..*" Desk : groups
+Resource "1" --> "0..*" Reservation : has
+Resource "1" --> "0..*" Incident : has
 
-    %% ── Block 3 – Reservations (rsv_) ────────────────────────────────
-    class Reservation {
-        +Long id
-        +LocalDate date
-        +Shift shift
-        +ReservationStatus status
-        +LocalDateTime createdAt
-    }
+Reservation "0..*" --> "1" User : booked by
+Reservation "0..*" --> "1" Resource : books
 
-    class RemoteWorkEntry {
-        +Long id
-        +Long userId
-        +LocalDate date
-        +LocalDateTime createdAt
-    }
+Incident "0..*" --> "1" Resource : targets
 
-    %% ── Block 4 – Analytics & Incidents (anl_) ───────────────────────
-    class Incident {
-        +Long id
-        +String description
-        +String photoPath
-        +IncidentStatus status
-        +LocalDateTime createdAt
-        +LocalDateTime resolvedAt
-    }
-
-    class AuditLog {
-        +Long id
-        +String entityType
-        +Long entityId
-        +String action
-        +LocalDateTime timestamp
-    }
-
-    class ZoneOccupancy {
-        +Long id
-        +Long roomId
-        +LocalDate date
-        +Integer totalReservations
-        +Integer confirmedCheckIns
-        +Float energySavingsEuros
-        +Float co2SavingsKg
-        +LocalDateTime generatedAt
-    }
-
-    %% ── Inheritance ──────────────────────────────────────────────────
-    Resource <|-- Desk
-
-    %% ── Block 1 Relationships ────────────────────────────────────────
-    User "1" --> "0..*" RefreshToken : owns
-    User "1" --> "0..*" Reservation : makes
-    User "1" --> "0..*" RemoteWorkEntry : logs
-    User "1" --> "0..*" Incident : reports
-    User "1" --> "0..*" Incident : resolves
-    User "1" --> "0..*" AuditLog : actor
-
-    %% ── Block 2 Relationships ────────────────────────────────────────
-    Building "1" --> "1..*" Floor : has
-    Floor "1" --> "1..*" Room : contains
-    Room "1" --> "0..*" Resource : groups
-
-    %% ── Block 3 Relationships ────────────────────────────────────────
-    Reservation "0..*" --> "1" User : booked by
-    Reservation "0..*" --> "1" Resource : books
-
-    %% ── Block 4 Relationships ────────────────────────────────────────
-    Incident "0..*" --> "1" Resource : targets
-    Room "1" --> "0..*" ZoneOccupancy : tracked by
+@enduml
 ```

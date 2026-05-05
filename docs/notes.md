@@ -6,16 +6,13 @@
 
 ## Preguntas
 
-- Presentación del TFM (Trabajo Fin de Máster): ¿individual o en grupo?
+- Presentación del TFM (Trabajo Fin de Máster): es en grupo
 - Cadencia de reuniones: ¿semanal?
 - Notificaciones en tiempo real: ¿usar SSE (Server-Sent Events)? La IA sugirió que es la opción más sencilla.
-- Uso de la herramienta de testing «bruno» (mencionar y evaluar)
-- ¿Asignar roles a cada persona del equipo?
-- ¿La app es interna para una empresa o es un SaaS?
-- ¿Cómo se crea la primera cuenta (la del propietario/empresa)?
-- ¿Es posible reservar mesas de forma permanente?
-- ¿Es posible reservar salas completas?
-- ¿Con qué antelación se puede reservar?
+- ¿La app es interna para una empresa o es un SaaS? Es un Saas
+- ¿Es posible reservar mesas de forma permanente? No, maximo una semana de antelación
+- ¿Es posible reservar salas completas? no
+- ¿Con qué antelación se puede reservar? Una semana
 
 ### Respondidas
 ---
@@ -74,6 +71,15 @@ Las dos tecnologías que no hemos tratado en clase son:
 
   - Suscripción / Planes:
     - Se elimina la vista de planes en el flujo público; la suscripción se gestiona desde la cuenta admin.
+  
+- [x] Seción de trabajo | *4 de mayo de 2026*
+  - Decisiones:
+    - el diagrama de clase ha sido puesto al dia (_bmad-output/planning-artifacts/class-diagram.md)
+    - el reparto del trabajo es el siguiente:
+      - Rai: CRUD Reservas
+      - Jose Luis: CRUD Usuarios
+      - Edu: CRUD Incidencias/analytics
+      - Guillaume: CRUD assets (plantas, salas, mesas...)
+    - el codigo debe ser escrito en ingles, y la documentacion, el front y los comentarios en el codigo en español
 
----
-Fin de las notas.
+
