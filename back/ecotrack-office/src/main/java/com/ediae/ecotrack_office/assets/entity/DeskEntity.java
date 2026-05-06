@@ -19,11 +19,10 @@ public class DeskEntity extends ResourceEntity {
     public DeskEntity(
         String name,
         ResourceStatus status,
-        Long floorId,
         String equipmentList,
         RoomEntity room
     ) {
-        super(name, status, floorId, equipmentList);
+        super(name, status, equipmentList);
         this.room = room;
     }
 

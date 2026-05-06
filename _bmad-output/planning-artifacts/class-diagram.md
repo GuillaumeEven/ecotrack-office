@@ -71,12 +71,12 @@ abstract class Resource {
     - name : String
     - status : ResourceStatus
     - isActive : Boolean
-    - floorId : Long
     - equipmentList : String
 }
 
 class Room {
     - type : RoomType
+    - floorId : Long
     - surfaceAreaM2 : Double
     - capacity : Integer
 }
