@@ -5,10 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ast_resources")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class ResourceEntity {
 
     @Id
@@ -24,9 +27,6 @@ public class ResourceEntity {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @Column(name = "floor_id", nullable = false)
-    private Long floorId;
-
     @Column(name = "equipment_list", nullable = true)
     private String equipmentList;
 
@@ -36,13 +36,11 @@ public class ResourceEntity {
     public ResourceEntity(
         String name,
         ResourceStatus status,
-        Long floorId,
         String equipmentList
     ) {
         this.name = name;
         this.status = status;
         this.isActive = false;
-        this.floorId = floorId;
         this.equipmentList = equipmentList;
     }
 
@@ -76,14 +74,6 @@ public class ResourceEntity {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
-    }
-
-    public Long getFloorId() {
-        return floorId;
-    }
-
-    public void setFloorId(Long floorId) {
-        this.floorId = floorId;
     }
 
     public String getEquipmentList() {

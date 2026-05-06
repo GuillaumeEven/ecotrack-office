@@ -1,10 +1,13 @@
 package com.ediae.ecotrack_office.assets.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,6 +25,8 @@ public class FloorEntity {
     private Boolean isActive;
 
     // Añadir vinculo con company
+    @OneToMany(mappedBy = "floor")
+    private List<RoomEntity> rooms;
 
     public FloorEntity() {
     }
@@ -53,5 +58,13 @@ public class FloorEntity {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public List<RoomEntity> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<RoomEntity> rooms) {
+        this.rooms = rooms;
     }
 }
