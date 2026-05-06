@@ -18,7 +18,40 @@ public class FloorEntity {
     @Column(name = "level", nullable = false)
     private Integer level;
 
-    @Column(name = "is-active", nullable = false)
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
+    // Añadir vinculo con company
+
+    public FloorEntity() {
+    }
+
+    public FloorEntity(Integer level, Boolean isActive) {
+        this.level = level;
+        this.isActive = isActive;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
 }
