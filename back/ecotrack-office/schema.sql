@@ -14,10 +14,10 @@
 
     create table ast_resources (
         is_active bit not null,
-        status tinyint not null check ((status between 0 and 2)),
         id bigint not null auto_increment,
         equipment_list varchar(255),
         name varchar(255),
+        status enum ('AVAILABLE','RESERVED','UNAVAILABLE') not null,
         primary key (id)
     ) engine=InnoDB;
 
@@ -26,6 +26,7 @@
         surface_area float(53) not null,
         floor_id bigint not null,
         id bigint not null,
+        type enum ('DESK_AREA','MEETING_ROOM') not null,
         primary key (id)
     ) engine=InnoDB;
 

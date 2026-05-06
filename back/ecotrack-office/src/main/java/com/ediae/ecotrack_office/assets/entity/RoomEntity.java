@@ -4,6 +4,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -12,6 +14,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "ast_rooms")
 public class RoomEntity extends ResourceEntity {
+
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoomType type;
 
     @Column(name = "surface_area", nullable = false)
     private Double surfaceArea;
@@ -30,6 +36,7 @@ public class RoomEntity extends ResourceEntity {
     }
 
     public RoomEntity(
+        RoomType type,
         String name,
         ResourceStatus status,
         FloorEntity floor,
@@ -38,10 +45,19 @@ public class RoomEntity extends ResourceEntity {
         String equipmentList
     ) {
         super(name, status, equipmentList);
+        this.type = type;
         this.floor = floor;
         this.surfaceArea = surfaceArea;
         this.capacity = capacity;
         this.setEquipmentList(equipmentList);
+    }
+
+    public RoomType getType() {
+        return type;
+    }
+
+    public void setType(RoomType type) {
+        this.type = type;
     }
 
     public Double getSurfaceArea() {
