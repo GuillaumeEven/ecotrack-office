@@ -24,9 +24,12 @@ public class FloorEntity {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    // Añadir vinculo con company
     @OneToMany(mappedBy = "floor")
     private List<RoomEntity> rooms;
+
+    // @ManyToOne(optional = true)
+    // @JoinColumn(name = "organization_id", nullable = true)
+    // private OrganizationEntity organization;
 
     public FloorEntity() {
     }
@@ -67,4 +70,12 @@ public class FloorEntity {
     public void setRooms(List<RoomEntity> rooms) {
         this.rooms = rooms;
     }
+
+    // public OrganizationEntity getOrganization() {
+    //     return organization;
+    // }
+
+    // public void setOrganization(OrganizationEntity organization) {
+    //     this.organization = organization;
+    // }
 }
