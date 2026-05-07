@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 
 @Entity
 @Table(name = "ast_floors")
@@ -27,9 +28,9 @@ public class FloorEntity {
     @OneToMany(mappedBy = "floor")
     private List<RoomEntity> rooms;
 
-    // @ManyToOne(optional = true)
-    // @JoinColumn(name = "organization_id", nullable = true)
-    // private OrganizationEntity organization;
+    @ManyToOne
+    @JoinColumn(name = "organization_id", nullable = false)
+    private OrganizationEntity organization;
 
     public FloorEntity() {
     }
