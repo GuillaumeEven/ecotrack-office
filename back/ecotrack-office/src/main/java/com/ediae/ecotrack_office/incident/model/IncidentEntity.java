@@ -32,23 +32,23 @@ public class IncidentEntity {
 
     @ManyToOne (optional = false)
     @JoinColumn (name = "user_id", nullable = false)
-    private Long userId;
+    private UserEntity user;
 
     @ManyToOne (optional = false)
     @JoinColumn (name = "resource_id", nullable = false)
-    private Long resourceId;
+    private ResourceEntity resource;
 
     // Constructores
 
     public IncidentEntity () {}
 
-    public IncidentEntity (String description, IncidentStatus status, LocalDateTime createdAt, Long userId, Long resourceId) {
+    public IncidentEntity (String description, IncidentStatus status, LocalDateTime createdAt, UserEntity user, ResourceEntity resource) {
         this.description = description;
         this.status = status;
         this.createdAt = createdAt;
         this.resolvedAt = null;
-        this.userId = userId;
-        this.resourceId = resourceId;
+        this.user = user;
+        this.resource = resource;
     }
 
     // Getter y Setter
@@ -93,19 +93,19 @@ public class IncidentEntity {
         this.resolvedAt = resolvedAt;
     }
 
-    public Long getUserId () {
+    public UserEntity getUser () {
 
-        return this.userId;
+        return this.user;
     }
-    public void setUserId (Long userId) {
-        this.userId = userId;
+    public void setUser (UserEntity user) {
+        this.user = user;
     }
 
-    public Long getResourceId () {
+    public ResourceEntity getResource () {
 
-        return this.resourceId;
+        return this.resource;
     }
-    public void setResourceId (Long resourceId) {
-        this.resourceId = resourceId;
+    public void setResource (ResourceEntity resource) {
+        this.resource = resource;
     }
 }
