@@ -1,6 +1,7 @@
 package com.ediae.ecotrack_office.assets.entity;
 
 import java.util.List;
+import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,19 +27,17 @@ public class FloorEntity {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "floor")
-    private List<RoomEntity> rooms;
-
-    // @ManyToOne(optional = true)
-    // @JoinColumn(name = "organization_id", nullable = true)
-    // private OrganizationEntity organization;
+    @ManyToOne
+    @JoinColumn(name = "organization_id", nullable = false)
+    private OrganizationEntity organization;
 
     public FloorEntity() {
     }
 
-    public FloorEntity(Integer level, Boolean isActive) {
+    public FloorEntity(Integer level, Boolean isActive, OrganizationEntity organization) {
         this.level = level;
         this.isActive = isActive;
+        this.organization = organization;
     }
 
     public Long getId() {
@@ -63,19 +64,11 @@ public class FloorEntity {
         this.isActive = isActive;
     }
 
-    public List<RoomEntity> getRooms() {
-        return rooms;
+    public OrganizationEntity getOrganization() {
+        return organization;
     }
 
-    public void setRooms(List<RoomEntity> rooms) {
-        this.rooms = rooms;
+    public void setOrganization(OrganizationEntity organization) {
+        this.organization = organization;
     }
-
-    // public OrganizationEntity getOrganization() {
-    //     return organization;
-    // }
-
-    // public void setOrganization(OrganizationEntity organization) {
-    //     this.organization = organization;
-    // }
 }

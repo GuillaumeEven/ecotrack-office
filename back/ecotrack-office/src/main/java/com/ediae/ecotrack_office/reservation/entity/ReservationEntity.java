@@ -1,5 +1,7 @@
 package com.ediae.ecotrack_office.reservation.entity;
 
+import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -27,22 +29,22 @@ public class ReservationEntity {
 
     @ManyToOne (optional = false)
     @JoinColumn (name = "user_id", nullable = false)
-    private Long userId;
+    private UserEntity user;
 
     @ManyToOne (optional = false)
     @JoinColumn (name = "resource_id", nullable = false)
-    private Long resourceId;
+    private ResourceEntity resource;
 
     // Constructores
 
     public ReservationEntity () {}
 
-    public ReservationEntity (LocalDate date, ReservationStatus status, LocalDateTime createdAt, Long userId, Long resourceId) {
+    public ReservationEntity (LocalDate date, ReservationStatus status, LocalDateTime createdAt, UserEntity user, ResourceEntity resource) {
         this.date = date;
         this.status = status;
         this.createdAt = createdAt;
-        this.userId = userId;
-        this.resourceId = resourceId;
+        this.user = user;
+        this.resource = resource;
     }
 
     // Getter y Setter
@@ -83,21 +85,21 @@ public class ReservationEntity {
         this.createdAt = createAt;
     }
 
-    public Long getUserId () {
+    public UserEntity getUser () {
 
-        return this.userId;
+        return this.user;
     }
-    public void setUserId (Long userId) {
+    public void setUser (UserEntity user) {
 
-        this.userId = userId;
+        this.user = user;
     }
 
-    public Long getResourceId () {
+    public ResourceEntity getResource () {
 
-        return this.resourceId;
+        return this.resource;
     }
-    public void setResourceId (Long resourceId) {
+    public void setResource (ResourceEntity resource) {
 
-        this.resourceId = resourceId;
+        this.resource = resource;
     }
 }
