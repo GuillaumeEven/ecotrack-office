@@ -1,4 +1,3 @@
-drop table if exists ast_floors;
 create table analitics_report (
     co_2_savings_kg float(53) not null,
     confirmed_check_ins integer not null,
