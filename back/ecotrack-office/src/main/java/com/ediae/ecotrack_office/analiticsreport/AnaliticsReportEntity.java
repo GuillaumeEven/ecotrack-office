@@ -20,7 +20,7 @@ public class AnaliticsReportEntity {
     @Column(name = "energy_savings_euros", nullable = false)
     private Double energySavingsEuros;
 
-    @Column(name = "total_reservaations", nullable = false)
+    @Column(name = "total_reservations", nullable = false)
     private Integer totalReservations;
 
     @Column(name = "confirmed_check_ins", nullable = false)
@@ -34,20 +34,20 @@ public class AnaliticsReportEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "organization_id", nullable = false)
-    private Long organizationId;
+    private OrganizationEntity organization ;
 
     // Constructores
 
     public AnaliticsReportEntity() {}
 
-    public AnaliticsReportEntity(Double co2SavingsKg, Double energySavingsEuros, Integer totalReservations, Integer confirmedCheckIns, Integer emptyRooms, LocalDateTime generatedAt, Long organizationId) {
+    public AnaliticsReportEntity(Double co2SavingsKg, Double energySavingsEuros, Integer totalReservations, Integer confirmedCheckIns, Integer emptyRooms, LocalDateTime generatedAt, OrganizationEntity organization) {
         this.co2SavingsKg = co2SavingsKg;
         this.energySavingsEuros = energySavingsEuros;
         this.totalReservations = totalReservations;
         this.confirmedCheckIns = confirmedCheckIns;
         this.emptyRooms = emptyRooms;
         this.generatedAt = generatedAt;
-        this.organizationId = organizationId;
+        this.organization = organization;
     }
 
     //Getter y Setter
@@ -101,10 +101,10 @@ public class AnaliticsReportEntity {
         this.generatedAt = generatedAt;
     }
 
-    public Long getOrganizationId() {
-        return this.organizationId;
+    public OrganizationEntity getOrganization() {
+        return this.organization;
     }
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
+    public void setOrganization(OrganizationEntity organization) {
+        this.organization = organization;
     }
 }
