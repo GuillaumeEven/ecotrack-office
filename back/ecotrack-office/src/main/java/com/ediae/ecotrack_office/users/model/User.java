@@ -3,6 +3,9 @@ package com.ediae.ecotrack_office.users.model;
 import com.ediae.ecotrack_office.users.enums.Role;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+// import com.ediae.ecotrack_office.incidence
+import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
 
 @Entity
 @Table(name = "usr_users")
@@ -43,11 +46,11 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany (mapped by = "userId")
-    Private List<IncidenceEntity> incidences;
+    // @OneToMany (mapped by = "userId")
+    //private List<IncidenceEntity> incidences;
 
     @OneToMany (mapped by = "userId")
-    Private List<ReservationEntity> reservations;
+    private List<ReservationEntity> reservations;
 
     
 
