@@ -1,6 +1,8 @@
-package com.ediae.ecotrack_office.users.model;
+package com.ediae.ecotrack_office.users.entity;
 
 import com.ediae.ecotrack_office.users.enums.Role;
+import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "usr_users")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +32,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-    
+
     @ManyToOne (optional = false)
     @JoinColumn (name = "organization_id", nullable = false)
-    private Long organizationId;
+    private OrganizationEntity organization;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
@@ -52,7 +54,7 @@ public class User {
     // @OneToMany (mapped by = "userId")
     // private List<ReservationEntity> reservations;
 
-    
+
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -73,8 +75,8 @@ public class User {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
 
-    public Long getOrganizationId() { return organizationId; }
-    public void setOrganizationId(Long organizationId) { this.organizationId = organizationId; }
+    public OrganizationEntity getOrganization() { return organization; }
+    public void setOrganization(OrganizationEntity organization) { this.organization = organization; }
 
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean isActive) { this.isActive = isActive; }

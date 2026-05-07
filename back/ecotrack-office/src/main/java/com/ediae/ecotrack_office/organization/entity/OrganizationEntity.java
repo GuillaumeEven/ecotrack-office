@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-import com.ediae.ecotrack_office.users.model.User;
+import com.ediae.ecotrack_office.users.entity.UserEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "organizations")
 public class OrganizationEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,14 +46,8 @@ public class OrganizationEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "organizationId")
-    private List<User> users;
-
-     // @OneToMany(mappedBy = "organizationId")
-     // private List<Floor> floors;
-
-    // @OneToMany(mappedBy = "organizationId")
-    // private List<AnalyticsReport> analyticReports;
+    @OneToMany(mappedBy = "organization")
+    private List<UserEntity> users;
 
     public Long getId() {
         return id;
@@ -103,13 +97,13 @@ public class OrganizationEntity {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    public List<User> getUsers() {
+    public List<UserEntity> getUsers() {
         return users;
     }
-    public void setUsers(List<User> users) {
+    public void setUsers(List<UserEntity> users) {
         this.users = users;
     }
-    
+
 
     // Other fields and methods
 }
