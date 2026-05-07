@@ -27,6 +27,9 @@ public class FloorEntity {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
+    @OneToMany(mappedBy = "floor")
+    private List<RoomEntity> rooms;
+
     @ManyToOne
     @JoinColumn(name = "organization_id", nullable = false)
     private OrganizationEntity organization;
