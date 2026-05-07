@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 // import com.ediae.ecotrack_office.incidence
-import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
+//import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
 
 @Entity
 @Table(name = "usr_users")
@@ -49,8 +49,8 @@ public class User {
     // @OneToMany (mapped by = "userId")
     //private List<IncidenceEntity> incidences;
 
-    @OneToMany (mapped by = "userId")
-    private List<ReservationEntity> reservations;
+    // @OneToMany (mapped by = "userId")
+    // private List<ReservationEntity> reservations;
 
     
 
