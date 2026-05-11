@@ -1,5 +1,8 @@
 package com.ediae.ecotrack_office.assets.model;
 
+import com.ediae.ecotrack_office.assets.dto.FloorCreateDto;
+import com.ediae.ecotrack_office.assets.dto.FloorResponseDto;
+import com.ediae.ecotrack_office.assets.dto.FloorUpdateDto;
 import com.ediae.ecotrack_office.assets.entity.FloorEntity;
 
 public class FloorModel {
@@ -7,15 +10,18 @@ public class FloorModel {
     private Long id;
     private Integer level;
     private Boolean isActive;
-    private OrganizationModel organization;
+    // private OrganizationModel organization;
 
     public FloorModel() {
     }
 
-    public FloorModel(Long id, Integer level, Boolean isActive, OrganizationModel organization) {
+    public FloorModel(Long id, Integer level, Boolean isActive
+        // OrganizationModel organization
+    ) {
+        this.id = id;
         this.level = level;
         this.isActive = isActive;
-        this.organization = organization;
+        // this.organization = organization;
     }
 
     public Long getId() {
@@ -42,13 +48,13 @@ public class FloorModel {
         this.isActive = isActive;
     }
 
-    public OrganizationModel getOrganization() {
-        return organization;
-    }
+    // public OrganizationModel getOrganization() {
+    //     return organization;
+    // }
 
-    public void setOrganization(OrganizationModel organization) {
-        this.organization = organization;
-    }
+    // public void setOrganization(OrganizationModel organization) {
+    //     this.organization = organization;
+    // }
 
     public static FloorModel fromEntity(FloorEntity entity) {
         if (entity == null) {
@@ -57,8 +63,8 @@ public class FloorModel {
         return new FloorModel(
             entity.getId(),
             entity.getLevel(),
-            entity.getIsActive(),
-            OrganizationModel.fromEntity(entity.getOrganization())
+            entity.getIsActive()
+            // OrganizationModel.fromEntity(entity.getOrganization())
         );
     }
 
@@ -67,9 +73,9 @@ public class FloorModel {
         entity.setId(this.id);
         entity.setLevel(this.level);
         entity.setIsActive(this.isActive);
-        if (this.organization != null) {
-            entity.setOrganization(this.organization.toEntity());
-        }
+        // if (this.organization != null) {
+        //     entity.setOrganization(this.organization.toEntity());
+        // }
         return entity;
     }
 
@@ -77,33 +83,33 @@ public class FloorModel {
         FloorEntity entity = new FloorEntity();
         entity.setLevel(this.level);
         entity.setIsActive(this.isActive);
-        if (this.organization != null) {
-            entity.setOrganization(this.organization.toEntity());
-        }
+        // if (this.organization != null) {
+        //     entity.setOrganization(this.organization.toEntity());
+        // }
         return entity;
     }
 
-    public static FloorModel fromCreateRequestDto(FloorCreateRequestDto requestDto) {
+    public static FloorModel fromCreateRequestDto(FloorCreateDto requestDto) {
         if (requestDto == null) {
             return null;
         }
         return new FloorModel(
             null,
             requestDto.getLevel(),
-            requestDto.getIsActive(),
-            OrganizationModel.fromRequestDto(requestDto.getOrganization())
+            requestDto.getIsActive()
+            // OrganizationModel.fromRequestDto(requestDto.getOrganization())
         );
     }
 
-    public static FloorModel fromUpdateRequestDto(FloorUpdateRequestDto requestDto, Long id) {
+    public static FloorModel fromUpdateRequestDto(FloorUpdateDto requestDto, Long id) {
         if (requestDto == null) {
             return null;
         }
         return new FloorModel(
             id,
             requestDto.getLevel(),
-            requestDto.getIsActive(),
-            OrganizationModel.fromRequestDto(requestDto.getOrganization())
+            requestDto.getIsActive()
+            // OrganizationModel.fromRequestDto(requestDto.getOrganization())
         );
     }
 
@@ -112,9 +118,9 @@ public class FloorModel {
         responseDto.setId(this.id);
         responseDto.setLevel(this.level);
         responseDto.setIsActive(this.isActive);
-        if (this.organization != null) {
-            responseDto.setOrganization(this.organization.toResponseDto());
-        }
+        // if (this.organization != null) {
+        //     responseDto.setOrganization(this.organization.toResponseDto());
+        // }
         return responseDto;
     }
 }
