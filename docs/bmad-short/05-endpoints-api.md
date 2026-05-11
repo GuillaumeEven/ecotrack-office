@@ -46,8 +46,6 @@
 | `GET` | `/floors/{id}/desks` | Autenticado | Escritorios de una planta (con estado en tiempo real) |
 | `POST` | `/desks` | ADMIN | Crear escritorio |
 | `PATCH` | `/desks/{id}` | ADMIN | Actualizar escritorio |
-| `POST` | `/floors/{id}/floor-plan` | ADMIN | Subir plano SVG |
-| `PATCH` | `/desks/{id}/anchor` | ADMIN | Asociar escritorio a posición SVG |
 
 ---
 
@@ -72,9 +70,9 @@
 | `GET` | `/incidents` | ADMIN | Listar todas las incidencias |
 | `PATCH` | `/incidents/{id}/status` | TECHNICIAN | Actualizar estado (open→in_progress→resolved) |
 | `GET` | `/incidents/stream` | TECHNICIAN | Stream SSE de notificaciones en tiempo real |
-| `GET` | `/analytics/zones/occupancy` | ADMIN | Ocupación por zona (día / semana) |
-| `GET` | `/analytics/zones/consolidation` | ADMIN | Sugerencias de consolidación de zonas |
-| `POST` | `/analytics/zones/{id}/notify` | ADMIN | *(Post-MVP)* Notificar empleados en una zona |
+| `GET` | `/analytics/rooms/occupancy` | ADMIN | Ocupación por sala (día / semana) |
+| `GET` | `/analytics/rooms/consolidation` | ADMIN | Sugerencias de consolidación de salas |
+| `POST` | `/analytics/rooms/{id}/notify` | ADMIN | *(Post-MVP)* Notificar empleados en una sala |
 | `GET` | `/analytics/reports` | ADMIN | Exportar informe de ocupación (CSV/PDF) |
 | `GET` | `/audit-logs` | ADMIN | Consultar registro de auditoría |
 

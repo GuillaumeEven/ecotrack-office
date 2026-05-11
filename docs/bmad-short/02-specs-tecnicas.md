@@ -107,7 +107,7 @@ com/ecotrack/
 │   ├── controller/
 │   ├── service/
 │   ├── repository/
-│   ├── model/                     ← Floor.java, Zone.java, Desk.java, MeetingRoom.java
+│   └── model/                     ← FloorEntity.java, ResourceEntity.java, RoomEntity.java, DeskEntity.java
 │   └── dto/
 │
 ├── reservations/                  ← BLOQUE 3
@@ -121,16 +121,16 @@ com/ecotrack/
     ├── controller/
     ├── service/
     ├── repository/
-    ├── model/                     ← Incident.java, ZoneOccupancy.java, AuditLog.java
+    └── model/                     ← Incident.java, RoomOccupancy.java, AuditLog.java
     └── dto/
 ```
 
 ### Migraciones de base de datos (`src/main/resources/db/migration/`)
 ```
 V1__users.sql           ← Tables usr_users, usr_refresh_tokens
-V2__assets.sql          ← Tables ast_floors, ast_zones, ast_desks, ast_meeting_rooms
+V2__assets.sql          ← Tables ast_resources, ast_floors, ast_rooms, ast_desks
 V3__reservations.sql    ← Tables rsv_reservations, rsv_checkin_tokens
-V4__analytics.sql       ← Tables anl_incidents, anl_zone_occupancy, anl_audit_logs
+V4__analytics.sql       ← Tables anl_incidents, anl_room_occupancy, anl_audit_logs
 ```
 > **Importante:** los números de versión de Flyway deben coordinarse entre los 4 estudiantes. V1 primero, siempre.
 
@@ -141,9 +141,9 @@ V4__analytics.sql       ← Tables anl_incidents, anl_zone_occupancy, anl_audit_
 | Bloque | Prefijo | Ejemplo |
 |---|---|---|
 | Usuarios | `usr_` | `usr_users`, `usr_refresh_tokens` |
-| Recursos físicos | `ast_` | `ast_floors`, `ast_zones`, `ast_desks` |
+| Recursos físicos | `ast_` | `ast_resources`, `ast_floors`, `ast_rooms`, `ast_desks` |
 | Reservas | `rsv_` | `rsv_reservations`, `rsv_checkin_tokens` |
-| Analítica | `anl_` | `anl_incidents`, `anl_zone_occupancy` |
+| Analítica | `anl_` | `anl_incidents`, `anl_room_occupancy` |
 
 ---
 
