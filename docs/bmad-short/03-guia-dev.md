@@ -21,7 +21,7 @@
 
 ### Sprint 4 — Gestión de recursos físicos
 - [ ] **2.2** CRUD de escritorios y salas de reunión
-- [ ] **2.3** Subida del plano SVG y asociación de posiciones
+- [ ] **2.3** Map Data API — endpoint GET /api/v1/floors/{id}/rooms con rooms+desks (Angular genera el SVG dinámicamente)
 
 ### Sprint 5 — Mapa interactivo ⚠️ SPRINT CRÍTICO
 - [ ] **2.4** Room tiles — mapa de salas con código de colores y drill-down de escritorios
@@ -45,7 +45,7 @@
 
 ### Sprint 9 — Analítica y Gobernanza
 - [ ] **4.4** Dashboard de ocupación + estimaciones de ahorro energético y CO₂
-- [ ] **4.5** Sugerencias de consolidación de zonas *(notificaciones a empleados: post-MVP)*
+- [ ] **4.5** Sugerencias de consolidación de salas *(notificaciones a empleados: post-MVP)*
 - [ ] **4.6** Exportar informes y gestión GDPR (exportación de datos, auditoría)
 
 ---
@@ -61,7 +61,7 @@ usr_users, ast_desks, rsv_reservations, anl_incidents
 user_id, created_at, is_active, auto_release_minutes
 
 -- Claves foráneas: nombre_columna (nunca fk_user, nunca userId)
-zone_id, user_id
+room_id, user_id
 
 -- Índices
 idx_{tabla}_{columna}  →  idx_usr_users_email
