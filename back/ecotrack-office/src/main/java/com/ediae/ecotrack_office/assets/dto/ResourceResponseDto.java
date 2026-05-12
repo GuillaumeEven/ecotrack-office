@@ -2,11 +2,11 @@ package com.ediae.ecotrack_office.assets.dto;
 
 public abstract class ResourceResponseDto {
 
-    long id;
-    String name;
-    String status;
-    Boolean isActive;
-    String equipmentList;
+    private long id;
+    private String name;
+    private String status;
+    private Boolean isActive;
+    private String equipmentList;
 
     protected ResourceResponseDto() {
     }

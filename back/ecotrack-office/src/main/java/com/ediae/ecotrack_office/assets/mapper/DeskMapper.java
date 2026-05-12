@@ -10,7 +10,7 @@ import com.ediae.ecotrack_office.assets.model.DeskModel;
 @Component
 public class DeskMapper {
 
-    public DeskModel fromEntity(DeskModel entity) {
+    public DeskModel fromEntity(DeskEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -24,34 +24,33 @@ public class DeskMapper {
         );
     }
 
-    public DeskModel toEntity(DeskModel model) {
+    public DeskEntity toEntity(DeskModel model) {
         if (model == null) {
             return null;
         }
-        return new DeskModel(
+        DeskEntity entity = new DeskEntity();
+        entity.setId(model.getId());
+        entity.setName(model.getName());
+        entity.setStatus(model.getStatus());
+        entity.setIsActive(model.getIsActive());
+        entity.setEquipmentList(model.getEquipmentList());
+        entity.setRoomId(model.getRoomId());
+        return entity;
+    }
+
+    public DeskResponseDto toResponseDto(DeskModel model) {
+        if (model == null) {
+            return null;
+        }
+        return new DeskResponseDto(
             model.getId(),
             model.getName(),
-            model.getStatus(),
+            model.getStatus() != null ? model.getStatus().name() : null,
             model.getIsActive(),
             model.getEquipmentList(),
             model.getRoomId()
         );
     }
-
-    public DeskModel fromResponseDto(DeskResponseDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        return new DeskModel(
-            dto.getId(),
-            dto.getName(),
-            dto.getStatus() != null ? ResourceStatus.valueOf(dto.getStatus()) : null,
-            dto.getIsActive(),
-            dto.getEquipmentList(),
-            dto.getRoomId()
-        );
-    }
-
 
     public DeskModel fromRequestDto(DeskRequestDto dto) {
         if (dto == null) {

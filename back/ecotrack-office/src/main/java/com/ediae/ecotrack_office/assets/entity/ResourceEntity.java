@@ -22,7 +22,7 @@ public class ResourceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = true)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "status", nullable = false)
@@ -32,7 +32,7 @@ public class ResourceEntity {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @Column(name = "equipment_list", nullable = true)
+    @Column(name = "equipment_list")
     private String equipmentList;
 
     public ResourceEntity() {

@@ -24,7 +24,7 @@ public class RoomMapper {
             return null;
         }
 
-        List<DeskEntity> deskEntities =  entity.getDesks() != null ? entity.getDesks() : null;
+        List<DeskEntity> deskEntities =  entity.getDesks();
 
         FloorEntity floorEntity = entity.getFloor() != null ? entity.getFloor() : null;
 
@@ -75,6 +75,7 @@ public class RoomMapper {
                 model.getFloor().getLevel(),
                 model.getFloor().getIsActive(),
                 null
+                // model.getFloor().getOrganization() != null ? model.getFloor().getOrganization().toEntity() : null
             );
             entity.setFloor(floorEntity);
         }

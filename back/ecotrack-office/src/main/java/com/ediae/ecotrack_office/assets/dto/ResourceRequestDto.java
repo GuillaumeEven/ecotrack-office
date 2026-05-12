@@ -1,11 +1,12 @@
 package com.ediae.ecotrack_office.assets.dto;
 
+
 public abstract class ResourceRequestDto {
 
-    String name;
-    String status;
-    Boolean isActive;
-    String equipmentList;
+    private String name;
+    private String status;
+    private Boolean isActive;
+    private String equipmentList;
 
     public ResourceRequestDto() {
     }

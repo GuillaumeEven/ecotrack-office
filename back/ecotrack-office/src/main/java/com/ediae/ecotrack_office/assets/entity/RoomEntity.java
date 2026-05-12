@@ -39,20 +39,19 @@ public class RoomEntity extends ResourceEntity {
     }
 
     public RoomEntity(
-        RoomType type,
         String name,
         ResourceStatus status,
-        FloorEntity floor,
+        String equipmentList,
+        RoomType type,
         Double surfaceArea,
-        Integer capacity,
-        String equipmentList
+        FloorEntity floor,
+        Integer capacity
     ) {
         super(name, status, equipmentList);
         this.type = type;
-        this.floor = floor;
         this.surfaceArea = surfaceArea;
+        this.floor = floor;
         this.capacity = capacity;
-        this.setEquipmentList(equipmentList);
     }
 
     public RoomType getType() {
