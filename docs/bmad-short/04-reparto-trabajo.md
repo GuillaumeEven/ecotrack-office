@@ -5,6 +5,7 @@
 
 ## Contenido
 
+- [Contenido](#contenido)
 - [Responsabilidades por estudiante](#responsabilidades-por-estudiante)
 - [Tabla de historias por sprint y estudiante](#tabla-de-historias-por-sprint-y-estudiante)
 - [Dependencias críticas entre bloques](#dependencias-críticas-entre-bloques)
@@ -36,7 +37,7 @@
 | **3** | Perfil + Base activos | 1.4 — Admin gestión usuarios | Est. 1 | 🟡 |
 | **3** | Perfil + Base activos | 2.1 — Plantas y salas (política 80%) | Est. 2 | 🟡 |
 | **4** | Gestión de activos | 2.2 — Escritorios y salas | Est. 2 | 🟡 |
-| **4** | Gestión de activos | 2.3 — Subida SVG + posiciones | Est. 2 | 🔴 |
+| **4** | Gestión de activos | 2.3 — Map Data API (Angular genera SVG desde rooms/desks) | Est. 2 | 🟡 |
 | **5** | Mapa interactivo ⚠️ | 2.4 — Room Tiles & Desk Drill-down | Est. 2 | 🔴 |
 | **5** | Mapa interactivo ⚠️ | 2.5 — Vista lista y ficha de detalle | Est. 2 | 🟡 |
 | **6** | Reservas | 3.1 — Reserva por turnos + prevención doble | Est. 3 | 🔴 |
@@ -48,7 +49,7 @@
 | **8** | Incidencias | 4.2 — Notificación técnico (SSE) + ciclo vida | Est. 4 | 🟡 |
 | **8** | Incidencias | 4.3 — Vista admin incidencias | Est. 4 | 🟡 |
 | **9** | Analítica | 4.4 — Dashboard ocupación + ahorro energético/CO₂ | Est. 4 | 🔴 |
-| **9** | Analítica | 4.5 — Consolidación de zonas | Est. 4 | 🟡 |
+| **9** | Analítica | 4.5 — Consolidación de salas | Est. 4 | 🟡 |
 | **9** | Gobernanza | 4.6 — Exportar informes + GDPR | Est. 4 | 🟡 |
 
 ---
