@@ -6,6 +6,7 @@ import com.ediae.ecotrack_office.assets.dto.DeskRequestDto;
 import com.ediae.ecotrack_office.assets.dto.DeskResponseDto;
 import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
 import com.ediae.ecotrack_office.assets.model.DeskModel;
+import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 
 @Component
 public class DeskMapper {

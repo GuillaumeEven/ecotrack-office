@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.ediae.ecotrack_office.assets.entity.FloorEntity;
+import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 
 @Repository
-public interface FloorRepository extends JpaRepository<FloorEntity, Long> {
-    List<FloorEntity> findByOrganizationId(Long organizationId);
+public interface DeskRepository extends JpaRepository<DeskEntity, Long> {
+    List<DeskEntity> findByRoomId(Long roomId);
 }
