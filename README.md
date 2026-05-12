@@ -5,8 +5,8 @@
 </h1>
 
 <p align="center">
-  <strong>Smart workspace management for hybrid offices</strong><br>
-  Book a desk in 60 seconds. Let the system handle the rest.
+  <strong>Gestión inteligente de espacios de trabajo para oficinas híbridas</strong><br>
+  Reserva un escritorio en 60 segundos. Deja que el sistema haga el resto.
 </p>
 
 <p align="center">
@@ -27,56 +27,56 @@
 </p>
 
 <p align="center">
-  <a href="project/roadmap.md">🗺️ Roadmap</a> &nbsp;•&nbsp;
+  <a href="project/roadmap.md">🗺️ Hoja de ruta</a> &nbsp;•&nbsp;
   <a href="_bmad-output/planning-artifacts/prd.md">📋 PRD</a> &nbsp;•&nbsp;
-  <a href="_bmad-output/planning-artifacts/architecture.md">🏗️ Architecture</a> &nbsp;•&nbsp;
+  <a href="_bmad-output/planning-artifacts/architecture.md">🏗️ Arquitectura</a> &nbsp;•&nbsp;
   <a href="_bmad-output/planning-artifacts/epics.md">📚 Epics & Stories</a> &nbsp;•&nbsp;
-  <a href="_bmad-output/planning-artifacts/ux-design-specification.md">🎨 UX Design</a>
+  <a href="_bmad-output/planning-artifacts/ux-design-specification.md">🎨 Diseño UX</a>
 </p>
 
 ---
 
-## The Problem
+## El problema
 
-Large hybrid offices are wasting space and energy every day. Employees book desks and don't show up — desks sit empty and "reserved" simultaneously. Organization Admins spend mornings manually recovering abandoned bookings from a spreadsheet nobody fills in. Nobody knows which floors are actually occupied until someone walks through them.
+Las grandes oficinas híbridas desperdician espacio y energía cada día. Los empleados reservan escritorios y no se presentan — los escritorios quedan vacíos y "reservados" al mismo tiempo. Los administradores de la organización pasan las mañanas recuperando manualmente reservas abandonadas desde una hoja de cálculo que nadie rellena. Nadie sabe qué plantas están realmente ocupadas hasta que alguien las recorre.
 
-## The Solution
+## La solución
 
-EcoTrack Office is a web platform that solves both sides of the problem at once:
+EcoTrack Office es una plataforma web que resuelve ambos lados del problema a la vez:
 
-- **Employees** see a live interactive floor map of rectangular room tiles, drill into a room to see available desks, and reserve by shift in two taps.
-- **Organization Admins** get automated ghost-desk recovery, zone consolidation suggestions, energy/CO₂ savings estimates, and occupancy dashboards — without chasing anyone.
+- **Los empleados** ven un mapa de planta interactivo en vivo formado por mosaicos rectangulares de salas, pueden entrar en una sala para ver los escritorios disponibles y reservar por turno con dos toques.
+- **Los administradores** obtienen recuperación automática de escritorios fantasma, sugerencias de consolidación de zonas, estimaciones de ahorro de energía/CO₂ y paneles de ocupación — todo sin tener que perseguir a nadie.
 
-## What Makes It Different
+## Qué lo diferencia
 
-| Feature | How it works |
+| Característica | Cómo funciona |
 |---|---|
-| 🗺️ **Map-first booking** | The building appears as a grid of room tiles. Click a room to see individual desks. Tap Morning or Afternoon to book — done. |
-| 🤖 **Friction-tolerant automation** | Missed check-in? Desk auto-releases after 15 min. Check-in is a single tap from within the app — no QR scanner, no email. The system absorbs non-compliance instead of fighting it. |
-| ⚡ **Zero manual recovery** | Ghost desks, faulty resources, zone shutdowns — all handled automatically. Organization Admins supervise, they don't intervene. |
+| 🗺️ **Reserva orientada al mapa** | El edificio aparece como una cuadrícula de mosaicos de salas. Haz clic en una sala para ver escritorios individuales. Pulsa Mañana o Tarde para reservar — listo. |
+| 🤖 **Automatización tolerante a incumplimientos** | ¿No hizo el check-in? El escritorio se libera automáticamente tras 15 min. El check-in es un solo toque desde la app — sin lector de QR, sin correo. El sistema absorbe la falta de cumplimiento en lugar de combatirla. |
+| ⚡ **Cero recuperación manual** | Escritorios fantasma, recursos defectuosos, cierres de zona — todo gestionado automáticamente. Los administradores supervisan, no intervienen. |
 
-## Key Metrics (MVP Targets)
+## Métricas clave (objetivos MVP)
 
-| Metric | Target |
+| Métrica | Objetivo |
 |---|---|
-| Booking time | ≤ 60 seconds end-to-end |
-| Ghost desk rate | < 5% after auto-release |
-| Zone efficiency | ≥ 80% occupants consolidated on low-attendance days |
+| Tiempo de reserva | ≤ 60 segundos de extremo a extremo |
+| Tasa de escritorios fantasma | < 5% después de la liberación automática |
+| Eficiencia de zona | ≥ 80% de ocupantes consolidados en días de baja asistencia |
 
 ## Stack
 
 ```
-Frontend   Angular SPA + Angular Material + SVG interactive map
+Frontend   Angular SPA + Angular Material + mapa SVG interactivo
 Backend    Spring Boot REST API (Java)
 Database   MySQL
-Auth       JWT (stateless, HttpOnly cookies)
+Auth       JWT (sin estado, cookies HttpOnly)
 ```
 
-## Installation and development
+## Instalación y desarrollo
 
-### Configure environment variables
+### Configurar variables de entorno
 
-You must have a MySQL database dedicated to the project.
+Debes tener una base de datos MySQL dedicada al proyecto.
 
 ```yml
 # .env
@@ -94,60 +94,60 @@ mvn spring-boot:run
 
 ### Front-end
 
-#### Install
+#### Instalar
 
 ```bash
 cd font/ecotrack-office/
 npm install
 ```
 
-#### Run server
+#### Ejecutar servidor
 
 ```bash
-# from /font/ecotrack-office
+# desde /font/ecotrack-office
 npm run start
 ```
 
 
 ## Personas
 
-| Name | Role | Core need |
+| Nombre | Rol | Necesidad principal |
 |---|---|---|
-| **Guillermo** | R&D Engineer | Book a desk matching personal criteria in seconds, from his phone on the bus |
-| **Eduardo** | Sales Rep | Never think about the tool — it works around his habits |
-| **Raimundo** | Building Technician | Get instantly notified when something breaks, with photo and location |
-| **José Luis** | Organization Admin | Replace his morning walk-through with a 30-second dashboard |
+| **Guillermo** | Ingeniero I+D | Reservar un escritorio que cumpla sus criterios en segundos, desde su teléfono en el autobús |
+| **Eduardo** | Comercial | No pensar nunca en la herramienta — que funcione según sus hábitos |
+| **Raimundo** | Técnico del edificio | Recibir notificaciones instantáneas cuando algo se rompe, con foto y ubicación |
+| **José Luis** | Administrador de la organización | Sustituir su recorrido matutino por un panel de control de 30 segundos |
 
-## Project Context
+## Contexto del proyecto
 
-Academic project — Final Master's Project (TFM) at Ediae.
-Team: 4 students × 8 weeks. Each student owns one full-stack vertical (Angular module + Spring Boot CRUD + MySQL schema).
+Proyecto académico — Trabajo Final de Máster (TFM) en Ediae.
+Equipo: 4 estudiantes × 8 semanas. Cada estudiante es responsable de un vertical full-stack (módulo Angular + CRUD Spring Boot + esquema MySQL).
 
-| Block | Domain |
+| Bloque | Dominio |
 |---|---|
-| Block 1 | Users & Authentication (company invitation code, JWT, RBAC) |
-| Block 2 | Physical Assets — rooms (Desk area / Meeting room, m², 80%-opening policy) & interactive map |
-| Block 3 | Reservations (shift-based), app-based check-in, auto-release, remote-work indicator |
-| Block 4 | Analytics, energy/CO₂ savings estimates, dashboard & incidents |
+| Bloque 1 | Usuarios y Autenticación (código de invitación de empresa, JWT, RBAC) |
+| Bloque 2 | Activos físicos — salas (área de escritorio / sala de reuniones, m², política apertura 80%) & mapa interactivo |
+| Bloque 3 | Reservas (por turnos), check-in desde la app, liberación automática, indicador de teletrabajo |
+| Bloque 4 | Analítica, estimaciones de ahorro energético/CO₂, panel e incidencias |
 
-## Roadmap
+## Hoja de ruta
 
-See the full project roadmap → [project/roadmap.md](project/roadmap.md)
+Consulta la hoja de ruta completa del proyecto → [project/roadmap.md](project/roadmap.md)
 
-## Documentation
+## Documentación
 
-| Document | Description |
+| Documento | Descripción |
 |---|---|
-| [📋 PRD](_bmad-output/planning-artifacts/prd.md) | Full Product Requirements Document — 43 functional requirements, 5 NFR categories, user journeys, domain constraints, phased roadmap |
-| [🏗️ Architecture](_bmad-output/planning-artifacts/architecture.md) | Architecture Decision Record — stack, 14 architectural decisions, implementation patterns, full project structure, FR mapping |
-| [📚 Epics & Stories](_bmad-output/planning-artifacts/epics.md) | 5 epics, 23 user stories with full acceptance criteria mapped to all 43 FRs |
-| [🎨 UX Design Specification](_bmad-output/planning-artifacts/ux-design-specification.md) | 14-section UX spec — design system, component strategy, user journeys, visual foundation, accessibility (WCAG 2.2 AA) |
-| [🗓️ Sprint Calendar](_bmad-output/planning-artifacts/sprint-calendar.md) | 9 sprints, 23 stories organized by technical dependencies with complexity indicators |
-| [📊 Sprint Status](_bmad-output/implementation-artifacts/sprint-status.yaml) | Live sprint tracking — story statuses updated throughout development |
-| [🗺️ Roadmap](project/roadmap.md) | Project checklist and next BMAD workflow steps |
+| [📋 PRD](_bmad-output/planning-artifacts/prd.md) | Documento completo de Requisitos del Producto — 43 requisitos funcionales, 5 categorías NFR, recorridos de usuario, restricciones de dominio, hoja de ruta por fases |
+| [🏗️ Arquitectura](_bmad-output/planning-artifacts/architecture.md) | Registro de decisiones arquitectónicas — stack, 14 decisiones arquitectónicas, patrones de implementación, estructura completa del proyecto, mapeo de FR |
+| [📚 Epics & Stories](_bmad-output/planning-artifacts/epics.md) | 5 épicas, 23 historias de usuario con criterios de aceptación completos mapeados a los 43 FR |
+| [🎨 Especificación de Diseño UX](_bmad-output/planning-artifacts/ux-design-specification.md) | Especificación UX en 14 secciones — sistema de diseño, estrategia de componentes, recorridos de usuario, fundación visual, accesibilidad (WCAG 2.2 AA) |
+| [🗓️ Calendario de Sprint](_bmad-output/planning-artifacts/sprint-calendar.md) | 9 sprints, 23 historias organizadas por dependencias técnicas con indicadores de complejidad |
+| [📊 Estado del Sprint](_bmad-output/implementation-artifacts/sprint-status.yaml) | Seguimiento del sprint en vivo — estados de historias actualizados durante el desarrollo |
+| [🗺️ Hoja de ruta](project/roadmap.md) | Checklist del proyecto y próximos pasos del flujo de trabajo BMAD |
 
 ---
 
 <p align="center">
-  Built with the <a href="https://github.com/bmad-method/bmad-method">BMAD Method</a> v6.2.2
+  Construido con el método <a href="https://github.com/bmad-method/bmad-method">BMAD Method</a> v6.2.2
 </p>
