@@ -5,11 +5,17 @@
 
 ## Contenido
 
+- [Contenido](#contenido)
 - [Bloque 1 — Usuarios y Autenticación](#bloque-1--usuarios-y-autenticación)
 - [Bloque 2 — Recursos Físicos y Mapa](#bloque-2--recursos-físicos-y-mapa)
 - [Bloque 3 — Reservas y Check-in](#bloque-3--reservas-y-check-in)
 - [Bloque 4 — Incidencias y Analítica](#bloque-4--incidencias-y-analítica)
 - [Formato de respuestas](#formato-de-respuestas)
+  - [Éxito — colección (con paginación)](#éxito--colección-con-paginación)
+  - [Éxito — objeto único](#éxito--objeto-único)
+  - [Éxito — acción sin datos](#éxito--acción-sin-datos)
+  - [Error — formato RFC 7807](#error--formato-rfc-7807)
+  - [Códigos HTTP](#códigos-http)
 
 ---
 
@@ -46,8 +52,6 @@
 | `GET` | `/floors/{id}/desks` | Autenticado | Escritorios de una planta (con estado en tiempo real) |
 | `POST` | `/desks` | ADMIN | Crear escritorio |
 | `PATCH` | `/desks/{id}` | ADMIN | Actualizar escritorio |
-| `POST` | `/floors/{id}/floor-plan` | ADMIN | Subir plano SVG |
-| `PATCH` | `/desks/{id}/anchor` | ADMIN | Asociar escritorio a posición SVG |
 
 ---
 
@@ -72,9 +76,9 @@
 | `GET` | `/incidents` | ADMIN | Listar todas las incidencias |
 | `PATCH` | `/incidents/{id}/status` | TECHNICIAN | Actualizar estado (open→in_progress→resolved) |
 | `GET` | `/incidents/stream` | TECHNICIAN | Stream SSE de notificaciones en tiempo real |
-| `GET` | `/analytics/zones/occupancy` | ADMIN | Ocupación por zona (día / semana) |
-| `GET` | `/analytics/zones/consolidation` | ADMIN | Sugerencias de consolidación de zonas |
-| `POST` | `/analytics/zones/{id}/notify` | ADMIN | *(Post-MVP)* Notificar empleados en una zona |
+| `GET` | `/analytics/rooms/occupancy` | ADMIN | Ocupación por sala (día / semana) |
+| `GET` | `/analytics/rooms/consolidation` | ADMIN | Sugerencias de consolidación de salas |
+| `POST` | `/analytics/rooms/{id}/notify` | ADMIN | *(Post-MVP)* Notificar empleados en una sala |
 | `GET` | `/analytics/reports` | ADMIN | Exportar informe de ocupación (CSV/PDF) |
 | `GET` | `/audit-logs` | ADMIN | Consultar registro de auditoría |
 

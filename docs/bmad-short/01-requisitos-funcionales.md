@@ -4,6 +4,7 @@
 
 ## Contenido
 
+- [Contenido](#contenido)
 - [Bloque 1 — Usuarios y Autenticación](#bloque-1--usuarios-y-autenticación)
 - [Bloque 2 — Recursos Físicos y Mapa](#bloque-2--recursos-físicos-y-mapa)
 - [Bloque 3 — Reservas y Check-in](#bloque-3--reservas-y-check-in)
@@ -37,9 +38,9 @@
 | FR8 | El Administrador puede crear, actualizar y desactivar plantas del edificio |
 | FR9 | El Administrador puede crear, actualizar y desactivar **salas** en una planta (tipo: Escritorios / Sala de reunión, superficie m², indicador energético) |
 | FR9b | El sistema aplica una **política de apertura por umbral del 80%**: una sala o planta se abre automáticamente al superar el umbral; el Técnico puede abrir/cerrar manualmente |
-| FR10 | El Administrador puede gestionar escritorios y salas (equipamiento, capacidad, posición en el plano) |
-| FR11 | El Administrador puede subir y reemplazar el plano SVG de cada planta |
-| FR12 | El Administrador puede asociar escritorios y salas a sus posiciones SVG en el plano |
+| FR10 | El Administrador puede gestionar escritorios y salas (equipamiento, capacidad) |
+| FR11 | El mapa de planta es **generado automáticamente** por Angular a partir de los datos de salas y escritorios devueltos por la API; no se sube ningún fichero SVG |
+| FR12 | La posición de cada tile de sala y marcador de escritorio en el mapa es calculada automáticamente por el componente Angular según el orden devuelto por la API |
 | FR13 | Un Empleado puede ver cualquier planta como **mapa de tiles rectangulares** de salas con código de colores en tiempo real (disponible / reservado / cerrado) |
 | FR14 | Al hacer clic en el tile de una sala, el mapa muestra el estado en tiempo real de cada escritorio dentro de esa sala (disponible / reservado / avería) |
 | FR15 | Al hacer clic en un tile de sala, el sistema muestra el **drill-down**: escritorios disponibles y botón de reserva directo |
@@ -79,10 +80,10 @@
 | FR32 | Un Técnico puede actualizar el estado de la incidencia (abierta → en curso → resuelta) |
 | FR33 | Cuando un Técnico marca la incidencia como resuelta, el recurso vuelve a estar disponible |
 | FR34 | El Administrador puede ver todas las incidencias con estado, tiempo de resolución y técnico asignado |
-| FR35 | El Administrador puede ver el total de reservas por zona del día actual y de la semana |
-| FR36 | El Administrador puede ver la tasa de ocupación (check-ins confirmados / total reservas) por zona |
-| FR37 | El sistema genera una sugerencia de consolidación de zonas cuando la asistencia es baja |
-| FR38 | *(Post-MVP — Growth)* El Administrador puede enviar una notificación a los Empleados en una zona recomendada para cerrar |
+| FR35 | El Administrador puede ver el total de reservas por sala del día actual y de la semana |
+| FR36 | El Administrador puede ver la tasa de ocupación (check-ins confirmados / total reservas) por sala |
+| FR37 | El sistema genera una sugerencia de consolidación de salas cuando la asistencia es baja |
+| FR38 | *(Post-MVP — Growth)* El Administrador puede enviar una notificación a los Empleados en una sala recomendada para cerrar |
 | FR39 | El Administrador puede exportar un informe de ocupación para un rango de fechas |
 | FR40b | El dashboard muestra el **ahorro energético estimado**: `superficie_m² × coste_por_m²_por_día × días_cierre` |
 | FR40c | El dashboard muestra el **ahorro de CO₂ estimado** basado en los registros de trabajo remoto |
@@ -96,6 +97,6 @@
 | **Rendimiento** | Carga inicial ≤ 3s · Respuestas API ≤ 500ms (p95) · Polling cada 30s |
 | **Seguridad** | HTTPS/TLS 1.2+ · bcrypt (factor 12) · JWT en cookies HttpOnly/Secure/SameSite=Strict |
 | **Seguridad** | Roles aplicados en la API (Spring Security) · Validación MIME de fotos · Sanitización de textos |
-| **Escalabilidad** | 500 usuarios concurrentes · Sin límites configurados en zonas/plantas/escritorios |
+| **Escalabilidad** | 500 usuarios concurrentes · Sin límites configurados en salas/plantas/escritorios |
 | **Fiabilidad** | 99% disponibilidad (lunes–viernes, 7-20h) · Degradación sin bloqueo si la API no responde |
 | **GDPR** | Consentimiento explícito · Derecho de acceso y borrado · Retención 12 meses · Auditoría 90 días |
