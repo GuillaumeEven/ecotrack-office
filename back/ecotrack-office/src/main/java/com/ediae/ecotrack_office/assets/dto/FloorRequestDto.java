@@ -1,20 +1,15 @@
 package com.ediae.ecotrack_office.assets.dto;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
-
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class FloorCreateDto {
+public class FloorRequestDto {
 
     private Integer level;
     private Boolean isActive;
     private Long organizationId;
 
-    public FloorCreateDto() {
+    public FloorRequestDto() {
     }
 
-    public FloorCreateDto(Integer level, Boolean isActive, Long organizationId) {
+    public FloorRequestDto(Integer level, Boolean isActive, Long organizationId) {
         this.level = level;
         this.isActive = isActive;
         this.organizationId = organizationId;
@@ -43,5 +38,4 @@ public class FloorCreateDto {
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
     }
-
 }

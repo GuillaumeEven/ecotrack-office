@@ -2,7 +2,7 @@ package com.ediae.ecotrack_office.assets.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.ediae.ecotrack_office.assets.dto.FloorCreateDto;
+import com.ediae.ecotrack_office.assets.dto.FloorRequestDto;
 import com.ediae.ecotrack_office.assets.dto.FloorResponseDto;
 import com.ediae.ecotrack_office.assets.entity.FloorEntity;
 import com.ediae.ecotrack_office.assets.model.FloorModel;
@@ -22,8 +22,9 @@ public class FloorMapper {
         );
     }
 
-    public FloorEntity toNewEntity(FloorModel model) {
+    public FloorEntity toEntity(FloorModel model) {
         FloorEntity entity = new FloorEntity();
+        entity.setId(model.getId());
         entity.setLevel(model.getLevel());
         entity.setIsActive(model.getIsActive());
         // if (model.getOrganization() != null) {
@@ -32,7 +33,7 @@ public class FloorMapper {
         return entity;
     }
 
-    public FloorModel fromCreateRequestDto(FloorCreateDto requestDto) {
+    public FloorModel fromRequestDto(FloorRequestDto requestDto) {
         if (requestDto == null) {
             return null;
         }

@@ -2,6 +2,9 @@ package com.ediae.ecotrack_office.assets.entity;
 
 import java.util.List;
 
+import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
+import com.ediae.ecotrack_office.assets.enums.RoomType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -19,6 +19,7 @@ public class FloorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // TODO In the database, change level to floor_number_id ?
     @Column(name = "level", nullable = false)
     private Integer level;
 
