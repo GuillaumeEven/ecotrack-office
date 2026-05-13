@@ -1,6 +1,6 @@
 spring:
-  main:
-    allow-circular-references: true
+  # main:
+  #   allow-circular-references: true
   application:
     name: usuarios
   datasource:

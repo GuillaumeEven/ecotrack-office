@@ -1,18 +1,19 @@
 package com.ediae.ecotrack_office.users.service;
 
-import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
-import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
-import com.ediae.ecotrack_office.users.dto.UserRequestDto;
-import com.ediae.ecotrack_office.users.entity.UserEntity;
-import com.ediae.ecotrack_office.users.models.UserModel;
-import com.ediae.ecotrack_office.users.repository.UserRepository;
-import com.ediae.ecotrack_office.users.mapper.UserMapper;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
+import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
+import com.ediae.ecotrack_office.users.dto.UserRequestDto;
+import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.ediae.ecotrack_office.users.mapper.UserMapper;
+import com.ediae.ecotrack_office.users.models.UserModel;
+import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
 public class UserService {
