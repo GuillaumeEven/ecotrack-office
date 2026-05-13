@@ -6,18 +6,16 @@ public class FloorResponseDto {
     private Long id;
     private Integer level;
     private Boolean isActive;
-    // private OrganizationDto organizationDto;
+    private Long organizationId;
 
     public FloorResponseDto() {
     }
 
-    public FloorResponseDto(Long id, Integer level, Boolean isActive
-        // OrganizationDto organizationDto
-    ) {
+    public FloorResponseDto(Long id, Integer level, Boolean isActive, Long organizationId) {
         this.id = id;
         this.level = level;
         this.isActive = isActive;
-        // this.organizationDto = organizationDto;
+        this.organizationId = organizationId;
     }
 
     public Long getId() {
@@ -44,15 +42,11 @@ public class FloorResponseDto {
         this.isActive = isActive;
     }
 
-    // public Long getOrganizationId() {
-    //     return organizationDto.getId();
-    // }
+    public Long getOrganizationId() {
+        return organizationId;
+    }
 
-    // public OrganizationDto getOrganizationDto() {
-    //     return organizationDto;
-    // }
-
-    // public void setOrganizationDto(OrganizationDto organizationDto) {
-    //     this.organizationDto = organizationDto;
-    // }
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 }

@@ -5,18 +5,16 @@ public class FloorModel {
     private Long id;
     private Integer level;
     private Boolean isActive;
-    // private OrganizationModel organization;
+    private Long organizationId;
 
     public FloorModel() {
     }
 
-    public FloorModel(Long id, Integer level, Boolean isActive
-        // OrganizationModel organization
-    ) {
+    public FloorModel(Long id, Integer level, Boolean isActive, Long organizationId) {
         this.id = id;
         this.level = level;
         this.isActive = isActive;
-        // this.organization = organization;
+        this.organizationId = organizationId;
     }
 
     public Long getId() {
@@ -43,11 +41,11 @@ public class FloorModel {
         this.isActive = isActive;
     }
 
-    // public OrganizationModel getOrganization() {
-    //     return organization;
-    // }
+    public Long getOrganizationId() {
+        return organizationId;
+    }
 
-    // public void setOrganization(OrganizationModel organization) {
-    //     this.organization = organization;
-    // }
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 }

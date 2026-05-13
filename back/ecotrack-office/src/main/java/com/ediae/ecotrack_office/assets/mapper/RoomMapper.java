@@ -6,27 +6,23 @@ import org.springframework.stereotype.Component;
 
 import com.ediae.ecotrack_office.assets.dto.RoomRequestDto;
 import com.ediae.ecotrack_office.assets.dto.RoomResponseDto;
-import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 import com.ediae.ecotrack_office.assets.entity.FloorEntity;
 import com.ediae.ecotrack_office.assets.entity.RoomEntity;
 import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
 import com.ediae.ecotrack_office.assets.enums.RoomType;
-import com.ediae.ecotrack_office.assets.model.DeskModel;
-import com.ediae.ecotrack_office.assets.model.FloorModel;
 import com.ediae.ecotrack_office.assets.model.RoomModel;
 
 @Component
 public class RoomMapper {
 
     public RoomModel fromEntity(RoomEntity entity) {
-
         if (entity == null) {
             return null;
         }
 
-        List<DeskEntity> deskEntities =  entity.getDesks();
-
-        FloorEntity floorEntity = entity.getFloor() != null ? entity.getFloor() : null;
+        List<Long> deskIds = entity.getDesks() != null
+            ? entity.getDesks().stream().map(d -> d.getId()).toList()
+            : List.of();
 
         return new RoomModel(
             entity.getId(),
@@ -36,26 +32,13 @@ public class RoomMapper {
             entity.getEquipmentList(),
             entity.getType(),
             entity.getSurfaceArea(),
-            floorEntity != null ? new FloorModel(
-                floorEntity.getId(),
-                floorEntity.getLevel(),
-                floorEntity.getIsActive()
-            ) : null,
+            entity.getFloorId(),
             entity.getCapacity(),
-            deskEntities != null ? deskEntities.stream().map(deskEntity -> {
-                DeskModel deskModel = new DeskModel();
-                deskModel.setId(deskEntity.getId());
-                deskModel.setName(deskEntity.getName());
-                deskModel.setStatus(deskEntity.getStatus());
-                deskModel.setIsActive(deskEntity.getIsActive());
-                deskModel.setEquipmentList(deskEntity.getEquipmentList());
-                return deskModel;
-            }).toList() : null
+            deskIds
         );
     }
 
     public RoomEntity toEntity(RoomModel model) {
-
         if (model == null) {
             return null;
         }
@@ -70,14 +53,10 @@ public class RoomMapper {
         entity.setSurfaceArea(model.getSurfaceArea());
         entity.setCapacity(model.getCapacity());
 
-        if (model.getFloor() != null) {
-            FloorEntity floorEntity = new FloorEntity(
-                model.getFloor().getLevel(),
-                model.getFloor().getIsActive(),
-                null
-                // model.getFloor().getOrganization() != null ? model.getFloor().getOrganization().toEntity() : null
-            );
-            entity.setFloor(floorEntity);
+        if (model.getFloorId() != null) {
+            FloorEntity floorRef = new FloorEntity();
+            floorRef.setId(model.getFloorId());
+            entity.setFloor(floorRef);
         }
 
         return entity;
@@ -96,7 +75,7 @@ public class RoomMapper {
             model.getEquipmentList(),
             model.getType() != null ? model.getType().name() : null,
             model.getSurfaceArea(),
-            model.getFloor() != null ? model.getFloor().getId() : null,
+            model.getFloorId(),
             model.getCapacity()
         );
     }
@@ -114,12 +93,7 @@ public class RoomMapper {
         model.setType(dto.getRoomType() != null ? RoomType.valueOf(dto.getRoomType()) : null);
         model.setSurfaceArea(dto.getSurfaceArea());
         model.setCapacity(dto.getCapacity());
-
-        if (dto.getFloorId() != null) {
-            FloorModel floorModel = new FloorModel();
-            floorModel.setId(dto.getFloorId());
-            model.setFloor(floorModel);
-        }
+        model.setFloorId(dto.getFloorId());
 
         return model;
     }

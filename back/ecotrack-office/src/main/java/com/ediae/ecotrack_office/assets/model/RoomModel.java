@@ -9,9 +9,9 @@ public class RoomModel extends ResourceModel {
 
     private RoomType type;
     private Double surfaceArea;
-    private FloorModel floor;
+    private Long floorId;
     private Integer capacity;
-    private List<DeskModel> desks;
+    private List<Long> deskIds;
 
     public RoomModel() {
     }
@@ -24,16 +24,16 @@ public class RoomModel extends ResourceModel {
         String equipmentList,
         RoomType type,
         Double surfaceArea,
-        FloorModel floor,
+        Long floorId,
         Integer capacity,
-        List<DeskModel> desks
+        List<Long> deskIds
     ) {
         super(id, name, status, isActive, equipmentList);
         this.surfaceArea = surfaceArea;
         this.capacity = capacity;
-        this.floor = floor;
+        this.floorId = floorId;
         this.type = type;
-        this.desks = desks;
+        this.deskIds = deskIds;
     }
 
     public Double getSurfaceArea() {
@@ -52,20 +52,20 @@ public class RoomModel extends ResourceModel {
         this.capacity = capacity;
     }
 
-    public FloorModel getFloor() {
-        return floor;
+    public Long getFloorId() {
+        return floorId;
     }
 
-    public void setFloor(FloorModel floor) {
-        this.floor = floor;
+    public void setFloorId(Long floorId) {
+        this.floorId = floorId;
     }
 
-    public List<DeskModel> getDesks() {
-        return desks;
+    public List<Long> getDeskIds() {
+        return deskIds;
     }
 
-    public void setDesks(List<DeskModel> desks) {
-        this.desks = desks;
+    public void setDeskIds(List<Long> deskIds) {
+        this.deskIds = deskIds;
     }
 
     public RoomType getType() {

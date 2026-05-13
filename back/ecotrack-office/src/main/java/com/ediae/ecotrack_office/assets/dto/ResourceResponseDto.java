@@ -2,7 +2,7 @@ package com.ediae.ecotrack_office.assets.dto;
 
 public abstract class ResourceResponseDto {
 
-    private long id;
+    private Long id;
     private String name;
     private String status;
     private Boolean isActive;
@@ -12,7 +12,7 @@ public abstract class ResourceResponseDto {
     }
 
     protected ResourceResponseDto(
-        long id,
+        Long id,
         String name,
         String status,
         Boolean isActive,
@@ -25,11 +25,11 @@ public abstract class ResourceResponseDto {
         this.equipmentList = equipmentList;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -4,9 +4,10 @@ import org.springframework.stereotype.Component;
 
 import com.ediae.ecotrack_office.assets.dto.DeskRequestDto;
 import com.ediae.ecotrack_office.assets.dto.DeskResponseDto;
+import com.ediae.ecotrack_office.assets.entity.DeskEntity;
+import com.ediae.ecotrack_office.assets.entity.RoomEntity;
 import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
 import com.ediae.ecotrack_office.assets.model.DeskModel;
-import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 
 @Component
 public class DeskMapper {
@@ -29,13 +30,20 @@ public class DeskMapper {
         if (model == null) {
             return null;
         }
+
         DeskEntity entity = new DeskEntity();
         entity.setId(model.getId());
         entity.setName(model.getName());
         entity.setStatus(model.getStatus());
         entity.setIsActive(model.getIsActive());
         entity.setEquipmentList(model.getEquipmentList());
-        entity.setRoomId(model.getRoomId());
+        if (model.getRoomId() != null) {
+            RoomEntity roomEntity = new RoomEntity();
+            roomEntity.setId(model.getRoomId());
+            entity.setRoom(roomEntity);
+        } else {
+            entity.setRoom(null);
+        }
         return entity;
     }
 
