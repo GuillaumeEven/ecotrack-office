@@ -1,5 +1,7 @@
 package com.ediae.ecotrack_office.assets.entity;
 
+import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

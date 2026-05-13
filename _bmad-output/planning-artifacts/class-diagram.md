@@ -76,8 +76,8 @@ abstract class Resource {
 
 class Room {
     - type : RoomType
-    - floorId : Long
     - surfaceAreaM2 : Double
+    - floorId : Long
     - capacity : Integer
 }
 
