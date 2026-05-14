@@ -9,5 +9,5 @@ import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 
 @Repository
 public interface DeskRepository extends JpaRepository<DeskEntity, Long> {
-    List<DeskEntity> findByRoomId(Long roomId);
+    List<DeskEntity> findByRoom_Id(Long roomId);
 }
