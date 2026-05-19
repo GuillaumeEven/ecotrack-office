@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.assets.dto.FloorRequestDto;
 import com.ediae.ecotrack_office.assets.dto.FloorResponseDto;
+import com.ediae.ecotrack_office.assets.mapper.FloorMapper;
 import com.ediae.ecotrack_office.assets.service.FloorService;
 
 
@@ -21,16 +22,18 @@ public class FloorController {
     @Autowired
     private FloorService floorService;
 
+    @Autowired
+    private FloorMapper floorMapper;
+
     @GetMapping("/{id}")
     public ResponseEntity<FloorResponseDto> getFloorById(@PathVariable Long id) {
-        FloorResponseDto floor = floorService.getFloorById(id);
+        FloorResponseDto floor = floorMapper.toResponseDto(floorService.getFloorById(id));
         return ResponseEntity.ok(floor);
     }
 
     @PostMapping
     public ResponseEntity<FloorResponseDto> createFloor(@RequestBody FloorRequestDto floorRequestDto) {
-        FloorResponseDto floor = floorService.createFloor(floorRequestDto);
+        FloorResponseDto floor = floorMapper.toResponseDto(floorService.createFloor(floorRequestDto));
         return ResponseEntity.ok(floor);
     }
-
 }

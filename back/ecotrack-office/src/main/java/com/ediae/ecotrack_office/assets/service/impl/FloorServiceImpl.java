@@ -22,29 +22,29 @@ public class FloorServiceImpl implements FloorService {
     private FloorMapper floorMapper;
 
     @Override
-    public FloorResponseDto getFloorById(Long id) {
+    public FloorModel getFloorById(Long id) {
         FloorEntity entity = floorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Floor not found with id: " + id));
-        return floorMapper.toResponseDto(floorMapper.fromEntity(entity));
+        return floorMapper.fromEntity(entity);
     }
 
     @Override
-    public FloorResponseDto createFloor(FloorRequestDto floorRequestDto) {
+    public FloorModel createFloor(FloorRequestDto floorRequestDto) {
         FloorModel model = floorMapper.fromRequestDto(floorRequestDto);
         FloorEntity entity = floorMapper.toEntity(model);
         FloorEntity savedEntity = floorRepository.save(entity);
-        return floorMapper.toResponseDto(floorMapper.fromEntity(savedEntity));
+        return floorMapper.fromEntity(savedEntity);
     }
 
     @Override
-    public FloorResponseDto updateFloor(Long id, FloorRequestDto floorRequestDto) {
+    public FloorModel updateFloor(Long id, FloorRequestDto floorRequestDto) {
         FloorEntity existingEntity = floorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Floor not found with id: " + id));
         FloorModel model = floorMapper.fromRequestDto(floorRequestDto);
         FloorEntity entity = floorMapper.toEntity(model);
         entity.setId(existingEntity.getId());
         FloorEntity updatedEntity = floorRepository.save(entity);
-        return floorMapper.toResponseDto(floorMapper.fromEntity(updatedEntity));
+        return floorMapper.fromEntity(updatedEntity);
     }
 
     @Override
