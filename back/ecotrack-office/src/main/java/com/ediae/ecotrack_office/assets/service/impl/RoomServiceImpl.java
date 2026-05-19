@@ -1,11 +1,12 @@
 package com.ediae.ecotrack_office.assets.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ediae.ecotrack_office.assets.dto.RoomRequestDto;
-import com.ediae.ecotrack_office.assets.dto.RoomResponseDto;
 import com.ediae.ecotrack_office.assets.entity.RoomEntity;
 import com.ediae.ecotrack_office.assets.mapper.RoomMapper;
 import com.ediae.ecotrack_office.assets.model.RoomModel;
@@ -31,27 +32,27 @@ public class RoomServiceImpl implements RoomService {
 
 
     @Override
-    public RoomResponseDto getRoomById(Long roomId) {
+    public RoomModel getRoomById(Long roomId) {
         RoomEntity entity = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
         RoomModel roomModel = roomMapper.fromEntity(entity);
-        return roomMapper.toResponseDto(roomModel);
+        return roomModel;
     }
 
     @Override
-    public RoomResponseDto createRoom(RoomRequestDto roomRequestDTO) {
+    public RoomModel createRoom(RoomRequestDto roomRequestDTO) {
 
         RoomModel roomModel = roomMapper.fromRequestDto(roomRequestDTO);
         RoomEntity roomEntity = roomMapper.toEntity(roomModel);
         RoomEntity savedEntity = roomRepository.save(roomEntity);
 
-        return roomMapper.toResponseDto(roomMapper.fromEntity(savedEntity));
+        return roomMapper.fromEntity(savedEntity);
     }
 
 
     @Override
     @Transactional
-    public RoomResponseDto updateRoom(Long roomId, RoomRequestDto roomRequestDTO) {
+    public RoomModel updateRoom(Long roomId, RoomRequestDto roomRequestDTO) {
         RoomEntity existingEntity = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
 
@@ -70,9 +71,8 @@ public class RoomServiceImpl implements RoomService {
         // apply field updates
         roomMapper.updateEntityFromModel(updatedModel, existingEntity);
 
-
         RoomEntity updatedEntity = roomRepository.save(existingEntity);
-        return roomMapper.toResponseDto(roomMapper.fromEntity(updatedEntity));
+        return roomMapper.fromEntity(updatedEntity);
     }
 
     public void deleteRoomById(Long roomId) {
@@ -86,4 +86,11 @@ public class RoomServiceImpl implements RoomService {
 
         roomRepository.delete(existingEntity);
     }
-}
+
+    @Override
+    public List<RoomModel> getRoomsByFloorId(Long floorId) {
+        List<RoomEntity> entities = roomRepository.findByFloorId(floorId);
+        return entities.stream()
+                .map(roomMapper::fromEntity)
+                .toList();
+    }

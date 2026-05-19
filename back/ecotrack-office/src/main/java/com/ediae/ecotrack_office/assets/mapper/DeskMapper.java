@@ -74,4 +74,21 @@ public class DeskMapper {
             dto.getRoomId()
         );
     }
+
+    public void updateEntityFromModel(DeskModel model, DeskEntity entity) {
+        if (model == null || entity == null) {
+            return;
+        }
+        entity.setName(model.getName());
+        entity.setStatus(model.getStatus());
+        entity.setIsActive(model.getIsActive());
+        entity.setEquipmentList(model.getEquipmentList());
+        if (model.getRoomId() != null) {
+            RoomEntity roomEntity = new RoomEntity();
+            roomEntity.setId(model.getRoomId());
+            entity.setRoom(roomEntity);
+        } else {
+            entity.setRoom(null);
+        }
+    }
 }
