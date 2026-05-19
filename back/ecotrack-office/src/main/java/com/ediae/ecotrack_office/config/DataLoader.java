@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,27 +37,51 @@ public class DataLoader implements CommandLineRunner {
     private final FloorRepository floorRepository;
     private final RoomRepository roomRepository;
     private final DeskRepository deskRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     public DataLoader(OrganizationRepository organizationRepository,
                       UserRepository userRepository,
                       FloorRepository floorRepository,
                       RoomRepository roomRepository,
-                      DeskRepository deskRepository) {
+                      DeskRepository deskRepository,
+                      JdbcTemplate jdbcTemplate) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.floorRepository = floorRepository;
         this.roomRepository = roomRepository;
         this.deskRepository = deskRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     @Transactional
     public void run(String... args) {
+        resetDatabase();
         OrganizationEntity org = createOrgIfMissing();
         createFloorsIfMissing(org);
         createAdminIfMissing(org);
         createTechAndEmployeeIfMissing(org);
         createRoomsAndDesksIfMissing(org);
+    }
+
+    /**
+     * Wipes all dev data and resets AUTO_INCREMENT to 1 so seeded IDs are always predictable:
+     * org=1, admin=1, tech=2, employee=3, floor0=1, floor1=2, roomA=1, roomB=2, desk1-3=1-3.
+     * MySQL TRUNCATE resets AUTO_INCREMENT automatically; FK checks disabled during truncation.
+     */
+    private void resetDatabase() {
+        jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
+        jdbcTemplate.execute("TRUNCATE TABLE analitics_report");
+        jdbcTemplate.execute("TRUNCATE TABLE incidents");
+        jdbcTemplate.execute("TRUNCATE TABLE reservation");
+        jdbcTemplate.execute("TRUNCATE TABLE ast_desks");
+        jdbcTemplate.execute("TRUNCATE TABLE ast_rooms");
+        jdbcTemplate.execute("TRUNCATE TABLE ast_resources");
+        jdbcTemplate.execute("TRUNCATE TABLE ast_floors");
+        jdbcTemplate.execute("TRUNCATE TABLE usr_users");
+        jdbcTemplate.execute("TRUNCATE TABLE organizations");
+        jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
+        log.info("Dev database reset: all tables truncated, AUTO_INCREMENT reset to 1.");
     }
 
     private OrganizationEntity createOrgIfMissing() {
@@ -89,7 +114,7 @@ public class DataLoader implements CommandLineRunner {
 
         UserEntity admin = new UserEntity();
         admin.setEmail(adminEmail);
-        admin.setPasswordHash("password"); // encode if using security
+        admin.setPasswordHash("password");
         admin.setFirstName("Admin");
         admin.setLastName("Ecotrack");
         admin.setRole(Role.ADMIN);
