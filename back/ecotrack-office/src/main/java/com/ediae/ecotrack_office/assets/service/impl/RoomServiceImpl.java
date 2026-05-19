@@ -75,6 +75,7 @@ public class RoomServiceImpl implements RoomService {
         return roomMapper.fromEntity(updatedEntity);
     }
 
+    @Override
     public void deleteRoomById(Long roomId) {
         RoomEntity existingEntity = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
@@ -94,3 +95,4 @@ public class RoomServiceImpl implements RoomService {
                 .map(roomMapper::fromEntity)
                 .toList();
     }
+}
