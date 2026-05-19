@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ediae.ecotrack_office.assets.dto.FloorRequestDto;
-import com.ediae.ecotrack_office.assets.dto.FloorResponseDto;
 import com.ediae.ecotrack_office.assets.entity.FloorEntity;
 import com.ediae.ecotrack_office.assets.mapper.FloorMapper;
 import com.ediae.ecotrack_office.assets.model.FloorModel;
