@@ -20,4 +20,5 @@ public interface DeskService {
 
     public List<DeskModel> getDesksByRoomId(Long roomId);
 
+
 }
