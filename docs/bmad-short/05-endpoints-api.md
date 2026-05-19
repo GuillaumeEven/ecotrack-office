@@ -24,9 +24,9 @@
 | Método | URL | Rol requerido | Descripción |
 |---|---|---|---|
 | `POST` | `/auth/register` | Público | Registro con consentimiento GDPR |
-| `POST` | `/auth/login` | Público | Login → devuelve cookie JWT |
+| `POST` | `/auth/login` | Público | Login → inicia sesión HTTP Basic (JWT diferido a Growth) |
 | `POST` | `/auth/logout` | Autenticado | Cierra sesión e invalida token |
-| `POST` | `/auth/refresh` | Autenticado | Renueva el token JWT |
+| `POST` | `/auth/refresh` | Autenticado | *(Growth)* Renueva el token JWT |
 | `GET` | `/users/me` | EMPLOYEE | Ver mi perfil |
 | `PATCH` | `/users/me` | EMPLOYEE | Actualizar mi perfil y preferencias |
 | `GET` | `/users` | ADMIN | Listar todos los usuarios |
