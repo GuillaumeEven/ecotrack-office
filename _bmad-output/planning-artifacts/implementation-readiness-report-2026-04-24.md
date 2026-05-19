@@ -24,7 +24,7 @@ documentsAssessed:
 **User Management & Authentication**
 
 - FR1: A visitor can register an account with name, email, and password
-- FR2: A registered user can log in and receive a session token valid for 8 hours
+- FR2: A registered user can log in (MVP demo: HTTP Basic Auth); production will adopt token-based sessions with expiry and refresh strategy
 - FR3: An authenticated user can log out and invalidate their session
 - FR4: An Organization Admin can create, update, deactivate, and delete user accounts
 - FR5: An Organization Admin can assign and change roles (Employee, Organization Admin, Technician) for any user
@@ -36,12 +36,12 @@ documentsAssessed:
 - FR8: An Organization Admin can create, update, and deactivate floors within the building
 - FR9: An Organization Admin can create, update, and deactivate zones within a floor, each with an energy-management flag
 - FR10: An Organization Admin can create, update, and deactivate individual desks and meeting rooms with attributes (equipment list, capacity, floor plan position)
-- FR11: An Organization Admin can upload and replace the SVG floor plan for any floor
-- FR12: An Organization Admin can associate desks and rooms with their SVG anchor positions on the floor plan
+- FR11: An Organization Admin can manage floor maps via dynamic floor map generation (MVP) — manual SVG upload is deferred to Growth
+- FR12: An Organization Admin can associate desks and rooms with generated map coordinates; manual SVG anchor association is deferred to Growth
 
 **Interactive Floor Map**
 
-- FR13: An Employee can view any floor as an interactive SVG map
+- FR13: An Employee can view any floor as an interactive, dynamically generated floor map (no manual SVG upload required for MVP)
 - FR14: The map displays each resource with a real-time color-coded status (available, reserved, unavailable/incident)
 - FR15: The map displays a zone heat overlay showing zones with active reservations to nudge energy-efficient clustering
 - FR16: An Employee can filter the map by criteria (proximity to restrooms, window-facing, equipment type)
@@ -105,9 +105,9 @@ documentsAssessed:
 **Security**
 
 - NFR6: All data in transit encrypted via HTTPS/TLS 1.2+
-- NFR7: Passwords stored with bcrypt (minimum cost factor 12); never logged or returned in API responses
-- NFR8: JWT tokens expire after 8 hours; refresh token strategy required for continuous sessions
-- NFR9: JWT stored in HttpOnly, Secure, SameSite=Strict cookies
+- NFR7: Password hashing and secure persistence are required for production; for the MVP demo, password storage/hardening is simplified and full bcrypt-based persistence is deferred to Growth
+- NFR8: MVP demo authentication uses HTTP Basic Auth (demo-only). Production will adopt token-based sessions (e.g., JWT) with appropriate expiry and refresh strategy
+- NFR9: For production, tokens must be stored in HttpOnly, Secure, SameSite=Strict cookies; demo authentication may not follow the production token storage model
 - NFR10: All API endpoints require valid authentication except login, registration, and email check-in link
 - NFR11: Role enforcement applied at API layer (Spring Security), not only in the Angular frontend
 - NFR12: Incident photo uploads: server-side MIME-type validation, 5MB maximum
@@ -154,11 +154,11 @@ documentsAssessed:
 - Simplified tenant model: logical data segmentation (not hardened multi-tenant isolation)
 - Usage telemetry may be recorded for evaluation but not for billing
 
-**Technical Architecture Constraints**
+-**Technical Architecture Constraints**
 
-- SVG floor plan rendering via Angular components on SVG anchors (no third-party mapping library)
+- Dynamic floor map generation rendered via Angular components; manual SVG upload/anchor association deferred for MVP (no third-party mapping library)
 - Angular services + RxJS observables for state management; no NgRx required
-- Angular HttpClient with interceptors for token injection and global error handling
+- Angular HttpClient with interceptors to support demo Basic Auth headers and production token injection/global error handling
 - OpenAPI/Swagger spec as the binding frontend–backend contract
 - 4 students × 8 weeks; each owns one full CRUD vertical (Angular module + Spring Boot controller/service/repository + MySQL schema)
 - Angular Material shared component library established in Week 1
@@ -173,9 +173,11 @@ documentsAssessed:
 
 ### PRD Completeness Assessment
 
-The PRD is thorough and well-structured. Requirements are numbered, clearly scoped per role, and organized into logical functional blocks. The phased delivery model (MVP / Growth / Vision) is explicit. SaaS demo mode constraints are documented inline. No missing functional areas detected.
+The PRD was updated on 2026-05-19 with demo scope simplifications (see validation report). The update simplifies authentication for the MVP (HTTP Basic Auth for demo) and replaces manual SVG floor-plan upload/anchor association with a dynamic floor map generation approach; some persistence and hashing details (e.g., bcrypt) are deferred to the Growth phase.
 
-Minor observation: FR38 (targeted notification to employees in shutdown zone) overlaps with Growth-tier "notification system" — the mechanism (push/email) is not specified for MVP in the PRD itself; the architecture document should clarify the MVP delivery vehicle.
+These simplifications are intentional for the demo but introduce a warning for downstream artifacts: update epics, stories, architecture notes, and UX assumptions accordingly before implementation. The validation report rates the updated PRD as 4/5 with a "Warning" status due to the scope simplifications and recommends aligning affected artifacts.
+
+Minor observation: FR38 (targeted notification to employees in shutdown zone) still overlaps with Growth-tier "notification system" — the mechanism (push/email) is not specified for MVP in the PRD itself; the architecture document should clarify the MVP delivery vehicle.
 
 ---
 
@@ -186,7 +188,7 @@ Minor observation: FR38 (targeted notification to employees in shutdown zone) ov
 | FR     | PRD Requirement (short)                                         | Epic Coverage               | Status      |
 |--------|-----------------------------------------------------------------|-----------------------------|-------------|
 | FR1    | Visitor registration (name, email, password)                   | Epic 1 — Story 1.1          | ✓ Covered   |
-| FR2    | Login + JWT session (8h)                                        | Epic 1 — Story 1.2          | ✓ Covered   |
+| FR2    | Login + session (MVP Basic Auth; production token-based sessions planned) | Epic 1 — Story 1.2          | ✓ Covered   |
 | FR3    | Logout / session invalidation                                   | Epic 1 — Story 1.2          | ✓ Covered   |
 | FR4    | Admin CRUD on user accounts                                     | Epic 1 — Story 1.4          | ✓ Covered   |
 | FR5    | Admin role assignment                                           | Epic 1 — Story 1.4          | ✓ Covered   |
@@ -195,9 +197,9 @@ Minor observation: FR38 (targeted notification to employees in shutdown zone) ov
 | FR8    | Admin floor CRUD                                                | Epic 2 — Story 2.1          | ✓ Covered   |
 | FR9    | Admin zone CRUD with energy flag                                | Epic 2 — Story 2.1          | ✓ Covered   |
 | FR10   | Admin desk & room CRUD with attributes                          | Epic 2 — Story 2.2          | ✓ Covered   |
-| FR11   | Admin SVG floor plan upload                                     | Epic 2 — Story 2.3          | ✓ Covered   |
-| FR12   | Desk/room ↔ SVG anchor association                              | Epic 2 — Story 2.3          | ✓ Covered   |
-| FR13   | Employee: view interactive SVG floor map                        | Epic 2 — Story 2.4          | ✓ Covered   |
+| FR11   | Admin dynamic floor map generation (SVG upload deferred to Growth) | Epic 2 — Story 2.3          | ✓ Covered   |
+| FR12   | Desk/room ↔ generated map coordinates (SVG anchor association deferred to Growth) | Epic 2 — Story 2.3          | ✓ Covered   |
+| FR13   | Employee: view interactive, dynamically generated floor map      | Epic 2 — Story 2.4          | ✓ Covered   |
 | FR14   | Real-time color-coded resource status on map                    | Epic 2 — Story 2.4          | ✓ Covered   |
 | FR15   | Zone heat overlay (energy nudge)                                | Epic 2 — Story 2.5          | ✓ Covered   |
 | FR16   | Map criteria filters                                            | Epic 2 — Story 2.5          | ✓ Covered   |
@@ -258,7 +260,7 @@ The UX document is comprehensive: executive summary, user personas, design syste
 
 | UX Requirement | PRD Requirement | Status |
 |---|---|---|
-| Map-first booking interface | FR13–FR18 (SVG map, status overlay, filters, detail card) | ✅ Aligned |
+| Map-first booking interface | FR13–FR18 (interactive, dynamically generated floor map; status overlay, filters, detail card) | ✅ Aligned |
 | Color-coded status (green/amber/red/grey) | FR14 (real-time color-coded status) | ✅ Aligned — UX refines to 5 states (see note) |
 | Zone heat overlay (energy nudge) | FR15 | ✅ Aligned |
 | Criteria filter panel (restrooms, window, equipment) | FR16 | ✅ Aligned |
@@ -282,7 +284,7 @@ The UX document is comprehensive: executive summary, user personas, design syste
 | UX Decision | Architecture Decision | Status |
 |---|---|---|
 | Angular Material (MDC/M3) as design system | Architecture: Angular Material shared library from Week 1 | ✅ Aligned |
-| `FloorMapComponent` + `DeskMarkerComponent` overlaying SVG anchors | Architecture: SVG via Angular components on SVG anchors, no third-party map lib | ✅ Aligned |
+| `FloorMapComponent` + `DeskMarkerComponent` overlaying generated map coordinates | Architecture: Dynamic floor map generation rendered via Angular components; manual SVG upload/anchor association deferred for MVP | ✅ Aligned |
 | `ZoneHeatOverlayComponent` as SVG layer | Architecture: computed from zone occupancy data | ✅ Aligned |
 | `SseNotificationService` via native `EventSource` | Architecture: Spring `SseEmitter` for incident push | ✅ Aligned |
 | RxJS `interval(30000) + switchMap` for availability polling | Architecture: 30s polling, cancel on component destroy | ✅ Aligned |
@@ -403,7 +405,7 @@ Epic 0 delivers zero user value by design — this is explicitly stated in its d
 
 #### MINOR-02 — `UPLOAD_DIR` Env Variable Missing from Story 0.3
 
-Story 0.3 (Docker Compose + env setup) creates `.env.example` files and documents all required environment variables. However, `UPLOAD_DIR` (used for SVG floor plan storage in Story 2.3 and incident photo storage in Story 4.1) is not mentioned in Story 0.3's acceptance criteria. Backend students working on Stories 2.3 and 4.1 will discover this variable requirement when they implement it — risking inconsistent paths across dev environments.
+Story 0.3 (Docker Compose + env setup) creates `.env.example` files and documents all required environment variables. However, `UPLOAD_DIR` (used for floor plan assets or incident photo storage in Story 2.3 and Story 4.1) is not mentioned in Story 0.3's acceptance criteria. Backend students working on Stories 2.3 and 4.1 will discover this variable requirement when they implement it — risking inconsistent paths across dev environments.
 
 **Recommendation:** Add `UPLOAD_DIR` to the Story 0.3 AC: "`.env.example` includes `UPLOAD_DIR=/var/ecotrack/uploads` as a required variable". No story rewrite needed — a single line addition to Story 0.3.
 
@@ -551,7 +553,8 @@ Either decision is valid. The risk is leaving it ambiguous.
 - **Consistent BDD ACs** — All 23 stories use Given/When/Then format with error conditions covered
 - **Architecture-UX coherence** — Technology choices (Angular Material, SVG map, SSE, RxJS polling) are consistent across all three planning documents
 - **Parallel development strategy** — OpenAPI-first contract + mock data plan enables 4 students to work independently from Week 2
-- **Security design is solid** — bcrypt, HttpOnly JWT cookies, RBAC at API layer, input sanitization, MIME validation — all NFRs are addressed at story level
+ - **Architecture-UX coherence** — Technology choices (Angular Material, dynamic floor map generation, SSE, RxJS polling) are consistent across all three planning documents
+ - **Security design (production planned)** — Production-grade security (bcrypt hashing, JWT-based sessions stored in HttpOnly cookies, RBAC enforcement, input sanitization, MIME validation) is specified for Growth; note that the MVP demo uses simplified Basic Auth and some persistence hardening is deferred
 
 ---
 
