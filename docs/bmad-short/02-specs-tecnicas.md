@@ -24,7 +24,7 @@
 | Backend | Spring Boot (Maven, Java) | 3.5.x / Java 21 |
 | Base de datos | MySQL | 8.x |
 | Migraciones DB | Flyway | (automático con Spring Boot) |
-| Auth | JWT (jjwt) + Spring Security | — |
+| Auth | HTTP Basic Auth + Spring Security (JWT + jjwt diferido a Growth) | — |
 | API docs | SpringDoc OpenAPI / Swagger UI | 2.8.x |
 | Email (dev) | MailHog (local SMTP fake) | — |
 | Entorno local | Docker Compose | — |
@@ -61,10 +61,10 @@ Luego añadir manualmente en `pom.xml`:
 src/app/
 ├── core/                          ← Servicios globales (1 sola vez en AppModule)
 │   ├── auth/
-│   │   ├── auth.interceptor.ts    ← Inyecta el token JWT en cada petición
+│   │   ├── auth.interceptor.ts    ← Inyecta las credenciales HTTP Basic en cada petición (MVP)
 │   │   ├── auth.guard.ts          ← Redirige a /login si no autenticado
 │   │   ├── role.guard.ts          ← Redirige si el rol no tiene acceso
-│   │   └── jwt.service.ts         ← Lee/escribe el token en cookies
+│   │   └── auth.service.ts        ← Gestiona el estado de autenticación (JWT + cookies HttpOnly/Secure en Growth)
 │   └── error.interceptor.ts       ← Maneja errores RFC 7807 globalmente
 │
 ├── shared/                        ← Componentes y pipes reutilizables
@@ -133,7 +133,7 @@ com/ecotrack/
 
 ### Migraciones de base de datos (`src/main/resources/db/migration/`)
 ```
-V1__users.sql           ← Tables usr_users, usr_refresh_tokens
+V1__users.sql           ← Tables usr_users  (usr_refresh_tokens → Growth, con JWT)
 V2__assets.sql          ← Tables ast_resources, ast_floors, ast_rooms, ast_desks
 V3__reservations.sql    ← Tables rsv_reservations, rsv_checkin_tokens
 V4__analytics.sql       ← Tables anl_incidents, anl_room_occupancy, anl_audit_logs
@@ -161,9 +161,9 @@ DB_URL=jdbc:mysql://localhost:3306/ecotrack
 DB_USERNAME=ecotrack
 DB_PASSWORD=secret
 
-# JWT
-JWT_SECRET=una-clave-larga-y-aleatoria
-JWT_EXPIRATION_MS=28800000
+# JWT (Growth — no necesario en MVP con HTTP Basic Auth)
+# JWT_SECRET=una-clave-larga-y-aleatoria
+# JWT_EXPIRATION_MS=28800000
 
 # CORS
 CORS_ALLOWED_ORIGINS=http://localhost:4200

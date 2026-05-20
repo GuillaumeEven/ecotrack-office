@@ -32,7 +32,7 @@
 | **1** | Fundación | 0.2 — Init Spring Boot | Todos | 🟡 |
 | **1** | Fundación | 0.3 — Docker Compose local | Todos | 🟢 |
 | **2** | Autenticación | 1.1 — Registro + GDPR | Est. 1 | 🟡 |
-| **2** | Autenticación | 1.2 — Login + sesión JWT | Est. 1 | 🟡 |
+| **2** | Autenticación | 1.2 — Login + sesión HTTP Basic | Est. 1 | 🟡 |
 | **3** | Perfil + Base activos | 1.3 — Perfil de empleado | Est. 1 | 🟢 |
 | **3** | Perfil + Base activos | 1.4 — Admin gestión usuarios | Est. 1 | 🟡 |
 | **3** | Perfil + Base activos | 2.1 — Plantas y salas (política 80%) | Est. 2 | 🟡 |
