@@ -16,5 +16,4 @@ public interface DeskRepository extends JpaRepository<DeskEntity, Long> {
 
     Long countByRoomId(Long roomId);
 
-
 }
