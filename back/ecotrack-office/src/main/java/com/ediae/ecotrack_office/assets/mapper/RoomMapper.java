@@ -98,4 +98,36 @@ public class RoomMapper {
         return model;
     }
 
+    public void updateEntityFromModel(RoomModel model, RoomEntity entity) {
+        if (model == null || entity == null) {
+            return;
+        }
+        if (model.getName() != null) {
+            entity.setName(model.getName());
+        }
+        if (model.getStatus() != null) {
+            entity.setStatus(model.getStatus());
+        }
+        if (model.getIsActive() != null) {
+            entity.setIsActive(model.getIsActive());
+        }
+        if (model.getEquipmentList() != null) {
+            entity.setEquipmentList(model.getEquipmentList());
+        }
+        if (model.getType() != null) {
+            entity.setType(model.getType());
+        }
+        if (model.getSurfaceArea() != null) {
+            entity.setSurfaceArea(model.getSurfaceArea());
+        }
+        if (model.getCapacity() != null) {
+            entity.setCapacity(model.getCapacity());
+        }
+        if (model.getFloorId() != null) {
+            FloorEntity floorRef = new FloorEntity();
+            floorRef.setId(model.getFloorId());
+            entity.setFloor(floorRef);
+        }
+    }
+
 }
