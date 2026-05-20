@@ -22,12 +22,13 @@ public class ReservationUpdateDto {
 
     public ReservationUpdateDto () {}
 
-    public ReservationUpdateDto (LocalDate date, ReservationStatus status, LocalDateTime createdAt, UserEntity user, ResourceEntity resource) {
+    public ReservationUpdateDto (Long id, LocalDate date, ReservationStatus status, LocalDateTime createdAt, UserEntity user, ResourceEntity resource) {
         this.date = date;
         this.status = status;
         this.createdAt = createdAt;
         this.user = user;
         this.resource = resource;
+        this.id = id;
     }
 
     // Getter y Setter
