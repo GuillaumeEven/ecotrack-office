@@ -10,5 +10,6 @@ import com.ediae.ecotrack_office.assets.entity.RoomEntity;
 @Repository
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
 
-    List<RoomEntity> findByFloorId(Long floorId);
+    List<RoomEntity> findByFloor_Id(Long floorId);
+
 }

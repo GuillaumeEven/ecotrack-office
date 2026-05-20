@@ -1,0 +1,1295 @@
+{
+  "info": {
+    "_postman_id": "ecotrack-office-v1",
+    "name": "EcoTrack Office API",
+    "description": "Collection générée depuis DataLoader (profil dev).\n\nIDs seedés garantis après reset :\n- Organization : id=1 (EcoTrack)\n- Users : admin id=1, tech id=2, employee id=3\n- Floors : level-0 id=1, level-1 id=2\n- Rooms : Desk Area A id=1, Desk Area B id=2\n- Desks : Desk 1 id=1, Desk 2 id=2, Desk 3 id=3\n\nBase URL : http://localhost:8080/api/v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newuser@ecotrack.local\",\n  \"password\": \"securepass123\",\n  \"firstName\": \"New\",\n  \"lastName\": \"User\",\n  \"organizationId\": 1,\n  \"consentGiven\": true\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@ecotrack.local\",\n  \"password\": \"password\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/logout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        },
+        {
+          "name": "Refresh token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/refresh",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "errors",
+          "item": [
+            {
+              "name": "[400] Register - missing consentGiven",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"noConsent@ecotrack.local\",\n  \"password\": \"pass\",\n  \"firstName\": \"No\",\n  \"lastName\": \"Consent\",\n  \"organizationId\": 1\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/auth/register",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "auth", "register"]
+                }
+              }
+            },
+            {
+              "name": "[409] Register - duplicate email",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@ecotrack.local\",\n  \"password\": \"password\",\n  \"firstName\": \"Dup\",\n  \"lastName\": \"Admin\",\n  \"organizationId\": 1,\n  \"consentGiven\": true\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/auth/register",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "auth", "register"]
+                }
+              }
+            },
+            {
+              "name": "[401] Login - wrong password",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"admin@ecotrack.local\",\n  \"password\": \"wrongpassword\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/auth/login",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "auth", "login"]
+                }
+              }
+            },
+            {
+              "name": "[401] Login - unknown email",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"ghost@ecotrack.local\",\n  \"password\": \"password\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/auth/login",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "auth", "login"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get my profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/users/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "users", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update my profile",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"AdminUpdated\",\n  \"preferencesJson\": \"{\\\"theme\\\":\\\"dark\\\"}\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/users/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "users", "me"]
+            }
+          }
+        },
+        {
+          "name": "List users by organization",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/users?organizationId=1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "users"],
+              "query": [{"key": "organizationId", "value": "1"}]
+            }
+          }
+        },
+        {
+          "name": "Create user (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"created@ecotrack.local\",\n  \"password\": \"password\",\n  \"firstName\": \"Created\",\n  \"lastName\": \"User\",\n  \"role\": \"EMPLOYEE\",\n  \"organizationId\": 1,\n  \"consentGiven\": true,\n  \"preferencesJson\": \"{}\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "users"]
+            }
+          }
+        },
+        {
+          "name": "Update user id=3 (ADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"TECHNICIAN\",\n  \"isActive\": true\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/users/3",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "users", "3"]
+            }
+          }
+        },
+        {
+          "name": "Delete user id=3 (ADMIN)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/users/3",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "users", "3"]
+            }
+          }
+        },
+        {
+          "name": "Export my data (GDPR)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/users/me/data-export",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "users", "me", "data-export"]
+            }
+          }
+        },
+        {
+          "name": "errors",
+          "item": [
+            {
+              "name": "[400] Create user - missing email",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"password\",\n  \"firstName\": \"No\",\n  \"lastName\": \"Email\",\n  \"role\": \"EMPLOYEE\",\n  \"organizationId\": 1,\n  \"consentGiven\": true\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "users"]
+                }
+              }
+            },
+            {
+              "name": "[400] Create user - invalid role",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"badrole@ecotrack.local\",\n  \"password\": \"password\",\n  \"firstName\": \"Bad\",\n  \"lastName\": \"Role\",\n  \"role\": \"SUPERADMIN\",\n  \"organizationId\": 1,\n  \"consentGiven\": true\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "users"]
+                }
+              }
+            },
+            {
+              "name": "[404] Update user - not found id=9999",
+              "request": {
+                "method": "PATCH",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": false\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users/9999",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "users", "9999"]
+                }
+              }
+            },
+            {
+              "name": "[404] Delete user - not found id=9999",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users/9999",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "users", "9999"]
+                }
+              }
+            },
+            {
+              "name": "[403] List users - forbidden (EMPLOYEE role)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/users?organizationId=1",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "users"],
+                  "query": [{"key": "organizationId", "value": "1"}]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Assets - Floors",
+      "item": [
+        {
+          "name": "List floors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/floors",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "floors"]
+            }
+          }
+        },
+        {
+          "name": "Create floor level 2 (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"level\": 2,\n  \"isActive\": true,\n  \"organizationId\": 1\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/floors",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "floors"]
+            }
+          }
+        },
+        {
+          "name": "Update floor id=1 (ADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": false\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/floors/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "floors", "1"]
+            }
+          }
+        },
+        {
+          "name": "List rooms of floor id=1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/floors/1/rooms",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "floors", "1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "List desks of floor id=1 (realtime)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/floors/1/desks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "floors", "1", "desks"]
+            }
+          }
+        },
+        {
+          "name": "errors",
+          "item": [
+            {
+              "name": "[400] Create floor - missing level",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": true,\n  \"organizationId\": 1\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/floors",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "floors"]
+                }
+              }
+            },
+            {
+              "name": "[404] Update floor - not found id=9999",
+              "request": {
+                "method": "PATCH",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": false\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/floors/9999",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "floors", "9999"]
+                }
+              }
+            },
+            {
+              "name": "[404] List rooms - floor not found id=9999",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/floors/9999/rooms",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "floors", "9999", "rooms"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Assets - Rooms",
+      "item": [
+        {
+          "name": "Create room on floor id=1 (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Meeting Room Alpha\",\n  \"status\": \"AVAILABLE\",\n  \"isActive\": true,\n  \"equipmentList\": \"projector,whiteboard,video-conf\",\n  \"roomType\": \"MEETING_ROOM\",\n  \"surfaceArea\": 30.0,\n  \"floorId\": 1,\n  \"capacity\": 10\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/rooms",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Update room id=1 (ADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"capacity\": 12,\n  \"equipmentList\": \"basic-equipment,extra-screens\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/rooms/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "rooms", "1"]
+            }
+          }
+        },
+        {
+          "name": "Open room id=1 (TECHNICIAN)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/rooms/1/open",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "rooms", "1", "open"]
+            }
+          }
+        },
+        {
+          "name": "Close room id=1 (TECHNICIAN)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/rooms/1/close",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "rooms", "1", "close"]
+            }
+          }
+        },
+        {
+          "name": "errors",
+          "item": [
+            {
+              "name": "[400] Create room - invalid roomType",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Bad Room\",\n  \"status\": \"AVAILABLE\",\n  \"isActive\": true,\n  \"equipmentList\": \"\",\n  \"roomType\": \"INVALID_TYPE\",\n  \"surfaceArea\": 20.0,\n  \"floorId\": 1,\n  \"capacity\": 5\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/rooms",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "rooms"]
+                }
+              }
+            },
+            {
+              "name": "[400] Create room - missing floorId",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"No Floor Room\",\n  \"status\": \"AVAILABLE\",\n  \"isActive\": true,\n  \"equipmentList\": \"\",\n  \"roomType\": \"DESK_AREA\",\n  \"surfaceArea\": 20.0,\n  \"capacity\": 5\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/rooms",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "rooms"]
+                }
+              }
+            },
+            {
+              "name": "[404] Update room - not found id=9999",
+              "request": {
+                "method": "PATCH",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"capacity\": 5\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/rooms/9999",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "rooms", "9999"]
+                }
+              }
+            },
+            {
+              "name": "[403] Open room - forbidden (EMPLOYEE role)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/rooms/1/open",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "rooms", "1", "open"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Assets - Desks",
+      "item": [
+        {
+          "name": "Create desk in room id=1 (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Desk 4\",\n  \"status\": \"AVAILABLE\",\n  \"isActive\": true,\n  \"equipmentList\": \"chair,monitor,docking-station\",\n  \"roomId\": 1\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/desks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "desks"]
+            }
+          }
+        },
+        {
+          "name": "Update desk id=1 (ADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"UNAVAILABLE\",\n  \"equipmentList\": \"chair,monitor,broken-keyboard\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/desks/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "desks", "1"]
+            }
+          }
+        },
+        {
+          "name": "errors",
+          "item": [
+            {
+              "name": "[400] Create desk - missing roomId",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Floating Desk\",\n  \"status\": \"AVAILABLE\",\n  \"isActive\": true,\n  \"equipmentList\": \"chair\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/desks",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "desks"]
+                }
+              }
+            },
+            {
+              "name": "[400] Create desk - invalid status",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Bad Status Desk\",\n  \"status\": \"BROKEN\",\n  \"isActive\": true,\n  \"equipmentList\": \"chair\",\n  \"roomId\": 1\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/desks",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "desks"]
+                }
+              }
+            },
+            {
+              "name": "[404] Update desk - not found id=9999",
+              "request": {
+                "method": "PATCH",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"UNAVAILABLE\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/desks/9999",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "desks", "9999"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "Create reservation (EMPLOYEE id=3, desk id=1)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 3,\n  \"resourceId\": 1,\n  \"date\": \"2026-06-01\",\n  \"status\": \"CONFIRMED\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/reservations",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "reservations"]
+            }
+          }
+        },
+        {
+          "name": "Get my reservations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/reservations/me",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "reservations", "me"]
+            }
+          }
+        },
+        {
+          "name": "Cancel reservation id=1",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/reservations/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "reservations", "1"]
+            }
+          }
+        },
+        {
+          "name": "Modify reservation id=1 (TECHNICIAN)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CANCELLED\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/reservations/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "reservations", "1"]
+            }
+          }
+        },
+        {
+          "name": "Check-in reservation id=1",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/reservations/1/check-in",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "reservations", "1", "check-in"]
+            }
+          }
+        },
+        {
+          "name": "Register remote work day",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 3,\n  \"date\": \"2026-06-02\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/remote-work",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "remote-work"]
+            }
+          }
+        },
+        {
+          "name": "errors",
+          "item": [
+            {
+              "name": "[409] Create reservation - desk already reserved",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 2,\n  \"resourceId\": 1,\n  \"date\": \"2026-06-01\",\n  \"status\": \"CONFIRMED\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/reservations",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "reservations"]
+                }
+              }
+            },
+            {
+              "name": "[400] Create reservation - past date",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 3,\n  \"resourceId\": 2,\n  \"date\": \"2020-01-01\",\n  \"status\": \"CONFIRMED\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/reservations",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "reservations"]
+                }
+              }
+            },
+            {
+              "name": "[404] Cancel reservation - not found id=9999",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/reservations/9999",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "reservations", "9999"]
+                }
+              }
+            },
+            {
+              "name": "[409] Check-in - already checked in",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/reservations/1/check-in",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "reservations", "1", "check-in"]
+                }
+              }
+            },
+            {
+              "name": "[400] Create reservation - unavailable desk id=9999",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 3,\n  \"resourceId\": 9999,\n  \"date\": \"2026-07-01\",\n  \"status\": \"CONFIRMED\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/reservations",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "reservations"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Incidents",
+      "item": [
+        {
+          "name": "Report incident (desk id=1)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Screen is cracked and keyboard is not working\",\n  \"userId\": 3,\n  \"resourceId\": 1\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/incidents",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "incidents"]
+            }
+          }
+        },
+        {
+          "name": "List all incidents (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/incidents",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "incidents"]
+            }
+          }
+        },
+        {
+          "name": "Update incident id=1 status (TECHNICIAN)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/incidents/1/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "incidents", "1", "status"]
+            }
+          }
+        },
+        {
+          "name": "Resolve incident id=1 (TECHNICIAN)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"RESOLVED\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/incidents/1/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "incidents", "1", "status"]
+            }
+          }
+        },
+        {
+          "name": "Stream incident notifications (SSE, TECHNICIAN)",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Accept", "value": "text/event-stream"}],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/incidents/stream",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "incidents", "stream"]
+            }
+          }
+        },
+        {
+          "name": "errors",
+          "item": [
+            {
+              "name": "[400] Report incident - missing description",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": 3,\n  \"resourceId\": 1\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/incidents",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "incidents"]
+                }
+              }
+            },
+            {
+              "name": "[404] Update status - incident not found id=9999",
+              "request": {
+                "method": "PATCH",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/incidents/9999/status",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "incidents", "9999", "status"]
+                }
+              }
+            },
+            {
+              "name": "[400] Update status - invalid transition (RESOLVED→IN_PROGRESS)",
+              "request": {
+                "method": "PATCH",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/incidents/1/status",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "incidents", "1", "status"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Rooms occupancy (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/analytics/rooms/occupancy?date=2026-05-19",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "analytics", "rooms", "occupancy"],
+              "query": [{"key": "date", "value": "2026-05-19"}]
+            }
+          }
+        },
+        {
+          "name": "Rooms occupancy by week (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/analytics/rooms/occupancy?from=2026-05-12&to=2026-05-18",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "analytics", "rooms", "occupancy"],
+              "query": [
+                {"key": "from", "value": "2026-05-12"},
+                {"key": "to", "value": "2026-05-18"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Room consolidation suggestions (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/analytics/rooms/consolidation",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "analytics", "rooms", "consolidation"]
+            }
+          }
+        },
+        {
+          "name": "Notify employees in room id=1 (ADMIN, post-MVP)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Please move to Desk Area B for energy savings.\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/analytics/rooms/1/notify",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "analytics", "rooms", "1", "notify"]
+            }
+          }
+        },
+        {
+          "name": "Export occupancy report CSV (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/analytics/reports?format=csv",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "analytics", "reports"],
+              "query": [{"key": "format", "value": "csv"}]
+            }
+          }
+        },
+        {
+          "name": "Export occupancy report PDF (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/analytics/reports?format=pdf",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "analytics", "reports"],
+              "query": [{"key": "format", "value": "pdf"}]
+            }
+          }
+        },
+        {
+          "name": "Audit logs (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/audit-logs",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "audit-logs"]
+            }
+          }
+        },
+        {
+          "name": "errors",
+          "item": [
+            {
+              "name": "[403] Occupancy - forbidden (EMPLOYEE role)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/analytics/rooms/occupancy?date=2026-05-19",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "analytics", "rooms", "occupancy"],
+                  "query": [{"key": "date", "value": "2026-05-19"}]
+                }
+              }
+            },
+            {
+              "name": "[403] Audit logs - forbidden (TECHNICIAN role)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/audit-logs",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "audit-logs"]
+                }
+              }
+            },
+            {
+              "name": "[404] Notify room - not found id=9999",
+              "request": {
+                "method": "POST",
+                "header": [{"key": "Content-Type", "value": "application/json"}],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Test notification\"\n}",
+                  "options": {"raw": {"language": "json"}}
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/analytics/rooms/9999/notify",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "analytics", "rooms", "9999", "notify"]
+                }
+              }
+            },
+            {
+              "name": "[400] Export report - invalid format",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/v1/analytics/reports?format=xls",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "8080",
+                  "path": ["api", "v1", "analytics", "reports"],
+                  "query": [{"key": "format", "value": "xls"}]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
