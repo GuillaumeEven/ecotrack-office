@@ -59,7 +59,7 @@ public class RoomServiceImpl implements RoomService {
         RoomModel updatedModel = roomMapper.fromRequestDto(roomRequestDTO);
 
         // validate capacity against existing desks
-        int currentDeskCount = deskRepository.findByRoomId(roomId).size();
+        int currentDeskCount = deskRepository.findByRoom_Id(roomId).size();
         if (updatedModel.getCapacity() != null && updatedModel.getCapacity() < currentDeskCount) {
             throw new RuntimeException("Cannot set capacity lower than existing desks count (" + currentDeskCount + ")");
         }
@@ -81,7 +81,7 @@ public class RoomServiceImpl implements RoomService {
                 .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
 
         // Check if there are desks associated with the room
-        if (!deskRepository.findByRoomId(roomId).isEmpty()) {
+        if (!deskRepository.findByRoom_Id(roomId).isEmpty()) {
             throw new RuntimeException("Cannot delete room with associated desks. Please delete the desks first.");
         }
 
@@ -90,7 +90,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomModel> getRoomsByFloorId(Long floorId) {
-        List<RoomEntity> entities = roomRepository.findByFloorId(floorId);
+        List<RoomEntity> entities = roomRepository.findByFloor_Id(floorId);
         return entities.stream()
                 .map(roomMapper::fromEntity)
                 .toList();

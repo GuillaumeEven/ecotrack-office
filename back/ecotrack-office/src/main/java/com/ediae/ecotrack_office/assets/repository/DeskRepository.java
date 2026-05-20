@@ -10,10 +10,10 @@ import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
 
 @Repository
 public interface DeskRepository extends JpaRepository<DeskEntity, Long> {
-    List<DeskEntity> findByRoomId(Long roomId);
+    List<DeskEntity> findByRoom_Id(Long roomId);
 
-    long countByRoomIdAndStatus(Long roomId, ResourceStatus status);
+    long countByRoom_IdAndStatus(Long roomId, ResourceStatus status);
 
-    Long countByRoomId(Long roomId);
+    Long countByRoom_Id(Long roomId);
 
 }

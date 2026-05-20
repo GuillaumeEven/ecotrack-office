@@ -44,10 +44,10 @@ public class ResourceServiceImpl implements ResourceService {
     // - the room becomes RESERVED (remaining desks still bookable)
     // - the next UNAVAILABLE room on the same floor opens up (AVAILABLE)
     private void syncRoomStatus(Long roomId) {
-        long total = deskRepository.countByRoomId(roomId);
+        long total = deskRepository.countByRoom_Id(roomId);
         if (total == 0) return;
 
-        long reserved = deskRepository.countByRoomIdAndStatus(roomId, ResourceStatus.RESERVED);
+        long reserved = deskRepository.countByRoom_IdAndStatus(roomId, ResourceStatus.RESERVED);
         if ((double) reserved / total < MAX_OCCUPANCY_RATIO) return;
 
         RoomEntity room = roomRepository.findById(roomId)
@@ -61,7 +61,7 @@ public class ResourceServiceImpl implements ResourceService {
 
         Long floorId = room.getFloor().getId();
         RoomEntity nextRoom = roomRepository
-            .findFirstByFloorIdAndStatusOrderByIdAsc(floorId, ResourceStatus.UNAVAILABLE)
+            .findFirstByFloor_IdAndStatusOrderByIdAsc(floorId, ResourceStatus.UNAVAILABLE)
             .orElse(null);
 
         if (nextRoom != null) {

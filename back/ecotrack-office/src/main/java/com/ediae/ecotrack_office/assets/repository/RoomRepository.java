@@ -11,12 +11,12 @@ import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
 
 @Repository
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
-    List<RoomEntity> findByFloorId(Long floorId);
+    List<RoomEntity> findByFloor_Id(Long floorId);
 
-    Long countByFloorId(Long floorId);
+    Long countByFloor_Id(Long floorId);
 
-    Long countByFloorIdAndStatus(Long floorId, ResourceStatus status);
+    Long countByFloor_IdAndStatus(Long floorId, ResourceStatus status);
 
     // Returns the first UNAVAILABLE room on a floor, ordered by id (deterministic)
-    Optional<RoomEntity> findFirstByFloorIdAndStatusOrderByIdAsc(Long floorId, ResourceStatus status);
+    Optional<RoomEntity> findFirstByFloor_IdAndStatusOrderByIdAsc(Long floorId, ResourceStatus status);
 }

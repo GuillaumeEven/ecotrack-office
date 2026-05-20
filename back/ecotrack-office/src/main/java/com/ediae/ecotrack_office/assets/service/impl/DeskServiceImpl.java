@@ -56,7 +56,7 @@ public class DeskServiceImpl implements DeskService {
 
     @Override
     public List<DeskModel> getDesksByRoomId(Long roomId) {
-        List<DeskEntity> entities = deskRepository.findByRoomId(roomId);
+        List<DeskEntity> entities = deskRepository.findByRoom_Id(roomId);
         return entities.stream()
                 .map(deskMapper::fromEntity)
                 .toList();
