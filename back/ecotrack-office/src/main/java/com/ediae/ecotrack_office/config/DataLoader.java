@@ -206,7 +206,7 @@ public class DataLoader implements CommandLineRunner {
         String roomAName = "Desk Area A";
         String roomBName = "Desk Area B";
 
-        RoomEntity roomA = roomRepository.findByFloor_Id(floor0.getId())
+        RoomEntity roomA = roomRepository.findByFloorId(floor0.getId())
                 .stream()
                 .filter(r -> roomAName.equalsIgnoreCase(r.getName()))
                 .findFirst()
@@ -225,7 +225,7 @@ public class DataLoader implements CommandLineRunner {
                     return saved;
                 });
 
-        RoomEntity roomB = roomRepository.findByFloor_Id(floor0.getId())
+        RoomEntity roomB = roomRepository.findByFloorId(floor0.getId())
                 .stream()
                 .filter(r -> roomBName.equalsIgnoreCase(r.getName()))
                 .findFirst()
@@ -247,7 +247,7 @@ public class DataLoader implements CommandLineRunner {
         // create three desks in roomA if missing
         for (int i = 1; i <= 3; i++) {
             final String deskName = "Desk " + i;
-            boolean exists = deskRepository.findByRoom_Id(roomA.getId())
+            boolean exists = deskRepository.findByRoomId(roomA.getId())
                     .stream()
                     .anyMatch(d -> deskName.equalsIgnoreCase(d.getName()));
             if (!exists) {
