@@ -1,14 +1,18 @@
 package com.ediae.ecotrack_office.users.service;
 
+
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
+import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.mapper.UserMapper;
@@ -97,4 +101,30 @@ public class UserService {
         entity.setIsActive(false);
         userRepository.save(entity);
     }
+
+    public UserModel updateMe(Long id, UserMeRequestDto dto) {
+    Optional<UserEntity> result = userRepository.findById(id);
+    if (result.isEmpty()) {
+        throw new RuntimeException("Usuario no encontrado con id: " + id);
+    }
+
+    if (dto.firstName() == null || dto.firstName().isBlank()) {
+        throw new IllegalArgumentException("El nombre no puede estar vacío");
+    }
+
+    if (dto.lastName() == null || dto.lastName().isBlank()) {
+        throw new IllegalArgumentException("El apellido no puede estar vacío");
+    }
+
+    UserEntity entity = result.get();
+    entity.setFirstName(HtmlUtils.htmlEscape(dto.firstName()));
+    entity.setLastName(HtmlUtils.htmlEscape(dto.lastName()));
+
+    if (dto.preferencesJson() != null) {
+        entity.setPreferencesJson(HtmlUtils.htmlEscape(dto.preferencesJson()));
+    }
+
+    UserEntity saved = userRepository.save(entity);
+    return UserModel.fromEntity(saved);
+}
 }
