@@ -1,6 +1,6 @@
 # EcoTrack Office — Jira Kanban : Tareas Backend (Spring Boot)
 
-> **Stack :** Spring Boot 3.5.x · MySQL 8 · Flyway · Spring Security · JWT (jjwt) · SpringDoc OpenAPI v2.8.x · RFC 7807 Problem Details
+> **Stack :** Spring Boot 3.5.x · MySQL 8 · Flyway · Spring Security · HTTP Basic Auth (JWT + jjwt diferido a Growth) · SpringDoc OpenAPI v2.8.x · RFC 7807 Problem Details
 
 Cada sección corresponde a un **Epic Jira**. Los elementos indentados son **Stories** (tarjetas del board).
 Los criterios bajo cada story son la **Definition of Done** exclusivamente para el backend.
@@ -19,7 +19,7 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 
 **DoD Backend :**
 - Proyecto Maven generado con las dependencias : `spring-boot-starter-web`, `spring-boot-starter-data-jpa`, `spring-boot-starter-security`, `spring-boot-starter-validation`, `spring-boot-starter-mail`, `mysql-connector-j`, `flyway-core`, `lombok`, `spring-boot-devtools`
-- Dependencias manuales añadidas : `springdoc-openapi-starter-webmvc-ui:2.8.x`, `jjwt-api/impl/jackson`, `flyway-mysql`
+- Dependencias manuales añadidas : `springdoc-openapi-starter-webmvc-ui:2.8.x`, `flyway-mysql` *(Growth: `jjwt-api/impl/jackson` cuando se implemente JWT)*
 - Estructura de paquetes creada : `com.ecotrack.users`, `com.ecotrack.assets`, `com.ecotrack.reservations`, `com.ecotrack.analytics`, `com.ecotrack.common`
 - `mvn test` pasa sin errores
 
@@ -58,12 +58,12 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 
 ### [STORY] BE-0.4 — Configurar SpringDoc OpenAPI / Swagger UI
 
-**Resumen :** Configurar Swagger UI accesible en `/swagger-ui.html` con el esquema de seguridad JWT Bearer.
+**Resumen :** Configurar Swagger UI accesible en `/swagger-ui.html`; sin esquema de seguridad Bearer en MVP (HTTP Basic).
 
 **DoD Backend :**
 - `OpenApiConfig` en `com.ecotrack.common.config`
 - Swagger UI disponible en `/swagger-ui.html`
-- Esquema de seguridad `BearerAuth` (JWT cookie) declarado en la configuración OpenAPI
+- Sin esquema `BearerAuth` en MVP; nota en la configuración que se añadirá en Growth con JWT cookie
 - Todas las rutas públicas (login, register) documentadas sin autenticación requerida
 - Spec OpenAPI exportable en formato JSON via `/v3/api-docs`
 
@@ -99,9 +99,10 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 **DoD Backend :**
 - Migración `V2__users.sql` crea :
   - `usr_organizations` : id, name, invitation_code (unique), created_at
-  - `usr_users` : id, name, email (unique), hashed_password, role ENUM(`EMPLOYEE`/`ORGANIZATION_ADMIN`/`TECHNICIAN`), organization_id FK, gdpr_consent BOOLEAN, consent_at, is_active BOOLEAN DEFAULT TRUE, search_preferences JSON, created_at
-  - `usr_refresh_tokens` : id, token_hash (unique), user_id FK, expires_at, revoked BOOLEAN DEFAULT FALSE, created_at
-- Índices sobre `email`, `invitation_code`, `token_hash`
+  - `usr_users` : id, name, email (unique), password (plain text — demo MVP scope only), role ENUM(`EMPLOYEE`/`ORGANIZATION_ADMIN`/`TECHNICIAN`), organization_id FK, gdpr_consent BOOLEAN, consent_at, is_active BOOLEAN DEFAULT TRUE, search_preferences JSON, created_at
+  *(Growth: renombrar a `hashed_password` y activar bcrypt)*
+  - *(Growth: `usr_refresh_tokens` : id, token_hash (unique), user_id FK, expires_at, revoked BOOLEAN DEFAULT FALSE, created_at — no necesaria en MVP HTTP Basic)*
+- Índices sobre `email`, `invitation_code`
 - `mvn flyway:migrate` pasa sin errores
 
 **Etiquetas :** `epic-1` `backend` `database` `flyway`
@@ -113,8 +114,8 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 **Resumen :** Implementar las entidades JPA, los Spring Data repositories y los DTOs de transferencia del bloque Users.
 
 **DoD Backend :**
-- Entidades : `UserEntity`, `OrganizationEntity`, `RefreshTokenEntity` con anotaciones JPA correctas (prefijos `usr_`)
-- Repositories : `UserRepository`, `OrganizationRepository`, `RefreshTokenRepository` (Spring Data JPA)
+- Entidades : `UserEntity`, `OrganizationEntity` con anotaciones JPA correctas (prefijos `usr_`) *(Growth: añadir `RefreshTokenEntity`)*
+- Repositories : `UserRepository`, `OrganizationRepository` (Spring Data JPA) *(Growth: `RefreshTokenRepository`)*
 - DTOs : `UserRegistrationRequest`, `UserLoginRequest`, `UserResponse` (sin campo password), `UserUpdateRequest`, `SearchPreferencesDto`
 - Ninguna entidad JPA serializada directamente en respuestas de la API
 
@@ -129,7 +130,7 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 **DoD Backend :**
 - `POST /api/v1/auth/register` (público, sin autenticación requerida)
 - Valida : código de invitación existente, email único, contraseña ≥ 8 caracteres, consentimiento marcado
-- Contraseña hasheada con bcrypt, cost factor ≥ 12 (`BCryptPasswordEncoder`)
+- Contraseña almacenada en **texto plano** (scope demo MVP — usar `NoOpPasswordEncoder`); bcrypt cost factor ≥ 12 diferido a Growth
 - Devuelve `201 Created` con `UserResponse` (sin contraseña)
 - Código inválido → `400 Bad Request` ProblemDetail
 - Email ya existente → `409 Conflict` ProblemDetail
@@ -141,37 +142,36 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 
 ---
 
-### [STORY] BE-1.4 — Login, JWT y gestión de sesión
+### [STORY] BE-1.4 — Login y gestión de sesión HTTP Basic *(JWT + refresh token diferidos a Growth)*
 
-**Resumen :** Endpoint `POST /api/v1/auth/login` que emite un JWT access token + refresh token almacenados en cookies HttpOnly.
+**Resumen :** Endpoint `POST /api/v1/auth/login` con autenticación HTTP Basic para el scope demo MVP. JWT access token + refresh token en cookies HttpOnly están diferidos a Growth.
 
 **DoD Backend :**
-- `POST /api/v1/auth/login` (público)
-- Verifica credenciales mediante `AuthenticationManager` de Spring Security
-- JWT access token : expiry 8h, claims : `sub` (userId), `role`, `orgId` — firmado con clave HS256 via variable de entorno `JWT_SECRET`
-- Access token establecido en cookie `HttpOnly; Secure; SameSite=Strict`
-- Refresh token persistido en `usr_refresh_tokens` (hash SHA-256 almacenado, no el token en bruto) + cookie separado
-- `POST /api/v1/auth/refresh` : valida el refresh token cookie y emite un nuevo access token
-- `POST /api/v1/auth/logout` : revoca el refresh token en BD, vacía ambas cookies → 204 No Content
+- `POST /api/v1/auth/login` (público) — HTTP Basic Auth (credenciales en claro, scope demo MVP)
+- Verifica credenciales mediante `AuthenticationManager` de Spring Security con `HttpBasicAuthenticationFilter`
+- Login correcto → sesión Spring Security activa, devuelve `200 OK` con `UserResponse`
+- `POST /api/v1/auth/logout` → invalida la sesión del servidor → `204 No Content`
 - Credenciales inválidas → `401 Unauthorized` sin indicar qué campo es incorrecto
 - Cuenta desactivada (`is_active = false`) → `403 Forbidden`
-- Tests unitarios sobre `JwtService` + tests de integración login/logout
+- Tests unitarios sobre `AuthService` + tests de integración login/logout
+- *(Growth: JWT access token expiry 8h + refresh token en `usr_refresh_tokens` + cookies `HttpOnly; Secure; SameSite=Strict`)*
 
-**Etiquetas :** `epic-1` `backend` `auth` `jwt`
+**Etiquetas :** `epic-1` `backend` `auth`
 
 ---
 
-### [STORY] BE-1.5 — Spring Security : filtro JWT y configuración RBAC
+### [STORY] BE-1.5 — Spring Security : configuración HTTP Basic y RBAC *(JwtAuthenticationFilter diferido a Growth)*
 
-**Resumen :** Configurar Spring Security para validar el JWT en cada petición y aplicar RBAC a nivel de API.
+**Resumen :** Configurar Spring Security con HTTP Basic Auth para el MVP demo y aplicar RBAC a nivel de API.
 
 **DoD Backend :**
-- `JwtAuthenticationFilter` extiende `OncePerRequestFilter` : extrae el JWT de la cookie, valida la firma y la expiración, carga `UserDetails`
-- `SecurityConfig` (`@Configuration @EnableMethodSecurity`) : rutas públicas (`/api/v1/auth/**`, `/swagger-ui/**`, `/v3/api-docs/**`), el resto protegido
+- `SecurityConfig` (`@Configuration @EnableMethodSecurity`) : configura `HttpSecurity.httpBasic()` para MVP; Spring Security valida las credenciales en cada petición y carga `UserDetails` desde `UserDetailsService`
+- Rutas públicas (`/api/v1/auth/**`, `/swagger-ui/**`, `/v3/api-docs/**`), el resto protegido
 - `@PreAuthorize("hasRole('ORGANIZATION_ADMIN')")` o `hasAnyRole(...)` sobre los métodos sensibles
 - CORS configurado mediante `CorsConfigurationSource` (orígenes desde variable de entorno)
-- CSRF desactivado (API REST + cookies SameSite=Strict)
+- CSRF desactivado (API REST stateless)
 - Tests : acceso no autenticado → 401, rol insuficiente → 403
+- *(Growth: reemplazar HTTP Basic con `JwtAuthenticationFilter extends OncePerRequestFilter` que extrae y valida el JWT de la cookie)*
 
 **Etiquetas :** `epic-1` `backend` `security` `rbac`
 
@@ -211,7 +211,7 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 
 ## EPIC 2 — Physical Asset Management
 
-> Gestión de Floors, Rooms, Desks y plano SVG.
+> Gestión de Floors, Rooms, Desks y generación dinámica del mapa (sin almacenamiento SVG en backend).
 
 ---
 
@@ -221,9 +221,9 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 
 **DoD Backend :**
 - Migración `V3__assets.sql` crea :
-  - `ast_floors` : id, organization_id FK, name, level_number INT, svg_path VARCHAR, is_active, created_at
+  - `ast_floors` : id, organization_id FK, name, level_number INT, is_active, created_at
   - `ast_rooms` : id, floor_id FK, name, type ENUM(`DESK_AREA`/`MEETING_ROOM`), surface_area_m2 DECIMAL(6,2), energy_managed BOOLEAN, is_open BOOLEAN DEFAULT FALSE, capacity INT, is_active, created_at
-  - `ast_desks` : id, room_id FK, name, equipment JSON, svg_anchor_id VARCHAR, status ENUM(`AVAILABLE`/`UNAVAILABLE`), is_active, created_at
+  - `ast_desks` : id, room_id FK, name, equipment JSON, display_order INT, status ENUM(`AVAILABLE`/`UNAVAILABLE`), is_active, created_at
 - Índices sobre `floor_id`, `room_id`
 - `mvn flyway:migrate` pasa sin errores
 
@@ -280,22 +280,11 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 
 ---
 
-### [STORY] BE-2.5 — Upload del plano SVG y asociación de anclas
+### ~~[STORY] BE-2.5 — Upload del plano SVG y asociación de anclas~~ *(ELIMINADA — Ronda 3)*
 
-**Resumen :** Endpoint multipart para subir el plano SVG de un Floor y asociar las anclas SVG a Desks y Rooms.
-
-**DoD Backend :**
-- `POST /api/v1/floor-plans/{floorId}` : multipart/form-data
-  - Validación de tipo MIME : `image/svg+xml` (lectura de bytes, no solo el header Content-Type)
-  - Tamaño máximo : 5 MB → `400 Bad Request` si se supera
-  - Almacenamiento en `{UPLOAD_DIR}/{floorId}.svg` via `Files.write` (reemplazo atómico)
-  - Actualización de `ast_floors.svg_path`
-- `GET /api/v1/floor-plans/{floorId}` → sirve el fichero SVG con `Content-Type: image/svg+xml`
-- `PUT /api/v1/desks/{id}/anchor` y `PUT /api/v1/rooms/{id}/anchor` → aceptan `svgAnchorId` (String) y lo registran en la tabla
-- `UPLOAD_DIR` via variable de entorno, sin hardcoding
-- Test unitario sobre el servicio de almacenamiento
-
-**Etiquetas :** `epic-2` `backend` `svg` `upload` `security`
+> **Decisión:** FR11 reemplazado — sin carga de SVG en el backend; el mapa de planta es generado dinámicamente en Angular desde la estructura almacenada (rooms + desks), con posiciones calculadas por `display_order`. FR12 eliminado — la asociación manual de anclas SVG ya no es necesaria.
+>
+> Los endpoints `GET /api/v1/floors/{id}/rooms` y `GET /api/v1/desks?floorId={id}` (cubiertos en BE-2.3 y BE-2.4) proporcionan los datos de estructura suficientes para que Angular renderice el mapa. Esta story no se implementa en MVP.
 
 ---
 
@@ -636,15 +625,15 @@ Los criterios bajo cada story son la **Definition of Done** exclusivamente para 
 | Epic 1 | BE-1.1 Esquema `usr_*` | database |
 | Epic 1 | BE-1.2 Entidades & DTOs Users | jpa |
 | Epic 1 | BE-1.3 Registro GDPR | auth, gdpr |
-| Epic 1 | BE-1.4 Login + JWT + Refresh | auth, jwt |
-| Epic 1 | BE-1.5 Spring Security RBAC | security |
+| Epic 1 | BE-1.4 Login HTTP Basic (JWT diferido a Growth) | auth |
+| Epic 1 | BE-1.5 Spring Security HTTP Basic + RBAC | security |
 | Epic 1 | BE-1.6 Perfil y preferencias | profile |
 | Epic 1 | BE-1.7 Admin usuarios + audit | admin |
 | Epic 2 | BE-2.1 Esquema `ast_*` | database |
 | Epic 2 | BE-2.2 Entidades & DTOs Assets | jpa |
 | Epic 2 | BE-2.3 CRUD Floors + regla 80% | floors |
 | Epic 2 | BE-2.4 CRUD Rooms & Desks | desks |
-| Epic 2 | BE-2.5 Upload SVG + anclas | svg, security |
+| Epic 2 | ~~BE-2.5 Upload SVG + anclas~~ *(ELIMINADA — Ronda 3)* | — |
 | Epic 3 | BE-3.1 Esquema `rsv_*` | database |
 | Epic 3 | BE-3.2 Reserva + anti-conflicto | reservations |
 | Epic 3 | BE-3.3 Mis reservas + cancelación | reservations |

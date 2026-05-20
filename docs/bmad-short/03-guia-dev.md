@@ -12,7 +12,7 @@
 
 ### Sprint 2 — Autenticación
 - [ ] **1.1** Registro de usuario con consentimiento GDPR (frontend + API + Flyway V1)
-- [ ] **1.2** Login, sesión JWT, logout (Spring Security + cookies HttpOnly)
+- [ ] **1.2** Login, sesión HTTP Basic, logout (Spring Security) *(JWT + cookies HttpOnly diferido a Growth)*
 
 ### Sprint 3 — Perfil + Base de activos
 - [ ] **1.3** Perfil del empleado y preferencias de búsqueda

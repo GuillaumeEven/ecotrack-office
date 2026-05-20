@@ -95,7 +95,7 @@
 | Categoría | Requisito |
 |---|---|
 | **Rendimiento** | Carga inicial ≤ 3s · Respuestas API ≤ 500ms (p95) · Polling cada 30s |
-| **Seguridad** | HTTPS/TLS 1.2+ · bcrypt (factor 12) · JWT en cookies HttpOnly/Secure/SameSite=Strict |
+| **Seguridad** | HTTPS/TLS 1.2+ · contraseñas en texto plano solo para demo MVP · bcrypt (factor 12) + JWT en cookies HttpOnly/Secure/SameSite=Strict *(Growth)* |
 | **Seguridad** | Roles aplicados en la API (Spring Security) · Validación MIME de fotos · Sanitización de textos |
 | **Escalabilidad** | 500 usuarios concurrentes · Sin límites configurados en salas/plantas/escritorios |
 | **Fiabilidad** | 99% disponibilidad (lunes–viernes, 7-20h) · Degradación sin bloqueo si la API no responde |

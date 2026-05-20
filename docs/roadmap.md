@@ -66,8 +66,8 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 |-------|-------|-------|---------|------|
 | 1.1 | User Registration with GDPR Consent 🟡 | 🔵 FE | Student 1 | Mocks `POST /api/v1/auth/register` |
 | 1.1 | User Registration with GDPR Consent 🟡 | 🟠 BE | Student 2 | Flyway `V2__users.sql` + endpoint |
-| 1.2 | User Login & Secure Session Management 🟡 | 🔵 FE | Student 3 | Mocks `POST /api/v1/auth/login`, JWT cookie |
-| 1.2 | User Login & Secure Session Management 🟡 | 🟠 BE | Student 4 | JWT + Spring Security + refresh token |
+| 1.2 | User Login & Secure Session Management 🟡 | 🔵 FE | Student 3 | Mocks `POST /api/v1/auth/login`, HTTP Basic |
+| 1.2 | User Login & Secure Session Management 🟡 | 🟠 BE | Student 4 | HTTP Basic + Spring Security (JWT + refresh token deferred to Growth) |
 
 > ⚡ Story 1.2 BE unblocks all authenticated API calls across all blocks.
 
@@ -94,8 +94,8 @@ Each story is split into a **frontend half** and a **backend half**, worked simu
 |-------|-------|-------|---------|
 | 2.2 | Desk Management 🟡 | 🔵 FE | Student 1 |
 | 2.2 | Desk Management 🟡 | 🟠 BE | Student 3 |
-| 2.3 | SVG Floor Plan Upload & Anchor Association 🔴 | 🔵 FE | Student 2 |
-| 2.3 | SVG Floor Plan Upload & Anchor Association 🔴 | 🟠 BE | Student 4 |
+| 2.3 | Map Data API — Floor/Room/Desk Structure Endpoint 🟡 | 🔵 FE | Student 2 |
+| 2.3 | Map Data API — Floor/Room/Desk Structure Endpoint 🟡 | 🟠 BE | Student 4 |
 
 ---
 

@@ -26,7 +26,7 @@ Cada miembro del equipo es **responsable de un bloque completo** (frontend + API
 
 | Bloque | Dominio | Responsable |
 |---|---|---|
-| **Bloque 1** | Usuarios y autenticación (JWT, roles) | Estudiante 1 |
+| **Bloque 1** | Usuarios y autenticación (HTTP Basic, roles) | Estudiante 1 |
 | **Bloque 2** | Recursos físicos (planos, zonas, escritorios) | Estudiante 2 |
 | **Bloque 3** | Reservas y check-in | Estudiante 3 |
 | **Bloque 4** | Incidencias y analítica | Estudiante 4 |
