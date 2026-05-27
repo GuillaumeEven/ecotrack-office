@@ -2,6 +2,7 @@ package com.ediae.ecotrack_office.organization.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +51,12 @@ public class OrganizationController {
     public OrganizationResponseDto deactivateOrganization (@PathVariable Long id) {
 
         return OrganizationMapper.toResponseDto(service.deactivateOrganization(id));
+    }
+
+    @DeleteMapping("organization/{id}") //TENER EN CUENTA QUE PARA BORRAR UNA ORGANIZACIÓN PRIMERO HABRÍA QUE BORRAR LOS USUARIO ASOCIADOS A ELLA, Y ESTO GENERA UNA ELIMINACIÓN DE ELEMENTOS EN CADENA.
+    public Boolean deleteOrganization (@PathVariable Long id) {
+
+        return service.deleteOrganization(id);
     }
 
 

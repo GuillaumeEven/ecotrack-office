@@ -94,7 +94,7 @@ public class OrganizationService {
         return OrganizationMapper.fromEntity(savedEntity);
     }
 
-    public void deleteOrganization (Long id) {
+    public Boolean deleteOrganization (Long id) {
 
         Optional <OrganizationEntity> entity = repository.findById(id);
         if (entity.isEmpty()) {
@@ -102,6 +102,8 @@ public class OrganizationService {
             throw new RuntimeException("No se ha encontrado una organización con id: " + id);
         }
         repository.deleteById(id);
+        if(repository.findById(id).isEmpty()) return true;
+        else return false;
     }
 
 }
