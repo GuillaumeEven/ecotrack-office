@@ -97,13 +97,5 @@ public class OrganizationEntity {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    public List<UserEntity> getUsers() {
-        return users;
-    }
-    public void setUsers(List<UserEntity> users) {
-        this.users = users;
-    }
-
-
-    // Other fields and methods
+    
 }

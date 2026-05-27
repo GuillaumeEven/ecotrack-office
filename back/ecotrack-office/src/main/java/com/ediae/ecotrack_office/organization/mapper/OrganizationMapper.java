@@ -29,7 +29,7 @@ public class OrganizationMapper {
 
     // Método para pasar de OrganizationModel a OrganizationEntity
 
-    public OrganizationEntity toEntity (OrganizationModel model) {
+    public static OrganizationEntity toEntity (OrganizationModel model) {
         
         OrganizationEntity entity = new OrganizationEntity();
         entity.setId(model.getId());
@@ -77,7 +77,7 @@ public class OrganizationMapper {
 
     // Método para pasar de OrganizationModel a OrganizationResponseDto
 
-    public OrganizationResponseDto toResponseDto (OrganizationModel model) {
+    public static OrganizationResponseDto toResponseDto (OrganizationModel model) {
 
         OrganizationResponseDto responseDto = new OrganizationResponseDto();
         responseDto.setId(model.getId());
