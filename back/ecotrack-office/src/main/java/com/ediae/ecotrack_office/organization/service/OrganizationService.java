@@ -71,6 +71,11 @@ public class OrganizationService {
 
             throw new RuntimeException("No se ha encontrado una organización con id: " + id);
         }
+        OrganizationEntity entity = initialEntity.get();
+        if((repository.findByCif(dto.getCif()).isPresent() && !(dto.getCif().equals(entity.getCif()))) || (repository.findByEmail(dto.getEmail()).isPresent() && !(dto.getEmail().equals(entity.getEmail())))) {
+
+            throw new RuntimeException("Ya existe una organización con este CIF o email.");
+        }
         OrganizationModel model = OrganizationMapper.fromUpdateDto(dto);
         OrganizationEntity savedEntity = repository.save(OrganizationMapper.toEntity(model));
         return OrganizationMapper.fromEntity(savedEntity);

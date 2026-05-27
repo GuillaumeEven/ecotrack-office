@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.organization.dto.OrganizationCreateDto;
 import com.ediae.ecotrack_office.organization.dto.OrganizationResponseDto;
+import com.ediae.ecotrack_office.organization.dto.OrganizationUpdateDto;
 import com.ediae.ecotrack_office.organization.mapper.OrganizationMapper;
 import com.ediae.ecotrack_office.organization.service.OrganizationService;
 
@@ -36,6 +38,12 @@ public class OrganizationController {
 
         System.out.println("La dirección recibida es: " + dto.getAddress());
         return OrganizationMapper.toResponseDto(service.createOrganization(dto));
+    }
+
+    @PutMapping("/organization/{id}")
+    public OrganizationResponseDto updateOrganization (@PathVariable Long id, @RequestBody OrganizationUpdateDto dto) {
+
+        return OrganizationMapper.toResponseDto(service.updateOrganizationById(id, dto));
     }
 
 
