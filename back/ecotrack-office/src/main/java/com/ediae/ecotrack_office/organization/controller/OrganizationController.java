@@ -46,6 +46,12 @@ public class OrganizationController {
         return OrganizationMapper.toResponseDto(service.updateOrganizationById(id, dto));
     }
 
+    @PutMapping("organization/{id}/deactivate")
+    public OrganizationResponseDto deactivateOrganization (@PathVariable Long id) {
+
+        return OrganizationMapper.toResponseDto(service.deactivateOrganization(id));
+    }
+
 
 
 }
