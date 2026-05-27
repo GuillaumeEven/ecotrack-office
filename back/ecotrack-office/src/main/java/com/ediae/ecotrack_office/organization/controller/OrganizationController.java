@@ -4,13 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ediae.ecotrack_office.organization.dto.OrganizationCreateDto;
 import com.ediae.ecotrack_office.organization.dto.OrganizationResponseDto;
 import com.ediae.ecotrack_office.organization.mapper.OrganizationMapper;
 import com.ediae.ecotrack_office.organization.service.OrganizationService;
+
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.GET,
@@ -26,5 +30,14 @@ public class OrganizationController {
 
         return OrganizationMapper.toResponseDto(service.getOrganizationById(id));
     }
+
+    @PostMapping("/organization")
+    public OrganizationResponseDto createOrganization (@RequestBody OrganizationCreateDto dto) {
+
+        System.out.println("La dirección recibida es: " + dto.getAddress());
+        return OrganizationMapper.toResponseDto(service.createOrganization(dto));
+    }
+
+
 
 }

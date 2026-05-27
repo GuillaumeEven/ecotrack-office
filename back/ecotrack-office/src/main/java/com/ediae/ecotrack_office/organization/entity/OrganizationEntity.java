@@ -29,7 +29,7 @@ public class OrganizationEntity {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String CIF;
+    private String cif;
 
     @Column(nullable = false)
     private String address;
@@ -61,11 +61,11 @@ public class OrganizationEntity {
     public void setName(String name) {
         this.name = name;
     }
-    public String getCIF() {
-        return CIF;
+    public String getCif() {
+        return cif;
     }
-    public void setCIF(String CIF) {
-        this.CIF = CIF;
+    public void setCif(String cif) {
+        this.cif = cif;
     }
     public String getAddress() {
         return address;

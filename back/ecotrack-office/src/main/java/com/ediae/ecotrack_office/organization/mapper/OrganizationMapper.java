@@ -18,7 +18,7 @@ public class OrganizationMapper {
         return new OrganizationModel(
             entity.getId(),
             entity.getName(),
-            entity.getCIF(),
+            entity.getCif(),
             entity.getAddress(),
             entity.getEmail(),
             entity.getEndSubscription(),
@@ -34,7 +34,7 @@ public class OrganizationMapper {
         OrganizationEntity entity = new OrganizationEntity();
         entity.setId(model.getId());
         entity.setName(model.getName());
-        entity.setCIF(model.getCIF());
+        entity.setCif(model.getCif());
         entity.setAddress(model.getAddress());
         entity.setEmail(model.getEmail());
         entity.setEndSubscription(model.getEndSubscription());
@@ -50,7 +50,7 @@ public class OrganizationMapper {
         return new OrganizationModel (
             null,
             createDto.getName(),
-            createDto.getCIF(),
+            createDto.getCif(),
             createDto.getAddress(),
             createDto.getEmail(),
             createDto.getEndSubscription(),
@@ -66,7 +66,7 @@ public class OrganizationMapper {
         return new OrganizationModel (
             updateDto.getId(),
             updateDto.getName(),
-            updateDto.getCIF(),
+            updateDto.getCif(),
             updateDto.getAddress(),
             updateDto.getEmail(),
             updateDto.getEndSubscription(),
@@ -82,7 +82,7 @@ public class OrganizationMapper {
         OrganizationResponseDto responseDto = new OrganizationResponseDto();
         responseDto.setId(model.getId());
         responseDto.setName(model.getName());
-        responseDto.setCIF(model.getCIF());
+        responseDto.setCif(model.getCif());
         responseDto.setAddress(model.getAddress());
         responseDto.setEmail(model.getEmail());
         responseDto.setEndSubscription(model.getEndSubscription());

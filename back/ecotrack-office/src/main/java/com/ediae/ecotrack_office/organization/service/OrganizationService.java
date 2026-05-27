@@ -43,15 +43,17 @@ public class OrganizationService {
 
     public OrganizationModel createOrganization (OrganizationCreateDto dto) {
 
-        if (repository.findByCIF(dto.getCIF()).isPresent() || repository.findByEmail(dto.getEmail()).isPresent()) {
+        if (repository.findByCif(dto.getCif()).isPresent() || repository.findByEmail(dto.getEmail()).isPresent()) {
 
             throw new RuntimeException ("Ya existe una organización con este CIF o email.");
         }
         OrganizationModel model = OrganizationMapper.fromCreateDto(dto);
+        System.out.println("La dirección en el modelo es: "+model.getAddress());
         OrganizationEntity entity = OrganizationMapper.toEntity(model);
         entity.setIsActive(true);
-        OrganizationEntity savedEntity = repository.save(entity);
-        return OrganizationMapper.fromEntity(savedEntity);
+        System.out.println("La dirección en la entidad es: "+entity.getAddress());
+        repository.save(entity);
+        return OrganizationMapper.fromEntity(entity);
 
     }
 

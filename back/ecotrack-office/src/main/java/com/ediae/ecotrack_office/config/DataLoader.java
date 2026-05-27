@@ -93,7 +93,7 @@ public class DataLoader implements CommandLineRunner {
                 .orElseGet(() -> {
                     OrganizationEntity o = new OrganizationEntity();
                     o.setName(name);
-                    o.setCIF("CIF-000000");
+                    o.setCif("CIF-000000");
                     o.setAddress("Unknown address");
                     o.setEmail("contact@ecotrack.local");
                     o.setEndSubscription(java.sql.Date.valueOf(LocalDate.now().plusYears(1)));
