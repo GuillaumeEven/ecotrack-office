@@ -64,7 +64,7 @@ public class ReservationService {
         return ReservationMapper.fromEntity(entity.get());
     }
 
-    public ReservationModel createReservation (ReservationCreateDto dto) {
+    public ReservationModel createReservation (ReservationCreateDto dto) { // RECORDAR QUE HAY QUE CAMBIAR EL ESTATUS DE LO QUE ESTÁS RESERVANDO CON EL SERVICIO DE RESOURCE
 
         ReservationModel model = ReservationMapper.fromCreateDto(dto);
         ReservationEntity entity = ReservationMapper.toEntity(model);
