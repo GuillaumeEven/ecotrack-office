@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
@@ -103,28 +102,18 @@ public class UserService {
     }
 
     public UserModel updateMe(Long id, UserMeRequestDto dto) {
-    Optional<UserEntity> result = userRepository.findById(id);
-    if (result.isEmpty()) {
-        throw new RuntimeException("Usuario no encontrado con id: " + id);
-    }
+    UserEntity entity = userRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
 
-    if (dto.firstName() == null || dto.firstName().isBlank()) {
-        throw new IllegalArgumentException("El nombre no puede estar vacío");
-    }
-
-    if (dto.lastName() == null || dto.lastName().isBlank()) {
-        throw new IllegalArgumentException("El apellido no puede estar vacío");
-    }
-
-    UserEntity entity = result.get();
-    entity.setFirstName(HtmlUtils.htmlEscape(dto.firstName()));
-    entity.setLastName(HtmlUtils.htmlEscape(dto.lastName()));
+    // Las validaciones de formato van en el DTO mejor con @NotBlank, @Size, etc. y elimino html escape
+    // Aquí solo asigno los valoores directamente, asumiendo que el DTO ya es válido
+    entity.setFirstName(dto.firstName().trim());
+    entity.setLastName(dto.lastName().trim());
 
     if (dto.preferencesJson() != null) {
-        entity.setPreferencesJson(HtmlUtils.htmlEscape(dto.preferencesJson()));
+        entity.setPreferencesJson(dto.preferencesJson());
     }
 
-    UserEntity saved = userRepository.save(entity);
-    return UserModel.fromEntity(saved);
+    return UserModel.fromEntity(userRepository.save(entity));
 }
 }
