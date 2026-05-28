@@ -11,7 +11,7 @@ import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 @Component
 public class ReservationMapper {
 
-    public ReservationModel fromEntity (ReservationEntity entity) {
+    public static ReservationModel fromEntity (ReservationEntity entity) {
 
         ReservationModel model = new ReservationModel();
         model.setId(entity.getId());
@@ -23,7 +23,7 @@ public class ReservationMapper {
         return model;
     }
 
-    public ReservationEntity toEntity (ReservationModel model) {
+    public static ReservationEntity toEntity (ReservationModel model) {
 
         ReservationEntity entity = new ReservationEntity();
         entity.setId(model.getId());
@@ -35,7 +35,7 @@ public class ReservationMapper {
         return entity;
     }
 
-    public ReservationModel fromCreatDto (ReservationCreateDto createDto) {
+    public static ReservationModel fromCreateDto (ReservationCreateDto createDto) {
 
         ReservationModel model = new ReservationModel();
         model.setId(null);
@@ -47,7 +47,7 @@ public class ReservationMapper {
         return model;
     }
 
-    public ReservationModel fromUpdateDto (ReservationUpdateDto updateDto) {
+    public static ReservationModel fromUpdateDto (ReservationUpdateDto updateDto) {
 
         ReservationModel model = new ReservationModel();
         model.setId(updateDto.getId());
@@ -59,7 +59,7 @@ public class ReservationMapper {
         return model;
     }
 
-    public ReservationResponseDto toResponseDto (ReservationModel model) {
+    public static ReservationResponseDto toResponseDto (ReservationModel model) {
 
         ReservationResponseDto response = new ReservationResponseDto();
         response.setId(model.getId());
