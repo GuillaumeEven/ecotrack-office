@@ -1,5 +1,7 @@
 package com.ediae.ecotrack_office.users.service;
 
+
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
+import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.mapper.UserMapper;
@@ -97,4 +100,20 @@ public class UserService {
         entity.setIsActive(false);
         userRepository.save(entity);
     }
+
+    public UserModel updateMe(Long id, UserMeRequestDto dto) {
+    UserEntity entity = userRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+
+    // Las validaciones de formato van en el DTO mejor con @NotBlank, @Size, etc. y elimino html escape
+    // Aquí solo asigno los valoores directamente, asumiendo que el DTO ya es válido
+    entity.setFirstName(dto.firstName().trim());
+    entity.setLastName(dto.lastName().trim());
+
+    if (dto.preferencesJson() != null) {
+        entity.setPreferencesJson(dto.preferencesJson());
+    }
+
+    return UserModel.fromEntity(userRepository.save(entity));
+}
 }
