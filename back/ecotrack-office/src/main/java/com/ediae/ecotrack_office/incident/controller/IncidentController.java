@@ -1,31 +1,47 @@
 package com.ediae.ecotrack_office.incident.controller;
 
+import com.ediae.ecotrack_office.incident.dto.IncidentRequestDto;
 import com.ediae.ecotrack_office.incident.dto.IncidentResponseDto;
 import com.ediae.ecotrack_office.incident.service.IncidentService;
-import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/incidents")
 public class IncidentController {
 
-    @Autowired
-    private IncidentService incidentService;
+    private final IncidentService incidentService;
 
-    @Autowired
-    private IncidentMapper incidentMapper;
+    public IncidentController(IncidentService incidentService) {
+        this.incidentService = incidentService;
+    }
 
+    // GET: Obtener el listado completo
     @GetMapping
-    public ResponseEntity<List<IncidentResponseDto>> getAllIncidents() {
-        List<IncidentResponseDto> response = incidentService.getAllIncidents().stream()
-                .map(incidentMapper::toResponseDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<IncidentResponseDto>> getAll() {
+        return ResponseEntity.ok(incidentService.getAllIncidents());
+    }
+
+    // POST: Crear una nueva incidencia
+    @PostMapping
+    public ResponseEntity<IncidentResponseDto> create(@RequestBody IncidentRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(incidentService.createIncident(requestDto));
+    }
+
+    // PATCH: Cerrar una incidencia existente
+    @PatchMapping("/{id}/resolve")
+    public ResponseEntity<IncidentResponseDto> resolve(@PathVariable Long id) {
+        return ResponseEntity.ok(incidentService.resolveIncident(id));
+    }
+
+    // DELETE: Borrar una incidencia
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        incidentService.deleteIncident(id);
+        return ResponseEntity.noContent().build();
     }
 }
