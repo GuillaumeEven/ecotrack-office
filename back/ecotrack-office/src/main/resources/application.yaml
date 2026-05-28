@@ -24,8 +24,8 @@ spring:
       hibernate:
         format_sql: true
   flyway:
-    # enabled: true
-    enabled: false
+    enabled: true
+    # enabled: false
     locations: classpath:db/migration
     # baseline-on-migrate: true
     baseline-on-migrate: false
