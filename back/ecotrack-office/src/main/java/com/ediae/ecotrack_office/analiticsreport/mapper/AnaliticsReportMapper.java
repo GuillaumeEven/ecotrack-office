@@ -4,7 +4,7 @@ import com.ediae.ecotrack_office.analiticsreport.AnaliticsReportEntity;
 import com.ediae.ecotrack_office.analiticsreport.model.AnaliticsReportModel;
 import java.time.LocalDateTime;
 
-public class AnaliticsReportMapper {
+public class AnaliticsReportMapper { //TODO: EN UN FUTURO PASAR A TENER DOS MAPPERS. UNO QUE RELACIONA ENTRE DTO Y MODEL Y OTRO ENTRE MODEL Y ENTITY
 
     // Convierte de Entidad (Base de datos) a Modelo (Negocio)
     public static AnaliticsReportModel toModel(AnaliticsReportEntity entity) {
