@@ -8,7 +8,7 @@ public class OrganizationCreateDto {
     // Atributos
     
     private String name;
-    private String CIF;
+    private String cif;
     private String address;
     private String email;
     private Date endSubscription;
@@ -19,9 +19,9 @@ public class OrganizationCreateDto {
 
     public OrganizationCreateDto () {}
 
-    public OrganizationCreateDto (String name, String CIF, String address, String email, Date endSubscription, Boolean isActivate, LocalDateTime createAt) {
+    public OrganizationCreateDto (String name, String cif, String address, String email, Date endSubscription, Boolean isActivate, LocalDateTime createAt) {
         this.name = name;
-        this.CIF = CIF;
+        this.cif = cif;
         this.address = address;
         this.email = email;
         this.endSubscription = endSubscription;
@@ -38,11 +38,11 @@ public class OrganizationCreateDto {
         this.name = name;
     }
 
-    public String getCIF() {
-        return CIF;
+    public String getCif() {
+        return cif;
     }
-    public void setCIF(String CIF) {
-        this.CIF = CIF;
+    public void setCif(String cif) {
+        this.cif = cif;
     }
 
     public String getAddress() {

@@ -1,0 +1,64 @@
+package com.ediae.ecotrack_office.organization.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ediae.ecotrack_office.organization.dto.OrganizationCreateDto;
+import com.ediae.ecotrack_office.organization.dto.OrganizationResponseDto;
+import com.ediae.ecotrack_office.organization.dto.OrganizationUpdateDto;
+import com.ediae.ecotrack_office.organization.mapper.OrganizationMapper;
+import com.ediae.ecotrack_office.organization.service.OrganizationService;
+
+
+@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.GET,
+        RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+@RequestMapping("/ecotrack-api/v1")
+public class OrganizationController {
+
+    @Autowired
+    private OrganizationService service;
+
+    @GetMapping("/organization/{id}")
+    public OrganizationResponseDto getOrganizationById (@PathVariable Long id) {
+
+        return OrganizationMapper.toResponseDto(service.getOrganizationById(id));
+    }
+
+    @PostMapping("/organization")
+    public OrganizationResponseDto createOrganization (@RequestBody OrganizationCreateDto dto) {
+
+        System.out.println("La dirección recibida es: " + dto.getAddress());
+        return OrganizationMapper.toResponseDto(service.createOrganization(dto));
+    }
+
+    @PutMapping("/organization/{id}")
+    public OrganizationResponseDto updateOrganization (@PathVariable Long id, @RequestBody OrganizationUpdateDto dto) {
+
+        return OrganizationMapper.toResponseDto(service.updateOrganizationById(id, dto));
+    }
+
+    @PutMapping("organization/{id}/deactivate")
+    public OrganizationResponseDto deactivateOrganization (@PathVariable Long id) {
+
+        return OrganizationMapper.toResponseDto(service.deactivateOrganization(id));
+    }
+
+    @DeleteMapping("organization/{id}") //TENER EN CUENTA QUE PARA BORRAR UNA ORGANIZACIÓN PRIMERO HABRÍA QUE BORRAR LOS USUARIO ASOCIADOS A ELLA, Y ESTO GENERA UNA ELIMINACIÓN DE ELEMENTOS EN CADENA.
+    public Boolean deleteOrganization (@PathVariable Long id) {
+
+        return service.deleteOrganization(id);
+    }
+
+
+
+}
