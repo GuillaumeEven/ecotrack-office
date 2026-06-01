@@ -12,6 +12,6 @@ public record UserMeRequestDto(
     @NotBlank(message = "El apellido no puede estar vacío")
     @Size(max = 100, message = "El apellido no puede superar 100 caracteres")
     String lastName,
-
+    Boolean consentGiven,
     String preferencesJson
 ) {}
