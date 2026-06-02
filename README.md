@@ -97,14 +97,14 @@ mvn spring-boot:run
 #### Instalar
 
 ```bash
-cd font/ecotrack-office/
+cd front/ecotrack-office/
 npm install
 ```
 
 #### Ejecutar servidor
 
 ```bash
-# desde /font/ecotrack-office
+# desde /front/ecotrack-office
 npm run start
 ```
 
