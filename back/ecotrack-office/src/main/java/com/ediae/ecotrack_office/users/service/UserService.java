@@ -1,18 +1,21 @@
 package com.ediae.ecotrack_office.users.service;
 
-
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ediae.ecotrack_office.audit.service.AuditLogService;
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
+import com.ediae.ecotrack_office.shared.context.RequestContext;
+import com.ediae.ecotrack_office.shared.dto.PageResponseDto;
+import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
+import com.ediae.ecotrack_office.users.dto.UserResponseDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.mapper.UserMapper;
 import com.ediae.ecotrack_office.users.models.UserModel;
@@ -24,96 +27,155 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final OrganizationRepository organizationRepository;
+    private final AuditLogService auditLogService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, OrganizationRepository organizationRepository) {
+    public UserService(UserRepository userRepository,
+                       UserMapper userMapper,
+                       OrganizationRepository organizationRepository,
+                       AuditLogService auditLogService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.organizationRepository = organizationRepository;
+        this.auditLogService = auditLogService;
     }
 
-    public List<UserModel> getUsersByOrganization(Long organizationId) {
-        List<UserEntity> entities = userRepository.findByOrganizationId(organizationId);
-        List<UserModel> models = new ArrayList<>();
-        for (UserEntity entity : entities) {
-            models.add(UserModel.fromEntity(entity));
-        }
-        return models;
+    // ─────────────────────────────────────────────
+    // GET — lista paginada de usuarios por organización
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
+    public PageResponseDto<UserResponseDto> getUsersByOrganization(Long organizationId, Pageable pageable) {
+        Page<UserEntity> page = userRepository.findByOrganizationId(organizationId, pageable);
+
+        List<UserResponseDto> content = page.getContent().stream()
+                .map(entity -> userMapper.toModel(entity).toResponseDto())
+                .toList();
+
+        return new PageResponseDto<>(page, content);
     }
 
+    // ─────────────────────────────────────────────
+    // GET — un usuario por id
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
     public UserModel getUserById(Long id) {
-        Optional<UserEntity> result = userRepository.findById(id);
-        if (result.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id);
-        }
-        return UserModel.fromEntity(result.get());
+        return userMapper.toModel(
+                userRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id))
+        );
     }
 
+    // ─────────────────────────────────────────────
+    // POST — crear usuario
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
     public UserModel createUser(UserRequestDto dto) {
         if (userRepository.existsByEmail(dto.email())) {
             throw new RuntimeException("Ya existe un usuario con el email: " + dto.email());
         }
 
         OrganizationEntity organization = organizationRepository.findById(dto.organizationId())
-                .orElseThrow(() -> new RuntimeException("Organización no encontrada con id: " + dto.organizationId()));
+                .orElseThrow(() -> new NotFoundException("Organización no encontrada con id: " + dto.organizationId()));
 
-        UserModel model = new UserModel();
-        model.setEmail(dto.email());
-        model.setFirstName(dto.firstName());
-        model.setLastName(dto.lastName());
-        model.setRole(dto.role());
-        model.setOrganizationId(dto.organizationId());
-        model.setConsentGiven(dto.consentGiven());
-        model.setPreferencesJson(dto.preferencesJson());
-
-        UserEntity entity = userMapper.toEntity(model, organization);
+        UserEntity entity = userMapper.toEntityFromDto(dto, organization);
         entity.setPasswordHash(dto.password());
         entity.setIsActive(true);
         entity.setCreatedAt(LocalDateTime.now());
 
+        // Registramos que el admin creó un usuario
         UserEntity saved = userRepository.save(entity);
-        return UserModel.fromEntity(saved);
+        auditLogService.log("USER_CREATED", "USER", saved.getId(), RequestContext.getUserId());
+
+        return userMapper.toModel(saved);
     }
 
+    // ─────────────────────────────────────────────
+    // PUT — el ADMIN modifica cualquier usuario
+    // Si cambia el rol, se registra en el audit log
+    // ─────────────────────────────────────────────
     public UserModel updateUser(Long id, UserRequestDto dto) {
-        Optional<UserEntity> result = userRepository.findById(id);
-        if (result.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id);
-        }
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-        UserEntity entity = result.get();
-        entity.setFirstName(dto.firstName());
-        entity.setLastName(dto.lastName());
+        // Guardamos el rol anterior para saber si cambió
+        var previousRole = entity.getRole();
+
+        // El mapper actualiza los campos comunes
+        userMapper.updateEntityFromDto(dto, entity);
+
+        // El rol solo lo gestiona el ADMIN desde este método
         entity.setRole(dto.role());
-        entity.setConsentGiven(dto.consentGiven());
-        entity.setPreferencesJson(dto.preferencesJson());
 
         UserEntity saved = userRepository.save(entity);
-        return UserModel.fromEntity(saved);
+
+        // Si el rol cambió, lo registramos en el audit log
+        if (!previousRole.equals(dto.role())) {
+            auditLogService.log(
+                "ROLE_CHANGED",   // qué pasó
+                "USER",           // sobre qué tipo de objeto
+                id,               // id del usuario afectado
+                RequestContext.getUserId() // id del admin que lo hizo
+            );
+        }
+
+        return userMapper.toModel(saved);
     }
 
+    // ─────────────────────────────────────────────
+    // PATCH — desactivar usuario
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
     public void deactivateUser(Long id) {
-        Optional<UserEntity> result = userRepository.findById(id);
-        if (result.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id);
-        }
-        UserEntity entity = result.get();
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
+
         entity.setIsActive(false);
         userRepository.save(entity);
+
+        auditLogService.log("USER_DEACTIVATED", "USER", id, RequestContext.getUserId());
     }
 
+    // ─────────────────────────────────────────────
+    // DELETE — GDPR erasure
+    // Solo ADMIN (se verifica en el Controller)
+    // No borra la fila, anonimiza los datos personales
+    // ─────────────────────────────────────────────
+    public void deleteUser(Long id) {
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
+
+        // Anonimizamos todos los datos personales
+        entity.setEmail("deleted_" + id + "@deleted.local");
+        entity.setFirstName("DELETED");
+        entity.setLastName("DELETED");
+        entity.setPasswordHash("");
+        entity.setConsentGiven(false);
+        entity.setPreferencesJson(null);
+        entity.setIsActive(false);
+
+        userRepository.save(entity);
+
+        auditLogService.log("USER_DELETED", "USER", id, RequestContext.getUserId());
+    }
+
+    // ─────────────────────────────────────────────
+    // PATCH — el usuario edita sus propios datos
+    // Cualquier usuario autenticado
+    // ─────────────────────────────────────────────
     public UserModel updateMe(Long id, UserMeRequestDto dto) {
-    UserEntity entity = userRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-    // Las validaciones de formato van en el DTO mejor con @NotBlank, @Size, etc. y elimino html escape
-    // Aquí solo asigno los valoores directamente, asumiendo que el DTO ya es válido
-    entity.setFirstName(dto.firstName().trim());
-    entity.setLastName(dto.lastName().trim());
+        entity.setFirstName(dto.firstName().trim());
+        entity.setLastName(dto.lastName().trim());
 
-    if (dto.preferencesJson() != null) {
-        entity.setPreferencesJson(dto.preferencesJson());
+        if (dto.consentGiven() != null) {
+            entity.setConsentGiven(dto.consentGiven());
+        }
+
+        if (dto.preferencesJson() != null) {
+            entity.setPreferencesJson(dto.preferencesJson());
+        }
+
+        return userMapper.toModel(userRepository.save(entity));
     }
-
-    return UserModel.fromEntity(userRepository.save(entity));
-}
 }

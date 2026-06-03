@@ -6,8 +6,9 @@ import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-// import com.ediae.ecotrack_office.incidence
-//import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
+import com.ediae.ecotrack_office.incident.model.IncidentEntity;
+import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
+
 
 @Entity
 @Table(name = "usr_users")
@@ -48,11 +49,11 @@ public class UserEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    // @OneToMany (mapped by = "userId")
-    //private List<IncidenceEntity> incidences;
+    @OneToMany (mappedBy = "user")
+    private List<IncidentEntity> incidences;
 
-    // @OneToMany (mapped by = "userId")
-    // private List<ReservationEntity> reservations;
+    @OneToMany (mappedBy = "user")
+    private List<ReservationEntity> reservations;
 
 
 
