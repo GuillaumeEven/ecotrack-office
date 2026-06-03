@@ -1,0 +1,42 @@
+<!-- Login page wireframe: code in English, UI text in Spanish -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Eco-Track — Iniciar sesión</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header spaced">
+      <div class="title">Eco-Track</div>
+      <div>
+        <a class="btn" href="../index.html">Volver al índice</a>
+      </div>
+    </header>
+
+    <main style="max-width:420px;margin:40px auto">
+      <div class="card">
+        <h2 class="title">Iniciar sesión</h2>
+        <form action="#" method="post" style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+          <label class="small">Usuario
+            <input name="username" type="text" placeholder="tu@correo.com" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--frame);margin-top:6px">
+          </label>
+
+          <label class="small">Contraseña
+            <input name="password" type="password" placeholder="********" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--frame);margin-top:6px">
+          </label>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+            <button class="btn" type="submit">Iniciar</button>
+            <a href="#" class="small muted">¿No tienes cuenta? Regístrate</a>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <div class="footer">Wireframe — Login</div>
+  </div>
+</body>
+</html>

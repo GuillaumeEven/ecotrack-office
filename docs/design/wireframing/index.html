@@ -16,17 +16,20 @@
 
     <p class="muted">Selecciona una vista para abrirla.</p>
 
-    <div class="card-grid">
-      <a class="card" href="pages/landing.html">
-        <h3>Landing</h3>
-        <p class="small">Página de entrada pública con hero y llamadas a la acción.</p>
-      </a>
-
-      <a class="card" href="pages/dashboard-admin.html">
-        <h3>Panel de administración</h3>
-        <p class="small">Vista para administradores: KPIs, gestión y listados.</p>
-      </a>
-    </div>
+    <nav>
+      <ol class="toc">
+        <li><a href="pages/landing.html">1. Landing</a> — Página pública: hero y llamada a la acción.</li>
+        <li><a href="pages/login.html">2. Login</a> — Formulario de inicio de sesión.</li>
+        <li>
+          <a href="pages/register.html">3. Registro</a>
+          <ol>
+            <li><a href="pages/register.html#empleado">3.1 Registro — Empleado</a></li>
+            <li><a href="pages/register.html#empresa">3.2 Registro — Empresa</a></li>
+          </ol>
+        </li>
+        <li><a href="pages/home-admin.html">4. Home Admin</a> — Mapa de planta y controles administrativos.</li>
+      </ol>
+    </nav>
 
     <div class="footer">Basado en: docs/Vistas Eco-Track.pdf</div>
   </div>
