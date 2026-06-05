@@ -71,7 +71,7 @@ public class ReservationService {
 
         ReservationModel model = ReservationMapper.fromCreateDto(dto);
         ReservationEntity entity = ReservationMapper.toEntity(model);
-        entity.setStatus(ReservationStatus.RELEASED);
+        entity.setStatus(ReservationStatus.CONFIRMED);
         ReservationEntity saved = repository.save(entity);
 
         // Trigger zone consolidation based on resource type
