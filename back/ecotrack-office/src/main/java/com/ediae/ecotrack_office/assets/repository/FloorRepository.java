@@ -10,4 +10,7 @@ import com.ediae.ecotrack_office.assets.entity.FloorEntity;
 @Repository
 public interface FloorRepository extends JpaRepository<FloorEntity, Long> {
     List<FloorEntity> findByOrganizationId(Long organizationId);
+
+    // Used for cross-floor room search: lowest floor first
+    List<FloorEntity> findByOrganization_IdOrderByLevelAsc(Long organizationId);
 }
