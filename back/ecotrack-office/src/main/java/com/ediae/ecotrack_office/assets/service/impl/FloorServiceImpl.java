@@ -1,5 +1,8 @@
 package com.ediae.ecotrack_office.assets.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,14 @@ public class FloorServiceImpl implements FloorService {
         FloorEntity entity = floorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Floor not found with id: " + id));
         return floorMapper.fromEntity(entity);
+    }
+
+    @Override
+    public List<FloorModel> getFloorsByOrganizationId(Long organizationId) {
+        List<FloorEntity> entities = floorRepository.findByOrganizationId(organizationId);
+        return entities.stream()
+            .map(floorMapper::fromEntity)
+            .collect(Collectors.toList());
     }
 
     @Override

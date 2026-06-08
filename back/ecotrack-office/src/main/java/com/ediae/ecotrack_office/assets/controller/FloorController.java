@@ -1,5 +1,7 @@
 package com.ediae.ecotrack_office.assets.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +33,12 @@ public class FloorController {
     public ResponseEntity<FloorResponseDto> getFloorById(@PathVariable Long id) {
         FloorResponseDto floor = floorMapper.toResponseDto(floorService.getFloorById(id));
         return ResponseEntity.ok(floor);
+    }
+
+    @GetMapping("/organization/{organizationId}")
+    public ResponseEntity<List<FloorResponseDto>> getFloorsByOrganizationId(@PathVariable Long organizationId) {
+        List<FloorResponseDto> floors = floorService.getFloorsByOrganizationId(organizationId);
+        return ResponseEntity.ok(floors);
     }
 
     @PostMapping
