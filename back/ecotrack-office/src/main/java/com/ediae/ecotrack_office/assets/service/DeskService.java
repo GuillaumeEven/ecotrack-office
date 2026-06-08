@@ -9,13 +9,12 @@ public interface DeskService {
 
     public DeskModel getDeskById(Long deskId);
 
+    public List<DeskModel> getDesksByRoomId(Long roomId);
+
     public DeskModel createDesk(DeskRequestDto deskRequestDto);
 
     public DeskModel updateDesk(Long deskId, DeskRequestDto deskRequestDto);
 
     public void deleteDeskById(Long deskId);
-
-    public List<DeskModel> getDesksByRoomId(Long roomId);
-
 
 }

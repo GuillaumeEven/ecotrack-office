@@ -1,9 +1,11 @@
 package com.ediae.ecotrack_office.assets.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.assets.dto.FloorRequestDto;
@@ -20,6 +23,13 @@ import com.ediae.ecotrack_office.assets.service.FloorService;
 
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
+    RequestMethod.GET,
+    RequestMethod.POST,
+    RequestMethod.PUT,
+    RequestMethod.DELETE,
+    RequestMethod.OPTIONS}
+)
 @RequestMapping("/api/v1/floors")
 public class FloorController {
 
@@ -29,6 +39,13 @@ public class FloorController {
     @Autowired
     private FloorMapper floorMapper;
 
+    @GetMapping
+    public ResponseEntity<List<FloorResponseDto>> getAllFloors() {
+        List<FloorResponseDto> floors = new ArrayList<>();
+        floorService.getFloors().forEach(floor -> floors.add(floorMapper.toResponseDto(floor)));
+        return ResponseEntity.ok(floors);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<FloorResponseDto> getFloorById(@PathVariable Long id) {
         FloorResponseDto floor = floorMapper.toResponseDto(floorService.getFloorById(id));
@@ -37,7 +54,8 @@ public class FloorController {
 
     @GetMapping("/organization/{organizationId}")
     public ResponseEntity<List<FloorResponseDto>> getFloorsByOrganizationId(@PathVariable Long organizationId) {
-        List<FloorResponseDto> floors = floorService.getFloorsByOrganizationId(organizationId);
+        List<FloorResponseDto> floors = new ArrayList<>();
+        floorService.getFloorsByOrganizationId(organizationId).forEach(floor -> floors.add(floorMapper.toResponseDto(floor)));
         return ResponseEntity.ok(floors);
     }
 
