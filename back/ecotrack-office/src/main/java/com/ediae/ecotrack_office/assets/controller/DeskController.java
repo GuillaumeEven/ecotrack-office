@@ -1,5 +1,8 @@
 package com.ediae.ecotrack_office.assets.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.assets.dto.DeskRequestDto;
@@ -19,7 +23,13 @@ import com.ediae.ecotrack_office.assets.service.DeskService;
 
 @RestController
 @RequestMapping("api/v1/desks")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
+    RequestMethod.GET,
+    RequestMethod.POST,
+    RequestMethod.PUT,
+    RequestMethod.DELETE,
+    RequestMethod.OPTIONS}
+)
 public class DeskController {
 
     @Autowired
@@ -32,6 +42,13 @@ public class DeskController {
     public ResponseEntity<DeskResponseDto> getDeskById(@PathVariable Long id) {
         DeskResponseDto deskResponseDTO = deskMapper.toResponseDto(deskService.getDeskById(id));
         return ResponseEntity.ok(deskResponseDTO);
+    }
+
+    @GetMapping("/room/{roomId}")
+    public ResponseEntity<List<DeskResponseDto>> getDesksByRoomId(@PathVariable Long roomId) {
+        List<DeskResponseDto> desks = new ArrayList<>();
+        deskService.getDesksByRoomId(roomId).forEach(desk -> desks.add(deskMapper.toResponseDto(desk)));
+        return ResponseEntity.ok(desks);
     }
 
     @PostMapping("")

@@ -24,6 +24,14 @@ public class FloorServiceImpl implements FloorService {
     private FloorMapper floorMapper;
 
     @Override
+    public List<FloorModel> getFloors() {
+        List<FloorEntity> entities = floorRepository.findAll();
+        return entities.stream()
+            .map(floorMapper::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+    @Override
     public FloorModel getFloorById(Long id) {
         FloorEntity entity = floorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Floor not found with id: " + id));
