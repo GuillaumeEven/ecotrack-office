@@ -18,7 +18,7 @@ import com.ediae.ecotrack_office.assets.service.FloorService;
 
 
 @RestController
-@RequestMapping("/api/floors")
+@RequestMapping("/api/v1/floors")
 public class FloorController {
 
     @Autowired

@@ -22,7 +22,7 @@ import com.ediae.ecotrack_office.organization.service.OrganizationService;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.GET,
         RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
-@RequestMapping("/ecotrack-api/v1")
+@RequestMapping("/api/v1")
 public class OrganizationController {
 
     @Autowired

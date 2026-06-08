@@ -19,7 +19,7 @@ import com.ediae.ecotrack_office.assets.service.RoomService;
 
 
 @RestController
-@RequestMapping("/rooms")
+@RequestMapping("api/v1/rooms")
 @CrossOrigin(origins = "*")
 public class RoomController {
 

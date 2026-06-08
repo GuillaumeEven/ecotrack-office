@@ -18,7 +18,7 @@ import com.ediae.ecotrack_office.assets.mapper.DeskMapper;
 import com.ediae.ecotrack_office.assets.service.DeskService;
 
 @RestController
-@RequestMapping("/desks")
+@RequestMapping("api/v1/desks")
 @CrossOrigin(origins = "*")
 public class DeskController {
 

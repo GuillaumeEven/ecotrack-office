@@ -26,7 +26,7 @@ import com.ediae.ecotrack_office.reservation.service.ReservationService;
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
     RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS
 })
-@RequestMapping("/ecotrack-api/v1")
+@RequestMapping("/api/v1")
 public class ReservationController {
 
     @Autowired
