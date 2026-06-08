@@ -1,0 +1,27 @@
+/* Minimal styles - no Tailwind, just basic CSS for readability */
+:host {
+  display: block;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+section {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+small {
+  display: block;
+  color: #666;
+  margin-top: 4px;
+}
