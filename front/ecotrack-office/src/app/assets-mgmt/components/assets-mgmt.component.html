@@ -1,0 +1,100 @@
+<div style="font-family: Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto;">
+  <h1>Assets Management</h1>
+  <p>Manage floors, rooms, and desks in your office.</p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px;">
+    <!-- FLOORS SECTION -->
+    <section style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
+      <h2>Floors</h2>
+
+      <button
+        (click)="loadFloors()"
+        style="padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px;">
+        Refresh Floors
+      </button>
+
+      <div *ngIf="loading.floors" style="color: #666; font-style: italic;">Loading...</div>
+      <div *ngIf="errors.floors" style="color: red; margin-bottom: 10px;">{{ errors.floors }}</div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button
+          *ngFor="let floor of floors"
+          (click)="onFloorSelect(floor.id)"
+          [style.background-color]="selectedFloorId === floor.id ? '#28a745' : '#f0f0f0'"
+          [style.color]="selectedFloorId === floor.id ? 'white' : 'black'"
+          style="padding: 10px; text-align: left; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+          <strong>{{ floor.name }}</strong> (Order: {{ floor.displayOrder }})
+          <br>
+          <small>Status: {{ floor.status }}</small>
+        </button>
+      </div>
+    </section>
+
+    <!-- ROOMS SECTION -->
+    <section style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
+      <h2>Rooms</h2>
+
+      <div *ngIf="!selectedFloorId" style="color: #999; font-style: italic;">
+        Select a floor to view rooms
+      </div>
+
+      <div *ngIf="selectedFloorId">
+        <div *ngIf="loading.rooms" style="color: #666; font-style: italic;">Loading...</div>
+        <div *ngIf="errors.rooms" style="color: red; margin-bottom: 10px;">{{ errors.rooms }}</div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button
+            *ngFor="let room of rooms"
+            (click)="onRoomSelect(room.id)"
+            [style.background-color]="selectedRoomId === room.id ? '#28a745' : '#f0f0f0'"
+            [style.color]="selectedRoomId === room.id ? 'white' : 'black'"
+            style="padding: 10px; text-align: left; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+            <strong>{{ room.name }}</strong> (Capacity: {{ room.capacity }})
+            <br>
+            <small>Status: {{ room.status }} | Order: {{ room.displayOrder }}</small>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESKS SECTION -->
+    <section style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
+      <h2>Desks</h2>
+
+      <div *ngIf="!selectedRoomId" style="color: #999; font-style: italic;">
+        Select a room to view desks
+      </div>
+
+      <div *ngIf="selectedRoomId">
+        <div *ngIf="loading.desks" style="color: #666; font-style: italic;">Loading...</div>
+        <div *ngIf="errors.desks" style="color: red; margin-bottom: 10px;">{{ errors.desks }}</div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div
+            *ngFor="let desk of desks"
+            style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #fafafa;">
+            <strong>{{ desk.name }}</strong> ({{ desk.type || 'Regular Desk' }})
+            <br>
+            <small>Status: {{ desk.status }} | Order: {{ desk.displayOrder }}</small>
+            <br>
+            <small *ngIf="desk.position">Position: {{ desk.position }}</small>
+          </div>
+        </div>
+
+        <div *ngIf="desks.length === 0 && !loading.desks && !errors.desks" style="color: #999; font-style: italic; margin-top: 10px;">
+          No desks found for this room.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- DEBUG INFO (remove later) -->
+  <div style="margin-top: 30px; padding: 15px; background-color: #f9f9f9; border: 1px solid #eee; border-radius: 4px;">
+    <h3>Debug Info</h3>
+    <p><strong>Selected Floor ID:</strong> {{ selectedFloorId || 'None' }}</p>
+    <p><strong>Selected Room ID:</strong> {{ selectedRoomId || 'None' }}</p>
+    <p><strong>Floors Count:</strong> {{ floors.length }}</p>
+    <p><strong>Rooms Count:</strong> {{ rooms.length }}</p>
+    <p><strong>Desks Count:</strong> {{ desks.length }}</p>
+  </div>
+</div>
