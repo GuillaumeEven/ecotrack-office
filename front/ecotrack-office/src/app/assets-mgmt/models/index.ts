@@ -1,7 +1,7 @@
 /**
  * Barrel export for all models
  */
-export { Floor } from './floor';
-export { Room } from './room';
-export { Desk } from './desk';
-export { User } from './user';
+export type { Floor } from './floor';
+export type { Room } from './room';
+export type { Desk } from './desk';
+export type { User } from './user';

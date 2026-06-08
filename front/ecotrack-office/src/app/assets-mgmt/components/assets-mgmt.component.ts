@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -22,8 +22,8 @@ export class AssetsMgmtComponent implements OnInit {
   rooms: Room[] = [];
   desks: Desk[] = [];
 
-  selectedFloorId: string | number | null = null;
-  selectedRoomId: string | number | null = null;
+  selectedFloorId: number | null = null;
+  selectedRoomId: number | null = null;
 
   loading = {
     floors: false,
@@ -40,10 +40,12 @@ export class AssetsMgmtComponent implements OnInit {
   constructor(
     private floorService: FloorService,
     private roomService: RoomService,
-    private deskService: DeskService
+    private deskService: DeskService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    console.log('🚀 AssetsMgmtComponent initialized, loading floors...');
     this.loadFloors();
   }
 
@@ -51,17 +53,22 @@ export class AssetsMgmtComponent implements OnInit {
    * Load all floors
    */
   loadFloors(): void {
+    console.log('📍 loadFloors() called');
     this.loading.floors = true;
     this.errors.floors = null;
 
     this.floorService.list().subscribe({
       next: (data) => {
+        console.log('✅ Floors loaded:', data);
         this.floors = data;
         this.loading.floors = false;
+        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
       },
       error: (err) => {
+        console.error('❌ Error loading floors:', err);
         this.errors.floors = `Failed to load floors: ${err.message}`;
         this.loading.floors = false;
+        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
         console.error(err);
       }
     });
@@ -70,7 +77,8 @@ export class AssetsMgmtComponent implements OnInit {
   /**
    * Load rooms for selected floor
    */
-  onFloorSelect(floorId: string | number): void {
+  onFloorSelect(floorId: number): void {
+    console.log('🏢 onFloorSelect() called with floorId:', floorId);
     this.selectedFloorId = floorId;
     this.selectedRoomId = null;
     this.rooms = [];
@@ -81,12 +89,16 @@ export class AssetsMgmtComponent implements OnInit {
 
     this.roomService.listByFloor(floorId).subscribe({
       next: (data) => {
+        console.log('✅ Rooms loaded:', data);
         this.rooms = data;
         this.loading.rooms = false;
+        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
       },
       error: (err) => {
+        console.error('❌ Error loading rooms:', err);
         this.errors.rooms = `Failed to load rooms: ${err.message}`;
         this.loading.rooms = false;
+        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
         console.error(err);
       }
     });
@@ -95,7 +107,8 @@ export class AssetsMgmtComponent implements OnInit {
   /**
    * Load desks for selected room
    */
-  onRoomSelect(roomId: string | number): void {
+  onRoomSelect(roomId: number): void {
+    console.log('🪑 onRoomSelect() called with roomId:', roomId);
     this.selectedRoomId = roomId;
     this.desks = [];
 
@@ -104,12 +117,16 @@ export class AssetsMgmtComponent implements OnInit {
 
     this.deskService.listByRoom(roomId).subscribe({
       next: (data) => {
+        console.log('✅ Desks loaded:', data);
         this.desks = data;
         this.loading.desks = false;
+        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
       },
       error: (err) => {
+        console.error('❌ Error loading desks:', err);
         this.errors.desks = `Failed to load desks: ${err.message}`;
         this.loading.desks = false;
+        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
         console.error(err);
       }
     });

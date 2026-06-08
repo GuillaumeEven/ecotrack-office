@@ -27,14 +27,16 @@ export class RoomService {
   /**
    * Fetch all rooms in a specific floor
    */
-  listByFloor(floorId: string | number): Observable<Room[]> {
-    return this.httpClient.get<Room[]>(`${this.apiUrl}?floorId=${floorId}`);
+  listByFloor(floorId: number): Observable<Room[]> {
+    const url = `${this.apiUrl}/floor/${floorId}`;
+    console.log('📡 RoomService.listByFloor() calling:', url);
+    return this.httpClient.get<Room[]>(url);
   }
 
   /**
    * Fetch a single room by ID
    */
-  get(id: string | number): Observable<Room> {
+  get(id: number): Observable<Room> {
     return this.httpClient.get<Room>(`${this.apiUrl}/${id}`);
   }
 
@@ -48,14 +50,14 @@ export class RoomService {
   /**
    * Update an existing room
    */
-  update(id: string | number, room: Partial<Room>): Observable<Room> {
+  update(id: number, room: Partial<Room>): Observable<Room> {
     return this.httpClient.put<Room>(`${this.apiUrl}/${id}`, room);
   }
 
   /**
    * Delete a room
    */
-  delete(id: string | number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
