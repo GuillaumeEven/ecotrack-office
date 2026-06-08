@@ -62,6 +62,10 @@ public class DataLoader implements CommandLineRunner {
         createAdminIfMissing(org);
         createTechAndEmployeeIfMissing(org);
         createRoomsAndDesksIfMissing(org);
+
+        OrganizationEntity org2 = createSecondOrgIfMissing();
+        createFloorsIfMissing(org2);
+        createRoomsAndDesksIfMissing(org2);
     }
 
     /**
@@ -96,6 +100,27 @@ public class DataLoader implements CommandLineRunner {
                     o.setCif("CIF-000000");
                     o.setAddress("Unknown address");
                     o.setEmail("contact@ecotrack.local");
+                    o.setEndSubscription(java.sql.Date.valueOf(LocalDate.now().plusYears(1)));
+                    o.setIsActive(Boolean.TRUE);
+                    o.setCreatedAt(LocalDateTime.now());
+                    OrganizationEntity saved = organizationRepository.save(o);
+                    log.info("Seeded organization '{}'", saved.getName());
+                    return saved;
+                });
+    }
+
+    private OrganizationEntity createSecondOrgIfMissing() {
+        final String name = "GreenOffice Solutions";
+        return organizationRepository.findAll()
+                .stream()
+                .filter(o -> name.equalsIgnoreCase(o.getName()))
+                .findFirst()
+                .orElseGet(() -> {
+                    OrganizationEntity o = new OrganizationEntity();
+                    o.setName(name);
+                    o.setCif("CIF-000001");
+                    o.setAddress("Tech Park, Building B");
+                    o.setEmail("contact@greenoffice.local");
                     o.setEndSubscription(java.sql.Date.valueOf(LocalDate.now().plusYears(1)));
                     o.setIsActive(Boolean.TRUE);
                     o.setCreatedAt(LocalDateTime.now());
@@ -202,61 +227,89 @@ public class DataLoader implements CommandLineRunner {
             return;
         }
 
-        // create two desk_area rooms if missing
-        String roomAName = "Desk Area A";
-        String roomBName = "Desk Area B";
+        // Create desk_area rooms on floor 0
+        createDeskAreaRoomsWithDesks(floor0, "Desk Area A", 50.0);
+        createDeskAreaRoomsWithDesks(floor0, "Desk Area B", 40.0);
+        createDeskAreaRoomsWithDesks(floor0, "Desk Area C", 45.0);
 
-        RoomEntity roomA = roomRepository.findByFloor_Id(floor0.getId())
+        // Create meeting rooms on floor 0
+        createMeetingRoom(floor0, "Meeting Room 1", 25.0);
+        createMeetingRoom(floor0, "Meeting Room 2", 30.0);
+
+        // Get floor level 1 and add rooms there if exists
+        FloorEntity floor1 = floorRepository.findByOrganizationId(org.getId())
                 .stream()
-                .filter(r -> roomAName.equalsIgnoreCase(r.getName()))
+                .filter(f -> Objects.equals(f.getLevel(), 1))
+                .findFirst()
+                .orElse(null);
+
+        if (floor1 != null) {
+            // Create desk_area rooms on floor 1
+            createDeskAreaRoomsWithDesks(floor1, "Desk Area D", 35.0);
+            createDeskAreaRoomsWithDesks(floor1, "Desk Area E", 38.0);
+
+            // Create meeting rooms on floor 1
+            createMeetingRoom(floor1, "Meeting Room 3", 28.0);
+            createMeetingRoom(floor1, "Meeting Room 4", 32.0);
+        }
+    }
+
+    /**
+     * Helper method to create a desk_area room with 10 desks if it doesn't exist
+     */
+    private void createDeskAreaRoomsWithDesks(FloorEntity floor, String roomName, Double area) {
+        RoomEntity room = roomRepository.findByFloor_Id(floor.getId())
+                .stream()
+                .filter(r -> roomName.equalsIgnoreCase(r.getName()))
                 .findFirst()
                 .orElseGet(() -> {
                     RoomEntity r = new RoomEntity(
-                            roomAName,
+                            roomName,
                             ResourceStatus.AVAILABLE,
                             "basic-equipment",
                             RoomType.DESK_AREA,
-                            50.0,
-                            floor0,
+                            area,
+                            floor,
                             10
                     );
                     RoomEntity saved = roomRepository.save(r);
-                    log.info("Seeded room '{}'", saved.getName());
+                    log.info("Seeded desk_area room '{}'", saved.getName());
                     return saved;
                 });
 
-        RoomEntity roomB = roomRepository.findByFloor_Id(floor0.getId())
-                .stream()
-                .filter(r -> roomBName.equalsIgnoreCase(r.getName()))
-                .findFirst()
-                .orElseGet(() -> {
-                    RoomEntity r = new RoomEntity(
-                            roomBName,
-                            ResourceStatus.AVAILABLE,
-                            "basic-equipment",
-                            RoomType.DESK_AREA,
-                            40.0,
-                            floor0,
-                            8
-                    );
-                    RoomEntity saved = roomRepository.save(r);
-                    log.info("Seeded room '{}'", saved.getName());
-                    return saved;
-                });
-
-        // create three desks in roomA if missing
-        for (int i = 1; i <= 3; i++) {
-            final String deskName = "Desk " + i;
-            boolean exists = deskRepository.findByRoom_Id(roomA.getId())
+        // Create 10 desks for this desk_area room
+        for (int i = 1; i <= 10; i++) {
+            final String deskName = room.getName() + " - Desk " + i;
+            boolean exists = deskRepository.findByRoom_Id(room.getId())
                     .stream()
                     .anyMatch(d -> deskName.equalsIgnoreCase(d.getName()));
             if (!exists) {
-                DeskEntity desk = new DeskEntity(deskName, ResourceStatus.AVAILABLE, "chair,monitor", roomA);
+                DeskEntity desk = new DeskEntity(deskName, ResourceStatus.AVAILABLE, "chair,monitor", room);
                 deskRepository.save(desk);
-                log.info("Seeded desk '{}' in room '{}'", deskName, roomA.getName());
-            } else {
-                log.info("Desk '{}' in room '{}' exists, skipping.", deskName, roomA.getName());
             }
+        }
+        log.info("Seeded 10 desks in room '{}'", room.getName());
+    }
+
+    /**
+     * Helper method to create a meeting room if it doesn't exist
+     */
+    private void createMeetingRoom(FloorEntity floor, String roomName, Double area) {
+        boolean exists = roomRepository.findByFloor_Id(floor.getId())
+                .stream()
+                .anyMatch(r -> roomName.equalsIgnoreCase(r.getName()));
+        if (!exists) {
+            RoomEntity r = new RoomEntity(
+                    roomName,
+                    ResourceStatus.AVAILABLE,
+                    "video-conference,whiteboard",
+                    RoomType.MEETING_ROOM,
+                    area,
+                    floor,
+                    20
+            );
+            RoomEntity saved = roomRepository.save(r);
+            log.info("Seeded meeting_room '{}'", saved.getName());
         }
     }
 }
