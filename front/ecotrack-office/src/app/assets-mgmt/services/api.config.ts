@@ -4,7 +4,8 @@
  */
 
 export const API_CONFIG = {
-  baseUrl: 'http://localhost:8080/api',
+  baseUrl: 'http://localhost:8080/api/v1',
+  organizationId: 1, // TODO: Get from user/session after auth is implemented
   endpoints: {
     floors: '/floors',
     rooms: '/rooms',

@@ -18,16 +18,18 @@ export class FloorService {
   constructor(private httpClient: HttpClient) {}
 
   /**
-   * Fetch all floors
+   * Fetch all floors for an organization
    */
-  list(): Observable<Floor[]> {
-    return this.httpClient.get<Floor[]>(this.apiUrl);
+  list(organizationId: number = API_CONFIG.organizationId): Observable<Floor[]> {
+    const url = `${this.apiUrl}/organization/${organizationId}`;
+    console.log('📡 FloorService.list() calling:', url);
+    return this.httpClient.get<Floor[]>(url);
   }
 
   /**
    * Fetch a single floor by ID
    */
-  get(id: string | number): Observable<Floor> {
+  get(id: number): Observable<Floor> {
     return this.httpClient.get<Floor>(`${this.apiUrl}/${id}`);
   }
 
@@ -41,14 +43,14 @@ export class FloorService {
   /**
    * Update an existing floor
    */
-  update(id: string | number, floor: Partial<Floor>): Observable<Floor> {
+  update(id: number, floor: Partial<Floor>): Observable<Floor> {
     return this.httpClient.put<Floor>(`${this.apiUrl}/${id}`, floor);
   }
 
   /**
    * Delete a floor
    */
-  delete(id: string | number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
