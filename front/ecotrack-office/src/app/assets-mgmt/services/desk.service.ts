@@ -27,14 +27,14 @@ export class DeskService {
   /**
    * Fetch all desks in a specific room
    */
-  listByRoom(roomId: string | number): Observable<Desk[]> {
-    return this.httpClient.get<Desk[]>(`${this.apiUrl}?roomId=${roomId}`);
+  listByRoom(roomId: number): Observable<Desk[]> {
+    return this.httpClient.get<Desk[]>(`${this.apiUrl}/room/${roomId}`);
   }
 
   /**
    * Fetch a single desk by ID
    */
-  get(id: string | number): Observable<Desk> {
+  get(id: number): Observable<Desk> {
     return this.httpClient.get<Desk>(`${this.apiUrl}/${id}`);
   }
 
@@ -48,14 +48,14 @@ export class DeskService {
   /**
    * Update an existing desk
    */
-  update(id: string | number, desk: Partial<Desk>): Observable<Desk> {
+  update(id: number, desk: Partial<Desk>): Observable<Desk> {
     return this.httpClient.put<Desk>(`${this.apiUrl}/${id}`, desk);
   }
 
   /**
    * Delete a desk
    */
-  delete(id: string | number): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

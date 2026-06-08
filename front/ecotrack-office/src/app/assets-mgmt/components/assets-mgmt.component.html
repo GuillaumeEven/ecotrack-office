@@ -23,9 +23,9 @@
           [style.background-color]="selectedFloorId === floor.id ? '#28a745' : '#f0f0f0'"
           [style.color]="selectedFloorId === floor.id ? 'white' : 'black'"
           style="padding: 10px; text-align: left; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
-          <strong>{{ floor.name }}</strong> (Order: {{ floor.displayOrder }})
+          <strong>Floor {{ floor.level }}</strong>
           <br>
-          <small>Status: {{ floor.status }}</small>
+          <small>Status: {{ floor.isActive ? 'Active' : 'Inactive' }}</small>
         </button>
       </div>
     </section>
@@ -49,10 +49,14 @@
             [style.background-color]="selectedRoomId === room.id ? '#28a745' : '#f0f0f0'"
             [style.color]="selectedRoomId === room.id ? 'white' : 'black'"
             style="padding: 10px; text-align: left; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
-            <strong>{{ room.name }}</strong> (Capacity: {{ room.capacity }})
+            <strong>{{ room.name }}</strong> (Cap: {{ room.capacity }})
             <br>
-            <small>Status: {{ room.status }} | Order: {{ room.displayOrder }}</small>
+            <small>{{ room.roomType }} | Status: {{ room.status }}</small>
           </button>
+        </div>
+
+        <div *ngIf="rooms.length === 0 && !loading.rooms && !errors.rooms" style="color: #999; font-style: italic; margin-top: 10px;">
+          No rooms found for this floor.
         </div>
       </div>
     </section>
@@ -73,11 +77,11 @@
           <div
             *ngFor="let desk of desks"
             style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #fafafa;">
-            <strong>{{ desk.name }}</strong> ({{ desk.type || 'Regular Desk' }})
+            <strong>{{ desk.name }}</strong>
             <br>
-            <small>Status: {{ desk.status }} | Order: {{ desk.displayOrder }}</small>
+            <small>Status: {{ desk.status }} | Active: {{ desk.isActive ? 'Yes' : 'No' }}</small>
             <br>
-            <small *ngIf="desk.position">Position: {{ desk.position }}</small>
+            <small *ngIf="desk.equipmentList">Equipment: {{ desk.equipmentList }}</small>
           </div>
         </div>
 
