@@ -22,38 +22,38 @@ import com.ediae.ecotrack_office.organization.service.OrganizationService;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.GET,
         RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/organizations")
 public class OrganizationController {
 
     @Autowired
     private OrganizationService service;
 
-    @GetMapping("/organization/{id}")
+    @GetMapping("/{id}")
     public OrganizationResponseDto getOrganizationById (@PathVariable Long id) {
 
         return OrganizationMapper.toResponseDto(service.getOrganizationById(id));
     }
 
-    @PostMapping("/organization")
+    @PostMapping
     public OrganizationResponseDto createOrganization (@RequestBody OrganizationCreateDto dto) {
 
         System.out.println("La dirección recibida es: " + dto.getAddress());
         return OrganizationMapper.toResponseDto(service.createOrganization(dto));
     }
 
-    @PutMapping("/organization/{id}")
+    @PutMapping("/{id}")
     public OrganizationResponseDto updateOrganization (@PathVariable Long id, @RequestBody OrganizationUpdateDto dto) {
 
         return OrganizationMapper.toResponseDto(service.updateOrganizationById(id, dto));
     }
 
-    @PutMapping("organization/{id}/deactivate")
+    @PutMapping("/{id}/deactivate")
     public OrganizationResponseDto deactivateOrganization (@PathVariable Long id) {
 
         return OrganizationMapper.toResponseDto(service.deactivateOrganization(id));
     }
 
-    @DeleteMapping("organization/{id}") //TENER EN CUENTA QUE PARA BORRAR UNA ORGANIZACIÓN PRIMERO HABRÍA QUE BORRAR LOS USUARIO ASOCIADOS A ELLA, Y ESTO GENERA UNA ELIMINACIÓN DE ELEMENTOS EN CADENA.
+    @DeleteMapping("/{id}") //TENER EN CUENTA QUE PARA BORRAR UNA ORGANIZACIÓN PRIMERO HABRÍA QUE BORRAR LOS USUARIO ASOCIADOS A ELLA, Y ESTO GENERA UNA ELIMINACIÓN DE ELEMENTOS EN CADENA.
     public Boolean deleteOrganization (@PathVariable Long id) {
 
         return service.deleteOrganization(id);

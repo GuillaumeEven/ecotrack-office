@@ -26,13 +26,13 @@ import com.ediae.ecotrack_office.reservation.service.ReservationService;
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
     RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS
 })
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/reservations")
 public class ReservationController {
 
     @Autowired
     private ReservationService service;
 
-    @GetMapping("/reservations-user/{id}")
+    @GetMapping("/user/{id}")
     public List <ReservationResponseDto> getReservationsByUserId (@PathVariable Long id) {
 
         List <ReservationModel> models = service.getReservationsByUserId(id);
@@ -44,7 +44,7 @@ public class ReservationController {
         return dtos;
     }
 
-    @GetMapping("/reservations")
+    @GetMapping
     public List <ReservationResponseDto> getAllReservations () {
 
         List <ReservationModel> models = service.getAllReservations();
@@ -56,26 +56,26 @@ public class ReservationController {
         return dtos;
     }
 
-    @GetMapping("/reservation/{id}")
+    @GetMapping("/{id}")
     public ReservationResponseDto getReservationById (@PathVariable Long id) {
 
         ReservationModel model = service.getReservationById(id);
         return ReservationMapper.toResponseDto(model);
     }
 
-    @PostMapping("/reservation")
+    @PostMapping
     public ReservationResponseDto createReservation (@RequestBody ReservationCreateDto dto) {
 
         return ReservationMapper.toResponseDto(service.createReservation(dto));
     }
 
-    @PutMapping("/reservation/{id}")
+    @PutMapping("/{id}")
     public ReservationResponseDto updateReservation (@PathVariable Long id, @RequestBody ReservationUpdateDto dto) {
 
         return ReservationMapper.toResponseDto(service.updateReservationById(id, dto));
     }
 
-    @DeleteMapping("/reservation/{id}")
+    @DeleteMapping("/{id}")
     public Boolean deleteReservation (@PathVariable Long id) {
 
         return service.deleteReservationById(id);
