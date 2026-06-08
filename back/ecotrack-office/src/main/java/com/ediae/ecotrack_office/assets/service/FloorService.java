@@ -8,6 +8,8 @@ import com.ediae.ecotrack_office.assets.model.FloorModel;
 
 public interface FloorService {
 
+    public List<FloorModel> getFloors();
+
     public FloorModel getFloorById(Long id);
 
     public List<FloorModel> getFloorsByOrganizationId(Long organizationId);

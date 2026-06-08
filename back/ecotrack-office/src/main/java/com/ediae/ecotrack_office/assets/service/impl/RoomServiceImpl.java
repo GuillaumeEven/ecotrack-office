@@ -30,6 +30,13 @@ public class RoomServiceImpl implements RoomService {
     @Autowired
     private RoomMapper roomMapper;
 
+    @Override
+    public List<RoomModel> getRooms() {
+        List<RoomEntity> entities = roomRepository.findAll();
+        return entities.stream()
+                .map(roomMapper::fromEntity)
+                .toList();
+    }
 
     @Override
     public RoomModel getRoomById(Long roomId) {
@@ -37,6 +44,14 @@ public class RoomServiceImpl implements RoomService {
                 .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
         RoomModel roomModel = roomMapper.fromEntity(entity);
         return roomModel;
+    }
+
+    @Override
+    public List<RoomModel> getRoomsByFloorId(Long floorId) {
+        List<RoomEntity> entities = roomRepository.findByFloor_Id(floorId);
+        return entities.stream()
+                .map(roomMapper::fromEntity)
+                .toList();
     }
 
     @Override
@@ -88,11 +103,4 @@ public class RoomServiceImpl implements RoomService {
         roomRepository.delete(existingEntity);
     }
 
-    @Override
-    public List<RoomModel> getRoomsByFloorId(Long floorId) {
-        List<RoomEntity> entities = roomRepository.findByFloor_Id(floorId);
-        return entities.stream()
-                .map(roomMapper::fromEntity)
-                .toList();
-    }
 }
