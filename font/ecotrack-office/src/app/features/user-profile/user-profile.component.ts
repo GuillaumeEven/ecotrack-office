@@ -19,7 +19,6 @@ export interface UserProfile {
 })
 export class UserProfileComponent implements OnInit {
   activeSection: ProfileSection = 'personal';
-  twoFactorEnabled = true;
 
   profileForm!: FormGroup;
 
@@ -46,10 +45,6 @@ export class UserProfileComponent implements OnInit {
 
   setActiveSection(section: ProfileSection): void {
     this.activeSection = section;
-  }
-
-  toggleTwoFactor(): void {
-    this.twoFactorEnabled = !this.twoFactorEnabled;
   }
 
   onSaveChanges(): void {

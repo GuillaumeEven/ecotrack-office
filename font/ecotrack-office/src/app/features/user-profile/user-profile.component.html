@@ -227,42 +227,6 @@
               </button>
             </div>
 
-            <!-- 2FA Toggle -->
-            <div
-              class="flex items-center justify-between p-sm border border-outline-variant rounded-xl"
-            >
-              <div class="flex items-center gap-md">
-                <div
-                  class="w-10 h-10 bg-secondary-container/20 rounded-full flex items-center justify-center text-secondary"
-                >
-                  <span class="material-symbols-outlined">verified_user</span>
-                </div>
-                <div>
-                  <p class="font-title-md text-title-md text-on-surface">
-                    Two-Factor Authentication
-                  </p>
-                  <p class="text-on-surface-variant text-body-md">
-                    {{ twoFactorEnabled ? 'Active (SMS & Authenticator App)' : 'Disabled' }}
-                  </p>
-                </div>
-              </div>
-              <!-- Toggle switch -->
-              <div
-                (click)="toggleTwoFactor()"
-                class="relative inline-block w-12 h-6 rounded-full cursor-pointer transition-colors"
-                [class.bg-secondary]="twoFactorEnabled"
-                [class.bg-outline-variant]="!twoFactorEnabled"
-                role="switch"
-                [attr.aria-checked]="twoFactorEnabled"
-              >
-                <div
-                  class="absolute top-1 w-4 h-4 bg-white rounded-full transition-all"
-                  [class.right-1]="twoFactorEnabled"
-                  [class.left-1]="!twoFactorEnabled"
-                ></div>
-              </div>
-            </div>
-
             <!-- Sign out all -->
             <div
               class="flex items-center justify-between p-sm border border-outline-variant rounded-xl"
