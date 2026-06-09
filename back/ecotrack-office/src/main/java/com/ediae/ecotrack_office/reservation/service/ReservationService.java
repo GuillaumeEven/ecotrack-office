@@ -1,5 +1,6 @@
 package com.ediae.ecotrack_office.reservation.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,18 @@ public class ReservationService {
     public List <ReservationModel> getReservationsByResourceId (Long resourceId) {
 
         List <ReservationEntity> entities = repository.findByResourceId(resourceId);
+        List <ReservationModel> models = new ArrayList <>();
+        for (ReservationEntity entity : entities) {
+
+            models.add(ReservationMapper.fromEntity(entity));
+        }
+        return models;
+    }
+
+    public List <ReservationModel> getReservationsByFloorIdAndDate (Long floorId, String date) {
+
+        LocalDate localDate = LocalDate.parse(date);
+        List <ReservationEntity> entities = repository.findByFloorIdAndDate(floorId, localDate);
         List <ReservationModel> models = new ArrayList <>();
         for (ReservationEntity entity : entities) {
 

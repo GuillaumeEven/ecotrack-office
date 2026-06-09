@@ -1,5 +1,6 @@
 package com.ediae.ecotrack_office.reservation.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
 
     @Query("SELECT r FROM ReservationEntity r WHERE r.resource.id = :resourceId")
     List <ReservationEntity> findByResourceId (Long resourceId);
+
+    @Query("SELECT r FROM ReservationEntity r WHERE r.resource.room.floor.id = :floorId AND r.date = :date")
+    List <ReservationEntity> findByFloorIdAndDate (Long floorId, LocalDate date);
 }

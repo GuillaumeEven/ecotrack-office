@@ -22,6 +22,9 @@ import com.ediae.ecotrack_office.assets.repository.FloorRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
+import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
+import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
+import com.ediae.ecotrack_office.reservation.repository.ReservationRepository;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
@@ -37,6 +40,7 @@ public class DataLoader implements CommandLineRunner {
     private final FloorRepository floorRepository;
     private final RoomRepository roomRepository;
     private final DeskRepository deskRepository;
+    private final ReservationRepository reservationRepository;
     private final JdbcTemplate jdbcTemplate;
 
     public DataLoader(OrganizationRepository organizationRepository,
@@ -44,12 +48,14 @@ public class DataLoader implements CommandLineRunner {
                       FloorRepository floorRepository,
                       RoomRepository roomRepository,
                       DeskRepository deskRepository,
+                      ReservationRepository reservationRepository,
                       JdbcTemplate jdbcTemplate) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.floorRepository = floorRepository;
         this.roomRepository = roomRepository;
         this.deskRepository = deskRepository;
+        this.reservationRepository = reservationRepository;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -66,6 +72,8 @@ public class DataLoader implements CommandLineRunner {
         OrganizationEntity org2 = createSecondOrgIfMissing();
         createFloorsIfMissing(org2);
         createRoomsAndDesksIfMissing(org2);
+
+        createReservationsIfMissing(org);
     }
 
     /**
@@ -310,6 +318,66 @@ public class DataLoader implements CommandLineRunner {
             );
             RoomEntity saved = roomRepository.save(r);
             log.info("Seeded meeting_room '{}'", saved.getName());
+        }
+    }
+
+    /**
+     * Helper method to create reservations for specific desks on given dates
+     */
+    private void createReservationsIfMissing(OrganizationEntity org) {
+        // Get employee user
+        UserEntity employee = userRepository.findByEmail("employee@ecotrack.local")
+                .orElse(null);
+
+        if (employee == null) {
+            log.warn("Employee user not found, skipping reservation seeding.");
+            return;
+        }
+
+        // Create reservations for 14/07/2026: desks 2, 5, 6
+        LocalDate date1 = LocalDate.of(2026, 7, 14);
+        createReservationForDesks(org, employee, date1, new int[]{2, 5, 6});
+
+        // Create reservations for 15/07/2026: desks 2, 7, 9
+        LocalDate date2 = LocalDate.of(2026, 7, 15);
+        createReservationForDesks(org, employee, date2, new int[]{2, 7, 9});
+    }
+
+    /**
+     * Helper method to create reservations for specific desk numbers on a given date
+     */
+    private void createReservationForDesks(OrganizationEntity org, UserEntity user, LocalDate date, int[] deskNumbers) {
+        for (int deskNum : deskNumbers) {
+            // Find the desk by name pattern
+            String deskNamePattern = "Desk " + deskNum;
+            DeskEntity desk = deskRepository.findAll()
+                    .stream()
+                    .filter(d -> d.getName().contains(deskNamePattern))
+                    .findFirst()
+                    .orElse(null);
+
+            if (desk != null) {
+                // Check if reservation already exists
+                boolean reservationExists = reservationRepository.findByResourceId(desk.getId())
+                        .stream()
+                        .anyMatch(r -> r.getDate().equals(date));
+
+                if (!reservationExists) {
+                    ReservationEntity reservation = new ReservationEntity(
+                            date,
+                            ReservationStatus.CONFIRMED,
+                            LocalDateTime.now(),
+                            user,
+                            desk
+                    );
+                    reservationRepository.save(reservation);
+                    log.info("Seeded reservation for desk '{}' on date {}", desk.getName(), date);
+                } else {
+                    log.info("Reservation for desk '{}' on date {} already exists, skipping.", desk.getName(), date);
+                }
+            } else {
+                log.warn("Desk with pattern '{}' not found, skipping reservation.", deskNamePattern);
+            }
         }
     }
 }

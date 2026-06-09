@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,17 @@ public class ReservationController {
             dtos.add(ReservationMapper.toResponseDto(model));
         }
         return dtos;
+    }
+
+    @GetMapping("/floor/{id}/date/{date}")
+    public ResponseEntity <List <ReservationResponseDto>> getReservationsByFloorIdAndDate (@PathVariable Long id, @PathVariable String date) {
+
+        List <ReservationModel> models = service.getReservationsByFloorIdAndDate(id, date);
+        List <ReservationResponseDto> dtos = new ArrayList <>();
+        for (ReservationModel model : models) {
+            dtos.add(ReservationMapper.toResponseDto(model));
+        }
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping
