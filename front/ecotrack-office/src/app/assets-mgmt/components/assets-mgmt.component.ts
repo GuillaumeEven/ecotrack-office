@@ -2,8 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Floor, Room, Desk } from '../models';
-import { FloorService, RoomService, DeskService } from '../services';
+import { Floor, Room, Desk, Reservation } from '../models';
+import { FloorService, RoomService, DeskService, ReservationService } from '../services';
 
 /**
  * Assets Management Component
@@ -21,32 +21,38 @@ export class AssetsMgmtComponent implements OnInit {
   floors: Floor[] = [];
   rooms: Room[] = [];
   desks: Desk[] = [];
+  reservations: Reservation[] = [];
 
   selectedFloorId: number | null = null;
   selectedRoomId: number | null = null;
+  selectedDate: Date = new Date(); // Default to today
 
   loading = {
     floors: false,
     rooms: false,
-    desks: false
+    desks: false,
+    reservations: false
   };
 
   errors = {
     floors: null as string | null,
     rooms: null as string | null,
-    desks: null as string | null
+    desks: null as string | null,
+    reservations: null as string | null
   };
 
   constructor(
     private floorService: FloorService,
     private roomService: RoomService,
     private deskService: DeskService,
+    private reservationService: ReservationService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     console.log('🚀 AssetsMgmtComponent initialized, loading floors...');
     this.loadFloors();
+    this.loadReservations();
   }
 
   /**
@@ -102,6 +108,9 @@ export class AssetsMgmtComponent implements OnInit {
         console.error(err);
       }
     });
+
+    // Reload reservations for the new floor
+    this.loadReservations();
   }
 
   /**
@@ -130,5 +139,69 @@ export class AssetsMgmtComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  /**
+   * Format date to ISO string (YYYY-MM-DD)
+   */
+  private formatDateToISO(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Load reservations for selected floor and date
+   */
+  loadReservations(): void {
+    if (!this.selectedFloorId) {
+      console.log('⚠️ No floor selected, skipping reservation load');
+      return;
+    }
+
+    const dateISO = this.formatDateToISO(this.selectedDate);
+    console.log('📍 loadReservations() called for floor', this.selectedFloorId, 'date', dateISO);
+
+    this.loading.reservations = true;
+    this.errors.reservations = null;
+
+    this.reservationService.getByFloorAndDate(this.selectedFloorId, dateISO).subscribe({
+      next: (data) => {
+        console.log('✅ Reservations loaded:', data);
+        this.reservations = data;
+        this.loading.reservations = false;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('❌ Error loading reservations:', err);
+        this.errors.reservations = `Failed to load reservations: ${err.message}`;
+        this.loading.reservations = false;
+        this.cdr.markForCheck();
+        console.error(err);
+      }
+    });
+  }
+
+  /**
+   * Get desk status based on reservations
+   */
+  getDeskStatus(desk: Desk): 'AVAILABLE' | 'RESERVED' | 'UNAVAILABLE' {
+    const reservation = this.reservations.find(
+      (r) => r.deskId === desk.id && r.status === 'CONFIRMED'
+    );
+    if (reservation) return 'RESERVED';
+    if (!desk.isActive) return 'UNAVAILABLE';
+    return 'AVAILABLE';
+  }
+
+  /**
+   * Handle date change
+   */
+  onDateChange(event: any): void {
+    const newDate = new Date(event.target.value);
+    console.log('📅 Date changed to:', newDate);
+    this.selectedDate = newDate;
+    this.loadReservations();
   }
 }
