@@ -64,4 +64,17 @@ public class FloorMapper {
         return responseDto;
     }
 
+    public FloorResponseDto toResponseDto(FloorEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        Long organizationId = entity.getOrganization() != null ? entity.getOrganization().getId() : null;
+        FloorResponseDto responseDto = new FloorResponseDto();
+        responseDto.setId(entity.getId());
+        responseDto.setLevel(entity.getLevel());
+        responseDto.setIsActive(entity.getIsActive());
+        responseDto.setOrganizationId(organizationId);
+        return responseDto;
+    }
+
 }
