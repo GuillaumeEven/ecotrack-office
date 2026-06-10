@@ -1,43 +1,39 @@
-<div class="bg-surface text-on-surface font-body-md min-h-screen p-md lg:p-lg">
-  <div class="max-w-container-max mx-auto">
+<div class="main-container">
+  <div class="content-wrapper">
     <!-- Header -->
-    <div class="mb-lg">
-      <h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Assets Management</h1>
+    <div class="header">
+      <h1 class="font-headline-lg text-headline-lg text-on-surface">Assets Management</h1>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
         Manage floors, rooms, and desks in your office.
       </p>
     </div>
 
     <!-- Main Grid: Filters + Desks -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-gutter">
+    <div class="main-grid">
       <!-- Filters Column -->
-      <div class="lg:col-span-1 space-y-gutter">
+      <div class="filters-column">
         <!-- Floor Selector -->
-        <section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
-          <h3 class="font-title-md text-title-md mb-md flex items-center gap-xs">
+        <section class="section">
+          <h3 class="font-title-md text-title-md text-on-surface">
             <span class="material-symbols-outlined text-primary">layers</span>
             Select Floor
           </h3>
 
           <button
             (click)="loadFloors()"
-            class="w-full mb-md px-md py-sm bg-cinema-blue text-white rounded-lg font-body-md hover:opacity-90 active:scale-95 transition-all">
+            class="btn-primary">
             Refresh
           </button>
 
-          <div *ngIf="loading.floors" class="text-on-surface-variant font-body-md italic">Loading...</div>
-          <div *ngIf="errors.floors" class="text-error font-body-md mb-md">{{ errors.floors }}</div>
+          <div *ngIf="loading.floors" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
+          <div *ngIf="errors.floors" class="error font-body-md">{{ errors.floors }}</div>
 
-          <div class="flex flex-col gap-xs">
+          <div class="btn-floor-list">
             <button
               *ngFor="let floor of floors"
               (click)="onFloorSelect(floor.id)"
-              [class.bg-secondary-container]="selectedFloorId === floor.id"
-              [class.text-on-secondary-container]="selectedFloorId === floor.id"
-              [class.bg-surface]="selectedFloorId !== floor.id"
-              [class.border]="selectedFloorId !== floor.id"
-              [class.border-outline-variant]="selectedFloorId !== floor.id"
-              class="px-md py-sm rounded-lg text-left transition-all active:scale-95">
+              [class.active]="selectedFloorId === floor.id"
+              class="btn-floor">
               <strong>Floor {{ floor.level }}</strong>
               <br>
               <small class="text-on-surface-variant">{{ floor.isActive ? 'Active' : 'Inactive' }}</small>
@@ -46,137 +42,118 @@
         </section>
 
         <!-- Date & Filters -->
-        <section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
-          <h3 class="font-title-md text-title-md mb-md flex items-center gap-xs">
+        <section class="section">
+          <h3 class="font-title-md text-title-md text-on-surface">
             <span class="material-symbols-outlined text-primary">filter_list</span>
             Schedule
           </h3>
 
-          <div class="space-y-sm">
-            <div>
-              <label class="block text-label-sm font-label-sm text-outline mb-xs uppercase">Select Date</label>
-              <div class="relative">
-                <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline text-[18px]">schedule</span>
-                <input
-                  type="date"
-                  [value]="selectedDate | date:'yyyy-MM-dd'"
-                  (change)="onDateChange($event)"
-                  class="w-full pl-xl pr-sm py-xs bg-surface border border-outline-variant rounded-lg focus:ring-2 focus:ring-cinema-blue outline-none font-body-md text-body-md"/>
-              </div>
-            </div>
+          <div class="form-group">
+            <label class="form-label">Select Date</label>
+            <input
+              type="date"
+              [value]="selectedDate | date:'yyyy-MM-dd'"
+              (change)="onDateChange($event)"
+              class="form-input"/>
           </div>
 
-          <div *ngIf="loading.reservations" class="mt-sm text-on-surface-variant font-body-md italic">Loading reservations...</div>
-          <div *ngIf="errors.reservations" class="mt-sm text-error font-body-md">{{ errors.reservations }}</div>
+          <div *ngIf="loading.reservations" class="loading text-on-surface-variant font-body-md">Loading reservations...</div>
+          <div *ngIf="errors.reservations" class="error text-error font-body-md">{{ errors.reservations }}</div>
         </section>
       </div>
 
       <!-- Rooms & Desks Column -->
-      <div class="lg:col-span-3 space-y-gutter">
+      <div class="rooms-desks-column">
         <!-- Rooms Section -->
-        <section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
-          <h3 class="font-title-md text-title-md mb-md">Rooms</h3>
+        <section class="section">
+          <h3 class="font-title-md text-title-md text-on-surface">Rooms</h3>
 
-          <div *ngIf="!selectedFloorId" class="text-on-surface-variant font-body-md italic">
+          <div *ngIf="!selectedFloorId" class="text-on-surface-variant font-body-md italic loading">
             Select a floor to view rooms
           </div>
 
           <div *ngIf="selectedFloorId">
-            <div *ngIf="loading.rooms" class="text-on-surface-variant font-body-md italic">Loading...</div>
-            <div *ngIf="errors.rooms" class="text-error font-body-md mb-md">{{ errors.rooms }}</div>
+            <div *ngIf="loading.rooms" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
+            <div *ngIf="errors.rooms" class="error text-error font-body-md">{{ errors.rooms }}</div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-sm">
+            <div class="btn-room-grid">
               <button
                 *ngFor="let room of rooms"
                 (click)="onRoomSelect(room.id)"
-                [class.bg-secondary-container]="selectedRoomId === room.id"
-                [class.text-on-secondary-container]="selectedRoomId === room.id"
-                [class.bg-surface-container]="selectedRoomId !== room.id"
-                [class.border]="selectedRoomId !== room.id"
-                [class.border-outline-variant]="selectedRoomId !== room.id"
-                class="px-md py-sm rounded-lg text-left transition-all active:scale-95">
-                <strong class="block text-body-md">{{ room.name }}</strong>
+                [class.active]="selectedRoomId === room.id"
+                class="btn-room">
+                <strong class="text-body-md">{{ room.name }}</strong>
                 <small class="text-on-surface-variant">Cap: {{ room.capacity }}</small>
               </button>
             </div>
 
             <div
               *ngIf="rooms.length === 0 && !loading.rooms && !errors.rooms"
-              class="text-on-surface-variant font-body-md italic mt-md">
+              class="text-on-surface-variant font-body-md italic loading">
               No rooms found.
             </div>
           </div>
         </section>
 
-        <!-- Desks Section (Cinema-style Grid) -->
-        <section class="bg-[#0F172A] rounded-2xl overflow-hidden flex flex-col min-h-[500px] shadow-2xl">
-          <!-- Header -->
-          <div class="p-lg border-b border-white/10">
-            <h2 class="text-white font-headline-md text-headline-md">
-              {{ selectedRoomId ? 'Desks' : 'Select a room to view desks' }}
-            </h2>
-            <p class="text-slate-400 font-body-md mt-xs">
-              {{ selectedDate | date:'MMMM d, yyyy' }} - {{ reservations.length }} reservation(s)
+        <!-- Desks Section - Cinema Style -->
+        <section class="desks-cinema">
+          <div class="cinema-header">
+            <h2 class="text-headline-md text-white">Desk Schedule</h2>
+            <p class="text-body-md text-surface-dim" *ngIf="selectedDate">
+              Date: {{ selectedDate | date: 'EEEE, MMMM d, yyyy' }}
             </p>
           </div>
 
-          <!-- Legend -->
-          <div class="px-lg pt-md flex gap-md flex-wrap">
-            <div class="flex items-center gap-xs">
-              <div class="w-3 h-3 rounded-sm border border-available-green"></div>
-              <span class="text-white text-label-sm font-label-sm">Available</span>
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-color available"></div>
+              <span class="legend-text">AVAILABLE</span>
             </div>
-            <div class="flex items-center gap-xs">
-              <div class="w-3 h-3 rounded-sm bg-cinema-blue"></div>
-              <span class="text-white text-label-sm font-label-sm">Selected</span>
+            <div class="legend-item">
+              <div class="legend-color selected"></div>
+              <span class="legend-text">SELECTED</span>
             </div>
-            <div class="flex items-center gap-xs">
-              <div class="w-3 h-3 rounded-sm bg-slate-600"></div>
-              <span class="text-white text-label-sm font-label-sm">Reserved</span>
+            <div class="legend-item">
+              <div class="legend-color reserved"></div>
+              <span class="legend-text">RESERVED</span>
             </div>
-            <div class="flex items-center gap-xs">
-              <div class="w-3 h-3 rounded-sm bg-error"></div>
-              <span class="text-white text-label-sm font-label-sm">Unavailable</span>
+            <div class="legend-item">
+              <div class="legend-color unavailable"></div>
+              <span class="legend-text">UNAVAILABLE</span>
             </div>
           </div>
 
-          <!-- Grid -->
-          <div class="flex-1 p-xl overflow-auto">
-            <div *ngIf="!selectedRoomId" class="flex items-center justify-center h-full">
-              <p class="text-slate-400 text-body-lg">Select a room to view available desks</p>
+          <div class="desks-grid-wrapper">
+            <div *ngIf="!selectedRoomId" class="empty-state">
+              <p>Select a room to view desks</p>
             </div>
 
-            <div *ngIf="selectedRoomId" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-sm">
+            <div *ngIf="selectedRoomId" class="desks-grid">
               <button
                 *ngFor="let desk of desks"
-                [ngClass]="{
-                  'border border-available-green/40 hover:bg-available-green/20 text-available-green': getDeskStatus(desk) === 'AVAILABLE',
-                  'bg-slate-600 text-slate-300 cursor-not-allowed': getDeskStatus(desk) === 'RESERVED',
-                  'bg-error text-white cursor-not-allowed': getDeskStatus(desk) === 'UNAVAILABLE'
-                }"
                 [disabled]="getDeskStatus(desk) !== 'AVAILABLE'"
-                class="w-12 h-12 rounded-lg flex items-center justify-center text-[12px] font-bold transition-all cursor-pointer active:scale-95 relative group"
-                title="{{ desk.name }} - {{ getDeskStatus(desk) }}">
+                [class.available]="getDeskStatus(desk) === 'AVAILABLE'"
+                [class.reserved]="getDeskStatus(desk) === 'RESERVED'"
+                [class.unavailable]="getDeskStatus(desk) === 'UNAVAILABLE'"
+                class="desk-btn"
+                [attr.title]="'Desk ' + desk.name + ' - ' + getDeskStatus(desk)">
                 {{ desk.name }}
-                <div
-                  class="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-slate-900 px-sm py-1 rounded shadow-lg text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
-                  {{ desk.name }} ({{ getDeskStatus(desk) }})
-                </div>
+                <span class="desk-tooltip">{{ getDeskStatus(desk) }}</span>
               </button>
             </div>
 
             <div
               *ngIf="selectedRoomId && desks.length === 0 && !loading.desks && !errors.desks"
-              class="flex items-center justify-center h-full">
-              <p class="text-slate-400 text-body-lg">No desks found for this room</p>
+              class="empty-state">
+              <p>No desks found for this room.</p>
             </div>
 
-            <div *ngIf="loading.desks" class="flex items-center justify-center h-full">
-              <p class="text-slate-400 text-body-lg italic">Loading desks...</p>
+            <div *ngIf="loading.desks" class="empty-state">
+              <p class="loading">Loading desks...</p>
             </div>
 
-            <div *ngIf="errors.desks" class="flex items-center justify-center h-full">
-              <p class="text-error text-body-lg">{{ errors.desks }}</p>
+            <div *ngIf="errors.desks" class="empty-state">
+              <p class="error">{{ errors.desks }}</p>
             </div>
           </div>
         </section>
@@ -184,20 +161,24 @@
     </div>
 
     <!-- Debug Info -->
-    <div class="mt-lg p-md bg-surface-container-lowest border border-outline-variant rounded-xl">
-      <h3 class="font-title-md text-title-md mb-sm">Debug Info</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-md text-body-md">
-        <div>
-          <strong>Floor:</strong> {{ selectedFloorId || 'None' }}
+    <div class="debug-section">
+      <h3 class="font-title-md text-title-md">Debug Info</h3>
+      <div class="debug-grid">
+        <div class="debug-item">
+          <strong>Floor:</strong>
+          {{ selectedFloorId || 'None' }}
         </div>
-        <div>
-          <strong>Room:</strong> {{ selectedRoomId || 'None' }}
+        <div class="debug-item">
+          <strong>Room:</strong>
+          {{ selectedRoomId || 'None' }}
         </div>
-        <div>
-          <strong>Date:</strong> {{ selectedDate | date:'yyyy-MM-dd' }}
+        <div class="debug-item">
+          <strong>Date:</strong>
+          {{ selectedDate | date:'yyyy-MM-dd' }}
         </div>
-        <div>
-          <strong>Reservations:</strong> {{ reservations.length }}
+        <div class="debug-item">
+          <strong>Reservations:</strong>
+          {{ reservations.length }}
         </div>
       </div>
     </div>
