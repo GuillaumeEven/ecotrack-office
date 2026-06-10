@@ -61,6 +61,20 @@ public class DeskMapper {
         );
     }
 
+    public DeskResponseDto toResponseDto(DeskEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        return new DeskResponseDto(
+            entity.getId(),
+            entity.getName(),
+            entity.getStatus() != null ? entity.getStatus().name() : null,
+            entity.getIsActive(),
+            entity.getEquipmentList(),
+            entity.getRoomId()
+        );
+    }
+
     public DeskModel fromRequestDto(DeskRequestDto dto) {
         if (dto == null) {
             return null;

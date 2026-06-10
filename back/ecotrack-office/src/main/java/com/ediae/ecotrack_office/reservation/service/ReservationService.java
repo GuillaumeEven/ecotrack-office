@@ -8,6 +8,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ediae.ecotrack_office.assets.entity.DeskEntity;
+import com.ediae.ecotrack_office.assets.entity.RoomEntity;
+import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
+import com.ediae.ecotrack_office.assets.enums.RoomType;
+import com.ediae.ecotrack_office.assets.repository.DeskRepository;
+import com.ediae.ecotrack_office.assets.repository.RoomRepository;
+import com.ediae.ecotrack_office.assets.service.ResourceStatusCalculatorService;
 import com.ediae.ecotrack_office.reservation.dto.ReservationCreateDto;
 import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
 import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
@@ -21,6 +28,15 @@ public class ReservationService {
 
     @Autowired
     private ReservationRepository repository;
+
+    @Autowired
+    private ResourceStatusCalculatorService resourceStatusCalculatorService;
+
+    @Autowired
+    private DeskRepository deskRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     public List <ReservationModel> getReservationsByUserId (Long userId) {
 
@@ -77,13 +93,53 @@ public class ReservationService {
         return ReservationMapper.fromEntity(entity.get());
     }
 
-    public ReservationModel createReservation (ReservationCreateDto dto) { // RECORDAR QUE HAY QUE CAMBIAR EL ESTATUS DE LO QUE ESTÁS RESERVANDO CON EL SERVICIO DE RESOURCE
+    public ReservationModel createReservation (ReservationCreateDto dto) {
 
         ReservationModel model = ReservationMapper.fromCreateDto(dto);
         ReservationEntity entity = ReservationMapper.toEntity(model);
-        entity.setStatus(ReservationStatus.RELEASED);
-        repository.save(entity);
-        return ReservationMapper.fromEntity(entity);
+        entity.setStatus(ReservationStatus.CONFIRMED);
+        ReservationEntity savedEntity = repository.save(entity);
+
+        // Trigger desk_area unlock logic after creating reservation
+        triggerDeskAreaUnlock(savedEntity);
+
+        return ReservationMapper.fromEntity(savedEntity);
+    }
+
+    /**
+     * Triggers desk_area unlock if the reserved desk's room reaches >= 80% occupancy on that date
+     */
+    private void triggerDeskAreaUnlock(ReservationEntity reservation) {
+        try {
+            // Verify if the reserved resource is a Desk
+            if (!(reservation.getResource() instanceof DeskEntity)) {
+                return; // Not a desk, no unlock needed
+            }
+
+            DeskEntity desk = (DeskEntity) reservation.getResource();
+            RoomEntity room = desk.getRoom();
+
+            if (room == null || !RoomType.DESK_AREA.equals(room.getType())) {
+                return; // Not a desk_area, no unlock needed
+            }
+
+            // Calculate current room status for the reservation date
+            ResourceStatus roomStatus = resourceStatusCalculatorService.calculateRoomStatus(room, reservation.getDate());
+
+            // If room reached >= 80% occupancy, unlock the next available desk_area
+            if (roomStatus == ResourceStatus.RESERVED) {
+                RoomEntity nextDeskArea = resourceStatusCalculatorService.getNextAvailableDeskArea(room.getFloor(), reservation.getDate());
+
+                if (nextDeskArea != null) {
+                    nextDeskArea.setStatus(ResourceStatus.AVAILABLE);
+                    roomRepository.save(nextDeskArea);
+                }
+            }
+        } catch (Exception e) {
+            // Log error but don't fail the reservation
+            System.err.println("Error triggering desk_area unlock: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public ReservationModel updateReservationById (Long id, ReservationUpdateDto dto) {
