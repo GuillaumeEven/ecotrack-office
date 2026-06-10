@@ -1,104 +1,205 @@
-<div style="font-family: Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto;">
-  <h1>Assets Management</h1>
-  <p>Manage floors, rooms, and desks in your office.</p>
+<div class="bg-surface text-on-surface font-body-md min-h-screen p-md lg:p-lg">
+  <div class="max-w-container-max mx-auto">
+    <!-- Header -->
+    <div class="mb-lg">
+      <h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Assets Management</h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant">
+        Manage floors, rooms, and desks in your office.
+      </p>
+    </div>
 
-  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px;">
-    <!-- FLOORS SECTION -->
-    <section style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
-      <h2>Floors</h2>
+    <!-- Main Grid: Filters + Desks -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-gutter">
+      <!-- Filters Column -->
+      <div class="lg:col-span-1 space-y-gutter">
+        <!-- Floor Selector -->
+        <section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+          <h3 class="font-title-md text-title-md mb-md flex items-center gap-xs">
+            <span class="material-symbols-outlined text-primary">layers</span>
+            Select Floor
+          </h3>
 
-      <button
-        (click)="loadFloors()"
-        style="padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px;">
-        Refresh Floors
-      </button>
-
-      <div *ngIf="loading.floors" style="color: #666; font-style: italic;">Loading...</div>
-      <div *ngIf="errors.floors" style="color: red; margin-bottom: 10px;">{{ errors.floors }}</div>
-
-      <div style="display: flex; flex-direction: column; gap: 8px;">
-        <button
-          *ngFor="let floor of floors"
-          (click)="onFloorSelect(floor.id)"
-          [style.background-color]="selectedFloorId === floor.id ? '#28a745' : '#f0f0f0'"
-          [style.color]="selectedFloorId === floor.id ? 'white' : 'black'"
-          style="padding: 10px; text-align: left; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
-          <strong>Floor {{ floor.level }}</strong>
-          <br>
-          <small>Status: {{ floor.isActive ? 'Active' : 'Inactive' }}</small>
-        </button>
-      </div>
-    </section>
-
-    <!-- ROOMS SECTION -->
-    <section style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
-      <h2>Rooms</h2>
-
-      <div *ngIf="!selectedFloorId" style="color: #999; font-style: italic;">
-        Select a floor to view rooms
-      </div>
-
-      <div *ngIf="selectedFloorId">
-        <div *ngIf="loading.rooms" style="color: #666; font-style: italic;">Loading...</div>
-        <div *ngIf="errors.rooms" style="color: red; margin-bottom: 10px;">{{ errors.rooms }}</div>
-
-        <div style="display: flex; flex-direction: column; gap: 8px;">
           <button
-            *ngFor="let room of rooms"
-            (click)="onRoomSelect(room.id)"
-            [style.background-color]="selectedRoomId === room.id ? '#28a745' : '#f0f0f0'"
-            [style.color]="selectedRoomId === room.id ? 'white' : 'black'"
-            style="padding: 10px; text-align: left; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
-            <strong>{{ room.name }}</strong> (Cap: {{ room.capacity }})
-            <br>
-            <small>{{ room.roomType }} | Status: {{ room.status }}</small>
+            (click)="loadFloors()"
+            class="w-full mb-md px-md py-sm bg-cinema-blue text-white rounded-lg font-body-md hover:opacity-90 active:scale-95 transition-all">
+            Refresh
           </button>
-        </div>
 
-        <div *ngIf="rooms.length === 0 && !loading.rooms && !errors.rooms" style="color: #999; font-style: italic; margin-top: 10px;">
-          No rooms found for this floor.
-        </div>
-      </div>
-    </section>
+          <div *ngIf="loading.floors" class="text-on-surface-variant font-body-md italic">Loading...</div>
+          <div *ngIf="errors.floors" class="text-error font-body-md mb-md">{{ errors.floors }}</div>
 
-    <!-- DESKS SECTION -->
-    <section style="border: 1px solid #ddd; padding: 15px; border-radius: 4px;">
-      <h2>Desks</h2>
-
-      <div *ngIf="!selectedRoomId" style="color: #999; font-style: italic;">
-        Select a room to view desks
-      </div>
-
-      <div *ngIf="selectedRoomId">
-        <div *ngIf="loading.desks" style="color: #666; font-style: italic;">Loading...</div>
-        <div *ngIf="errors.desks" style="color: red; margin-bottom: 10px;">{{ errors.desks }}</div>
-
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div
-            *ngFor="let desk of desks"
-            style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #fafafa;">
-            <strong>{{ desk.name }}</strong>
-            <br>
-            <small>Status: {{ desk.status }} | Active: {{ desk.isActive ? 'Yes' : 'No' }}</small>
-            <br>
-            <small *ngIf="desk.equipmentList">Equipment: {{ desk.equipmentList }}</small>
+          <div class="flex flex-col gap-xs">
+            <button
+              *ngFor="let floor of floors"
+              (click)="onFloorSelect(floor.id)"
+              [class.bg-secondary-container]="selectedFloorId === floor.id"
+              [class.text-on-secondary-container]="selectedFloorId === floor.id"
+              [class.bg-surface]="selectedFloorId !== floor.id"
+              [class.border]="selectedFloorId !== floor.id"
+              [class.border-outline-variant]="selectedFloorId !== floor.id"
+              class="px-md py-sm rounded-lg text-left transition-all active:scale-95">
+              <strong>Floor {{ floor.level }}</strong>
+              <br>
+              <small class="text-on-surface-variant">{{ floor.isActive ? 'Active' : 'Inactive' }}</small>
+            </button>
           </div>
-        </div>
+        </section>
 
-        <div *ngIf="desks.length === 0 && !loading.desks && !errors.desks" style="color: #999; font-style: italic; margin-top: 10px;">
-          No desks found for this room.
+        <!-- Date & Filters -->
+        <section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+          <h3 class="font-title-md text-title-md mb-md flex items-center gap-xs">
+            <span class="material-symbols-outlined text-primary">filter_list</span>
+            Schedule
+          </h3>
+
+          <div class="space-y-sm">
+            <div>
+              <label class="block text-label-sm font-label-sm text-outline mb-xs uppercase">Select Date</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline text-[18px]">schedule</span>
+                <input
+                  type="date"
+                  [value]="selectedDate | date:'yyyy-MM-dd'"
+                  (change)="onDateChange($event)"
+                  class="w-full pl-xl pr-sm py-xs bg-surface border border-outline-variant rounded-lg focus:ring-2 focus:ring-cinema-blue outline-none font-body-md text-body-md"/>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="loading.reservations" class="mt-sm text-on-surface-variant font-body-md italic">Loading reservations...</div>
+          <div *ngIf="errors.reservations" class="mt-sm text-error font-body-md">{{ errors.reservations }}</div>
+        </section>
+      </div>
+
+      <!-- Rooms & Desks Column -->
+      <div class="lg:col-span-3 space-y-gutter">
+        <!-- Rooms Section -->
+        <section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+          <h3 class="font-title-md text-title-md mb-md">Rooms</h3>
+
+          <div *ngIf="!selectedFloorId" class="text-on-surface-variant font-body-md italic">
+            Select a floor to view rooms
+          </div>
+
+          <div *ngIf="selectedFloorId">
+            <div *ngIf="loading.rooms" class="text-on-surface-variant font-body-md italic">Loading...</div>
+            <div *ngIf="errors.rooms" class="text-error font-body-md mb-md">{{ errors.rooms }}</div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-sm">
+              <button
+                *ngFor="let room of rooms"
+                (click)="onRoomSelect(room.id)"
+                [class.bg-secondary-container]="selectedRoomId === room.id"
+                [class.text-on-secondary-container]="selectedRoomId === room.id"
+                [class.bg-surface-container]="selectedRoomId !== room.id"
+                [class.border]="selectedRoomId !== room.id"
+                [class.border-outline-variant]="selectedRoomId !== room.id"
+                class="px-md py-sm rounded-lg text-left transition-all active:scale-95">
+                <strong class="block text-body-md">{{ room.name }}</strong>
+                <small class="text-on-surface-variant">Cap: {{ room.capacity }}</small>
+              </button>
+            </div>
+
+            <div
+              *ngIf="rooms.length === 0 && !loading.rooms && !errors.rooms"
+              class="text-on-surface-variant font-body-md italic mt-md">
+              No rooms found.
+            </div>
+          </div>
+        </section>
+
+        <!-- Desks Section (Cinema-style Grid) -->
+        <section class="bg-[#0F172A] rounded-2xl overflow-hidden flex flex-col min-h-[500px] shadow-2xl">
+          <!-- Header -->
+          <div class="p-lg border-b border-white/10">
+            <h2 class="text-white font-headline-md text-headline-md">
+              {{ selectedRoomId ? 'Desks' : 'Select a room to view desks' }}
+            </h2>
+            <p class="text-slate-400 font-body-md mt-xs">
+              {{ selectedDate | date:'MMMM d, yyyy' }} - {{ reservations.length }} reservation(s)
+            </p>
+          </div>
+
+          <!-- Legend -->
+          <div class="px-lg pt-md flex gap-md flex-wrap">
+            <div class="flex items-center gap-xs">
+              <div class="w-3 h-3 rounded-sm border border-available-green"></div>
+              <span class="text-white text-label-sm font-label-sm">Available</span>
+            </div>
+            <div class="flex items-center gap-xs">
+              <div class="w-3 h-3 rounded-sm bg-cinema-blue"></div>
+              <span class="text-white text-label-sm font-label-sm">Selected</span>
+            </div>
+            <div class="flex items-center gap-xs">
+              <div class="w-3 h-3 rounded-sm bg-slate-600"></div>
+              <span class="text-white text-label-sm font-label-sm">Reserved</span>
+            </div>
+            <div class="flex items-center gap-xs">
+              <div class="w-3 h-3 rounded-sm bg-error"></div>
+              <span class="text-white text-label-sm font-label-sm">Unavailable</span>
+            </div>
+          </div>
+
+          <!-- Grid -->
+          <div class="flex-1 p-xl overflow-auto">
+            <div *ngIf="!selectedRoomId" class="flex items-center justify-center h-full">
+              <p class="text-slate-400 text-body-lg">Select a room to view available desks</p>
+            </div>
+
+            <div *ngIf="selectedRoomId" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-sm">
+              <button
+                *ngFor="let desk of desks"
+                [ngClass]="{
+                  'border border-available-green/40 hover:bg-available-green/20 text-available-green': getDeskStatus(desk) === 'AVAILABLE',
+                  'bg-slate-600 text-slate-300 cursor-not-allowed': getDeskStatus(desk) === 'RESERVED',
+                  'bg-error text-white cursor-not-allowed': getDeskStatus(desk) === 'UNAVAILABLE'
+                }"
+                [disabled]="getDeskStatus(desk) !== 'AVAILABLE'"
+                class="w-12 h-12 rounded-lg flex items-center justify-center text-[12px] font-bold transition-all cursor-pointer active:scale-95 relative group"
+                title="{{ desk.name }} - {{ getDeskStatus(desk) }}">
+                {{ desk.name }}
+                <div
+                  class="absolute -top-12 left-1/2 -translate-x-1/2 bg-white text-slate-900 px-sm py-1 rounded shadow-lg text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+                  {{ desk.name }} ({{ getDeskStatus(desk) }})
+                </div>
+              </button>
+            </div>
+
+            <div
+              *ngIf="selectedRoomId && desks.length === 0 && !loading.desks && !errors.desks"
+              class="flex items-center justify-center h-full">
+              <p class="text-slate-400 text-body-lg">No desks found for this room</p>
+            </div>
+
+            <div *ngIf="loading.desks" class="flex items-center justify-center h-full">
+              <p class="text-slate-400 text-body-lg italic">Loading desks...</p>
+            </div>
+
+            <div *ngIf="errors.desks" class="flex items-center justify-center h-full">
+              <p class="text-error text-body-lg">{{ errors.desks }}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Debug Info -->
+    <div class="mt-lg p-md bg-surface-container-lowest border border-outline-variant rounded-xl">
+      <h3 class="font-title-md text-title-md mb-sm">Debug Info</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-md text-body-md">
+        <div>
+          <strong>Floor:</strong> {{ selectedFloorId || 'None' }}
+        </div>
+        <div>
+          <strong>Room:</strong> {{ selectedRoomId || 'None' }}
+        </div>
+        <div>
+          <strong>Date:</strong> {{ selectedDate | date:'yyyy-MM-dd' }}
+        </div>
+        <div>
+          <strong>Reservations:</strong> {{ reservations.length }}
         </div>
       </div>
-    </section>
-  </div>
-
-  <!-- DEBUG INFO (remove later) -->
-  <div style="margin-top: 30px; padding: 15px; background-color: #f9f9f9; border: 1px solid #eee; border-radius: 4px;">
-    <h3>Debug Info</h3>
-    <p><strong>Selected Floor ID:</strong> {{ selectedFloorId || 'None' }}</p>
-    <p><strong>Selected Room ID:</strong> {{ selectedRoomId || 'None' }}</p>
-    <p><strong>Floors Count:</strong> {{ floors.length }}</p>
-    <p><strong>Rooms Count:</strong> {{ rooms.length }}</p>
-    <p><strong>Desks Count:</strong> {{ desks.length }}</p>
+    </div>
   </div>
 </div>

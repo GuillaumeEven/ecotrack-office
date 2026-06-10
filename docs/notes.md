@@ -117,3 +117,8 @@ Las dos tecnologías que no hemos tratado en clase son:
   Decisión provisional:
 
   - Sistema de notificaciones: deshabilitado por el momento.
+
+
+TODO:
+- harmonizar los controladores: poner cualquier respuesta como ResponseEntity
+- repensar los status de resources: una resource no puede ser reservada o disponible en si misma, depende de las reservas...
