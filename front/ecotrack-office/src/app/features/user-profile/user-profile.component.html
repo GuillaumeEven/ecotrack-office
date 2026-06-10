@@ -1,0 +1,275 @@
+<main class="lg:pl-64 pt-20 min-h-screen">
+  <div class="max-w-container-max mx-auto px-lg py-xl">
+    <!-- Page Header -->
+    <div class="mb-xl">
+      <h1 class="font-headline-lg text-headline-lg text-on-surface">User Profile</h1>
+      <p class="text-on-surface-variant font-body-lg text-body-lg">
+        Manage your personal information and security preferences.
+      </p>
+    </div>
+
+    <!-- Bento Grid -->
+    <div class="grid grid-cols-12 gap-gutter">
+      <!-- LEFT COLUMN: Identity card + Quick nav -->
+      <div class="col-span-12 md:col-span-4 flex flex-col gap-gutter">
+        <!-- Identity card -->
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+          <div class="flex flex-col items-center text-center">
+            <!-- Avatar with upload button -->
+            <div class="relative group cursor-pointer mb-md" (click)="onChangePhoto()">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnHu9QB7UKbkPpUnc2e48oUrKYZyVqH_Fafdqai4PKK7eO79-an2Uhq9UNwtbNRA9ag9one6kkuqN-VAel9wHbJT5L-ks_oCU2kG0SL244tTKAxYIFs2baTBJdIDLROWy4h0KO9ccsahkXVDSyZyRNHZv-Y3qyPjG4QnSV1R0OhnhyY8l0oQOO86rLLjBF87bPWu6GQhE66cD0EkDBULteYUU-CCdaHM6TPf_CN4n1SIUKupVC6Hccx_4q6L8jj6IKwiDD5jFUYfyf"
+                alt="User profile photo"
+                class="w-32 h-32 rounded-full object-cover border-4 border-surface-container-high shadow-lg transition-transform group-hover:scale-105"
+              />
+              <div
+                class="absolute bottom-0 right-0 bg-primary text-on-primary p-xs rounded-full shadow-md"
+              >
+                <span class="material-symbols-outlined text-[20px]">photo_camera</span>
+              </div>
+            </div>
+
+            <h2 class="font-headline-md text-headline-md text-on-surface">Alex Thompson</h2>
+            <p class="text-on-surface-variant font-body-md text-body-md">
+              Facility Manager, Floor 4
+            </p>
+
+            <!-- Meta info -->
+            <div class="mt-md w-full pt-md border-t border-outline-variant space-y-sm">
+              <div class="flex justify-between items-center px-sm">
+                <span class="text-on-surface-variant text-label-sm font-label-sm"
+                  >ACCOUNT STATUS</span
+                >
+                <span
+                  class="bg-secondary-container/20 text-secondary text-[12px] font-bold px-sm py-[2px] rounded-full"
+                >
+                  Active
+                </span>
+              </div>
+              <div class="flex justify-between items-center px-sm">
+                <span class="text-on-surface-variant text-label-sm font-label-sm">SINCE</span>
+                <span class="text-on-surface text-[12px] font-medium">October 2022</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick navigation -->
+        <div
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden"
+        >
+          <button
+            (click)="setActiveSection('personal')"
+            [class.text-primary]="activeSection === 'personal'"
+            [class.font-bold]="activeSection === 'personal'"
+            [class.text-on-surface-variant]="activeSection !== 'personal'"
+            class="w-full flex items-center gap-md px-md py-sm hover:bg-surface-container-low transition-colors"
+          >
+            <span class="material-symbols-outlined">person</span>
+            <span class="font-title-md text-title-md">Personal Data</span>
+          </button>
+          <button
+            (click)="setActiveSection('security')"
+            [class.text-primary]="activeSection === 'security'"
+            [class.font-bold]="activeSection === 'security'"
+            [class.text-on-surface-variant]="activeSection !== 'security'"
+            class="w-full flex items-center gap-md px-md py-sm hover:bg-surface-container-low transition-colors"
+          >
+            <span class="material-symbols-outlined">security</span>
+            <span class="font-title-md text-title-md">Security Settings</span>
+          </button>
+          <button
+            (click)="setActiveSection('notifications')"
+            [class.text-primary]="activeSection === 'notifications'"
+            [class.font-bold]="activeSection === 'notifications'"
+            [class.text-on-surface-variant]="activeSection !== 'notifications'"
+            class="w-full flex items-center gap-md px-md py-sm hover:bg-surface-container-low transition-colors"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="font-title-md text-title-md">Notifications</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Forms -->
+      <div class="col-span-12 md:col-span-8 space-y-gutter">
+        <!-- Personal Information Form -->
+        <div
+          *ngIf="activeSection === 'personal'"
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md"
+        >
+          <div
+            class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm"
+          >
+            <h3 class="font-headline-md text-headline-md text-on-surface">Personal Information</h3>
+            <span class="material-symbols-outlined text-on-surface-variant">edit</span>
+          </div>
+
+          <form
+            [formGroup]="profileForm"
+            (ngSubmit)="onSaveChanges()"
+            class="grid grid-cols-1 md:grid-cols-2 gap-md"
+          >
+            <!-- Full Name -->
+            <div class="space-y-xs">
+              <label class="text-on-surface font-label-sm text-label-sm block">FULL NAME</label>
+              <input
+                type="text"
+                formControlName="fullName"
+                class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
+                [class.border-error]="
+                  profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched
+                "
+              />
+              <p
+                *ngIf="profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched"
+                class="text-error text-[12px]"
+              >
+                Full name is required.
+              </p>
+            </div>
+
+            <!-- Email -->
+            <div class="space-y-xs">
+              <label class="text-on-surface font-label-sm text-label-sm block">EMAIL ADDRESS</label>
+              <input
+                type="email"
+                formControlName="email"
+                class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
+                [class.border-error]="
+                  profileForm.get('email')?.invalid && profileForm.get('email')?.touched
+                "
+              />
+              <p
+                *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+                class="text-error text-[12px]"
+              >
+                Please enter a valid email.
+              </p>
+            </div>
+
+            <!-- Department -->
+            <div class="space-y-xs">
+              <label class="text-on-surface font-label-sm text-label-sm block">DEPARTMENT</label>
+              <select
+                formControlName="department"
+                class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
+              >
+                <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+              </select>
+            </div>
+
+            <!-- Work Location -->
+            <div class="space-y-xs">
+              <label class="text-on-surface font-label-sm text-label-sm block">WORK LOCATION</label>
+              <input
+                type="text"
+                formControlName="workLocation"
+                class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
+              />
+            </div>
+
+            <!-- Actions -->
+            <div class="col-span-full pt-md flex justify-end gap-sm">
+              <button
+                type="button"
+                (click)="onDiscardChanges()"
+                class="px-lg py-sm text-on-surface-variant border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-bold"
+              >
+                Discard Changes
+              </button>
+              <button
+                type="submit"
+                [disabled]="profileForm.invalid"
+                class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Security & Privacy -->
+        <div
+          *ngIf="activeSection === 'security'"
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md"
+        >
+          <div
+            class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm"
+          >
+            <h3 class="font-headline-md text-headline-md text-on-surface">
+              Security &amp; Privacy
+            </h3>
+            <span class="material-symbols-outlined text-on-surface-variant">lock</span>
+          </div>
+
+          <div class="space-y-md">
+            <!-- Change Password -->
+            <div
+              class="flex items-center justify-between p-sm border border-outline-variant rounded-xl"
+            >
+              <div class="flex items-center gap-md">
+                <div
+                  class="w-10 h-10 bg-surface-container-high rounded-full flex items-center justify-center text-primary"
+                >
+                  <span class="material-symbols-outlined">password</span>
+                </div>
+                <div>
+                  <p class="font-title-md text-title-md text-on-surface">Change Password</p>
+                  <p class="text-on-surface-variant text-body-md">Last changed 4 months ago</p>
+                </div>
+              </div>
+              <button
+                (click)="onChangePassword()"
+                class="text-on-tertiary-container font-bold px-sm py-xs hover:bg-surface-container-high rounded-xl transition-colors"
+              >
+                Update
+              </button>
+            </div>
+
+            <!-- Sign out all -->
+            <div
+              class="flex items-center justify-between p-sm border border-outline-variant rounded-xl"
+            >
+              <div class="flex items-center gap-md">
+                <div
+                  class="w-10 h-10 bg-error-container/30 rounded-full flex items-center justify-center text-error"
+                >
+                  <span class="material-symbols-outlined">logout</span>
+                </div>
+                <div>
+                  <p class="font-title-md text-title-md text-error">Logout from all devices</p>
+                  <p class="text-on-surface-variant text-body-md">
+                    Removes access from 3 active sessions
+                  </p>
+                </div>
+              </div>
+              <button
+                (click)="onSignOutAll()"
+                class="text-error font-bold px-sm py-xs hover:bg-error-container rounded-xl transition-colors"
+              >
+                Sign out all
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications (placeholder) -->
+        <div
+          *ngIf="activeSection === 'notifications'"
+          class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md"
+        >
+          <div
+            class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm"
+          >
+            <h3 class="font-headline-md text-headline-md text-on-surface">Notifications</h3>
+            <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+          </div>
+          <p class="text-on-surface-variant font-body-lg text-body-lg">
+            Notification preferences coming soon.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
