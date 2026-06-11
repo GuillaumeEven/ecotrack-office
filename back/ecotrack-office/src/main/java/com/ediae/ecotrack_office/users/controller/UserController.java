@@ -1,17 +1,28 @@
 package com.ediae.ecotrack_office.users.controller;
 
-import com.ediae.ecotrack_office.shared.context.RequestContext;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ediae.ecotrack_office.shared.dto.PageResponseDto;
 import com.ediae.ecotrack_office.shared.guard.AdminGuard;
+import com.ediae.ecotrack_office.users.dto.ChangePasswordRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
 import com.ediae.ecotrack_office.users.service.UserService;
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 @RestController
@@ -36,12 +47,21 @@ public class UserController {
     }
 
     // PATCH /api/v1/users/me
-    // Solo puede modificar firstName, lastName, consentGiven y preferencesJson
+    // Solo puede modificar firstName, lastName, email, consentGiven y preferencesJson
     @PatchMapping("/me")
     public ResponseEntity<UserResponseDto> updateMe(
             @RequestHeader("X-User-Id") Long userId,
             @Valid @RequestBody UserMeRequestDto dto) {
         return ResponseEntity.ok(userService.updateMe(userId, dto).toResponseDto());
+    }
+
+    // PATCH /api/v1/users/me/password
+    @PatchMapping("/me/password")
+    public ResponseEntity<Void> changePassword(
+            @RequestHeader("X-User-Id") Long userId,
+            @Valid @RequestBody ChangePasswordRequestDto dto) {
+        userService.changePassword(userId, dto);
+        return ResponseEntity.noContent().build();
     }
 
     // ─── Endpoints de administración (solo ADMIN) ─────────────────────────────

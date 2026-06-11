@@ -13,6 +13,7 @@ import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
 import com.ediae.ecotrack_office.shared.context.RequestContext;
 import com.ediae.ecotrack_office.shared.dto.PageResponseDto;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
+import com.ediae.ecotrack_office.users.dto.ChangePasswordRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
@@ -20,6 +21,7 @@ import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.mapper.UserMapper;
 import com.ediae.ecotrack_office.users.models.UserModel;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
+
 
 @Service
 public class UserService {
@@ -177,5 +179,26 @@ public class UserService {
         }
 
         return userMapper.toModel(userRepository.save(entity));
+    }
+
+    // ─────────────────────────────────────────────
+    // PATCH — el usuario cambia su propia contraseña
+    // Cualquier usuario autenticado
+    // ─────────────────────────────────────────────
+    public void changePassword(Long id, ChangePasswordRequestDto dto) {
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
+
+        // MVP: comparación directa. 
+        // TODO: cuando se añada BCrypt, usar passwordEncoder.matches()
+        if (!entity.getPasswordHash().equals(dto.currentPassword())) {
+            throw new IllegalArgumentException("La contraseña actual no es correcta");
+        }
+
+        // TODO: cuando se añada BCrypt, usar passwordEncoder.encode()
+        entity.setPasswordHash(dto.newPassword());
+        userRepository.save(entity);
+
+        auditLogService.log("PASSWORD_CHANGED", "USER", id, RequestContext.getUserId());
     }
 }

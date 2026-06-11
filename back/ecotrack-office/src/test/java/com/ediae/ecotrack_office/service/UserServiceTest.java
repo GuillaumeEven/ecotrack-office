@@ -1,7 +1,27 @@
 package com.ediae.ecotrack_office.service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.ediae.ecotrack_office.audit.service.AuditLogService;
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
+import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
@@ -9,21 +29,7 @@ import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.mapper.UserMapper;
 import com.ediae.ecotrack_office.users.models.UserModel;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
-import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
 import com.ediae.ecotrack_office.users.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -99,7 +105,7 @@ class UserServiceTest {
     @Test
     void updateMe_datosValidos_actualizaYDevuelveModel() {
         // CORREGIDO: UserMeRequestDto ahora tiene 4 campos (añadido consentGiven)
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", "analopez@example.com", null,  null);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -114,7 +120,7 @@ class UserServiceTest {
 
     @Test
     void updateMe_usuarioNoExiste_lanzaNotFoundException() {
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", "analopez@example.com", null,  null);
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
         NotFoundException ex = assertThrows(NotFoundException.class,
@@ -126,7 +132,7 @@ class UserServiceTest {
     @Test
     void updateMe_intentaModificarEmail_emailNoCambia() {
         // El DTO de updateMe no tiene campo email, así que nunca puede cambiarlo
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", "analopez@example.com", null,  null);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -141,7 +147,7 @@ class UserServiceTest {
     @Test
     void updateMe_conConsentimientoFalse_actualizaConsentimiento() {
         // Verificamos que el usuario puede retirar su consentimiento GDPR
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", false, null);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", "analopez@example.com", false, null);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -158,7 +164,7 @@ class UserServiceTest {
     @Test
     void updateMe_conPreferencias_guardaLasPreferencias() {
         String prefs = "{\"theme\":\"dark\"}";
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, prefs);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", "analopez@example.com", null, prefs);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
