@@ -20,3 +20,9 @@ export interface UserMeRequest {
   consentGiven?: boolean;
   preferencesJson?: string | null;
 }
+
+// Mapea ChangePasswordRequestDto de Spring
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}

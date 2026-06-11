@@ -1,4 +1,6 @@
 <main class="lg:pl-64 pt-20 min-h-screen">
+  <!-- Change Password Modal -->
+  <app-change-password-modal *ngIf="showPasswordModal" (closed)="showPasswordModal = false" />
   <div class="max-w-container-max mx-auto px-lg py-xl">
     <!-- Page Header -->
     <div class="mb-xl">
