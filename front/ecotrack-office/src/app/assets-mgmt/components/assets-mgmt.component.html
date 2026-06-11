@@ -19,26 +19,17 @@
             Select Floor
           </h3>
 
-          <button
-            (click)="loadFloors()"
-            class="btn-primary">
-            Refresh
-          </button>
-
-          <div *ngIf="loading.floors" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
-          <div *ngIf="errors.floors" class="error font-body-md">{{ errors.floors }}</div>
-
-          <div class="btn-floor-list">
-            <button
-              *ngFor="let floor of floors"
-              (click)="onFloorSelect(floor.id)"
-              [class.active]="selectedFloorId === floor.id"
-              class="btn-floor">
-              <strong>Floor {{ floor.level }}</strong>
-              <br>
-              <small class="text-on-surface-variant">{{ floor.isActive ? 'Active' : 'Inactive' }}</small>
-            </button>
-          </div>
+            <div class="btn-floor-list">
+              <button
+                *ngFor="let floor of allFloors"
+                (click)="onFloorSelect(floor.id)"
+                [class.active]="selectedFloorId === floor.id"
+                class="btn-floor">
+                <strong>Floor {{ floor.level }}</strong>
+                <br>
+                <small class="text-on-surface-variant">{{ floor.isActive ? 'Active' : 'Inactive' }}</small>
+              </button>
+            </div>
         </section>
 
         <!-- Date & Filters -->
@@ -57,8 +48,8 @@
               class="form-input"/>
           </div>
 
-          <div *ngIf="loading.reservations" class="loading text-on-surface-variant font-body-md">Loading reservations...</div>
-          <div *ngIf="errors.reservations" class="error text-error font-body-md">{{ errors.reservations }}</div>
+          <div *ngIf="loading.floorStatus" class="loading text-on-surface-variant font-body-md">Loading floor status...</div>
+          <div *ngIf="errors.floorStatus" class="error text-error font-body-md">{{ errors.floorStatus }}</div>
         </section>
       </div>
 
@@ -73,22 +64,24 @@
           </div>
 
           <div *ngIf="selectedFloorId">
-            <div *ngIf="loading.rooms" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
-            <div *ngIf="errors.rooms" class="error text-error font-body-md">{{ errors.rooms }}</div>
+            <div *ngIf="loading.floorStatus" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
+            <div *ngIf="errors.floorStatus" class="error text-error font-body-md">{{ errors.floorStatus }}</div>
 
-            <div class="btn-room-grid">
+            <div class="btn-room-grid" *ngIf="floorWithStatus">
               <button
-                *ngFor="let room of rooms"
-                (click)="onRoomSelect(room.id)"
-                [class.active]="selectedRoomId === room.id"
+                *ngFor="let roomWithStatus of floorWithStatus.rooms"
+                (click)="onRoomSelect(roomWithStatus.room.id)"
+                [class.active]="selectedRoomId === roomWithStatus.room.id"
                 class="btn-room">
-                <strong class="text-body-md">{{ room.name }}</strong>
-                <small class="text-on-surface-variant">Cap: {{ room.capacity }}</small>
+                <strong class="text-body-md">{{ roomWithStatus.room.name }}</strong>
+                <small class="text-on-surface-variant">
+                  Cap: {{ roomWithStatus.room.capacity }} | {{ getOccupancyPercent(roomWithStatus) }}
+                </small>
               </button>
             </div>
 
             <div
-              *ngIf="rooms.length === 0 && !loading.rooms && !errors.rooms"
+              *ngIf="floorWithStatus && floorWithStatus.rooms.length === 0 && !loading.floorStatus && !errors.floorStatus"
               class="text-on-surface-variant font-body-md italic loading">
               No rooms found.
             </div>
@@ -128,32 +121,35 @@
               <p>Select a room to view desks</p>
             </div>
 
-            <div *ngIf="selectedRoomId" class="desks-grid">
+            <div *ngIf="selectedRoomId && floorWithStatus" class="desks-grid">
               <button
-                *ngFor="let desk of desks"
-                [disabled]="getDeskStatus(desk) !== 'AVAILABLE'"
-                [class.available]="getDeskStatus(desk) === 'AVAILABLE'"
-                [class.reserved]="getDeskStatus(desk) === 'RESERVED'"
-                [class.unavailable]="getDeskStatus(desk) === 'UNAVAILABLE'"
+                *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
+                [disabled]="!isDeskAvailable(deskWithStatus)"
+                [class.available]="isDeskAvailable(deskWithStatus)"
+                [class.reserved]="isDeskReserved(deskWithStatus)"
+                [class.unavailable]="isDeskUnavailable(deskWithStatus)"
                 class="desk-btn"
-                [attr.title]="'Desk ' + desk.name + ' - ' + getDeskStatus(desk)">
-                {{ desk.name }}
-                <span class="desk-tooltip">{{ getDeskStatus(desk) }}</span>
+                [attr.title]="'Desk ' + deskWithStatus.desk.name + ' - ' + deskWithStatus.calculatedStatus">
+                {{ deskWithStatus.desk.name }}
+                <span class="desk-tooltip">{{ deskWithStatus.calculatedStatus }}</span>
+                <span class="desk-reserved-by" *ngIf="deskWithStatus.reservedBy">
+                  ({{ deskWithStatus.reservedBy }})
+                </span>
               </button>
             </div>
 
             <div
-              *ngIf="selectedRoomId && desks.length === 0 && !loading.desks && !errors.desks"
+              *ngIf="selectedRoomId && floorWithStatus && getDesksByRoom(selectedRoomId).length === 0 && !loading.floorStatus && !errors.floorStatus"
               class="empty-state">
               <p>No desks found for this room.</p>
             </div>
 
-            <div *ngIf="loading.desks" class="empty-state">
-              <p class="loading">Loading desks...</p>
+            <div *ngIf="loading.floorStatus" class="empty-state">
+              <p class="loading">Loading floor status...</p>
             </div>
 
-            <div *ngIf="errors.desks" class="empty-state">
-              <p class="error">{{ errors.desks }}</p>
+            <div *ngIf="errors.floorStatus" class="empty-state">
+              <p class="error">{{ errors.floorStatus }}</p>
             </div>
           </div>
         </section>
@@ -177,8 +173,16 @@
           {{ selectedDate | date:'yyyy-MM-dd' }}
         </div>
         <div class="debug-item">
-          <strong>Reservations:</strong>
-          {{ reservations.length }}
+          <strong>Rooms Loaded:</strong>
+          {{ floorWithStatus?.rooms?.length || 0 }}
+        </div>
+        <div class="debug-item" *ngIf="selectedRoomId">
+          <strong>Desks in Room:</strong>
+          {{ getDesksByRoom(selectedRoomId).length }}
+        </div>
+        <div class="debug-item" *ngIf="selectedRoomId && getRoomById(selectedRoomId)">
+          <strong>Occupancy Rate:</strong>
+          {{ getOccupancyPercent(getRoomById(selectedRoomId)!) }}
         </div>
       </div>
     </div>

@@ -29,6 +29,7 @@ import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
 
+// TODO después en el paquete shared
 @Component
 @Profile("dev")
 public class DataLoader implements CommandLineRunner {

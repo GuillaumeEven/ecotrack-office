@@ -2,13 +2,13 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Floor, Room, Desk, Reservation } from '../models';
-import { FloorService, RoomService, DeskService, ReservationService } from '../services';
+import { Floor, FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus } from '../models';
+import { FloorService } from '../services';
 
 /**
  * Assets Management Component
- * Main page for managing floors, rooms, and desks
- * HTML is minimal (no Tailwind) for progressive styling
+ * Manages floors, rooms, and desks with dynamic status calculation
+ * Consumes the new endpoint: GET /api/v1/floors/{id}/status?date=YYYY-MM-DD
  */
 @Component({
   selector: 'app-assets-mgmt',
@@ -18,127 +18,102 @@ import { FloorService, RoomService, DeskService, ReservationService } from '../s
   styleUrl: './assets-mgmt.component.css'
 })
 export class AssetsMgmtComponent implements OnInit {
-  floors: Floor[] = [];
-  rooms: Room[] = [];
-  desks: Desk[] = [];
-  reservations: Reservation[] = [];
+  // Data from API
+  allFloors: Floor[] = [
+    { id: 1, level: 0, isActive: true, organizationId: 1 },
+    { id: 2, level: 1, isActive: true, organizationId: 1 },
+    { id: 3, level: 2, isActive: true, organizationId: 1 }
+  ];
+  floorWithStatus: FloorWithStatus | null = null;
 
+  // UI State
   selectedFloorId: number | null = null;
   selectedRoomId: number | null = null;
   selectedDate: Date = new Date(); // Default to today
 
+  // Enum for template
+  ResourceStatus = ResourceStatus;
+
+  // Loading & Error states (simplified)
   loading = {
-    floors: false,
-    rooms: false,
-    desks: false,
-    reservations: false
+    floorStatus: false
   };
 
   errors = {
-    floors: null as string | null,
-    rooms: null as string | null,
-    desks: null as string | null,
-    reservations: null as string | null
+    floorStatus: null as string | null
   };
 
   constructor(
     private floorService: FloorService,
-    private roomService: RoomService,
-    private deskService: DeskService,
-    private reservationService: ReservationService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    console.log('🚀 AssetsMgmtComponent initialized, loading floors...');
-    this.loadFloors();
-    this.loadReservations();
+    console.log('🚀 AssetsMgmtComponent initialized, loading floor 1 status...');
+    // Auto-select first floor and load its status for today
+    this.selectedFloorId = 1;
+    this.loadFloorWithStatus();
   }
 
   /**
-   * Load all floors
+   * Load floor with status for a specific date
+   * Single API call that returns everything calculated
    */
-  loadFloors(): void {
-    console.log('📍 loadFloors() called');
-    this.loading.floors = true;
-    this.errors.floors = null;
+  private loadFloorWithStatus(): void {
+    if (!this.selectedFloorId) {
+      console.log('⚠️ No floor selected, skipping status load');
+      return;
+    }
 
-    this.floorService.list().subscribe({
+    this.loading.floorStatus = true;
+    this.errors.floorStatus = null;
+
+    const dateISO = this.formatDateToISO(this.selectedDate);
+    console.log('📍 loadFloorWithStatus() called for floor', this.selectedFloorId, 'date', dateISO);
+
+    this.floorService.getFloorWithStatus(this.selectedFloorId, dateISO).subscribe({
       next: (data) => {
-        console.log('✅ Floors loaded:', data);
-        this.floors = data;
-        this.loading.floors = false;
-        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
+        console.log('✅ Floor with status loaded:', data);
+        this.floorWithStatus = data;
+        this.loading.floorStatus = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
-        console.error('❌ Error loading floors:', err);
-        this.errors.floors = `Failed to load floors: ${err.message}`;
-        this.loading.floors = false;
-        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
-        console.error(err);
+        console.error('❌ Error loading floor status:', err);
+        this.errors.floorStatus = `Failed to load floor status: ${err.message}`;
+        this.loading.floorStatus = false;
+        this.cdr.markForCheck();
       }
     });
   }
 
   /**
-   * Load rooms for selected floor
+   * Handle floor selection
    */
   onFloorSelect(floorId: number): void {
     console.log('🏢 onFloorSelect() called with floorId:', floorId);
     this.selectedFloorId = floorId;
     this.selectedRoomId = null;
-    this.rooms = [];
-    this.desks = [];
-
-    this.loading.rooms = true;
-    this.errors.rooms = null;
-
-    this.roomService.listByFloor(floorId).subscribe({
-      next: (data) => {
-        console.log('✅ Rooms loaded:', data);
-        this.rooms = data;
-        this.loading.rooms = false;
-        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
-      },
-      error: (err) => {
-        console.error('❌ Error loading rooms:', err);
-        this.errors.rooms = `Failed to load rooms: ${err.message}`;
-        this.loading.rooms = false;
-        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
-        console.error(err);
-      }
-    });
-
-    // Reload reservations for the new floor
-    this.loadReservations();
+    this.floorWithStatus = null;
+    this.loadFloorWithStatus();
   }
 
   /**
-   * Load desks for selected room
+   * Handle room selection (UI only, data already loaded)
    */
   onRoomSelect(roomId: number): void {
     console.log('🪑 onRoomSelect() called with roomId:', roomId);
     this.selectedRoomId = roomId;
-    this.desks = [];
+  }
 
-    this.loading.desks = true;
-    this.errors.desks = null;
-
-    this.deskService.listByRoom(roomId).subscribe({
-      next: (data) => {
-        console.log('✅ Desks loaded:', data);
-        this.desks = data;
-        this.loading.desks = false;
-        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
-      },
-      error: (err) => {
-        console.error('❌ Error loading desks:', err);
-        this.errors.desks = `Failed to load desks: ${err.message}`;
-        this.loading.desks = false;
-        this.cdr.markForCheck(); // 🔴 Force Angular to detect changes
-        console.error(err);
-      }
-    });
+  /**
+   * Handle date change
+   */
+  onDateChange(event: any): void {
+    const newDate = new Date(event.target.value);
+    console.log('📅 Date changed to:', newDate);
+    this.selectedDate = newDate;
+    this.loadFloorWithStatus();
   }
 
   /**
@@ -151,57 +126,48 @@ export class AssetsMgmtComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  // ========== HELPER METHODS FOR TEMPLATE ==========
+
   /**
-   * Load reservations for selected floor and date
+   * Get room by ID from floorWithStatus
    */
-  loadReservations(): void {
-    if (!this.selectedFloorId) {
-      console.log('⚠️ No floor selected, skipping reservation load');
-      return;
-    }
-
-    const dateISO = this.formatDateToISO(this.selectedDate);
-    console.log('📍 loadReservations() called for floor', this.selectedFloorId, 'date', dateISO);
-
-    this.loading.reservations = true;
-    this.errors.reservations = null;
-
-    this.reservationService.getByFloorAndDate(this.selectedFloorId, dateISO).subscribe({
-      next: (data) => {
-        console.log('✅ Reservations loaded:', data);
-        this.reservations = data;
-        this.loading.reservations = false;
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('❌ Error loading reservations:', err);
-        this.errors.reservations = `Failed to load reservations: ${err.message}`;
-        this.loading.reservations = false;
-        this.cdr.markForCheck();
-        console.error(err);
-      }
-    });
+  getRoomById(roomId: number): RoomWithStatus | undefined {
+    return this.floorWithStatus?.rooms.find(r => r.room.id === roomId);
   }
 
   /**
-   * Get desk status based on reservations
+   * Get desks for a specific room
    */
-  getDeskStatus(desk: Desk): 'AVAILABLE' | 'RESERVED' | 'UNAVAILABLE' {
-    const reservation = this.reservations.find(
-      (r) => r.deskId === desk.id && r.status === 'CONFIRMED'
-    );
-    if (reservation) return 'RESERVED';
-    if (!desk.isActive) return 'UNAVAILABLE';
-    return 'AVAILABLE';
+  getDesksByRoom(roomId: number | null): DeskWithStatus[] {
+    if (!roomId) return [];
+    return this.getRoomById(roomId)?.desks ?? [];
   }
 
   /**
-   * Handle date change
+   * Get occupancy percentage display
    */
-  onDateChange(event: any): void {
-    const newDate = new Date(event.target.value);
-    console.log('📅 Date changed to:', newDate);
-    this.selectedDate = newDate;
-    this.loadReservations();
+  getOccupancyPercent(room: RoomWithStatus): string {
+    return `${Math.round(room.occupancyRate * 100)}%`;
+  }
+
+  /**
+   * Check if desk is available for reservation
+   */
+  isDeskAvailable(desk: DeskWithStatus): boolean {
+    return desk.calculatedStatus === ResourceStatus.AVAILABLE;
+  }
+
+  /**
+   * Check if desk is reserved
+   */
+  isDeskReserved(desk: DeskWithStatus): boolean {
+    return desk.calculatedStatus === ResourceStatus.RESERVED;
+  }
+
+  /**
+   * Check if desk is unavailable
+   */
+  isDeskUnavailable(desk: DeskWithStatus): boolean {
+    return desk.calculatedStatus === ResourceStatus.UNAVAILABLE;
   }
 }

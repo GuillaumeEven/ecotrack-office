@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Floor } from '../models';
+import { Floor, FloorWithStatus } from '../models';
 import { API_CONFIG } from './api.config';
 
 /**
@@ -52,5 +52,20 @@ export class FloorService {
    */
   delete(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  /**
+   * Fetch floor with all rooms, desks and their status for a specific date
+   * Single API call replacing 4+ individual calls
+   * 
+   * @param id Floor ID
+   * @param date Date in format YYYY-MM-DD
+   * @returns Observable of FloorWithStatus (includes all rooms, desks, and calculated statuses)
+   */
+  getFloorWithStatus(id: number, date: string): Observable<FloorWithStatus> {
+    const url = `${this.apiUrl}/${id}/status`;
+    const params = new HttpParams().set('date', date);
+    console.log('📡 FloorService.getFloorWithStatus() calling:', url, 'date:', date);
+    return this.httpClient.get<FloorWithStatus>(url, { params });
   }
 }
