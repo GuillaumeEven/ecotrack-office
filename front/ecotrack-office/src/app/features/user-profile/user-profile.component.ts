@@ -1,45 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { UserResponse } from '../../models/user.model';
 
 export type ProfileSection = 'personal' | 'security' | 'notifications';
-
-export interface UserProfile {
-  fullName: string;
-  email: string;
-  department: string;
-  workLocation: string;
-}
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DatePipe],
   templateUrl: './user-profile.component.html',
 })
 export class UserProfileComponent implements OnInit {
   activeSection: ProfileSection = 'personal';
-
   profileForm!: FormGroup;
+  user: UserResponse | null = null;
+  isLoading = true;
+  isSaving = false;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   departments = ['Facilities Management', 'Administration', 'Human Resources', 'IT Support'];
 
-  // TODO: reemplazar con datos del AuthService / UserService del backend
-  private initialProfile: UserProfile = {
-    fullName: 'Alex Thompson',
-    email: 'alex.thompson@ecotrackoffice.com',
-    department: 'Facilities Management',
-    workLocation: 'Main Wing, Floor 4',
-  };
-
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+  ) {}
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
-      fullName: [this.initialProfile.fullName, [Validators.required]],
-      email: [this.initialProfile.email, [Validators.required, Validators.email]],
-      department: [this.initialProfile.department, [Validators.required]],
-      workLocation: [this.initialProfile.workLocation, [Validators.required]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+    });
+
+    this.userService.getMe().subscribe({
+      next: (user) => {
+        this.user = user;
+        this.profileForm.patchValue({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        });
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Could not load profile. Please try again.';
+        this.isLoading = false;
+      },
     });
   }
 
@@ -49,27 +58,46 @@ export class UserProfileComponent implements OnInit {
 
   onSaveChanges(): void {
     if (this.profileForm.invalid) return;
-    const updated: UserProfile = this.profileForm.value;
-    console.log('Saving profile:', updated);
-    // TODO: llamar al UserService para PATCH /api/users/me
+    this.isSaving = true;
+    this.successMessage = null;
+    this.errorMessage = null;
+
+    this.userService.updateMe(this.profileForm.value).subscribe({
+      next: (updated) => {
+        this.user = updated;
+        this.isSaving = false;
+        this.successMessage = 'Profile updated successfully.';
+      },
+      error: () => {
+        this.isSaving = false;
+        this.errorMessage = 'Could not save changes. Please try again.';
+      },
+    });
   }
 
   onDiscardChanges(): void {
-    this.profileForm.patchValue(this.initialProfile);
+    if (!this.user) return;
+    this.profileForm.patchValue({
+      firstName: this.user.firstName,
+      lastName: this.user.lastName,
+      email: this.user.email,
+    });
+    this.successMessage = null;
+    this.errorMessage = null;
   }
 
   onChangePassword(): void {
-    console.log('Open change password dialog');
     // TODO: abrir modal o navegar a /settings/change-password
+    console.log('Change password');
   }
 
   onSignOutAll(): void {
-    console.log('Sign out from all devices');
     // TODO: llamar al AuthService para revocar todas las sesiones
+    console.log('Sign out all');
   }
 
   onChangePhoto(): void {
-    console.log('Open photo upload');
     // TODO: abrir file picker y llamar al endpoint de upload
+    console.log('Change photo');
   }
 }

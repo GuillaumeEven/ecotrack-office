@@ -29,10 +29,14 @@
               </div>
             </div>
 
-            <h2 class="font-headline-md text-headline-md text-on-surface">Alex Thompson</h2>
-            <p class="text-on-surface-variant font-body-md text-body-md">
-              Facility Manager, Floor 4
-            </p>
+            <div
+              *ngIf="isLoading"
+              class="h-8 w-40 bg-surface-container-high rounded-xl animate-pulse mb-xs"
+            ></div>
+            <h2 *ngIf="!isLoading" class="font-headline-md text-headline-md text-on-surface">
+              {{ user?.firstName }} {{ user?.lastName }}
+            </h2>
+            <p class="text-on-surface-variant font-body-md text-body-md">{{ user?.role }}</p>
 
             <!-- Meta info -->
             <div class="mt-md w-full pt-md border-t border-outline-variant space-y-sm">
@@ -43,12 +47,14 @@
                 <span
                   class="bg-secondary-container/20 text-secondary text-[12px] font-bold px-sm py-[2px] rounded-full"
                 >
-                  Active
+                  {{ user?.isActive ? 'Active' : 'Inactive' }}
                 </span>
               </div>
               <div class="flex justify-between items-center px-sm">
                 <span class="text-on-surface-variant text-label-sm font-label-sm">SINCE</span>
-                <span class="text-on-surface text-[12px] font-medium">October 2022</span>
+                <span class="text-on-surface text-[12px] font-medium">
+                  {{ user?.createdAt | date: 'MMMM yyyy' }}
+                </span>
               </div>
             </div>
           </div>
@@ -110,22 +116,43 @@
             (ngSubmit)="onSaveChanges()"
             class="grid grid-cols-1 md:grid-cols-2 gap-md"
           >
-            <!-- Full Name -->
+            <!-- First Name -->
             <div class="space-y-xs">
-              <label class="text-on-surface font-label-sm text-label-sm block">FULL NAME</label>
+              <label class="text-on-surface font-label-sm text-label-sm block">FIRST NAME</label>
               <input
                 type="text"
-                formControlName="fullName"
+                formControlName="firstName"
                 class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
                 [class.border-error]="
-                  profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched
+                  profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched
                 "
               />
               <p
-                *ngIf="profileForm.get('fullName')?.invalid && profileForm.get('fullName')?.touched"
+                *ngIf="
+                  profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched
+                "
                 class="text-error text-[12px]"
               >
-                Full name is required.
+                First name is required.
+              </p>
+            </div>
+
+            <!-- Last Name -->
+            <div class="space-y-xs">
+              <label class="text-on-surface font-label-sm text-label-sm block">LAST NAME</label>
+              <input
+                type="text"
+                formControlName="lastName"
+                class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
+                [class.border-error]="
+                  profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched
+                "
+              />
+              <p
+                *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
+                class="text-error text-[12px]"
+              >
+                Last name is required.
               </p>
             </div>
 
@@ -148,25 +175,25 @@
               </p>
             </div>
 
-            <!-- Department -->
+            <!-- Role (solo lectura, lo gestiona el ADMIN) -->
             <div class="space-y-xs">
-              <label class="text-on-surface font-label-sm text-label-sm block">DEPARTMENT</label>
-              <select
-                formControlName="department"
-                class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
-              >
-                <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
-              </select>
-            </div>
-
-            <!-- Work Location -->
-            <div class="space-y-xs">
-              <label class="text-on-surface font-label-sm text-label-sm block">WORK LOCATION</label>
+              <label class="text-on-surface font-label-sm text-label-sm block">ROLE</label>
               <input
                 type="text"
-                formControlName="workLocation"
-                class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
+                [value]="user?.role ?? ''"
+                disabled
+                class="w-full bg-surface-container-low border border-outline-variant rounded-xl p-sm text-on-surface-variant outline-none cursor-not-allowed"
               />
+            </div>
+
+            <!-- Feedback messages -->
+            <div class="col-span-full">
+              <p *ngIf="successMessage" class="text-secondary text-[13px] font-medium">
+                ✓ {{ successMessage }}
+              </p>
+              <p *ngIf="errorMessage" class="text-error text-[13px] font-medium">
+                ✕ {{ errorMessage }}
+              </p>
             </div>
 
             <!-- Actions -->
