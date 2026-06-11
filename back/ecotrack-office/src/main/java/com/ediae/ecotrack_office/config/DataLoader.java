@@ -379,28 +379,27 @@ public class DataLoader implements CommandLineRunner {
                 log.warn("Desk with pattern '{}' not found, skipping reservation.", deskNamePattern);
             }
         }
-        log.info("Seeded 10 desks in room '{}'", room.getName());
     }
 
     /**
      * Helper method to create a meeting room if it doesn't exist
      */
-    private void createMeetingRoom(FloorEntity floor, String roomName, Double area) {
-        boolean exists = roomRepository.findByFloor_Id(floor.getId())
-                .stream()
-                .anyMatch(r -> roomName.equalsIgnoreCase(r.getName()));
-        if (!exists) {
-            RoomEntity r = new RoomEntity(
-                    roomName,
-                    ResourceStatus.AVAILABLE,
-                    "video-conference,whiteboard",
-                    RoomType.MEETING_ROOM,
-                    area,
-                    floor,
-                    20
-            );
-            RoomEntity saved = roomRepository.save(r);
-            log.info("Seeded meeting_room '{}'", saved.getName());
-        }
-    }
+    // private void createMeetingRoom(FloorEntity floor, String roomName, Double area) {
+    //     boolean exists = roomRepository.findByFloor_Id(floor.getId())
+    //             .stream()
+    //             .anyMatch(r -> roomName.equalsIgnoreCase(r.getName()));
+    //     if (!exists) {
+    //         RoomEntity r = new RoomEntity(
+    //                 roomName,
+    //                 ResourceStatus.AVAILABLE,
+    //                 "video-conference,whiteboard",
+    //                 RoomType.MEETING_ROOM,
+    //                 area,
+    //                 floor,
+    //                 20
+    //         );
+    //         RoomEntity saved = roomRepository.save(r);
+    //         log.info("Seeded meeting_room '{}'", saved.getName());
+    //     }
+    // }
 }
