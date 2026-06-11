@@ -7,10 +7,7 @@ import { SidebarComponent } from './shared/components/sidebar/sidebar.component'
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, HeaderComponent, SidebarComponent],
-  template: `
-    <app-header />
-    <app-sidebar />
-    <router-outlet />
-  `,
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {}
