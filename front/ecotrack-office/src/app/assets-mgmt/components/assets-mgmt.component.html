@@ -128,13 +128,8 @@
                 [class.available]="isDeskAvailable(deskWithStatus)"
                 [class.reserved]="isDeskReserved(deskWithStatus)"
                 [class.unavailable]="isDeskUnavailable(deskWithStatus)"
-                class="desk-btn"
-                [attr.title]="'Desk ' + deskWithStatus.desk.name + ' - ' + deskWithStatus.calculatedStatus">
+                class="desk-btn">
                 {{ deskWithStatus.desk.name }}
-                <span class="desk-tooltip">{{ deskWithStatus.calculatedStatus }}</span>
-                <span class="desk-reserved-by" *ngIf="deskWithStatus.reservedBy">
-                  ({{ deskWithStatus.reservedBy }})
-                </span>
               </button>
             </div>
 

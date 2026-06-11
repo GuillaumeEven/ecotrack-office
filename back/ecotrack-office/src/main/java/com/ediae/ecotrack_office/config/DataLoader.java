@@ -289,7 +289,7 @@ public class DataLoader implements CommandLineRunner {
 
         // Create 10 desks for this desk_area room
         for (int i = 1; i <= 10; i++) {
-            final String deskName = room.getName() + " - Desk " + i;
+            final String deskName = "D" + i;
             boolean exists = deskRepository.findByRoom_Id(room.getId())
                     .stream()
                     .anyMatch(d -> deskName.equalsIgnoreCase(d.getName()));
@@ -353,7 +353,7 @@ public class DataLoader implements CommandLineRunner {
     private void createReservationForDesks(OrganizationEntity org, UserEntity user, LocalDate date, int[] deskNumbers) {
         for (int deskNum : deskNumbers) {
             // Find the desk by name pattern
-            String deskNamePattern = "Desk " + deskNum;
+            String deskNamePattern = "D" + deskNum;
             DeskEntity desk = deskRepository.findAll()
                     .stream()
                     .filter(d -> d.getName().contains(deskNamePattern))
