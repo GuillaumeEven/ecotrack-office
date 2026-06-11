@@ -7,6 +7,7 @@ import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
 import com.ediae.ecotrack_office.users.service.UserService;
+import com.ediae.ecotrack_office.users.dto.ChangePasswordRequestDto;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -36,12 +37,21 @@ public class UserController {
     }
 
     // PATCH /api/v1/users/me
-    // Solo puede modificar firstName, lastName, consentGiven y preferencesJson
+    // Solo puede modificar firstName, lastName, email, consentGiven y preferencesJson
     @PatchMapping("/me")
     public ResponseEntity<UserResponseDto> updateMe(
             @RequestHeader("X-User-Id") Long userId,
             @Valid @RequestBody UserMeRequestDto dto) {
         return ResponseEntity.ok(userService.updateMe(userId, dto).toResponseDto());
+    }
+
+    // PATCH /api/v1/users/me/password
+    @PatchMapping("/me/password")
+    public ResponseEntity<Void> changePassword(
+            @RequestHeader("X-User-Id") Long userId,
+            @Valid @RequestBody ChangePasswordRequestDto dto) {
+        userService.changePassword(userId, dto);
+        return ResponseEntity.noContent().build();
     }
 
     // ─── Endpoints de administración (solo ADMIN) ─────────────────────────────
