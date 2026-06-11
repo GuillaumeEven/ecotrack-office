@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ediae.ecotrack_office.assets.entity.RoomEntity;
 import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
+import com.ediae.ecotrack_office.assets.enums.RoomType;
 
 @Repository
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
@@ -19,4 +20,6 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
 
     // Returns the first UNAVAILABLE room on a floor, ordered by id (deterministic)
     Optional<RoomEntity> findFirstByFloor_IdAndStatusOrderByIdAsc(Long floorId, ResourceStatus status);
+
+    List<RoomEntity> findByFloor_IdAndType(Long floorId, RoomType type);
 }

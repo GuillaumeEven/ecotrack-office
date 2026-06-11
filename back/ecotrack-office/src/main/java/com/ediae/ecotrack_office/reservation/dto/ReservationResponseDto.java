@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
 import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ReservationResponseDto {
 
@@ -15,7 +16,9 @@ public class ReservationResponseDto {
     private LocalDate date;
     private ReservationStatus status;
     private LocalDateTime createdAt;
+    @JsonIgnore
     private UserEntity user;
+    @JsonIgnore
     private ResourceEntity resource;
 
     // Constructores

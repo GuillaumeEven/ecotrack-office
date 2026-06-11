@@ -18,6 +18,15 @@ public class AuthInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception {
 
+        String path = request.getRequestURI();
+        String method = request.getMethod();
+
+        // TODO: Quitar esta excepción cuando el frontend implemente credenciales correctas
+        // Las rutas GET de floors son públicas temporalmente para desarrollo
+        if (path.contains("/api/v1/floors") && "GET".equals(method)) {
+            return true;
+        }
+
         String userIdHeader = request.getHeader("X-User-Id");
         String userRoleHeader = request.getHeader("X-User-Role");
 

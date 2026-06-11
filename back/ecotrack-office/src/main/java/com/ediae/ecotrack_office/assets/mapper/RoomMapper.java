@@ -80,6 +80,24 @@ public class RoomMapper {
         );
     }
 
+    public RoomResponseDto toResponseDto(RoomEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        return new RoomResponseDto(
+            entity.getId(),
+            entity.getName(),
+            entity.getStatus() != null ? entity.getStatus().name() : null,
+            entity.getIsActive(),
+            entity.getEquipmentList(),
+            entity.getType() != null ? entity.getType().name() : null,
+            entity.getSurfaceArea(),
+            entity.getFloorId(),
+            entity.getCapacity()
+        );
+    }
+
     public RoomModel fromRequestDto(RoomRequestDto dto) {
         if (dto == null) {
             return null;
