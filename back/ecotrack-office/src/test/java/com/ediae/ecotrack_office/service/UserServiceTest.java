@@ -98,8 +98,8 @@ class UserServiceTest {
 
     @Test
     void updateMe_datosValidos_actualizaYDevuelveModel() {
-        // CORREGIDO: UserMeRequestDto ahora tiene 4 campos (añadido consentGiven)
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null);
+        // CORREGIDO: UserMeRequestDto ahora tiene 5 campos (firstName, lastName, email, consentGiven, preferencesJson)
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null, null);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -114,7 +114,7 @@ class UserServiceTest {
 
     @Test
     void updateMe_usuarioNoExiste_lanzaNotFoundException() {
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null, null);
         when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
         NotFoundException ex = assertThrows(NotFoundException.class,
@@ -126,7 +126,7 @@ class UserServiceTest {
     @Test
     void updateMe_intentaModificarEmail_emailNoCambia() {
         // El DTO de updateMe no tiene campo email, así que nunca puede cambiarlo
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null, null);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -141,7 +141,7 @@ class UserServiceTest {
     @Test
     void updateMe_conConsentimientoFalse_actualizaConsentimiento() {
         // Verificamos que el usuario puede retirar su consentimiento GDPR
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", false, null);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, false, null);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -158,7 +158,7 @@ class UserServiceTest {
     @Test
     void updateMe_conPreferencias_guardaLasPreferencias() {
         String prefs = "{\"theme\":\"dark\"}";
-        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, prefs);
+        UserMeRequestDto dto = new UserMeRequestDto("Ana", "López", null, null, prefs);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
         when(userRepository.save(any(UserEntity.class))).thenAnswer(inv -> inv.getArgument(0));
