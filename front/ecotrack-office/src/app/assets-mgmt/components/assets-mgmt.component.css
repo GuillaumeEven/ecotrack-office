@@ -247,7 +247,7 @@
 }
 
 .legend-color.reserved {
-  background-color: #475569;
+  background-color: #f44336;
 }
 
 .legend-color.unavailable {
@@ -313,8 +313,8 @@
 }
 
 .desk-btn.reserved {
-  background-color: #475569;
-  color: #cbd5e1;
+  background-color: #f44336;
+  color: white;
   cursor: not-allowed;
 }
 
