@@ -75,6 +75,13 @@ export class AssetsMgmtComponent implements OnInit {
       next: (data) => {
         console.log('✅ Floor with status loaded:', data);
         this.floorWithStatus = data;
+
+        // Auto-select first room on initial load
+        if (this.floorWithStatus.rooms.length > 0 && !this.selectedRoomId) {
+          this.selectedRoomId = this.floorWithStatus.rooms[0].room.id;
+          console.log('🪑 Auto-selected first room:', this.selectedRoomId);
+        }
+
         this.loading.floorStatus = false;
         this.cdr.markForCheck();
       },

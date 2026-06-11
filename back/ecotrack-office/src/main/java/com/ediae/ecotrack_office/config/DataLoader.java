@@ -281,6 +281,7 @@ public class DataLoader implements CommandLineRunner {
                             floor,
                             10
                     );
+                    r.setIsActive(true); // Activate room for dev
                     RoomEntity saved = roomRepository.save(r);
                     log.info("Seeded desk_area room '{}'", saved.getName());
                     return saved;
@@ -294,6 +295,7 @@ public class DataLoader implements CommandLineRunner {
                     .anyMatch(d -> deskName.equalsIgnoreCase(d.getName()));
             if (!exists) {
                 DeskEntity desk = new DeskEntity(deskName, ResourceStatus.AVAILABLE, "chair,monitor", room);
+                desk.setIsActive(true); // Activate desk for dev
                 deskRepository.save(desk);
             }
         }
@@ -317,6 +319,7 @@ public class DataLoader implements CommandLineRunner {
                     floor,
                     20
             );
+            r.setIsActive(true); // Activate meeting room for dev
             RoomEntity saved = roomRepository.save(r);
             log.info("Seeded meeting_room '{}'", saved.getName());
         }
