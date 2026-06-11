@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -25,8 +26,27 @@ public class UserController {
         this.adminGuard = adminGuard;
     }
 
+    // ─── Endpoints /me (cualquier usuario autenticado) ───────────────────────
+
+    // GET /api/v1/users/me
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getMe(
+            @RequestHeader("X-User-Id") Long userId) {
+        return ResponseEntity.ok(userService.getUserById(userId).toResponseDto());
+    }
+
+    // PATCH /api/v1/users/me
+    // Solo puede modificar firstName, lastName, consentGiven y preferencesJson
+    @PatchMapping("/me")
+    public ResponseEntity<UserResponseDto> updateMe(
+            @RequestHeader("X-User-Id") Long userId,
+            @Valid @RequestBody UserMeRequestDto dto) {
+        return ResponseEntity.ok(userService.updateMe(userId, dto).toResponseDto());
+    }
+
+    // ─── Endpoints de administración (solo ADMIN) ─────────────────────────────
+
     // GET /api/v1/users?organizationId=1&page=0&size=20
-    // Solo ADMIN
     @GetMapping
     public ResponseEntity<PageResponseDto<UserResponseDto>> getUsers(
             @RequestParam Long organizationId,
@@ -36,7 +56,6 @@ public class UserController {
     }
 
     // GET /api/v1/users/{id}
-    // Solo ADMIN
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         adminGuard.requireAdmin();
@@ -44,26 +63,25 @@ public class UserController {
     }
 
     // POST /api/v1/users
-    // Solo ADMIN
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto dto) {
+    public ResponseEntity<UserResponseDto> createUser(
+            @Valid @RequestBody UserRequestDto dto) {
         adminGuard.requireAdmin();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userService.createUser(dto).toResponseDto());
     }
 
     // PUT /api/v1/users/{id}
-    // Solo ADMIN — puede modificar nombre, email y rol
+    // Puede modificar email, password, firstName, lastName y rol
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(
             @PathVariable Long id,
-            @RequestBody UserRequestDto dto) {
+            @Valid @RequestBody UserRequestDto dto) {
         adminGuard.requireAdmin();
         return ResponseEntity.ok(userService.updateUser(id, dto).toResponseDto());
     }
 
     // PATCH /api/v1/users/{id}/deactivate
-    // Solo ADMIN
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateUser(@PathVariable Long id) {
         adminGuard.requireAdmin();
@@ -72,21 +90,11 @@ public class UserController {
     }
 
     // DELETE /api/v1/users/{id}
-    // Solo ADMIN — GDPR erasure, no borra la fila
+    // GDPR erasure — no borra la fila
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         adminGuard.requireAdmin();
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // PATCH /api/v1/users/me
-    // Cualquier usuario autenticado — solo sus propios datos
-    @PatchMapping("/me")
-    public ResponseEntity<UserResponseDto> updateMe(@RequestBody UserMeRequestDto dto) {
-        // El id viene del contexto, no de la URL
-        // Así un usuario nunca puede editar los datos de otro
-        Long actorId = RequestContext.getUserId();
-        return ResponseEntity.ok(userService.updateMe(actorId, dto).toResponseDto());
     }
 }
