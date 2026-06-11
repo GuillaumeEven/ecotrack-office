@@ -4,6 +4,7 @@ import { UserProfileComponent } from './features/user-profile/user-profile.compo
 import { AssetsMgmtComponent } from './assets-mgmt/components/assets-mgmt.component';
 
 export const routes: Routes = [
+  { path: 'home', component: AssetsMgmtComponent },
   { path: 'profile', component: UserProfileComponent },
   { path: '', component: HomeLanding},
   { path: 'assets-mgmt', component: AssetsMgmtComponent},
