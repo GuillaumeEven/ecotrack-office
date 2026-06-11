@@ -1,5 +1,4 @@
-package com.ediae.ecotrack_office.analiticsreport;
-
+package com.ediae.ecotrack_office.analiticsreport.entity;
 import java.time.LocalDateTime;
 
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
