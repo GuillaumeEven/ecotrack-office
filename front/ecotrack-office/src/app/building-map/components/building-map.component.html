@@ -109,8 +109,12 @@
               <span class="legend-text">AVAILABLE</span>
             </div>
             <div class="legend-item">
-              <div class="legend-color selected"></div>
-              <span class="legend-text">SELECTED</span>
+              <div class="legend-color" style="background-color: #2196f3; box-shadow: 0 0 8px rgba(33, 150, 243, 0.6);"></div>
+              <span class="legend-text">MY RESERVATION</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color: #ff9800;"></div>
+              <span class="legend-text">OTHER RESERVATION</span>
             </div>
             <div class="legend-item">
               <div class="legend-color reserved"></div>
@@ -131,9 +135,8 @@
               <button
                 *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
                 [disabled]="!isDeskAvailable(deskWithStatus)"
-                [class.available]="isDeskAvailable(deskWithStatus)"
-                [class.reserved]="isDeskReserved(deskWithStatus)"
-                [class.unavailable]="isDeskUnavailable(deskWithStatus)"
+                [ngClass]="getDeskStatusClass(deskWithStatus)"
+                [title]="isMyReservation(deskWithStatus) ? 'Your reservation' : isOtherReservation(deskWithStatus) ? 'Reserved by ' + deskWithStatus.reservedBy : ''"
                 class="desk-btn">
                 {{ deskWithStatus.desk.name }}
               </button>

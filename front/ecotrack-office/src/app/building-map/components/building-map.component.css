@@ -364,6 +364,31 @@
   cursor: not-allowed;
 }
 
+/* Reservation by current user - blue highlight */
+.desk-btn.reserved-mine {
+  background-color: #2196f3;
+  color: white;
+  cursor: not-allowed;
+  border: 2px solid #1976d2;
+  box-shadow: 0 0 12px rgba(33, 150, 243, 0.6);
+}
+
+.desk-btn.reserved-mine:hover {
+  background-color: #1976d2;
+}
+
+/* Reservation by others - orange/red */
+.desk-btn.reserved-other {
+  background-color: #ff9800;
+  color: white;
+  cursor: not-allowed;
+  border: 1px solid #f57c00;
+}
+
+.desk-btn.reserved-other:hover {
+  background-color: #f57c00;
+}
+
 .desk-btn.unavailable {
   background-color: #f44336;
   color: white;

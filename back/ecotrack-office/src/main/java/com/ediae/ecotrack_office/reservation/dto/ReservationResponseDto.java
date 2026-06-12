@@ -67,9 +67,9 @@ public class ReservationResponseDto {
 
         return this.createdAt;
     }
-    public void setCreateAt (LocalDateTime createAt) {
+    public void setCreatedAt (LocalDateTime createdAt) {
 
-        this.createdAt = createAt;
+        this.createdAt = createdAt;
     }
 
     public UserEntity getUser () {

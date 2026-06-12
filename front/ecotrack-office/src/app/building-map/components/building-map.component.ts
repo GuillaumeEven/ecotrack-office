@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Floor, FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus } from '../models';
 import { FloorService } from '../services';
+import { getCurrentUser } from '../config/user-stub';
 
 /**
  * Building Map Component
@@ -21,6 +22,9 @@ import { FloorService } from '../services';
 export class BuildingMapComponent implements OnInit {
   // Data from API
   allFloorsWithStatus: FloorWithStatus[] = [];
+
+  // User context
+  currentUserEmail: string = '';
 
   // UI State
   selectedFloorId: number | null = null;
@@ -42,7 +46,10 @@ export class BuildingMapComponent implements OnInit {
   constructor(
     private floorService: FloorService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    // Get current user email
+    this.currentUserEmail = getCurrentUser().email;
+  }
 
   ngOnInit(): void {
     console.log('🚀 AssetsMgmtComponent initialized, loading all floors with status...');
@@ -68,6 +75,13 @@ export class BuildingMapComponent implements OnInit {
         if (this.allFloorsWithStatus.length > 0 && !this.selectedFloorId) {
           this.selectedFloorId = this.allFloorsWithStatus[0].floor.id;
           console.log('🏢 Auto-selected first floor:', this.selectedFloorId);
+
+          // Auto-select first room of the first floor
+          const firstFloor = this.allFloorsWithStatus[0];
+          if (firstFloor.rooms.length > 0 && !this.selectedRoomId) {
+            this.selectedRoomId = firstFloor.rooms[0].room.id;
+            console.log('🪑 Auto-selected first room:', this.selectedRoomId);
+          }
         }
 
         this.loading.floors = false;
@@ -171,6 +185,39 @@ export class BuildingMapComponent implements OnInit {
    */
   isDeskUnavailable(desk: DeskWithStatus): boolean {
     return desk.calculatedStatus === ResourceStatus.UNAVAILABLE;
+  }
+
+  /**
+   * Check if the desk is reserved by the current user
+   */
+  isMyReservation(desk: DeskWithStatus): boolean {
+    return desk.calculatedStatus === ResourceStatus.RESERVED && desk.reservedBy === this.currentUserEmail;
+  }
+
+  /**
+   * Check if the desk is reserved by someone else
+   */
+  isOtherReservation(desk: DeskWithStatus): boolean {
+    return desk.calculatedStatus === ResourceStatus.RESERVED && desk.reservedBy !== this.currentUserEmail;
+  }
+
+  /**
+   * Get CSS class for desk status
+   */
+  getDeskStatusClass(desk: DeskWithStatus): string {
+    if (this.isMyReservation(desk)) {
+      return 'reserved-mine';
+    }
+    if (this.isOtherReservation(desk)) {
+      return 'reserved-other';
+    }
+    if (this.isDeskAvailable(desk)) {
+      return 'available';
+    }
+    if (this.isDeskReserved(desk)) {
+      return 'reserved';
+    }
+    return 'unavailable';
   }
 
   /**

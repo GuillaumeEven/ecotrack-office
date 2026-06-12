@@ -5,22 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
+import com.ediae.ecotrack_office.assets.repository.ResourceRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
 import com.ediae.ecotrack_office.assets.service.ResourceStatusCalculatorService;
 import com.ediae.ecotrack_office.reservation.dto.ReservationCreateDto;
 import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
 import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
-import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
 import com.ediae.ecotrack_office.reservation.mapper.ReservationMapper;
 import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.reservation.repository.ReservationRepository;
+import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
 public class ReservationService {
+
+    // load d'un logger pour la classe
+    private static final Logger logger = LoggerFactory.getLogger(ReservationService.class);
 
     @Autowired
     private ReservationRepository repository;
@@ -33,6 +39,12 @@ public class ReservationService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ResourceRepository resourceRepository;
 
     public List <ReservationModel> getReservationsByUserId (Long userId) {
 
@@ -91,52 +103,23 @@ public class ReservationService {
 
     public ReservationModel createReservation (ReservationCreateDto dto) {
 
-        ReservationModel model = ReservationMapper.fromCreateDto(dto);
-        ReservationEntity entity = ReservationMapper.toEntity(model);
-        entity.setStatus(ReservationStatus.CONFIRMED);
+        logger.info("Creating reservation: date={}, status={}, userId={}, resourceId={}", 
+            dto.getDate(), dto.getStatus(), dto.getUserId(), dto.getResourceId());
+
+        // Load entities from IDs
+        var user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + dto.getUserId()));
+
+        var resource = resourceRepository.findById(dto.getResourceId())
+                .orElseThrow(() -> new RuntimeException("Recurso no encontrado con id: " + dto.getResourceId()));
+
+        // Create entity directly
+        ReservationEntity entity = new ReservationEntity(dto.getDate(), dto.getStatus(), user, resource);
         ReservationEntity savedEntity = repository.save(entity);
 
-        // Trigger desk_area unlock logic after creating reservation
-        // triggerDeskAreaUnlock(savedEntity);
-
+        logger.info("Reservation created successfully with id: {}", savedEntity.getId());
         return ReservationMapper.fromEntity(savedEntity);
     }
-
-    /**
-     * Triggers desk_area unlock if the reserved desk's room reaches >= 80% occupancy on that date
-     */
-    // private void triggerDeskAreaUnlock(ReservationEntity reservation) {
-    //     try {
-    //         // Verify if the reserved resource is a Desk
-    //         if (!(reservation.getResource() instanceof DeskEntity)) {
-    //             return; // Not a desk, no unlock needed
-    //         }
-
-    //         DeskEntity desk = (DeskEntity) reservation.getResource();
-    //         RoomEntity room = desk.getRoom();
-
-    //         if (room == null || !RoomType.DESK_AREA.equals(room.getType())) {
-    //             return; // Not a desk_area, no unlock needed
-    //         }
-
-    //         // Calculate current room status for the reservation date
-    //         ResourceStatus roomStatus = resourceStatusCalculatorService.calculateRoomStatus(room, reservation.getDate());
-
-    //         // If room reached >= 80% occupancy, unlock the next available desk_area
-    //         if (roomStatus == ResourceStatus.RESERVED) {
-    //             RoomEntity nextDeskArea = resourceStatusCalculatorService.getNextAvailableDeskArea(room.getFloor(), reservation.getDate());
-
-    //             if (nextDeskArea != null) {
-    //                 nextDeskArea.setStatus(ResourceStatus.AVAILABLE);
-    //                 roomRepository.save(nextDeskArea);
-    //             }
-    //         }
-    //     } catch (Exception e) {
-    //         // Log error but don't fail the reservation
-    //         System.err.println("Error triggering desk_area unlock: " + e.getMessage());
-    //         e.printStackTrace();
-    //     }
-    // }
 
     public ReservationModel updateReservationById (Long id, ReservationUpdateDto dto) {
 
