@@ -1,4 +1,4 @@
-export type Role = 'ADMIN' | 'USER';
+export type Role = 'ADMIN' | 'EMPLOYEE' | 'TECHNICIAN';
 
 export interface UserResponse {
   id: number;
@@ -19,4 +19,9 @@ export interface UserMeRequest {
   email: string;
   consentGiven?: boolean;
   preferencesJson?: string | null;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
 }
