@@ -21,13 +21,15 @@
 
             <div class="btn-floor-list">
               <button
-                *ngFor="let floor of allFloors"
-                (click)="onFloorSelect(floor.id)"
-                [class.active]="selectedFloorId === floor.id"
+                *ngFor="let floorWithStatus of allFloorsWithStatus"
+                (click)="onFloorSelect(floorWithStatus.floor.id)"
+                [class.active]="selectedFloorId === floorWithStatus.floor.id"
+                [ngClass]="getFloorStatusClass(floorWithStatus)"
                 class="btn-floor">
-                <strong>Floor {{ floor.level }}</strong>
+                <strong>Floor {{ floorWithStatus.floor.level }}</strong>
+                <span class="status-badge" [ngClass]="getFloorStatusClass(floorWithStatus).split('-')[1]" [title]="getStatusText(getFloorStatus(floorWithStatus))"></span>
                 <br>
-                <small class="text-on-surface-variant">{{ floor.isActive ? 'Active' : 'Inactive' }}</small>
+                <small class="text-on-surface-variant">{{ floorWithStatus.floor.isActive ? 'Active' : 'Inactive' }}</small>
               </button>
             </div>
         </section>
@@ -48,8 +50,8 @@
               class="form-input"/>
           </div>
 
-          <div *ngIf="loading.floorStatus" class="loading text-on-surface-variant font-body-md">Loading floor status...</div>
-          <div *ngIf="errors.floorStatus" class="error text-error font-body-md">{{ errors.floorStatus }}</div>
+          <div *ngIf="loading.floors" class="loading text-on-surface-variant font-body-md">Loading floor status...</div>
+          <div *ngIf="errors.floors" class="error text-error font-body-md">{{ errors.floors }}</div>
         </section>
       </div>
 
@@ -64,16 +66,20 @@
           </div>
 
           <div *ngIf="selectedFloorId">
-            <div *ngIf="loading.floorStatus" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
-            <div *ngIf="errors.floorStatus" class="error text-error font-body-md">{{ errors.floorStatus }}</div>
+            <div *ngIf="loading.floors" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
+            <div *ngIf="errors.floors" class="error text-error font-body-md">{{ errors.floors }}</div>
 
-            <div class="btn-room-grid" *ngIf="floorWithStatus">
+            <div class="btn-room-grid" *ngIf="getSelectedFloor()">
               <button
-                *ngFor="let roomWithStatus of floorWithStatus.rooms"
+                *ngFor="let roomWithStatus of getSelectedFloor()!.rooms"
                 (click)="onRoomSelect(roomWithStatus.room.id)"
                 [class.active]="selectedRoomId === roomWithStatus.room.id"
+                [ngClass]="getRoomStatusClass(roomWithStatus)"
+                [title]="getStatusText(roomWithStatus.roomStatus)"
                 class="btn-room">
                 <strong class="text-body-md">{{ roomWithStatus.room.name }}</strong>
+                <span class="status-badge" [ngClass]="getRoomStatusClass(roomWithStatus).split('-')[1]"></span>
+                <br>
                 <small class="text-on-surface-variant">
                   Cap: {{ roomWithStatus.room.capacity }} | {{ getOccupancyPercent(roomWithStatus) }}
                 </small>
@@ -81,7 +87,7 @@
             </div>
 
             <div
-              *ngIf="floorWithStatus && floorWithStatus.rooms.length === 0 && !loading.floorStatus && !errors.floorStatus"
+              *ngIf="getSelectedFloor() && getSelectedFloor()!.rooms.length === 0 && !loading.floors && !errors.floors"
               class="text-on-surface-variant font-body-md italic loading">
               No rooms found.
             </div>
@@ -121,7 +127,7 @@
               <p>Select a room to view desks</p>
             </div>
 
-            <div *ngIf="selectedRoomId && floorWithStatus" class="desks-grid">
+            <div *ngIf="selectedRoomId && getSelectedFloor()" class="desks-grid">
               <button
                 *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
                 [disabled]="!isDeskAvailable(deskWithStatus)"
@@ -134,17 +140,17 @@
             </div>
 
             <div
-              *ngIf="selectedRoomId && floorWithStatus && getDesksByRoom(selectedRoomId).length === 0 && !loading.floorStatus && !errors.floorStatus"
+              *ngIf="selectedRoomId && getSelectedFloor() && getDesksByRoom(selectedRoomId).length === 0 && !loading.floors && !errors.floors"
               class="empty-state">
               <p>No desks found for this room.</p>
             </div>
 
-            <div *ngIf="loading.floorStatus" class="empty-state">
+            <div *ngIf="loading.floors" class="empty-state">
               <p class="loading">Loading floor status...</p>
             </div>
 
-            <div *ngIf="errors.floorStatus" class="empty-state">
-              <p class="error">{{ errors.floorStatus }}</p>
+            <div *ngIf="errors.floors" class="empty-state">
+              <p class="error">{{ errors.floors }}</p>
             </div>
           </div>
         </section>
@@ -169,7 +175,7 @@
         </div>
         <div class="debug-item">
           <strong>Rooms Loaded:</strong>
-          {{ floorWithStatus?.rooms?.length || 0 }}
+          {{ getSelectedFloor()?.rooms?.length || 0 }}
         </div>
         <div class="debug-item" *ngIf="selectedRoomId">
           <strong>Desks in Room:</strong>

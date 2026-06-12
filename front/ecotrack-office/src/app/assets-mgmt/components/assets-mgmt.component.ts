@@ -8,7 +8,8 @@ import { FloorService } from '../services';
 /**
  * Assets Management Component
  * Manages floors, rooms, and desks with dynamic status calculation
- * Consumes the new endpoint: GET /api/v1/floors/{id}/status?date=YYYY-MM-DD
+ * Consumes the global endpoint: GET /api/v1/floors/status/{organizationId}?date=YYYY-MM-DD
+ * Returns all floors with progressive unlock logic applied
  */
 @Component({
   selector: 'app-assets-mgmt',
@@ -19,12 +20,7 @@ import { FloorService } from '../services';
 })
 export class AssetsMgmtComponent implements OnInit {
   // Data from API
-  allFloors: Floor[] = [
-    { id: 1, level: 0, isActive: true, organizationId: 1 },
-    { id: 2, level: 1, isActive: true, organizationId: 1 },
-    { id: 3, level: 2, isActive: true, organizationId: 1 }
-  ];
-  floorWithStatus: FloorWithStatus | null = null;
+  allFloorsWithStatus: FloorWithStatus[] = [];
 
   // UI State
   selectedFloorId: number | null = null;
@@ -34,13 +30,13 @@ export class AssetsMgmtComponent implements OnInit {
   // Enum for template
   ResourceStatus = ResourceStatus;
 
-  // Loading & Error states (simplified)
+  // Loading & Error states
   loading = {
-    floorStatus: false
+    floors: false
   };
 
   errors = {
-    floorStatus: null as string | null
+    floors: null as string | null
   };
 
   constructor(
@@ -49,46 +45,38 @@ export class AssetsMgmtComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('🚀 AssetsMgmtComponent initialized, loading floor 1 status...');
-    // Auto-select first floor and load its status for today
-    this.selectedFloorId = 1;
-    this.loadFloorWithStatus();
+    console.log('🚀 AssetsMgmtComponent initialized, loading all floors with status...');
+    this.loadAllFloorsWithStatus();
   }
 
   /**
-   * Load floor with status for a specific date
-   * Single API call that returns everything calculated
+   * Load all floors with status for a specific date using global progressive logic
    */
-  private loadFloorWithStatus(): void {
-    if (!this.selectedFloorId) {
-      console.log('⚠️ No floor selected, skipping status load');
-      return;
-    }
-
-    this.loading.floorStatus = true;
-    this.errors.floorStatus = null;
+  private loadAllFloorsWithStatus(): void {
+    this.loading.floors = true;
+    this.errors.floors = null;
 
     const dateISO = this.formatDateToISO(this.selectedDate);
-    console.log('📍 loadFloorWithStatus() called for floor', this.selectedFloorId, 'date', dateISO);
+    console.log('📍 loadAllFloorsWithStatus() called for date', dateISO);
 
-    this.floorService.getFloorWithStatus(this.selectedFloorId, dateISO).subscribe({
+    this.floorService.getFloorsWithStatus(1, dateISO).subscribe({
       next: (data) => {
-        console.log('✅ Floor with status loaded:', data);
-        this.floorWithStatus = data;
+        console.log('✅ All floors with status loaded:', data);
+        this.allFloorsWithStatus = data;
 
-        // Auto-select first room on initial load
-        if (this.floorWithStatus.rooms.length > 0 && !this.selectedRoomId) {
-          this.selectedRoomId = this.floorWithStatus.rooms[0].room.id;
-          console.log('🪑 Auto-selected first room:', this.selectedRoomId);
+        // Auto-select first floor
+        if (this.allFloorsWithStatus.length > 0 && !this.selectedFloorId) {
+          this.selectedFloorId = this.allFloorsWithStatus[0].floor.id;
+          console.log('🏢 Auto-selected first floor:', this.selectedFloorId);
         }
 
-        this.loading.floorStatus = false;
+        this.loading.floors = false;
         this.cdr.markForCheck();
       },
       error: (err) => {
-        console.error('❌ Error loading floor status:', err);
-        this.errors.floorStatus = `Failed to load floor status: ${err.message}`;
-        this.loading.floorStatus = false;
+        console.error('❌ Error loading floors with status:', err);
+        this.errors.floors = `Failed to load floors: ${err.message}`;
+        this.loading.floors = false;
         this.cdr.markForCheck();
       }
     });
@@ -101,8 +89,6 @@ export class AssetsMgmtComponent implements OnInit {
     console.log('🏢 onFloorSelect() called with floorId:', floorId);
     this.selectedFloorId = floorId;
     this.selectedRoomId = null;
-    this.floorWithStatus = null;
-    this.loadFloorWithStatus();
   }
 
   /**
@@ -120,7 +106,9 @@ export class AssetsMgmtComponent implements OnInit {
     const newDate = new Date(event.target.value);
     console.log('📅 Date changed to:', newDate);
     this.selectedDate = newDate;
-    this.loadFloorWithStatus();
+    this.selectedFloorId = null;
+    this.selectedRoomId = null;
+    this.loadAllFloorsWithStatus();
   }
 
   /**
@@ -136,10 +124,17 @@ export class AssetsMgmtComponent implements OnInit {
   // ========== HELPER METHODS FOR TEMPLATE ==========
 
   /**
-   * Get room by ID from floorWithStatus
+   * Get currently selected floor with status
+   */
+  getSelectedFloor(): FloorWithStatus | undefined {
+    return this.allFloorsWithStatus.find(f => f.floor.id === this.selectedFloorId);
+  }
+
+  /**
+   * Get room by ID from selected floor
    */
   getRoomById(roomId: number): RoomWithStatus | undefined {
-    return this.floorWithStatus?.rooms.find(r => r.room.id === roomId);
+    return this.getSelectedFloor()?.rooms.find(r => r.room.id === roomId);
   }
 
   /**
@@ -176,5 +171,57 @@ export class AssetsMgmtComponent implements OnInit {
    */
   isDeskUnavailable(desk: DeskWithStatus): boolean {
     return desk.calculatedStatus === ResourceStatus.UNAVAILABLE;
+  }
+
+  /**
+   * Get the dominant status for a floor based on occupancy flags
+   * UNAVAILABLE > RESERVED > AVAILABLE
+   */
+  getFloorStatus(floor: FloorWithStatus): ResourceStatus {
+    // If both desks and meeting rooms are occupied, floor is "reserved"
+    if (floor.desksOccupied && floor.meetingRoomsOccupied) {
+      return ResourceStatus.RESERVED;
+    }
+    // If desks are occupied, show as "reserved"
+    if (floor.desksOccupied) {
+      return ResourceStatus.RESERVED;
+    }
+    // If meeting rooms are occupied, show as "reserved"
+    if (floor.meetingRoomsOccupied) {
+      return ResourceStatus.RESERVED;
+    }
+    // Otherwise, floor has availability
+    return ResourceStatus.AVAILABLE;
+  }
+
+  /**
+   * Get CSS class for floor status indicator
+   */
+  getFloorStatusClass(floor: FloorWithStatus): string {
+    const status = this.getFloorStatus(floor);
+    return `status-${status.toLowerCase()}`;
+  }
+
+  /**
+   * Get CSS class for room status indicator
+   */
+  getRoomStatusClass(room: RoomWithStatus): string {
+    return `status-${room.roomStatus.toLowerCase()}`;
+  }
+
+  /**
+   * Get readable status text
+   */
+  getStatusText(status: ResourceStatus): string {
+    switch (status) {
+      case ResourceStatus.AVAILABLE:
+        return 'Available';
+      case ResourceStatus.RESERVED:
+        return 'Reserved';
+      case ResourceStatus.UNAVAILABLE:
+        return 'Unavailable';
+      default:
+        return 'Unknown';
+    }
   }
 }

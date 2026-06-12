@@ -35,4 +35,6 @@ export interface FloorWithStatus {
   floor: Floor;
   rooms: RoomWithStatus[];
   date: string; // YYYY-MM-DD
+  desksOccupied: boolean; // Flag: last DESK_AREA of this floor has occupancy >= 80%
+  meetingRoomsOccupied: boolean; // Flag: last MEETING_ROOM of this floor is RESERVED
 }

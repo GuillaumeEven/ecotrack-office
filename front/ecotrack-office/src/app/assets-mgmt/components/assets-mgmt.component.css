@@ -79,27 +79,6 @@
 }
 
 /* Buttons */
-.btn-primary {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  background-color: #1e88e5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-bottom: 1rem;
-  transition: opacity 0.2s, transform 0.1s;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-}
-
-.btn-primary:active {
-  transform: scale(0.95);
-}
-
 .btn-floor-list {
   display: flex;
   flex-direction: column;
@@ -132,12 +111,6 @@
   gap: 0.5rem;
 }
 
-@media (min-width: 640px) {
-  .btn-room-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 .btn-room {
   padding: 0.5rem 1rem;
   border: 1px solid var(--outline-variant, #ccc);
@@ -156,6 +129,83 @@
   background-color: var(--secondary-container, #ddeef5);
   color: var(--on-secondary-container, #004d7a);
   border-color: var(--secondary-container, #ddeef5);
+}
+
+/* Status Indicators for Floors and Rooms */
+.btn-floor,
+.btn-room {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Status badge - small dot indicator */
+.status-badge {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.status-badge.available {
+  background-color: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+}
+
+.status-badge.reserved {
+  background-color: #ff9800;
+  box-shadow: 0 0 8px rgba(255, 152, 0, 0.6);
+}
+
+.status-badge.unavailable {
+  background-color: #f44336;
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.6);
+}
+
+/* Status bar - left border accent */
+.btn-floor.status-available::before,
+.btn-room.status-available::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #4caf50;
+}
+
+.btn-floor.status-reserved::before,
+.btn-room.status-reserved::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #ff9800;
+}
+
+.btn-floor.status-unavailable::before,
+.btn-room.status-unavailable::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #f44336;
+}
+
+/* Add padding to accommodate status bar */
+.btn-floor.status-available,
+.btn-floor.status-reserved,
+.btn-floor.status-unavailable,
+.btn-room.status-available,
+.btn-room.status-reserved,
+.btn-room.status-unavailable {
+  padding-left: 0.75rem;
 }
 
 /* Forms */
@@ -242,10 +292,6 @@
   border: 1px solid #4caf50;
 }
 
-.legend-color.selected {
-  background-color: #1e88e5;
-}
-
 .legend-color.reserved {
   background-color: #f44336;
 }
@@ -330,29 +376,6 @@
 
 .desk-btn:not(:disabled):active {
   transform: scale(0.95);
-}
-
-.desk-tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 8px;
-  background-color: white;
-  color: #1a1a1a;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  font-size: 10px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-  z-index: 10;
-}
-
-.desk-btn:hover .desk-tooltip {
-  opacity: 1;
 }
 
 /* Empty States */
