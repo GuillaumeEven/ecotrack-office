@@ -1,0 +1,185 @@
+<div class="main-container">
+  <div class="content-wrapper">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="font-headline-lg text-headline-lg text-on-surface">Assets Management</h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant">
+        Manage floors, rooms, and desks in your office.
+      </p>
+    </div>
+
+    <!-- Main Grid: Filters + Desks -->
+    <div class="main-grid">
+      <!-- Filters Column -->
+      <div class="filters-column">
+        <!-- Floor Selector -->
+        <section class="section">
+          <h3 class="font-title-md text-title-md text-on-surface">
+            <span class="material-symbols-outlined text-primary">layers</span>
+            Select Floor
+          </h3>
+
+            <div class="btn-floor-list">
+              <button
+                *ngFor="let floor of allFloors"
+                (click)="onFloorSelect(floor.id)"
+                [class.active]="selectedFloorId === floor.id"
+                class="btn-floor">
+                <strong>Floor {{ floor.level }}</strong>
+                <br>
+                <small class="text-on-surface-variant">{{ floor.isActive ? 'Active' : 'Inactive' }}</small>
+              </button>
+            </div>
+        </section>
+
+        <!-- Date & Filters -->
+        <section class="section">
+          <h3 class="font-title-md text-title-md text-on-surface">
+            <span class="material-symbols-outlined text-primary">filter_list</span>
+            Schedule
+          </h3>
+
+          <div class="form-group">
+            <label class="form-label">Select Date</label>
+            <input
+              type="date"
+              [value]="selectedDate | date:'yyyy-MM-dd'"
+              (change)="onDateChange($event)"
+              class="form-input"/>
+          </div>
+
+          <div *ngIf="loading.floorStatus" class="loading text-on-surface-variant font-body-md">Loading floor status...</div>
+          <div *ngIf="errors.floorStatus" class="error text-error font-body-md">{{ errors.floorStatus }}</div>
+        </section>
+      </div>
+
+      <!-- Rooms & Desks Column -->
+      <div class="rooms-desks-column">
+        <!-- Rooms Section -->
+        <section class="section">
+          <h3 class="font-title-md text-title-md text-on-surface">Rooms</h3>
+
+          <div *ngIf="!selectedFloorId" class="text-on-surface-variant font-body-md italic loading">
+            Select a floor to view rooms
+          </div>
+
+          <div *ngIf="selectedFloorId">
+            <div *ngIf="loading.floorStatus" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
+            <div *ngIf="errors.floorStatus" class="error text-error font-body-md">{{ errors.floorStatus }}</div>
+
+            <div class="btn-room-grid" *ngIf="floorWithStatus">
+              <button
+                *ngFor="let roomWithStatus of floorWithStatus.rooms"
+                (click)="onRoomSelect(roomWithStatus.room.id)"
+                [class.active]="selectedRoomId === roomWithStatus.room.id"
+                class="btn-room">
+                <strong class="text-body-md">{{ roomWithStatus.room.name }}</strong>
+                <small class="text-on-surface-variant">
+                  Cap: {{ roomWithStatus.room.capacity }} | {{ getOccupancyPercent(roomWithStatus) }}
+                </small>
+              </button>
+            </div>
+
+            <div
+              *ngIf="floorWithStatus && floorWithStatus.rooms.length === 0 && !loading.floorStatus && !errors.floorStatus"
+              class="text-on-surface-variant font-body-md italic loading">
+              No rooms found.
+            </div>
+          </div>
+        </section>
+
+        <!-- Desks Section - Cinema Style -->
+        <section class="desks-cinema">
+          <div class="cinema-header">
+            <h2 class="text-headline-md text-white">Desk Schedule</h2>
+            <p class="text-body-md text-surface-dim" *ngIf="selectedDate">
+              Date: {{ selectedDate | date: 'EEEE, MMMM d, yyyy' }}
+            </p>
+          </div>
+
+          <div class="legend">
+            <div class="legend-item">
+              <div class="legend-color available"></div>
+              <span class="legend-text">AVAILABLE</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color selected"></div>
+              <span class="legend-text">SELECTED</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color reserved"></div>
+              <span class="legend-text">RESERVED</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color unavailable"></div>
+              <span class="legend-text">UNAVAILABLE</span>
+            </div>
+          </div>
+
+          <div class="desks-grid-wrapper">
+            <div *ngIf="!selectedRoomId" class="empty-state">
+              <p>Select a room to view desks</p>
+            </div>
+
+            <div *ngIf="selectedRoomId && floorWithStatus" class="desks-grid">
+              <button
+                *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
+                [disabled]="!isDeskAvailable(deskWithStatus)"
+                [class.available]="isDeskAvailable(deskWithStatus)"
+                [class.reserved]="isDeskReserved(deskWithStatus)"
+                [class.unavailable]="isDeskUnavailable(deskWithStatus)"
+                class="desk-btn">
+                {{ deskWithStatus.desk.name }}
+              </button>
+            </div>
+
+            <div
+              *ngIf="selectedRoomId && floorWithStatus && getDesksByRoom(selectedRoomId).length === 0 && !loading.floorStatus && !errors.floorStatus"
+              class="empty-state">
+              <p>No desks found for this room.</p>
+            </div>
+
+            <div *ngIf="loading.floorStatus" class="empty-state">
+              <p class="loading">Loading floor status...</p>
+            </div>
+
+            <div *ngIf="errors.floorStatus" class="empty-state">
+              <p class="error">{{ errors.floorStatus }}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Debug Info -->
+    <div class="debug-section">
+      <h3 class="font-title-md text-title-md">Debug Info</h3>
+      <div class="debug-grid">
+        <div class="debug-item">
+          <strong>Floor:</strong>
+          {{ selectedFloorId || 'None' }}
+        </div>
+        <div class="debug-item">
+          <strong>Room:</strong>
+          {{ selectedRoomId || 'None' }}
+        </div>
+        <div class="debug-item">
+          <strong>Date:</strong>
+          {{ selectedDate | date:'yyyy-MM-dd' }}
+        </div>
+        <div class="debug-item">
+          <strong>Rooms Loaded:</strong>
+          {{ floorWithStatus?.rooms?.length || 0 }}
+        </div>
+        <div class="debug-item" *ngIf="selectedRoomId">
+          <strong>Desks in Room:</strong>
+          {{ getDesksByRoom(selectedRoomId).length }}
+        </div>
+        <div class="debug-item" *ngIf="selectedRoomId && getRoomById(selectedRoomId)">
+          <strong>Occupancy Rate:</strong>
+          {{ getOccupancyPercent(getRoomById(selectedRoomId)!) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,8 @@
 package com.ediae.ecotrack_office.assets.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.assets.dto.RoomRequestDto;
@@ -20,7 +24,13 @@ import com.ediae.ecotrack_office.assets.service.RoomService;
 
 @RestController
 @RequestMapping("api/v1/rooms")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
+    RequestMethod.GET,
+    RequestMethod.POST,
+    RequestMethod.PUT,
+    RequestMethod.DELETE,
+    RequestMethod.OPTIONS}
+)
 public class RoomController {
 
     @Autowired
@@ -29,10 +39,24 @@ public class RoomController {
     @Autowired
     private RoomMapper roomMapper;
 
+    @GetMapping
+    public ResponseEntity<List<RoomResponseDto>> getRooms() {
+        List<RoomResponseDto> rooms = new ArrayList<>();
+        roomService.getRooms().forEach(room -> rooms.add(roomMapper.toResponseDto(room)));
+        return ResponseEntity.ok(rooms);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RoomResponseDto> getRoomById(@PathVariable Long id) {
         RoomResponseDto roomResponseDTO = roomMapper.toResponseDto(roomService.getRoomById(id));
         return ResponseEntity.ok(roomResponseDTO);
+    }
+
+    @GetMapping("/floor/{floorId}")
+    public ResponseEntity<List<RoomResponseDto>> getRoomsByFloorId(@PathVariable Long floorId) {
+        List<RoomResponseDto> rooms = new ArrayList<>();
+        roomService.getRoomsByFloorId(floorId).forEach(room -> rooms.add(roomMapper.toResponseDto(room)));
+        return ResponseEntity.ok(rooms);
     }
 
     @PostMapping("")

@@ -3,9 +3,7 @@ package com.ediae.ecotrack_office.assets.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
-import com.ediae.ecotrack_office.assets.entity.RoomEntity;
 import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.ResourceRepository;
@@ -34,15 +32,18 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setStatus(newStatus);
         resourceRepository.save(resource);
 
+        // TODO: DEPRECATED - Old sync logic replaced by ResourceStatusCalculatorService
+        // Status calculation is now dynamic and date-based instead of static
         // After saving, check if the room occupancy threshold is crossed
-        if (resource instanceof DeskEntity desk) {
-            syncRoomStatus(desk.getRoomId());
-        }
+        // if (resource instanceof DeskEntity desk) {
+        //     syncRoomStatus(desk.getRoomId());
+        // }
     }
 
-    // When a desk is reserved and its room crosses 80% occupancy:
-    // - the room becomes RESERVED (remaining desks still bookable)
-    // - the next UNAVAILABLE room on the same floor opens up (AVAILABLE)
+    // TODO: DEPRECATED METHOD - Use ResourceStatusCalculatorService.getFloorWithStatusForDate() instead
+    // This method implements the old static status update logic that is now replaced by dynamic calculation
+    // Kept for reference; can be deleted after Phase 2 database migration
+    /*
     private void syncRoomStatus(Long roomId) {
         long total = deskRepository.countByRoom_Id(roomId);
         if (total == 0) return;
@@ -69,4 +70,5 @@ public class ResourceServiceImpl implements ResourceService {
             roomRepository.save(nextRoom);
         }
     }
+    */
 }

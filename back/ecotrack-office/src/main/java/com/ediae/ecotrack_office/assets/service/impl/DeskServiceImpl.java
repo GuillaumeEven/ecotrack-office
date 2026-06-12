@@ -12,6 +12,8 @@ import com.ediae.ecotrack_office.assets.model.DeskModel;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.service.DeskService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class DeskServiceImpl implements DeskService {
 
@@ -24,9 +26,17 @@ public class DeskServiceImpl implements DeskService {
     @Override
     public DeskModel getDeskById(Long deskId) {
         DeskEntity entity = deskRepository.findById(deskId)
-                .orElseThrow(() -> new RuntimeException("Desk not found with id: " + deskId));
+                .orElseThrow(() -> new EntityNotFoundException("Desk not found with id: " + deskId));
         DeskModel deskModel = deskMapper.fromEntity(entity);
         return deskModel;
+    }
+
+    @Override
+    public List<DeskModel> getDesksByRoomId(Long roomId) {
+        List<DeskEntity> entities = deskRepository.findByRoom_Id(roomId);
+        return entities.stream()
+                .map(deskMapper::fromEntity)
+                .toList();
     }
 
     @Override
@@ -40,7 +50,7 @@ public class DeskServiceImpl implements DeskService {
     @Override
     public DeskModel updateDesk(Long deskId, DeskRequestDto deskRequestDto) {
         DeskEntity entity = deskRepository.findById(deskId)
-                .orElseThrow(() -> new RuntimeException("Desk not found with id: " + deskId));
+                .orElseThrow(() -> new EntityNotFoundException("Desk not found with id: " + deskId));
         DeskModel deskModel = deskMapper.fromRequestDto(deskRequestDto);
         deskMapper.updateEntityFromModel(deskModel, entity);
         DeskEntity updatedEntity = deskRepository.save(entity);
@@ -50,16 +60,8 @@ public class DeskServiceImpl implements DeskService {
     @Override
     public void deleteDeskById(Long deskId) {
         DeskEntity entity = deskRepository.findById(deskId)
-                .orElseThrow(() -> new RuntimeException("Desk not found with id: " + deskId));
+                .orElseThrow(() -> new EntityNotFoundException("Desk not found with id: " + deskId));
         deskRepository.delete(entity);
-    }
-
-    @Override
-    public List<DeskModel> getDesksByRoomId(Long roomId) {
-        List<DeskEntity> entities = deskRepository.findByRoom_Id(roomId);
-        return entities.stream()
-                .map(deskMapper::fromEntity)
-                .toList();
     }
 
 }
