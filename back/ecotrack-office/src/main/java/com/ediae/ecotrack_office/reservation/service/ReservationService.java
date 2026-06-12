@@ -8,10 +8,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ediae.ecotrack_office.assets.entity.DeskEntity;
-import com.ediae.ecotrack_office.assets.entity.RoomEntity;
-import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
-import com.ediae.ecotrack_office.assets.enums.RoomType;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
 import com.ediae.ecotrack_office.assets.service.ResourceStatusCalculatorService;
@@ -101,7 +97,7 @@ public class ReservationService {
         ReservationEntity savedEntity = repository.save(entity);
 
         // Trigger desk_area unlock logic after creating reservation
-        triggerDeskAreaUnlock(savedEntity);
+        // triggerDeskAreaUnlock(savedEntity);
 
         return ReservationMapper.fromEntity(savedEntity);
     }
@@ -109,38 +105,38 @@ public class ReservationService {
     /**
      * Triggers desk_area unlock if the reserved desk's room reaches >= 80% occupancy on that date
      */
-    private void triggerDeskAreaUnlock(ReservationEntity reservation) {
-        try {
-            // Verify if the reserved resource is a Desk
-            if (!(reservation.getResource() instanceof DeskEntity)) {
-                return; // Not a desk, no unlock needed
-            }
+    // private void triggerDeskAreaUnlock(ReservationEntity reservation) {
+    //     try {
+    //         // Verify if the reserved resource is a Desk
+    //         if (!(reservation.getResource() instanceof DeskEntity)) {
+    //             return; // Not a desk, no unlock needed
+    //         }
 
-            DeskEntity desk = (DeskEntity) reservation.getResource();
-            RoomEntity room = desk.getRoom();
+    //         DeskEntity desk = (DeskEntity) reservation.getResource();
+    //         RoomEntity room = desk.getRoom();
 
-            if (room == null || !RoomType.DESK_AREA.equals(room.getType())) {
-                return; // Not a desk_area, no unlock needed
-            }
+    //         if (room == null || !RoomType.DESK_AREA.equals(room.getType())) {
+    //             return; // Not a desk_area, no unlock needed
+    //         }
 
-            // Calculate current room status for the reservation date
-            ResourceStatus roomStatus = resourceStatusCalculatorService.calculateRoomStatus(room, reservation.getDate());
+    //         // Calculate current room status for the reservation date
+    //         ResourceStatus roomStatus = resourceStatusCalculatorService.calculateRoomStatus(room, reservation.getDate());
 
-            // If room reached >= 80% occupancy, unlock the next available desk_area
-            if (roomStatus == ResourceStatus.RESERVED) {
-                RoomEntity nextDeskArea = resourceStatusCalculatorService.getNextAvailableDeskArea(room.getFloor(), reservation.getDate());
+    //         // If room reached >= 80% occupancy, unlock the next available desk_area
+    //         if (roomStatus == ResourceStatus.RESERVED) {
+    //             RoomEntity nextDeskArea = resourceStatusCalculatorService.getNextAvailableDeskArea(room.getFloor(), reservation.getDate());
 
-                if (nextDeskArea != null) {
-                    nextDeskArea.setStatus(ResourceStatus.AVAILABLE);
-                    roomRepository.save(nextDeskArea);
-                }
-            }
-        } catch (Exception e) {
-            // Log error but don't fail the reservation
-            System.err.println("Error triggering desk_area unlock: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+    //             if (nextDeskArea != null) {
+    //                 nextDeskArea.setStatus(ResourceStatus.AVAILABLE);
+    //                 roomRepository.save(nextDeskArea);
+    //             }
+    //         }
+    //     } catch (Exception e) {
+    //         // Log error but don't fail the reservation
+    //         System.err.println("Error triggering desk_area unlock: " + e.getMessage());
+    //         e.printStackTrace();
+    //     }
+    // }
 
     public ReservationModel updateReservationById (Long id, ReservationUpdateDto dto) {
 

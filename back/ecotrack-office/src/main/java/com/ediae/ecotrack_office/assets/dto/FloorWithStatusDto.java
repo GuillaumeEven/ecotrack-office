@@ -8,6 +8,8 @@ public class FloorWithStatusDto {
     private FloorResponseDto floor;
     private List<RoomWithStatusDto> rooms;
     private LocalDate date;
+    private Boolean desksOccupied;
+    private Boolean meetingRoomsOccupied;
 
     public FloorWithStatusDto() {
     }
@@ -16,6 +18,17 @@ public class FloorWithStatusDto {
         this.floor = floor;
         this.rooms = rooms;
         this.date = date;
+        this.desksOccupied = false;
+        this.meetingRoomsOccupied = false;
+    }
+
+    public FloorWithStatusDto(FloorResponseDto floor, List<RoomWithStatusDto> rooms, LocalDate date, 
+                              Boolean desksOccupied, Boolean meetingRoomsOccupied) {
+        this.floor = floor;
+        this.rooms = rooms;
+        this.date = date;
+        this.desksOccupied = desksOccupied;
+        this.meetingRoomsOccupied = meetingRoomsOccupied;
     }
 
     public FloorResponseDto getFloor() {
@@ -40,6 +53,22 @@ public class FloorWithStatusDto {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Boolean getDesksOccupied() {
+        return desksOccupied;
+    }
+
+    public void setDesksOccupied(Boolean desksOccupied) {
+        this.desksOccupied = desksOccupied;
+    }
+
+    public Boolean getMeetingRoomsOccupied() {
+        return meetingRoomsOccupied;
+    }
+
+    public void setMeetingRoomsOccupied(Boolean meetingRoomsOccupied) {
+        this.meetingRoomsOccupied = meetingRoomsOccupied;
     }
 
 }
