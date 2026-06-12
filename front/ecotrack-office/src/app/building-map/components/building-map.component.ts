@@ -6,19 +6,19 @@ import { Floor, FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus 
 import { FloorService } from '../services';
 
 /**
- * Assets Management Component
- * Manages floors, rooms, and desks with dynamic status calculation
+ * Building Map Component
+ * Interactive floor plan for browsing and making desk/room reservations
  * Consumes the global endpoint: GET /api/v1/floors/status/{organizationId}?date=YYYY-MM-DD
  * Returns all floors with progressive unlock logic applied
  */
 @Component({
-  selector: 'app-assets-mgmt',
+  selector: 'app-building-map',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './assets-mgmt.component.html',
-  styleUrl: './assets-mgmt.component.css'
+  templateUrl: './building-map.component.html',
+  styleUrl: './building-map.component.css'
 })
-export class AssetsMgmtComponent implements OnInit {
+export class BuildingMapComponent implements OnInit {
   // Data from API
   allFloorsWithStatus: FloorWithStatus[] = [];
 
