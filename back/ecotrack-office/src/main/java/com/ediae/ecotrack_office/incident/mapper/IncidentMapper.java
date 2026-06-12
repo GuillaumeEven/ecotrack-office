@@ -1,11 +1,12 @@
 package com.ediae.ecotrack_office.incident.mapper;
 
+import java.time.LocalDateTime;
+
 import com.ediae.ecotrack_office.incident.dto.IncidentRequestDto;
 import com.ediae.ecotrack_office.incident.dto.IncidentResponseDto;
+import com.ediae.ecotrack_office.incident.entity.IncidentEntity;
 import com.ediae.ecotrack_office.incident.enums.IncidentStatus;
-import com.ediae.ecotrack_office.incident.model.IncidentEntity;
 import com.ediae.ecotrack_office.incident.model.IncidentModel;
-import java.time.LocalDateTime;
 
 public class IncidentMapper {
 

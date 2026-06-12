@@ -1,9 +1,11 @@
 package com.ediae.ecotrack_office.incident.repository;
 
-import com.ediae.ecotrack_office.incident.model.IncidentEntity;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+
+import com.ediae.ecotrack_office.incident.entity.IncidentEntity;
 
 @Repository
 public interface IncidentRepository extends JpaRepository<IncidentEntity, Long> {
