@@ -10,6 +10,64 @@ import com.ediae.ecotrack_office.users.enums.Role;
 @Component
 public class RoleGuard {
 
+    // ═════════════════════════════════════════════════════════════════
+    // MODO 1: Extracción de datos (boolean returns) - Para controladores
+    // ═════════════════════════════════════════════════════════════════
+
+    /**
+     * Extract userId from Authentication context
+     */
+    public Long getUserIdFromAuth(Authentication auth) {
+        return (Long) auth.getPrincipal();
+    }
+
+    /**
+     * Check if user has a specific role (returns boolean, no exception)
+     * Ejemplo: roleGuard.hasRole(auth, Role.ADMIN)
+     */
+    public boolean hasRole(Authentication auth, Role role) {
+        if (auth == null || !auth.isAuthenticated()) return false;
+        return auth.getAuthorities()
+                .contains(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    /**
+     * Check if user has ANY of the specified roles
+     * Ejemplo: roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN)
+     */
+    public boolean hasAnyRole(Authentication auth, Role... roles) {
+        if (auth == null || !auth.isAuthenticated()) return false;
+        for (Role role : roles) {
+            if (hasRole(auth, role)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Convenience method: Check if user is ADMIN
+     */
+    public boolean isAdmin(Authentication auth) {
+        return hasRole(auth, Role.ADMIN);
+    }
+
+    /**
+     * Convenience method: Check if user is TECHNICIAN
+     */
+    public boolean isTechnician(Authentication auth) {
+        return hasRole(auth, Role.TECHNICIAN);
+    }
+
+    /**
+     * Convenience method: Check if user is EMPLOYEE
+     */
+    public boolean isEmployee(Authentication auth) {
+        return hasRole(auth, Role.EMPLOYEE);
+    }
+
+    // ═════════════════════════════════════════════════════════════════
+    // MODO 2: Validación con excepciones - Para servicios/handlers
+    // ═════════════════════════════════════════════════════════════════
+
     // ─────────────────────────────────────────────
     // Comprueba que el usuario tiene UN rol específico
     // Ejemplo: roleGuard.requireRole(auth, Role.TECHNICIAN)
@@ -36,13 +94,8 @@ public class RoleGuard {
     }
 
     // ─────────────────────────────────────────────
-    // Helpers privados
+    // Helper privado
     // ─────────────────────────────────────────────
-    private boolean hasRole(Authentication auth, Role role) {
-        return auth.getAuthorities()
-                .contains(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
-
     private void checkAuthenticated(Authentication auth) {
         if (auth == null || !auth.isAuthenticated()) {
             throw new ForbiddenException("No estás autenticado.");

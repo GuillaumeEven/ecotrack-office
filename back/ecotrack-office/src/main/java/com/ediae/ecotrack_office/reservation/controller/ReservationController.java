@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,7 @@ import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
 import com.ediae.ecotrack_office.reservation.mapper.ReservationMapper;
 import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.reservation.service.ReservationService;
+import com.ediae.ecotrack_office.shared.guard.RoleGuard;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
@@ -33,8 +36,17 @@ public class ReservationController {
     @Autowired
     private ReservationService service;
 
+    @Autowired
+    private RoleGuard roleGuard;
+
     @GetMapping("/user/{id}")
-    public List <ReservationResponseDto> getReservationsByUserId (@PathVariable Long id) {
+    public List <ReservationResponseDto> getReservationsByUserId (Authentication auth, @PathVariable Long id) {
+        Long userId = roleGuard.getUserIdFromAuth(auth);
+
+        // Verify that the user can only see their own reservations (unless ADMIN)
+        if (!userId.equals(id) && !roleGuard.isAdmin(auth)) {
+            return new ArrayList<>();  // Return empty list instead of throwing exception
+        }
 
         List <ReservationModel> models = service.getReservationsByUserId(id);
         List <ReservationResponseDto> dtos = new ArrayList <>();
@@ -46,7 +58,8 @@ public class ReservationController {
     }
 
     @GetMapping("/floor/{id}/date/{date}")
-    public ResponseEntity <List <ReservationResponseDto>> getReservationsByFloorIdAndDate (@PathVariable Long id, @PathVariable String date) {
+    public ResponseEntity <List <ReservationResponseDto>> getReservationsByFloorIdAndDate (Authentication auth, @PathVariable Long id, @PathVariable String date) {
+        Long userId = roleGuard.getUserIdFromAuth(auth);
 
         List <ReservationModel> models = service.getReservationsByFloorIdAndDate(id, date);
         List <ReservationResponseDto> dtos = new ArrayList <>();
@@ -57,7 +70,8 @@ public class ReservationController {
     }
 
     @GetMapping
-    public List <ReservationResponseDto> getAllReservations () {
+    public List <ReservationResponseDto> getAllReservations (Authentication auth) {
+        Long userId = roleGuard.getUserIdFromAuth(auth);
 
         List <ReservationModel> models = service.getAllReservations();
         List <ReservationResponseDto> dtos = new ArrayList <>();
@@ -69,26 +83,33 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ReservationResponseDto getReservationById (@PathVariable Long id) {
+    public ReservationResponseDto getReservationById (Authentication auth, @PathVariable Long id) {
+        Long userId = roleGuard.getUserIdFromAuth(auth);
 
         ReservationModel model = service.getReservationById(id);
         return ReservationMapper.toResponseDto(model);
     }
 
     @PostMapping
-    public ReservationResponseDto createReservation (@RequestBody ReservationCreateDto dto) {
+    public ReservationResponseDto createReservation (Authentication auth, @RequestBody ReservationCreateDto dto) {
+        Long userId = roleGuard.getUserIdFromAuth(auth);
+
+        System.out.println("POST /reservations por userId: " + userId);
+        System.out.println("Received DTO: " + dto);
 
         return ReservationMapper.toResponseDto(service.createReservation(dto));
     }
 
     @PutMapping("/{id}")
-    public ReservationResponseDto updateReservation (@PathVariable Long id, @RequestBody ReservationUpdateDto dto) {
+    public ReservationResponseDto updateReservation (Authentication auth, @PathVariable Long id, @RequestBody ReservationUpdateDto dto) {
+        Long userId = roleGuard.getUserIdFromAuth(auth);
 
         return ReservationMapper.toResponseDto(service.updateReservationById(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public Boolean deleteReservation (@PathVariable Long id) {
+    public Boolean deleteReservation (Authentication auth, @PathVariable Long id) {
+        Long userId = roleGuard.getUserIdFromAuth(auth);
 
         return service.deleteReservationById(id);
     }
