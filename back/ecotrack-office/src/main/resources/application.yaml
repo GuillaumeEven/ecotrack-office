@@ -12,7 +12,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    show-sql: true
+    show-sql: false
     properties:
       javax:
         persistence:
@@ -22,7 +22,7 @@ spring:
               action: none
               create-target: schema.sql
       hibernate:
-        format_sql: true
+        format_sql: false
   flyway:
     enabled: true
     # enabled: false
@@ -41,3 +41,10 @@ jwt:
   logging:
   level:
     org.springframework.security: DEBUG
+logging:
+  level:
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.springframework.web: INFO
+    root: INFO
+    com.ediae.ecotrack_office: DEBUG

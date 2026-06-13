@@ -3,11 +3,13 @@ package com.ediae.ecotrack_office.reservation.dto;
 import java.time.LocalDate;
 
 import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ReservationCreateDto {
 
     // Atributos
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
     private ReservationStatus status;
     private Long userId;

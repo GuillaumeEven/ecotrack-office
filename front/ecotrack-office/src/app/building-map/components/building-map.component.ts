@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Floor, FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus } from '../models';
 import { FloorService } from '../services';
 import { getCurrentUser } from '../config/user-stub';
+import { DeskReservationDialogComponent } from '../dialogs/desk-reservation-dialog.component';
 
 /**
  * Building Map Component
@@ -15,7 +16,7 @@ import { getCurrentUser } from '../config/user-stub';
 @Component({
   selector: 'app-building-map',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DeskReservationDialogComponent],
   templateUrl: './building-map.component.html',
   styleUrl: './building-map.component.css'
 })
@@ -30,6 +31,10 @@ export class BuildingMapComponent implements OnInit {
   selectedFloorId: number | null = null;
   selectedRoomId: number | null = null;
   selectedDate: Date = new Date(); // Default to today
+
+  // Dialog state
+  isDialogOpen = false;
+  selectedDeskForDialog: DeskWithStatus | null = null;
 
   // Enum for template
   ResourceStatus = ResourceStatus;
@@ -270,5 +275,29 @@ export class BuildingMapComponent implements OnInit {
       default:
         return 'Unknown';
     }
+  }
+
+  /**
+   * Open desk reservation dialog
+   */
+  openDeskDialog(desk: DeskWithStatus): void {
+    this.selectedDeskForDialog = desk;
+    this.isDialogOpen = true;
+  }
+
+  /**
+   * Close desk reservation dialog
+   */
+  closeDeskDialog(): void {
+    this.isDialogOpen = false;
+    this.selectedDeskForDialog = null;
+  }
+
+  /**
+   * Handle successful reservation
+   */
+  onReservationSuccess(): void {
+    // Reload desks after successful reservation
+    this.loadAllFloorsWithStatus();
   }
 }

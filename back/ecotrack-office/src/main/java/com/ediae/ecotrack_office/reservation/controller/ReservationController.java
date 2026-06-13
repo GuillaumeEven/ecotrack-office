@@ -76,6 +76,15 @@ public class ReservationController {
     @PostMapping
     public ReservationResponseDto createReservation (@RequestBody ReservationCreateDto dto) {
 
+        System.out.println("Received DTO: " + dto);
+        System.out.println("Date: " + dto.getDate() + " Type: " + dto.getDate().getClass());
+        System.out.println("UserId: " + dto.getUserId());
+        System.out.println("ResourceId: " + dto.getResourceId());
+        System.out.println("Status: " + dto.getStatus());
+
+
+
+
         return ReservationMapper.toResponseDto(service.createReservation(dto));
     }
 

@@ -134,9 +134,9 @@
             <div *ngIf="selectedRoomId && getSelectedFloor()" class="desks-grid">
               <button
                 *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
-                [disabled]="!isDeskAvailable(deskWithStatus)"
                 [ngClass]="getDeskStatusClass(deskWithStatus)"
                 [title]="isMyReservation(deskWithStatus) ? 'Your reservation' : isOtherReservation(deskWithStatus) ? 'Reserved by ' + deskWithStatus.reservedBy : ''"
+                (click)="openDeskDialog(deskWithStatus)"
                 class="desk-btn">
                 {{ deskWithStatus.desk.name }}
               </button>
@@ -192,3 +192,12 @@
     </div>
   </div>
 </div>
+
+<!-- Desk Reservation Dialog -->
+<app-desk-reservation-dialog
+  [isOpen]="isDialogOpen"
+  [deskWithStatus]="selectedDeskForDialog"
+  [selectedDate]="selectedDate"
+  (close)="closeDeskDialog()"
+  (reserved)="onReservationSuccess()">
+</app-desk-reservation-dialog>

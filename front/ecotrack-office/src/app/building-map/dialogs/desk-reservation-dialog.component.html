@@ -1,0 +1,69 @@
+<div class="dialog-overlay" *ngIf="isOpen" (click)="onClose()">
+  <div class="dialog-content" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="dialog-header">
+      <h2>{{ deskWithStatus?.desk?.name || 'Desk' }}</h2>
+      <button class="close-btn" (click)="onClose()" [disabled]="isLoading">✕</button>
+    </div>
+
+    <!-- Content -->
+    <div class="dialog-body">
+      <!-- Status indicator -->
+      <div class="status-section">
+        <!-- Available status -->
+        <div *ngIf="isAvailable()" class="status-available">
+          <div class="status-badge available"></div>
+          <span>This desk is available</span>
+        </div>
+
+        <!-- Reserved status -->
+        <div *ngIf="isReserved()" class="status-reserved">
+          <div class="status-badge reserved"></div>
+          <span>{{ getReservedByText() }}</span>
+        </div>
+
+        <!-- Unavailable status -->
+        <div *ngIf="isUnavailable()" class="status-unavailable">
+          <div class="status-badge unavailable"></div>
+          <span>This desk is unavailable</span>
+        </div>
+      </div>
+
+      <!-- Desk info -->
+      <div class="desk-info">
+        <div class="info-row">
+          <span class="label">Desk:</span>
+          <span class="value">{{ deskWithStatus?.desk?.name || 'N/A' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Date:</span>
+          <span class="value">{{ selectedDate | date: 'short' }}</span>
+        </div>
+      </div>
+
+      <!-- Error message -->
+      <div *ngIf="errorMessage" class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Success message -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="dialog-footer">
+      <button class="btn btn-secondary" (click)="onClose()" [disabled]="isLoading">
+        Close
+      </button>
+      <button
+        *ngIf="isAvailable()"
+        class="btn btn-primary"
+        (click)="onReserve()"
+        [disabled]="isLoading">
+        {{ isLoading ? 'Reserving...' : 'Reserve Desk' }}
+      </button>
+    </div>
+  </div>
+</div>

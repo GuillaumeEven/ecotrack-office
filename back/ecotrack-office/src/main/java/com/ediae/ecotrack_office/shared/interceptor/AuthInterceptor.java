@@ -23,9 +23,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         // TODO: Quitar esta excepción cuando el frontend implemente credenciales correctas
         // Las rutas GET de floors son públicas temporalmente para desarrollo
-        if (path.contains("/api/v1/floors") && "GET".equals(method)) {
-            return true;
-        }
+        // List<String> publicPaths = List.of(
+        //         "/api/v1/floors",
+        //         "/api/v1/reservations"
+        // );
+        // if (publicPaths.stream().anyMatch(path::contains) && "GET".equals(method)) {
+        //     return true;
+        // }
 
         String userIdHeader = request.getHeader("X-User-Id");
         String userRoleHeader = request.getHeader("X-User-Role");

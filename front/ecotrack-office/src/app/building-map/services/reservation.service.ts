@@ -49,4 +49,25 @@ export class ReservationService {
     console.log('📡 ReservationService.getByDeskAndDate() calling:', url);
     return this.httpClient.get<Reservation[]>(url);
   }
+
+  /**
+   * Create a new reservation
+   * @param userId - The user ID
+   * @param resourceId - The resource (desk/room) ID
+   * @param date - The date in ISO format (YYYY-MM-DD)
+   */
+  create(userId: number, resourceId: number, date: string): Observable<any> {
+    const url = this.apiUrl;
+    // Match the exact payload structure from Postman that works (status CONFIRMED)
+    const payload = {
+      date,
+      status: 'CONFIRMED',
+      userId,
+      resourceId
+    };
+    console.log('� ReservationService.create() - URL:', url);
+    console.log('🚀 ReservationService.create() - Payload:', JSON.stringify(payload, null, 2));
+    console.log('🚀 Types - userId:', typeof userId, 'resourceId:', typeof resourceId, 'date:', typeof date);
+    return this.httpClient.post(url, payload);
+  }
 }
