@@ -1,4 +1,4 @@
-export type Role = 'ADMIN' | 'USER';
+export type Role = 'ADMIN' | 'EMPLOYEE' | 'TECHNICIAN';
 
 export interface UserResponse {
   id: number;
@@ -21,7 +21,6 @@ export interface UserMeRequest {
   preferencesJson?: string | null;
 }
 
-// Mapea ChangePasswordRequestDto de Spring
 export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;

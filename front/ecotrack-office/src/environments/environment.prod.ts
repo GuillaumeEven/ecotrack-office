@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://tu-dominio.com/api/v1', // TODO: reemplazar con la URL de producción
+
+  // URL base de tu API Backend para el Login con JWT
+  apiUrl: 'http://localhost:8080/api/v1',
 };
