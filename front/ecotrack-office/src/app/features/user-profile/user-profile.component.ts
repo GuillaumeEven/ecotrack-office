@@ -3,13 +3,14 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { UserResponse } from '../../models/user.model';
+import { ChangePasswordModalComponent } from './components/change-password-modal.component';
 
 export type ProfileSection = 'personal' | 'security' | 'notifications';
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePipe],
+  imports: [CommonModule, ReactiveFormsModule, DatePipe, ChangePasswordModalComponent],
   templateUrl: './user-profile.component.html',
 })
 export class UserProfileComponent implements OnInit {
@@ -20,6 +21,7 @@ export class UserProfileComponent implements OnInit {
   isSaving = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
+  showPasswordModal = false;
 
   departments = ['Facilities Management', 'Administration', 'Human Resources', 'IT Support'];
 
@@ -87,8 +89,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   onChangePassword(): void {
-    // TODO: abrir modal o navegar a /settings/change-password
-    console.log('Change password');
+    this.showPasswordModal = true;
   }
 
   onSignOutAll(): void {
