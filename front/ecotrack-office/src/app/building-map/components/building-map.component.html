@@ -136,6 +136,7 @@
                 *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
                 [ngClass]="getDeskStatusClass(deskWithStatus)"
                 [title]="isMyReservation(deskWithStatus) ? 'Your reservation' : isOtherReservation(deskWithStatus) ? 'Reserved by ' + deskWithStatus.reservedBy : ''"
+                [disabled]="isSelectedRoomUnavailable()"
                 (click)="openDeskDialog(deskWithStatus)"
                 class="desk-btn">
                 {{ deskWithStatus.desk.name }}

@@ -172,6 +172,15 @@ export class BuildingMapComponent implements OnInit {
   }
 
   /**
+   * Check if selected room is unavailable
+   */
+  isSelectedRoomUnavailable(): boolean {
+    if (!this.selectedRoomId) return false;
+    const room = this.getRoomById(this.selectedRoomId);
+    return room?.roomStatus === ResourceStatus.UNAVAILABLE;
+  }
+
+  /**
    * Check if desk is available for reservation
    */
   isDeskAvailable(desk: DeskWithStatus): boolean {
