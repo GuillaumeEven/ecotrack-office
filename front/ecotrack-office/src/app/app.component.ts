@@ -9,13 +9,8 @@ import { AuthService } from './services/auth.service';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, CommonModule, HeaderComponent, SidebarComponent],
-  template: `
-    <ng-container *ngIf="authService.isAuthenticated()">
-      <app-header />
-      <app-sidebar />
-    </ng-container>
-    <router-outlet />
-  `,
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
   constructor(public authService: AuthService) {}
