@@ -1,21 +1,21 @@
 package com.ediae.ecotrack_office.incident.service;
 
-import com.ediae.ecotrack_office.incident.dto.IncidentRequestDto;
-import com.ediae.ecotrack_office.incident.dto.IncidentResponseDto;
-import com.ediae.ecotrack_office.incident.model.IncidentEntity;
-import com.ediae.ecotrack_office.incident.model.IncidentModel;
-import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
-import com.ediae.ecotrack_office.incident.repository.IncidentRepository;
-import com.ediae.ecotrack_office.incident.enums.IncidentStatus;
-import com.ediae.ecotrack_office.users.entity.UserEntity;
-import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
-
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
+import com.ediae.ecotrack_office.incident.dto.IncidentRequestDto;
+import com.ediae.ecotrack_office.incident.dto.IncidentResponseDto;
+import com.ediae.ecotrack_office.incident.entity.IncidentEntity;
+import com.ediae.ecotrack_office.incident.enums.IncidentStatus;
+import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
+import com.ediae.ecotrack_office.incident.model.IncidentModel;
+import com.ediae.ecotrack_office.incident.repository.IncidentRepository;
+import com.ediae.ecotrack_office.users.entity.UserEntity;
 
 @Service
 public class IncidentService {

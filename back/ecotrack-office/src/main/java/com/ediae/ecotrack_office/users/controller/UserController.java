@@ -3,17 +3,8 @@ package com.ediae.ecotrack_office.users.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import com.ediae.ecotrack_office.shared.dto.PageResponseDto;
 import com.ediae.ecotrack_office.shared.guard.AdminGuard;
@@ -41,25 +32,27 @@ public class UserController {
 
     // GET /api/v1/users/me
     @GetMapping("/me")
-    public ResponseEntity<UserResponseDto> getMe(
-            @RequestHeader("X-User-Id") Long userId) {
+    public ResponseEntity<UserResponseDto> getMe(Authentication auth) {
+        // El JwtFilter ya verificó el token y guardó el userId como principal
+        Long userId = (Long) auth.getPrincipal();
         return ResponseEntity.ok(userService.getUserById(userId).toResponseDto());
     }
 
     // PATCH /api/v1/users/me
-    // Solo puede modificar firstName, lastName, email, consentGiven y preferencesJson
     @PatchMapping("/me")
     public ResponseEntity<UserResponseDto> updateMe(
-            @RequestHeader("X-User-Id") Long userId,
+            Authentication auth,
             @Valid @RequestBody UserMeRequestDto dto) {
+        Long userId = (Long) auth.getPrincipal();
         return ResponseEntity.ok(userService.updateMe(userId, dto).toResponseDto());
     }
 
     // PATCH /api/v1/users/me/password
     @PatchMapping("/me/password")
     public ResponseEntity<Void> changePassword(
-            @RequestHeader("X-User-Id") Long userId,
+            Authentication auth,
             @Valid @RequestBody ChangePasswordRequestDto dto) {
+        Long userId = (Long) auth.getPrincipal();
         userService.changePassword(userId, dto);
         return ResponseEntity.noContent().build();
     }
@@ -69,51 +62,58 @@ public class UserController {
     // GET /api/v1/users?organizationId=1&page=0&size=20
     @GetMapping
     public ResponseEntity<PageResponseDto<UserResponseDto>> getUsers(
+            Authentication auth,
             @RequestParam Long organizationId,
             Pageable pageable) {
-        adminGuard.requireAdmin();
+        adminGuard.requireAdmin(auth);
         return ResponseEntity.ok(userService.getUsersByOrganization(organizationId, pageable));
     }
 
     // GET /api/v1/users/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
-        adminGuard.requireAdmin();
+    public ResponseEntity<UserResponseDto> getUserById(
+            Authentication auth,
+            @PathVariable Long id) {
+        adminGuard.requireAdmin(auth);
         return ResponseEntity.ok(userService.getUserById(id).toResponseDto());
     }
 
     // POST /api/v1/users
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(
+            Authentication auth,
             @Valid @RequestBody UserRequestDto dto) {
-        adminGuard.requireAdmin();
+        adminGuard.requireAdmin(auth);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userService.createUser(dto).toResponseDto());
     }
 
     // PUT /api/v1/users/{id}
-    // Puede modificar email, password, firstName, lastName y rol
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(
+            Authentication auth,
             @PathVariable Long id,
             @Valid @RequestBody UserRequestDto dto) {
-        adminGuard.requireAdmin();
+        adminGuard.requireAdmin(auth);
         return ResponseEntity.ok(userService.updateUser(id, dto).toResponseDto());
     }
 
     // PATCH /api/v1/users/{id}/deactivate
     @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateUser(@PathVariable Long id) {
-        adminGuard.requireAdmin();
+    public ResponseEntity<Void> deactivateUser(
+            Authentication auth,
+            @PathVariable Long id) {
+        adminGuard.requireAdmin(auth);
         userService.deactivateUser(id);
         return ResponseEntity.noContent().build();
     }
 
     // DELETE /api/v1/users/{id}
-    // GDPR erasure — no borra la fila
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        adminGuard.requireAdmin();
+    public ResponseEntity<Void> deleteUser(
+            Authentication auth,
+            @PathVariable Long id) {
+        adminGuard.requireAdmin(auth);
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

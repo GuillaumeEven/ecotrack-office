@@ -1,4 +1,4 @@
-package com.ediae.ecotrack_office.incident.model;
+package com.ediae.ecotrack_office.incident.entity;
 
 import java.time.LocalDateTime;
 

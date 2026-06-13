@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-EcotrackOfficeApplication<ecotrack-office>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.ediae.ecotrack_office.EcotrackOfficeApplication",
+      "projectName": "ecotrack-office",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
