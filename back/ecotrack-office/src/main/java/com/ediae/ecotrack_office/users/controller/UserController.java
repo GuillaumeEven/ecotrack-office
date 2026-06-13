@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.ediae.ecotrack_office.shared.dto.PageResponseDto;
-import com.ediae.ecotrack_office.shared.guard.AdminGuard;
+import com.ediae.ecotrack_office.shared.guard.RoleGuard;
 import com.ediae.ecotrack_office.users.dto.ChangePasswordRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
@@ -21,11 +21,11 @@ import jakarta.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-    private final AdminGuard adminGuard;
+    private final RoleGuard roleGuard;
 
-    public UserController(UserService userService, AdminGuard adminGuard) {
+    public UserController(UserService userService, RoleGuard roleGuard) {
         this.userService = userService;
-        this.adminGuard = adminGuard;
+        this.roleGuard = roleGuard;
     }
 
     // ─── Endpoints /me (cualquier usuario autenticado) ───────────────────────
@@ -65,7 +65,9 @@ public class UserController {
             Authentication auth,
             @RequestParam Long organizationId,
             Pageable pageable) {
-        adminGuard.requireAdmin(auth);
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(userService.getUsersByOrganization(organizationId, pageable));
     }
 
@@ -74,7 +76,9 @@ public class UserController {
     public ResponseEntity<UserResponseDto> getUserById(
             Authentication auth,
             @PathVariable Long id) {
-        adminGuard.requireAdmin(auth);
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(userService.getUserById(id).toResponseDto());
     }
 
@@ -83,7 +87,9 @@ public class UserController {
     public ResponseEntity<UserResponseDto> createUser(
             Authentication auth,
             @Valid @RequestBody UserRequestDto dto) {
-        adminGuard.requireAdmin(auth);
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userService.createUser(dto).toResponseDto());
     }
@@ -94,7 +100,9 @@ public class UserController {
             Authentication auth,
             @PathVariable Long id,
             @Valid @RequestBody UserRequestDto dto) {
-        adminGuard.requireAdmin(auth);
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(userService.updateUser(id, dto).toResponseDto());
     }
 
@@ -103,7 +111,9 @@ public class UserController {
     public ResponseEntity<Void> deactivateUser(
             Authentication auth,
             @PathVariable Long id) {
-        adminGuard.requireAdmin(auth);
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         userService.deactivateUser(id);
         return ResponseEntity.noContent().build();
     }
@@ -113,7 +123,9 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(
             Authentication auth,
             @PathVariable Long id) {
-        adminGuard.requireAdmin(auth);
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

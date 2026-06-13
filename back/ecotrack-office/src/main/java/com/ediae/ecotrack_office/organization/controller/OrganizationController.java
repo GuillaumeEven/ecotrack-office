@@ -1,6 +1,9 @@
 package com.ediae.ecotrack_office.organization.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,7 @@ import com.ediae.ecotrack_office.organization.dto.OrganizationResponseDto;
 import com.ediae.ecotrack_office.organization.dto.OrganizationUpdateDto;
 import com.ediae.ecotrack_office.organization.mapper.OrganizationMapper;
 import com.ediae.ecotrack_office.organization.service.OrganizationService;
+import com.ediae.ecotrack_office.shared.guard.RoleGuard;
 
 
 @RestController
@@ -28,35 +32,46 @@ public class OrganizationController {
     @Autowired
     private OrganizationService service;
 
+    @Autowired
+    private RoleGuard roleGuard;
+
     @GetMapping("/{id}")
-    public OrganizationResponseDto getOrganizationById (@PathVariable Long id) {
+    public OrganizationResponseDto getOrganizationById (Authentication auth, @PathVariable Long id) {
 
         return OrganizationMapper.toResponseDto(service.getOrganizationById(id));
     }
 
     @PostMapping
-    public OrganizationResponseDto createOrganization (@RequestBody OrganizationCreateDto dto) {
-
+    public ResponseEntity<OrganizationResponseDto> createOrganization (Authentication auth, @RequestBody OrganizationCreateDto dto) {
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         System.out.println("La dirección recibida es: " + dto.getAddress());
-        return OrganizationMapper.toResponseDto(service.createOrganization(dto));
+        return ResponseEntity.ok(OrganizationMapper.toResponseDto(service.createOrganization(dto)));
     }
 
     @PutMapping("/{id}")
-    public OrganizationResponseDto updateOrganization (@PathVariable Long id, @RequestBody OrganizationUpdateDto dto) {
-
-        return OrganizationMapper.toResponseDto(service.updateOrganizationById(id, dto));
+    public ResponseEntity<OrganizationResponseDto> updateOrganization (Authentication auth, @PathVariable Long id, @RequestBody OrganizationUpdateDto dto) {
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(OrganizationMapper.toResponseDto(service.updateOrganizationById(id, dto)));
     }
 
     @PutMapping("/{id}/deactivate")
-    public OrganizationResponseDto deactivateOrganization (@PathVariable Long id) {
-
-        return OrganizationMapper.toResponseDto(service.deactivateOrganization(id));
+    public ResponseEntity<OrganizationResponseDto> deactivateOrganization (Authentication auth, @PathVariable Long id) {
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(OrganizationMapper.toResponseDto(service.deactivateOrganization(id)));
     }
 
     @DeleteMapping("/{id}") //TENER EN CUENTA QUE PARA BORRAR UNA ORGANIZACIÓN PRIMERO HABRÍA QUE BORRAR LOS USUARIO ASOCIADOS A ELLA, Y ESTO GENERA UNA ELIMINACIÓN DE ELEMENTOS EN CADENA.
-    public Boolean deleteOrganization (@PathVariable Long id) {
-
-        return service.deleteOrganization(id);
+    public ResponseEntity<Boolean> deleteOrganization (Authentication auth, @PathVariable Long id) {
+        if (!roleGuard.isAdmin(auth)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(service.deleteOrganization(id));
     }
 
 
