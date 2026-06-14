@@ -12,7 +12,7 @@ input.ng-invalid.ng-touched {
   background-color: #fff8f8;
 }
 
-.error-msg {
+.error-message {
   color: #dc3545;
   font-size: 0.85rem;
 }
