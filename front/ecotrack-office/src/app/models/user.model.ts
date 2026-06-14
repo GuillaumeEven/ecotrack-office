@@ -13,6 +13,20 @@ export interface UserResponse {
   createdAt: string;
 }
 
+export interface UserModel {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  passwordHash: string;
+  role: Role | null;
+  organizationId: number | null;
+  isActive: boolean;
+  consentGiven: boolean;
+  preferencesJson: string | null;
+  createdAt: string;
+}
+
 export interface UserMeRequest {
   firstName: string;
   lastName: string;

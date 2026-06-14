@@ -129,37 +129,74 @@
                 </div>
                 <div class="lg:w-1/2 w-full">
                     <div class="bg-white p-lg rounded-xl shadow-xl border border-outline-variant">
-                        <h3 class="font-headline-md text-headline-md mb-lg">Registro (¿aquí sería un usuario y luego ya mete datos de la empresa o cómo? Para poner los campos correctos)</h3>
-                        <form class="space-y-md">
+                        <h3 class="font-headline-md text-headline-md mb-lg">Formualario de Registro</h3>
+                        <form class="space-y-md" [formGroup]= "registerForm" (ngSubmit) = "register()">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
                                 <div class="space-y-xs">
-                                    <label class="font-label-sm text-label-sm text-on-surface-variant">NOMBRE</label>
-                                    <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="John" type="text"/>
+                                    <label class="font-label-sm text-label-sm text-on-surface-variant" for = "nombre">NOMBRE</label>
+                                    <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="John" type="text" id = "firstName" formControlName = "firstName"/>
+                                
+                                    @if (registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
+
+                                        <small class = "error-message">El nombre es obligatorio.</small>
+                                    }
                                 </div>
                                 <div class="space-y-xs">
-                                    <label class="font-label-sm text-label-sm text-on-surface-variant">APELLIDOS</label>
-                                    <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Doe" type="text"/>
+                                    <label class="font-label-sm text-label-sm text-on-surface-variant" for = "apellidos">APELLIDOS</label>
+                                    <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Doe" type="text" id = "lastName" formControlName = "lastName"/>
+                                
+                                    @if (registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
+
+                                        <small class = "error-message">El apellido es obligatorio.</small>
+                                    }
                                 </div>
                             </div>
                             <div class="space-y-xs">
-                                <label class="font-label-sm text-label-sm text-on-surface-variant">CORREO ELECTRÓNICO</label>
-                                <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="john@company.com" type="email"/>
+                                <label class="font-label-sm text-label-sm text-on-surface-variant" for = "correoElectronico">CORREO ELECTRÓNICO</label>
+                                <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="john@company.com" type="email" id = "email" formControlName = "email"/>
+                            
+                                @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+
+                                        @if (registerForm.get('email')?.hasError('required')) {
+                                            <small class = "error-message">El correo electrónico es obligatorio.</small>
+                                        }
+                                        @if (registerForm.get('email')?.hasError('email')) {
+                                            <small class = "error-message">Por favor, introduce un formato de email valido.</small>
+                                        }
+                                    }
                             </div>
                             <div class="space-y-xs">
-                                <label class="font-label-sm text-label-sm text-on-surface-variant">CONTRASEÑA</label>
-                                <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Acme Corp" type="text"/>
+                                <label class="font-label-sm text-label-sm text-on-surface-variant" for = "contrasena">CONTRASEÑA</label>
+                                <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Introduce tu contraseña" type="password" id = "passwordHash" formControlName = "passwordHash"/>
+                            
+                                @if (registerForm.get('passwordHash')?.invalid && registerForm.get('passwordHash')?.touched) {
+
+                                    @if (registerForm.get('passwordHash')?.hasError('required')) {
+
+                                        <small class = "error-message">La contraseña es obligatoria.</small>
+
+                                    } 
+                                }
                             </div>
                             <div class="space-y-xs">
-                                <label class="font-label-sm text-label-sm text-on-surface-variant">ORGANIZATION SIZE</label>
-                                <select class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
-                                    <option>1-50 employees</option>
-                                    <option>51-250 employees</option>
-                                    <option>251-1000 employees</option>
-                                    <option>1000+ employees</option>
-                                </select>
+                                <label class="font-label-sm text-label-sm text-on-surface-variant" for = "repetirContrasena">REPETIR CONTRASEÑA</label>
+                                <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Repite tu contraseña" type="password" id = "confirmPassword" formControlName = "confirmPassword"/>
+                            
+                                @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('passwordHash')?.touched) {
+
+                                    @if (registerForm.get('confirmPassword')?.hasError('required')) {
+
+                                        <small class = "error-message">Debes confirmar la contraseña.</small>
+
+                                    } 
+                                    @if (registerForm.get('confirmPassword')?.hasError('passwordsNotMatch')) {
+
+                                        <small class = "error-message">Las contraseñas no coinciden.</small>
+                                    }
+                                }
                             </div>
-                            <button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-md rounded-xl hover:bg-black/90 transition-all shadow-lg active:scale-95 duration-150" type="submit">
-                                Continue to Setup
+                            <button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-md rounded-xl hover:bg-black/90 transition-all shadow-lg active:scale-95 duration-150" type="submit" [disabled]="registerForm.invalid">
+                                Continuar con el registro
                             </button>
                             <p class="font-body-md text-body-md text-on-surface-variant text-center">
                                 By registering, you agree to our <a class="text-primary font-bold hover:underline" href="#">Terms of Service</a>.
