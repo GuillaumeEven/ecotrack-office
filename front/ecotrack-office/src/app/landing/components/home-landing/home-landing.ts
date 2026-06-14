@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-home-landing',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './home-landing.html',
   styleUrl: './home-landing.css',
 })
