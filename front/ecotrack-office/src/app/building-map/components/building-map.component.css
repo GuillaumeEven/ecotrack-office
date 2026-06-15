@@ -458,3 +458,89 @@
   display: block;
   margin-bottom: 4px;
 }
+
+/* Meeting Room Container */
+.meeting-room-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+  color: white;
+  min-height: 250px;
+  justify-content: space-between;
+}
+
+.meeting-room-info {
+  flex: 1;
+}
+
+.meeting-room-info h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.meeting-room-info p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.meeting-room-info .capacity {
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.meeting-room-info .status-available {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.meeting-room-info .status-reserved {
+  color: #ffcdd2;
+  font-weight: bold;
+}
+
+.meeting-room-info .status-unavailable {
+  color: #ffcdd2;
+  font-weight: bold;
+}
+
+.meeting-room-container .btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.meeting-room-container .btn-primary {
+  background-color: #4caf50;
+  color: white;
+}
+
+.meeting-room-container .btn-primary:hover {
+  background-color: #45a049;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.meeting-room-container .btn-primary:active {
+  transform: scale(0.98);
+}
+
+.meeting-room-container .btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: not-allowed;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.meeting-room-container .btn-secondary:disabled {
+  opacity: 0.7;
+}

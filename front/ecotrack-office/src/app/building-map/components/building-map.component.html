@@ -143,8 +143,37 @@
               </button>
             </div>
 
+            <!-- Meeting Room Display (single button for the entire room) -->
+            <div *ngIf="selectedRoomId && getSelectedFloor() && getSelectedRoom() && isMeetingRoom(getSelectedRoom()!)" class="meeting-room-container">
+              <div class="meeting-room-info">
+                <h3>{{ getSelectedRoom()?.room?.name }}</h3>
+                <p class="capacity">Capacity: {{ getSelectedRoom()?.room?.capacity }} people</p>
+                <p [ngClass]="'status-' + getSelectedRoom()?.roomStatus?.toLowerCase()">
+                  Status: {{ getStatusText(getSelectedRoom()?.roomStatus!) }}
+                </p>
+              </div>
+              <button
+                *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.AVAILABLE"
+                (click)="openMeetingRoomReservationDialog(getSelectedRoom()!)"
+                class="btn btn-primary">
+                Reserve Meeting Room
+              </button>
+              <button
+                *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.RESERVED"
+                disabled
+                class="btn btn-secondary">
+                Reserved
+              </button>
+              <button
+                *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.UNAVAILABLE"
+                disabled
+                class="btn btn-secondary">
+                Unavailable
+              </button>
+            </div>
+
             <div
-              *ngIf="selectedRoomId && getSelectedFloor() && getDesksByRoom(selectedRoomId).length === 0 && !loading.floors && !errors.floors"
+              *ngIf="selectedRoomId && getSelectedFloor() && getDesksByRoom(selectedRoomId).length === 0 && !isMeetingRoom(getSelectedRoom()!) && !loading.floors && !errors.floors"
               class="empty-state">
               <p>No desks found for this room.</p>
             </div>
@@ -199,6 +228,7 @@
   [isOpen]="isDialogOpen"
   [deskWithStatus]="selectedDeskForDialog"
   [selectedDate]="selectedDate"
+  [isMeetingRoom]="isDialogForMeetingRoom"
   (close)="closeDeskDialog()"
   (reserved)="onReservationSuccess()">
 </app-desk-reservation-dialog>

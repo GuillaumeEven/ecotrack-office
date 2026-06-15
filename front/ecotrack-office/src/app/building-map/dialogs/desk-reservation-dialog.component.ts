@@ -15,6 +15,7 @@ export class DeskReservationDialogComponent implements OnInit {
   @Input() isOpen = false;
   @Input() deskWithStatus: DeskWithStatus | null = null;
   @Input() selectedDate: Date = new Date();
+  @Input() isMeetingRoom = false; // Flag to indicate if this is a meeting room reservation
   @Output() close = new EventEmitter<void>();
   @Output() reserved = new EventEmitter<void>();
 
@@ -65,6 +66,13 @@ export class DeskReservationDialogComponent implements OnInit {
            this.deskWithStatus?.reservedBy !== this.currentUserEmail;
   }
 
+  /**
+   * Get resource type text (Desk or Meeting Room)
+   */
+  getResourceType(): string {
+    return this.isMeetingRoom ? 'Meeting Room' : 'Desk';
+  }
+
   onReserve(): void {
     if (!this.deskWithStatus?.desk?.id) {
       this.errorMessage = 'Invalid desk ID';
@@ -96,7 +104,8 @@ export class DeskReservationDialogComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           console.log('✅ Reservation successful:', response);
-          this.successMessage = `Desk "${this.deskWithStatus?.desk?.name}" reserved successfully!`;
+          const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
+          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" reserved successfully!`;
           setTimeout(() => {
             this.onClose();
             this.reserved.emit();
@@ -148,7 +157,8 @@ export class DeskReservationDialogComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           console.log('✅ Reservation cancelled successfully');
-          this.successMessage = `Reservation for "${this.deskWithStatus?.desk?.name}" cancelled successfully!`;
+          const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
+          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" cancelled successfully!`;
           setTimeout(() => {
             this.onClose();
             this.reserved.emit(); // Emit event to trigger refresh

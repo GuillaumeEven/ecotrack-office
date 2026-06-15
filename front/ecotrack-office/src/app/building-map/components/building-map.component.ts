@@ -35,6 +35,7 @@ export class BuildingMapComponent implements OnInit {
   // Dialog state
   isDialogOpen = false;
   selectedDeskForDialog: DeskWithStatus | null = null;
+  isDialogForMeetingRoom = false; // Track if dialog is for meeting room
 
   // Enum for template
   ResourceStatus = ResourceStatus;
@@ -66,7 +67,7 @@ export class BuildingMapComponent implements OnInit {
   /**
    * Load all floors with status for a specific date using global progressive logic
    */
-  private loadAllFloorsWithStatus(): void {
+  private loadAllFloorsWithStatus(refreshCurrentRoom = false): void {
     this.loading.floors = true;
     this.errors.floors = null;
 
@@ -91,6 +92,11 @@ export class BuildingMapComponent implements OnInit {
           }
         }
 
+        // If refreshCurrentRoom is true, ensure the current room data is fresh
+        if (refreshCurrentRoom && this.selectedRoomId) {
+          console.log('🔄 Refreshing current room data after reservation:', this.selectedRoomId);
+        }
+
         this.loading.floors = false;
         this.cdr.markForCheck();
       },
@@ -105,19 +111,25 @@ export class BuildingMapComponent implements OnInit {
 
   /**
    * Handle floor selection
+   * Force change detection to show updated meeting room statuses after progressive unlock
    */
   onFloorSelect(floorId: number): void {
     console.log('🏢 onFloorSelect() called with floorId:', floorId);
     this.selectedFloorId = floorId;
     this.selectedRoomId = null;
+    // Force change detection to display updated meeting room statuses
+    this.cdr.markForCheck();
   }
 
   /**
    * Handle room selection (UI only, data already loaded)
+   * Force change detection to show updated room statuses
    */
   onRoomSelect(roomId: number): void {
     console.log('🪑 onRoomSelect() called with roomId:', roomId);
     this.selectedRoomId = roomId;
+    // Force change detection when switching rooms to display updated statuses from progressive unlock
+    this.cdr.markForCheck();
   }
 
   /**
@@ -164,6 +176,36 @@ export class BuildingMapComponent implements OnInit {
   getDesksByRoom(roomId: number | null): DeskWithStatus[] {
     if (!roomId) return [];
     return this.getRoomById(roomId)?.desks ?? [];
+  }
+
+  /**
+   * Check if a room is a meeting room (vs desk area)
+   */
+  isMeetingRoom(room: RoomWithStatus): boolean {
+    return room.room.roomType === 'MEETING_ROOM';
+  }
+
+  /**
+   * Get the currently selected room
+   */
+  getSelectedRoom(): RoomWithStatus | null {
+    if (!this.selectedRoomId) return null;
+    return this.getRoomById(this.selectedRoomId) ?? null;
+  }
+
+  /**
+   * Open meeting room reservation dialog
+   */
+  openMeetingRoomReservationDialog(room: RoomWithStatus): void {
+    // Create a pseudo-DeskWithStatus for the dialog
+    // The dialog will treat it as a reservation request for the room itself
+    const pseudoDeskWithStatus: DeskWithStatus = {
+      desk: room.room as any, // Room object has same id/name structure
+      calculatedStatus: room.roomStatus
+    };
+    this.selectedDeskForDialog = pseudoDeskWithStatus;
+    this.isDialogForMeetingRoom = true;
+    this.isDialogOpen = true;
   }
 
   /**
@@ -297,6 +339,7 @@ export class BuildingMapComponent implements OnInit {
       return; // Don't open dialog for other people's reservations
     }
     this.selectedDeskForDialog = desk;
+    this.isDialogForMeetingRoom = false;
     this.isDialogOpen = true;
   }
 
@@ -306,13 +349,16 @@ export class BuildingMapComponent implements OnInit {
   closeDeskDialog(): void {
     this.isDialogOpen = false;
     this.selectedDeskForDialog = null;
+    this.isDialogForMeetingRoom = false;
   }
 
   /**
-   * Handle successful reservation
+   * Handle successful reservation - reload all floors to see progressive unlock changes
+   * This forces the display to refresh after the backend recalculates meeting room statuses
    */
   onReservationSuccess(): void {
-    // Reload desks after successful reservation
-    this.loadAllFloorsWithStatus();
+    console.log('🎉 Reservation successful, reloading all floors for progressive unlock...');
+    // Reload floors with flag to refresh current room after data arrives
+    this.loadAllFloorsWithStatus(true);
   }
 }
