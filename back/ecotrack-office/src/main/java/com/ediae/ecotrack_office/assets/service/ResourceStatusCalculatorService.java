@@ -255,7 +255,7 @@ public class ResourceStatusCalculatorService {
     /**
      * Calculates desk status for a specific date
      * - RESERVED: if confirmed reservation exists for that day
-     * - UNAVAILABLE: if desk is inactive (is_active=false)
+     * - UNAVAILABLE: if desk is inactive OR if released reservation exists
      * - AVAILABLE: otherwise
      */
     public ResourceStatus calculateDeskStatus(DeskEntity desk, LocalDate date) {
@@ -264,6 +264,15 @@ public class ResourceStatusCalculatorService {
         }
 
         List<ReservationEntity> reservations = reservationRepository.findByResourceId(desk.getId());
+
+        // Check for RELEASED reservations (locked, unavailable)
+        boolean hasReleasedReservation = reservations.stream()
+                .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.RELEASED);
+        if (hasReleasedReservation) {
+            return ResourceStatus.UNAVAILABLE;
+        }
+
+        // Check for CONFIRMED reservations (reserved)
         boolean hasConfirmedReservation = reservations.stream()
                 .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.CONFIRMED);
 
@@ -299,12 +308,21 @@ public class ResourceStatusCalculatorService {
 
     /**
      * Calculates status for MEETING_ROOM
-     * - If reserved that day → RESERVED
+     * - If released reservation exists → UNAVAILABLE
+     * - If confirmed reservation exists → RESERVED
      * - Otherwise → AVAILABLE
      */
     private ResourceStatus calculateMeetingRoomStatus(RoomEntity room, LocalDate date) {
         List<ReservationEntity> roomReservations = reservationRepository.findByResourceId(room.getId());
 
+        // Check for RELEASED reservations (locked, unavailable)
+        boolean hasReleasedReservation = roomReservations.stream()
+                .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.RELEASED);
+        if (hasReleasedReservation) {
+            return ResourceStatus.UNAVAILABLE;
+        }
+
+        // Check for CONFIRMED reservations (reserved)
         boolean isReservedThatDay = roomReservations.stream()
                 .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.CONFIRMED);
 
@@ -353,6 +371,7 @@ public class ResourceStatusCalculatorService {
 
     /**
      * Converts a desk entity to DeskWithStatusDto
+     * Only sets reservedBy for CONFIRMED reservations (not RELEASED)
      */
     private DeskWithStatusDto convertDeskToWithStatusDto(DeskEntity desk, LocalDate date) {
         DeskResponseDto deskDto = deskMapper.toResponseDto(desk);
@@ -369,6 +388,7 @@ public class ResourceStatusCalculatorService {
                 reservedBy = reservation.get().getUser().getEmail();
             }
         }
+        // RELEASED reservations show as UNAVAILABLE with no reservedBy info
 
         return new DeskWithStatusDto(deskDto, status, reservedBy);
     }

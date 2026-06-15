@@ -71,7 +71,7 @@ export class DeskReservationDialogComponent implements OnInit {
     this.errorMessage = null;
     this.successMessage = null;
 
-    const dateStr = this.selectedDate.toISOString().split('T')[0];
+    const dateStr = this.formatDateToISO(this.selectedDate);
     const userIdNum = typeof userId === 'string' ? parseInt(userId, 10) : userId;
 
     console.log('💾 Dialog - Attempting reservation:');
@@ -114,5 +114,16 @@ export class DeskReservationDialogComponent implements OnInit {
     this.errorMessage = null;
     this.successMessage = null;
     this.close.emit();
+  }
+
+  /**
+   * Format date to ISO string (YYYY-MM-DD) using local timezone
+   * Prevents UTC conversion issues
+   */
+  private formatDateToISO(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

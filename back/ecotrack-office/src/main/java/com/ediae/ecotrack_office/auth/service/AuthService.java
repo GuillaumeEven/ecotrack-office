@@ -42,6 +42,6 @@ public class AuthService {
         // 4. Generamos el token con el id y el rol del usuario
         String token = jwtService.generateToken(user.getId(), user.getRole().name());
 
-        return new LoginResponseDto(token, user.getId(), user.getRole().name());
+        return new LoginResponseDto(token, user.getId(), user.getRole().name(), user.getEmail());
     }
 }
