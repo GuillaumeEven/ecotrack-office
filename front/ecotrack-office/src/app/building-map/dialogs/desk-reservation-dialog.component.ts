@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DeskWithStatus, ResourceStatus } from '../models';
 import { ReservationService } from '../services';
-import { getCurrentUser } from '../config/user-stub';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-desk-reservation-dialog',
@@ -23,12 +23,17 @@ export class DeskReservationDialogComponent implements OnInit {
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
-  currentUser = getCurrentUser();
   ResourceStatus = ResourceStatus;
+  private currentUserEmail: string | null = null;
 
-  constructor(private reservationService: ReservationService) {}
+  constructor(
+    private reservationService: ReservationService,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.currentUserEmail = this.authService.getEmail();
+  }
 
   isReserved(): boolean {
     return this.deskWithStatus?.calculatedStatus === ResourceStatus.RESERVED;
@@ -44,7 +49,7 @@ export class DeskReservationDialogComponent implements OnInit {
 
   getReservedByText(): string {
     if (!this.deskWithStatus?.reservedBy) return '';
-    if (this.deskWithStatus.reservedBy === this.currentUser.email) {
+    if (this.deskWithStatus.reservedBy === this.currentUserEmail) {
       return 'Your reservation';
     }
     return `Reserved by ${this.deskWithStatus.reservedBy}`;
@@ -56,23 +61,27 @@ export class DeskReservationDialogComponent implements OnInit {
       return;
     }
 
+    const userId = this.authService.getUserId();
+    if (!userId) {
+      this.errorMessage = 'User not authenticated';
+      return;
+    }
+
     this.isLoading = true;
     this.errorMessage = null;
     this.successMessage = null;
 
     const dateStr = this.selectedDate.toISOString().split('T')[0];
-    const userId = typeof this.currentUser.id === 'string'
-      ? parseInt(this.currentUser.id, 10)
-      : this.currentUser.id;
+    const userIdNum = typeof userId === 'string' ? parseInt(userId, 10) : userId;
 
     console.log('💾 Dialog - Attempting reservation:');
-    console.log('   User ID:', userId, 'Type:', typeof userId);
+    console.log('   User ID:', userIdNum, 'Type:', typeof userIdNum);
     console.log('   Resource ID:', this.deskWithStatus.desk.id, 'Type:', typeof this.deskWithStatus.desk.id);
     console.log('   Date:', dateStr, 'Type:', typeof dateStr);
-    console.log('   Current User:', this.currentUser);
+    console.log('   Current User Email:', this.currentUserEmail);
 
     this.reservationService
-      .create(userId, this.deskWithStatus.desk.id, dateStr)
+      .create(userIdNum, this.deskWithStatus.desk.id, dateStr)
       .subscribe({
         next: (response) => {
           this.isLoading = false;

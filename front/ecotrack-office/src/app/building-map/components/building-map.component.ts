@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Floor, FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus } from '../models';
 import { FloorService } from '../services';
-import { getCurrentUser } from '../config/user-stub';
+import { AuthService } from '../../services/auth.service';
 import { DeskReservationDialogComponent } from '../dialogs/desk-reservation-dialog.component';
 
 /**
@@ -50,14 +50,16 @@ export class BuildingMapComponent implements OnInit {
 
   constructor(
     private floorService: FloorService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {
-    // Get current user email
-    this.currentUserEmail = getCurrentUser().email;
+    // Get current user email from JWT
+    const email = this.authService.getEmail();
+    this.currentUserEmail = email || '';
   }
 
   ngOnInit(): void {
-    console.log('🚀 AssetsMgmtComponent initialized, loading all floors with status...');
+    console.log('🚀 BuildingMapComponent initialized, loading all floors with status...');
     this.loadAllFloorsWithStatus();
   }
 

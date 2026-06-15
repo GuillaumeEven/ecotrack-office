@@ -65,9 +65,19 @@ export class ReservationService {
       userId,
       resourceId
     };
-    console.log('� ReservationService.create() - URL:', url);
+    console.log('💾 ReservationService.create() - URL:', url);
     console.log('🚀 ReservationService.create() - Payload:', JSON.stringify(payload, null, 2));
     console.log('🚀 Types - userId:', typeof userId, 'resourceId:', typeof resourceId, 'date:', typeof date);
     return this.httpClient.post(url, payload);
+  }
+
+  /**
+   * Delete a reservation by ID
+   * @param reservationId - The reservation ID to delete
+   */
+  delete(reservationId: number): Observable<boolean> {
+    const url = `${this.apiUrl}/${reservationId}`;
+    console.log('🗑️ ReservationService.delete() - URL:', url);
+    return this.httpClient.delete<boolean>(url);
   }
 }
