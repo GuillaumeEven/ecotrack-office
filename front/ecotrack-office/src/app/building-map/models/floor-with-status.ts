@@ -15,6 +15,7 @@ export interface DeskWithStatus {
   desk: Desk;
   calculatedStatus: ResourceStatus;
   reservedBy?: string; // email of the user who reserved it
+  reservationId?: number; // ID of the reservation (for cancellation)
 }
 
 /**

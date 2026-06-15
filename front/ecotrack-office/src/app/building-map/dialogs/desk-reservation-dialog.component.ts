@@ -55,6 +55,16 @@ export class DeskReservationDialogComponent implements OnInit {
     return `Reserved by ${this.deskWithStatus.reservedBy}`;
   }
 
+  isMyReservation(): boolean {
+    return this.isReserved() && 
+           this.deskWithStatus?.reservedBy === this.currentUserEmail;
+  }
+
+  isOtherReservation(): boolean {
+    return this.isReserved() && 
+           this.deskWithStatus?.reservedBy !== this.currentUserEmail;
+  }
+
   onReserve(): void {
     if (!this.deskWithStatus?.desk?.id) {
       this.errorMessage = 'Invalid desk ID';
@@ -114,6 +124,45 @@ export class DeskReservationDialogComponent implements OnInit {
     this.errorMessage = null;
     this.successMessage = null;
     this.close.emit();
+  }
+
+  onCancelReservation(): void {
+    if (!this.deskWithStatus?.reservationId) {
+      this.errorMessage = 'Reservation ID not found';
+      return;
+    }
+
+    if (!confirm('Are you sure you want to cancel this reservation?')) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.successMessage = null;
+
+    console.log('🗑️ Attempting to cancel reservation:', this.deskWithStatus.reservationId);
+
+    this.reservationService
+      .delete(this.deskWithStatus.reservationId)
+      .subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          console.log('✅ Reservation cancelled successfully');
+          this.successMessage = `Reservation for "${this.deskWithStatus?.desk?.name}" cancelled successfully!`;
+          setTimeout(() => {
+            this.onClose();
+            this.reserved.emit(); // Emit event to trigger refresh
+          }, 1500);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          console.error('❌ Cancellation failed:', error);
+          this.errorMessage =
+            error.error?.message ||
+            error.message ||
+            `Failed to cancel reservation (HTTP ${error.status}). Please try again.`;
+        }
+      });
   }
 
   /**

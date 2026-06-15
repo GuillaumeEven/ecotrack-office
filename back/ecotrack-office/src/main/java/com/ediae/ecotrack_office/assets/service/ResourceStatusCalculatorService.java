@@ -371,13 +371,14 @@ public class ResourceStatusCalculatorService {
 
     /**
      * Converts a desk entity to DeskWithStatusDto
-     * Only sets reservedBy for CONFIRMED reservations (not RELEASED)
+     * Only sets reservedBy and reservationId for CONFIRMED reservations (not RELEASED)
      */
     private DeskWithStatusDto convertDeskToWithStatusDto(DeskEntity desk, LocalDate date) {
         DeskResponseDto deskDto = deskMapper.toResponseDto(desk);
         ResourceStatus status = calculateDeskStatus(desk, date);
 
         String reservedBy = null;
+        Long reservationId = null;
         if (status == ResourceStatus.RESERVED) {
             List<ReservationEntity> reservations = reservationRepository.findByResourceId(desk.getId());
             Optional<ReservationEntity> reservation = reservations.stream()
@@ -386,11 +387,12 @@ public class ResourceStatusCalculatorService {
 
             if (reservation.isPresent()) {
                 reservedBy = reservation.get().getUser().getEmail();
+                reservationId = reservation.get().getId();
             }
         }
         // RELEASED reservations show as UNAVAILABLE with no reservedBy info
 
-        return new DeskWithStatusDto(deskDto, status, reservedBy);
+        return new DeskWithStatusDto(deskDto, status, reservedBy, reservationId);
     }
 
 }

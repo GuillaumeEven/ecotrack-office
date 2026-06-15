@@ -64,6 +64,13 @@
         [disabled]="isLoading">
         {{ isLoading ? 'Reserving...' : 'Reserve Desk' }}
       </button>
+      <button
+        *ngIf="isMyReservation()"
+        class="btn btn-danger"
+        (click)="onCancelReservation()"
+        [disabled]="isLoading">
+        {{ isLoading ? 'Cancelling...' : 'Cancel Reservation' }}
+      </button>
     </div>
   </div>
 </div>

@@ -290,8 +290,12 @@ export class BuildingMapComponent implements OnInit {
 
   /**
    * Open desk reservation dialog
+   * Don't open if desk is reserved by someone else
    */
   openDeskDialog(desk: DeskWithStatus): void {
+    if (this.isOtherReservation(desk)) {
+      return; // Don't open dialog for other people's reservations
+    }
     this.selectedDeskForDialog = desk;
     this.isDialogOpen = true;
   }

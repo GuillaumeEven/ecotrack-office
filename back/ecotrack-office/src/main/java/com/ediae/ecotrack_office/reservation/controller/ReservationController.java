@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,8 @@ import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
 import com.ediae.ecotrack_office.reservation.mapper.ReservationMapper;
 import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.reservation.service.ReservationService;
+import com.ediae.ecotrack_office.shared.guard.RoleGuard;
+import com.ediae.ecotrack_office.users.enums.Role;
 
 @RestController
 // @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
@@ -30,6 +33,9 @@ public class ReservationController {
 
     @Autowired
     private ReservationService service;
+
+    @Autowired
+    private RoleGuard roleGuard;
 
     @GetMapping("/user/{id}")
     public List <ReservationResponseDto> getReservationsByUserId (@PathVariable Long id) {
@@ -95,8 +101,12 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean deleteReservation (@PathVariable Long id) {
-
-        return service.deleteReservationById(id);
+    public Boolean deleteReservation (@PathVariable Long id, Authentication auth) {
+        // Authorization: only ADMIN, TECHNICIAN, or the reservation owner can delete
+        roleGuard.requireAnyRole(auth, Role.ADMIN, Role.TECHNICIAN);
+        
+        // If not admin/tech, verify it's the user's own reservation
+        Long currentUserId = (Long) auth.getPrincipal();
+        return service.deleteReservationById(id, currentUserId, roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN));
     }
 }
