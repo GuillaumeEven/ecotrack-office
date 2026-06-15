@@ -160,7 +160,7 @@
               </button>
               <button
                 *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.RESERVED"
-                disabled
+                (click)="openMeetingRoomReservationDialog(getSelectedRoom()!)"
                 class="btn btn-secondary">
                 Reserved
               </button>

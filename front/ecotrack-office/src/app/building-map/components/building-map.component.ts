@@ -201,11 +201,16 @@ export class BuildingMapComponent implements OnInit {
     // The dialog will treat it as a reservation request for the room itself
     const pseudoDeskWithStatus: DeskWithStatus = {
       desk: room.room as any, // Room object has same id/name structure
-      calculatedStatus: room.roomStatus
+      calculatedStatus: room.roomStatus,
+      reservedBy: room.reservedBy,
+      reservationId: room.reservationId
     };
     this.selectedDeskForDialog = pseudoDeskWithStatus;
     this.isDialogForMeetingRoom = true;
     this.isDialogOpen = true;
+
+    // Force change detection to apply input bindings in dialog
+    this.cdr.markForCheck();
   }
 
   /**

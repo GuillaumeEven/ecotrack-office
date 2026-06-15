@@ -185,7 +185,9 @@ public class ResourceStatusCalculatorService {
                             meetingRoomDto.getRoom(),
                             meetingRoomDto.getDesks(),
                             meetingRoomDto.getOccupancyRate(),
-                            ResourceStatus.AVAILABLE
+                            ResourceStatus.AVAILABLE,
+                            meetingRoomDto.getReservedBy(),
+                            meetingRoomDto.getReservationId()
                     );
                 }
             } else if (previousMeetingRoom != null && previousMeetingRoom.getRoomStatus() == ResourceStatus.RESERVED) {
@@ -195,7 +197,9 @@ public class ResourceStatusCalculatorService {
                             meetingRoomDto.getRoom(),
                             meetingRoomDto.getDesks(),
                             meetingRoomDto.getOccupancyRate(),
-                            ResourceStatus.AVAILABLE
+                            ResourceStatus.AVAILABLE,
+                            meetingRoomDto.getReservedBy(),
+                            meetingRoomDto.getReservationId()
                     );
                 }
             } else {
@@ -204,7 +208,9 @@ public class ResourceStatusCalculatorService {
                         meetingRoomDto.getRoom(),
                         meetingRoomDto.getDesks(),
                         meetingRoomDto.getOccupancyRate(),
-                        ResourceStatus.UNAVAILABLE
+                        ResourceStatus.UNAVAILABLE,
+                        meetingRoomDto.getReservedBy(),
+                        meetingRoomDto.getReservationId()
                 );
             }
 
@@ -350,6 +356,7 @@ public class ResourceStatusCalculatorService {
 
     /**
      * Converts a room entity to RoomWithStatusDto with all desks
+     * For MEETING_ROOM types, populates reservedBy and reservationId if reserved
      */
     private RoomWithStatusDto convertRoomToWithStatusDto(RoomEntity room, LocalDate date) {
         RoomResponseDto roomDto = roomMapper.toResponseDto(room);
@@ -366,7 +373,22 @@ public class ResourceStatusCalculatorService {
 
         ResourceStatus roomStatus = calculateRoomStatus(room, date);
 
-        return new RoomWithStatusDto(roomDto, deskDtos, occupancyRate, roomStatus);
+        // For MEETING_ROOM types, get reservedBy and reservationId
+        String reservedBy = null;
+        Long reservationId = null;
+        if (roomStatus == ResourceStatus.RESERVED && room.getType() == RoomType.MEETING_ROOM) {
+            List<ReservationEntity> reservations = reservationRepository.findByResourceId(room.getId());
+            Optional<ReservationEntity> reservation = reservations.stream()
+                    .filter(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.CONFIRMED)
+                    .findFirst();
+
+            if (reservation.isPresent()) {
+                reservedBy = reservation.get().getUser().getEmail();
+                reservationId = reservation.get().getId();
+            }
+        }
+
+        return new RoomWithStatusDto(roomDto, deskDtos, occupancyRate, roomStatus, reservedBy, reservationId);
     }
 
     /**

@@ -9,6 +9,8 @@ public class RoomWithStatusDto {
     private List<DeskWithStatusDto> desks;
     private Double occupancyRate;
     private ResourceStatus roomStatus;
+    private String reservedBy; // For meeting rooms: email of user who reserved
+    private Long reservationId; // For meeting rooms: ID of the reservation
 
     public RoomWithStatusDto() {
     }
@@ -18,6 +20,15 @@ public class RoomWithStatusDto {
         this.desks = desks;
         this.occupancyRate = occupancyRate;
         this.roomStatus = roomStatus;
+    }
+
+    public RoomWithStatusDto(RoomResponseDto room, List<DeskWithStatusDto> desks, Double occupancyRate, ResourceStatus roomStatus, String reservedBy, Long reservationId) {
+        this.room = room;
+        this.desks = desks;
+        this.occupancyRate = occupancyRate;
+        this.roomStatus = roomStatus;
+        this.reservedBy = reservedBy;
+        this.reservationId = reservationId;
     }
 
     public RoomResponseDto getRoom() {
@@ -50,6 +61,22 @@ public class RoomWithStatusDto {
 
     public void setRoomStatus(ResourceStatus roomStatus) {
         this.roomStatus = roomStatus;
+    }
+
+    public String getReservedBy() {
+        return reservedBy;
+    }
+
+    public void setReservedBy(String reservedBy) {
+        this.reservedBy = reservedBy;
+    }
+
+    public Long getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(Long reservationId) {
+        this.reservationId = reservationId;
     }
 
 }

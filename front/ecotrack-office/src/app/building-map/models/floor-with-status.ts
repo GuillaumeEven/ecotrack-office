@@ -26,6 +26,8 @@ export interface RoomWithStatus {
   desks: DeskWithStatus[];
   occupancyRate: number; // 0.0 - 1.0 (e.g., 0.75 = 75%)
   roomStatus: ResourceStatus; // Status of the room itself
+  reservedBy?: string; // For meeting rooms: email of user who reserved
+  reservationId?: number; // For meeting rooms: ID of the reservation
 }
 
 /**
