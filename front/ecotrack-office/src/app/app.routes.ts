@@ -6,6 +6,9 @@ import { HomeLanding } from './landing/components/home-landing/home-landing';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
 import { BuildingMapComponent } from './building-map/components/building-map.component';
 import { UserManagementComponent } from './features/admin/user-management/user-management.component';
+import { Reservation } from './reservation/reservation';
+import { Organization } from './organization/organization';
+import { AssetsMgmt } from './features/assets-mgmt/assets-mgmt';
 
 export const routes: Routes = [
   // RUTAS PÚBLICAS
@@ -31,6 +34,17 @@ export const routes: Routes = [
         component: UserManagementComponent,
         canActivate: [authGuard],
       },
+        path: 'reservation',
+        component: Reservation,
+      },
+      {
+        path: 'organization',
+        component: Organization,
+      },
+      {
+        path: 'assets',
+        component: AssetsMgmt,
+      }
     ],
   },
 
