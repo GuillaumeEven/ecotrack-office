@@ -128,6 +128,8 @@ TODO:
   - [ ] reservas
   - [ ] limpiar header y hacer botones operativos
   - [ ] limpiar sidebar y hacer botones operativos
+  - [ ] form de inscripción
+
 - [ ] clean code: comentarios, logging, sonarCube...
 - [ ] harmonizar la gestión de los errores
 - [ ] Recuperar la estructura de la memoria
@@ -136,4 +138,5 @@ TODO:
 - [ ] harmonizar el css
 - [ ] harmonizar los controladores: poner cualquier respuesta como ResponseEntity
 - [ ] añadir docstring para swagguer
+- [ ] collection postman
 - [x] repensar los status de resources: una resource no puede ser reservada o disponible en si misma, depende de las reservas.
