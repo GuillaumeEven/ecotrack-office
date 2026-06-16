@@ -43,6 +43,7 @@ export const routes: Routes = [
         component: Organization,
       },
       {
+        // TODO: Filtrar solo los admins
         path: 'assets',
         component: AssetsMgmt,
       }
