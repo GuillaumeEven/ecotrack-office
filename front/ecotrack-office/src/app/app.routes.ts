@@ -7,6 +7,7 @@ import { PrivateLayout } from './layouts/private-layout/private-layout';
 import { BuildingMapComponent } from './building-map/components/building-map.component';
 import { Reservation } from './reservation/reservation';
 import { Organization } from './organization/organization';
+import { AssetsMgmt } from './features/assets-mgmt/assets-mgmt';
 
 export const routes: Routes = [
 
@@ -38,6 +39,10 @@ export const routes: Routes = [
       {
         path: 'organization',
         component: Organization,
+      },
+      {
+        path: 'assets',
+        component: AssetsMgmt,
       }
     ],
   },
