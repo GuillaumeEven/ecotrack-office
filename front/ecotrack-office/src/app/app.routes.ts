@@ -5,21 +5,18 @@ import { authGuard } from './guards/auth.guard';
 import { HomeLanding } from './landing/components/home-landing/home-landing';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
 import { BuildingMapComponent } from './building-map/components/building-map.component';
+import { UserManagementComponent } from './features/admin/user-management/user-management.component';
 
 export const routes: Routes = [
-
-  // RUTA PÚBLICA
-
+  // RUTAS PÚBLICAS
   { path: '', component: HomeLanding },
   { path: 'login', component: LoginComponent },
 
   // RUTAS PRIVADAS
-
   {
     path: '',
     component: PrivateLayout,
     children: [
-
       {
         path: 'profile',
         component: UserProfileComponent,
@@ -28,11 +25,15 @@ export const routes: Routes = [
       {
         path: 'home',
         component: BuildingMapComponent,
-      }
+      },
+      {
+        path: 'admin/user-management',
+        component: UserManagementComponent,
+        canActivate: [authGuard],
+      },
     ],
   },
 
   // RUTA POR DEFECTO
-
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
