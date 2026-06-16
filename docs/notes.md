@@ -118,34 +118,45 @@ Las dos tecnologías que no hemos tratado en clase son:
 
   - Sistema de notificaciones: deshabilitado por el momento.
 
+  #### Sesion del 17 de junio
 
 TODO:
+Imprescindible:
+Hoy creamos las paginas que nos hacen falta (mi component works !), mañana Rai configura los botones de nav
 - [ ] paginas:
-  - [ ] gestión edificio: crud floors/recursos para admin
-  - [ ] gestion usuarios para el admin
-  - [ ] incidencias (vinculo desde desk/room dialog ?)
-  - [ ] analytics
-  - [ ] editar perfil: operativo ?
-  - [ ] reservas
-  - [ ] limpiar header y hacer botones operativos
-  - [ ] limpiar sidebar y hacer botones operativos
-  - [ ] form de inscripción
+  - [ ] gestión edificio: crud floors/recursos para -> gui
+  - [ ] gestion usuarios para el admin -> JL
+  - [ ] incidencias (vinculo desde desk/room dialog ?) -> Edu ?
+  - [ ] analytics -> Edu
+  - [ ] editar perfil: operativo -> JL
+  - [ ] reservas -> Rai
+  - [ ] limpiar header y hacer botones operativos (quitar lo que es navegacion)-> ??
+  - [ ] limpiar sidebar y hacer botones operativos (navegacion: home, reservas, incident, empresa(admin)) -> Rai
+  - [ ] form de inscripción -> Rai
+  - [ ] editar organization -> Rai
+  - [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
 
-- [ ] Form registro COMO LO HACEMOS ?
+- [ ] Form registro COMO LO HACEMOS:
   - [ ] un formulario comun de user
   - [ ] al pulsar registrarse, nuevo formulario con:
     - [ ] nueva empresa ?
-    - [ ] agregarse a una empresa
+    - [ ] agregarse a una empresa (con cif)
+    - [ ] al final de la validacion de ese esgundo form se envia la peticion total con rol = employee (en caso de no admin)
 
+En nuestros sueños:
+- [ ] pensar la arquitectura del front (Rai hace una propuesta)
+- [ ] generacion de codigo empresa para que admin invite a nueavos usuarios
 - [ ] clean code: comentarios, logging, sonarCube...
-- [ ] pensar la arquitectura del front
-- [ ] hash passwords
-- [ ] harmonizar la gestión de los errores
+- [ ] hash passwords (a JL ?)
 - [ ] Recuperar la estructura de la memoria
-- [ ] docker/deploy
-- [ ] desiciones de diseño
 - [ ] harmonizar el css
-- [ ] harmonizar los controladores: poner cualquier respuesta como ResponseEntity
 - [ ] añadir docstring para swagguer
 - [ ] collection postman
+- [ ] gestion de recurso averiado: bloqueado o no...
+- [ ] harmonizar los controladores: poner cualquier respuesta como ResponseEntity
+- [ ] harmonizar la gestión de los exceptiones
+- [ ] desiciones de diseño
+- [ ] docker/deploy
 - [x] repensar los status de resources: una resource no puede ser reservada o disponible en si misma, depende de las reservas.
+
+Muchas gracias chicos, un placer trabajar con vosotros ! Y esas cosas...
