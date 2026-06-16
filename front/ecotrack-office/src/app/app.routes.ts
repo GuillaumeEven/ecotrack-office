@@ -4,11 +4,11 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { HomeLanding } from './landing/components/home-landing/home-landing';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
-import { AssetsMgmtComponent } from './assets-mgmt/components/assets-mgmt.component';
+import { BuildingMapComponent } from './building-map/components/building-map.component';
 
 export const routes: Routes = [
 
-  // RUTA PÚBLICA 
+  // RUTA PÚBLICA
 
   { path: '', component: HomeLanding },
   { path: 'login', component: LoginComponent },
@@ -26,8 +26,8 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       {
-        path: 'assets-mgmt',
-        component: AssetsMgmtComponent,
+        path: 'home',
+        component: BuildingMapComponent,
       }
     ],
   },
