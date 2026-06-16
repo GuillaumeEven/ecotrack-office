@@ -57,13 +57,31 @@ export class DeskReservationDialogComponent implements OnInit {
   }
 
   isMyReservation(): boolean {
-    return this.isReserved() && 
+    return this.isReserved() &&
            this.deskWithStatus?.reservedBy === this.currentUserEmail;
   }
 
   isOtherReservation(): boolean {
-    return this.isReserved() && 
+    return this.isReserved() &&
            this.deskWithStatus?.reservedBy !== this.currentUserEmail;
+  }
+
+  /**
+   * Check if user can cancel this reservation
+   * Can cancel if: resource is reserved AND (it's my reservation OR user is ADMIN/TECHNICIAN)
+   */
+  canCancelReservation(): boolean {
+    if (!this.isReserved()) {
+      return false;
+    }
+
+    if (this.isMyReservation()) {
+      return true;
+    }
+
+    // Check if user is ADMIN or TECHNICIAN
+    const userRole = this.authService.getRole();
+    return userRole === 'ADMIN' || userRole === 'TECHNICIAN';
   }
 
   /**

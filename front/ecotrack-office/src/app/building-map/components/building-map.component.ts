@@ -237,13 +237,6 @@ export class BuildingMapComponent implements OnInit {
   }
 
   /**
-   * Check if desk is reserved
-   */
-  isDeskReserved(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.RESERVED;
-  }
-
-  /**
    * Check if desk is unavailable
    */
   isDeskUnavailable(desk: DeskWithStatus): boolean {
@@ -265,6 +258,20 @@ export class BuildingMapComponent implements OnInit {
   }
 
   /**
+   * Check if user can cancel a reservation
+   * Can cancel if: resource is reserved AND (it's my reservation OR user is ADMIN/TECHNICIAN)
+   */
+  canCancelReservation(desk: DeskWithStatus): boolean {
+    if (this.isMyReservation(desk)) {
+      return true;
+    }
+
+    // Check if user is ADMIN or TECHNICIAN
+    const userRole = this.authService.getRole();
+    return userRole === 'ADMIN' || userRole === 'TECHNICIAN';
+  }
+
+  /**
    * Get CSS class for desk status
    */
   getDeskStatusClass(desk: DeskWithStatus): string {
@@ -276,9 +283,6 @@ export class BuildingMapComponent implements OnInit {
     }
     if (this.isDeskAvailable(desk)) {
       return 'available';
-    }
-    if (this.isDeskReserved(desk)) {
-      return 'reserved';
     }
     return 'unavailable';
   }
@@ -340,8 +344,9 @@ export class BuildingMapComponent implements OnInit {
    * Don't open if desk is reserved by someone else
    */
   openDeskDialog(desk: DeskWithStatus): void {
-    if (this.isOtherReservation(desk)) {
-      return; // Don't open dialog for other people's reservations
+    const userRole = this.authService.getRole();
+    if (this.isOtherReservation(desk) && userRole !== 'ADMIN' && userRole !== 'TECHNICIAN') {
+      return; // Don't open dialog for other people's reservations unless user is ADMIN or TECHNICIAN
     }
     this.selectedDeskForDialog = desk;
     this.isDialogForMeetingRoom = false;
