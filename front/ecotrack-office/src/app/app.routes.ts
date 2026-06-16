@@ -5,6 +5,8 @@ import { authGuard } from './guards/auth.guard';
 import { HomeLanding } from './landing/components/home-landing/home-landing';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
 import { BuildingMapComponent } from './building-map/components/building-map.component';
+import { Reservation } from './reservation/reservation';
+import { Organization } from './organization/organization';
 
 export const routes: Routes = [
 
@@ -28,6 +30,14 @@ export const routes: Routes = [
       {
         path: 'home',
         component: BuildingMapComponent,
+      },
+      {
+        path: 'reservation',
+        component: Reservation,
+      },
+      {
+        path: 'organization',
+        component: Organization,
       }
     ],
   },
