@@ -122,6 +122,7 @@ Las dos tecnologías que no hemos tratado en clase son:
 TODO:
 - [ ] paginas:
   - [ ] gestión edificio: crud floors/recursos para admin
+  - [ ] gestion usuarios para el admin
   - [ ] incidencias (vinculo desde desk/room dialog ?)
   - [ ] analytics
   - [ ] editar perfil: operativo ?
@@ -130,7 +131,15 @@ TODO:
   - [ ] limpiar sidebar y hacer botones operativos
   - [ ] form de inscripción
 
+- [ ] Form registro COMO LO HACEMOS ?
+  - [ ] un formulario comun de user
+  - [ ] al pulsar registrarse, nuevo formulario con:
+    - [ ] nueva empresa ?
+    - [ ] agregarse a una empresa
+
 - [ ] clean code: comentarios, logging, sonarCube...
+- [ ] pensar la arquitectura del front
+- [ ] hash passwords
 - [ ] harmonizar la gestión de los errores
 - [ ] Recuperar la estructura de la memoria
 - [ ] docker/deploy
