@@ -34,6 +34,7 @@ export const routes: Routes = [
         component: UserManagementComponent,
         canActivate: [authGuard],
       },
+      {
         path: 'reservation',
         component: Reservation,
       },
@@ -47,7 +48,6 @@ export const routes: Routes = [
       }
     ],
   },
-
   // RUTA POR DEFECTO
   { path: '**', redirectTo: '' },
 ];
