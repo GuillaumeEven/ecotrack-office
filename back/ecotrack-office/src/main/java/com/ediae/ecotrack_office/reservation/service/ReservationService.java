@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +23,6 @@ import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
 public class ReservationService {
-
-    // load d'un logger pour la classe
-    private static final Logger logger = LoggerFactory.getLogger(ReservationService.class);
 
     @Autowired
     private ReservationRepository repository;
@@ -104,9 +99,6 @@ public class ReservationService {
 
     public ReservationModel createReservation (ReservationCreateDto dto) {
 
-        logger.info("Creating reservation: date={}, status={}, userId={}, resourceId={}", 
-            dto.getDate(), dto.getStatus(), dto.getUserId(), dto.getResourceId());
-
         // Load entities from IDs
         var user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + dto.getUserId()));
@@ -118,7 +110,6 @@ public class ReservationService {
         ReservationEntity entity = new ReservationEntity(dto.getDate(), dto.getStatus(), user, resource);
         ReservationEntity savedEntity = repository.save(entity);
 
-        logger.info("Reservation created successfully with id: {}", savedEntity.getId());
         return ReservationMapper.fromEntity(savedEntity);
     }
 
@@ -142,8 +133,8 @@ public class ReservationService {
         }
 
         ReservationEntity reservation = entity.get();
-        
-        // Authorization: 
+
+        // Authorization:
         // - ADMIN and TECHNICIAN can always delete
         // - Others can only delete their own reservation
         if (!isAdminOrTech && !reservation.getUser().getId().equals(currentUserId)) {
@@ -151,8 +142,7 @@ public class ReservationService {
         }
 
         repository.deleteById(id);
-        
-        logger.info("Reservation with id {} deleted by user {}", id, currentUserId);
+
         return repository.findById(id).isEmpty();
     }
 

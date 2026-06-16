@@ -2,9 +2,9 @@
   <div class="content-wrapper">
     <!-- Header -->
     <div class="header">
-      <h1 class="font-headline-lg text-headline-lg text-on-surface">Building Map</h1>
+      <h1 class="font-headline-lg text-headline-lg text-on-surface">Mapa del Edificio</h1>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
-        Browse and book floors, rooms, and desks.
+        Explora y reserva plantas, salas y escritorios.
       </p>
     </div>
 
@@ -16,7 +16,7 @@
         <section class="section">
           <h3 class="font-title-md text-title-md text-on-surface">
             <span class="material-symbols-outlined text-primary">layers</span>
-            Select Floor
+            Seleccionar Planta
           </h3>
 
             <div class="btn-floor-list">
@@ -26,10 +26,10 @@
                 [class.active]="selectedFloorId === floorWithStatus.floor.id"
                 [ngClass]="getFloorStatusClass(floorWithStatus)"
                 class="btn-floor">
-                <strong>Floor {{ floorWithStatus.floor.level }}</strong>
+                <strong>Planta {{ floorWithStatus.floor.level }}</strong>
                 <span class="status-badge" [ngClass]="getFloorStatusClass(floorWithStatus).split('-')[1]" [title]="getStatusText(getFloorStatus(floorWithStatus))"></span>
                 <br>
-                <small class="text-on-surface-variant">{{ floorWithStatus.floor.isActive ? 'Active' : 'Inactive' }}</small>
+                <small class="text-on-surface-variant">{{ floorWithStatus.floor.isActive ? 'Activo' : 'Inactivo' }}</small>
               </button>
             </div>
         </section>
@@ -38,11 +38,11 @@
         <section class="section">
           <h3 class="font-title-md text-title-md text-on-surface">
             <span class="material-symbols-outlined text-primary">filter_list</span>
-            Schedule
+            Horario
           </h3>
 
           <div class="form-group">
-            <label class="form-label">Select Date</label>
+            <label class="form-label">Seleccionar Fecha</label>
             <input
               type="date"
               [value]="selectedDate | date:'yyyy-MM-dd'"
@@ -50,7 +50,7 @@
               class="form-input"/>
           </div>
 
-          <div *ngIf="loading.floors" class="loading text-on-surface-variant font-body-md">Loading floor status...</div>
+          <div *ngIf="loading.floors" class="loading text-on-surface-variant font-body-md">Cargando estado de la planta...</div>
           <div *ngIf="errors.floors" class="error text-error font-body-md">{{ errors.floors }}</div>
         </section>
       </div>
@@ -59,14 +59,14 @@
       <div class="rooms-desks-column">
         <!-- Rooms Section -->
         <section class="section">
-          <h3 class="font-title-md text-title-md text-on-surface">Rooms</h3>
+          <h3 class="font-title-md text-title-md text-on-surface">Salas</h3>
 
           <div *ngIf="!selectedFloorId" class="text-on-surface-variant font-body-md italic loading">
-            Select a floor to view rooms
+            Selecciona una planta para ver las salas
           </div>
 
           <div *ngIf="selectedFloorId">
-            <div *ngIf="loading.floors" class="text-on-surface-variant font-body-md italic loading">Loading...</div>
+            <div *ngIf="loading.floors" class="text-on-surface-variant font-body-md italic loading">Cargando...</div>
             <div *ngIf="errors.floors" class="error text-error font-body-md">{{ errors.floors }}</div>
 
             <div class="btn-room-grid" *ngIf="getSelectedFloor()">
@@ -89,7 +89,7 @@
             <div
               *ngIf="getSelectedFloor() && getSelectedFloor()!.rooms.length === 0 && !loading.floors && !errors.floors"
               class="text-on-surface-variant font-body-md italic loading">
-              No rooms found.
+              No se encontraron salas.
             </div>
           </div>
         </section>
@@ -97,45 +97,45 @@
         <!-- Desks Section - Cinema Style -->
         <section class="desks-cinema">
           <div class="cinema-header">
-            <h2 class="text-headline-md text-white">Desk Schedule</h2>
+            <h2 class="text-headline-md text-white">Horario de Escritorios</h2>
             <p class="text-body-md text-surface-dim" *ngIf="selectedDate">
-              Date: {{ selectedDate | date: 'EEEE, MMMM d, yyyy' }}
+              Fecha: {{ selectedDate | date: 'EEEE, MMMM d, yyyy' }}
             </p>
           </div>
 
           <div class="legend">
             <div class="legend-item">
               <div class="legend-color available"></div>
-              <span class="legend-text">AVAILABLE</span>
+              <span class="legend-text">DISPONIBLE</span>
             </div>
             <div class="legend-item">
               <div class="legend-color" style="background-color: #2196f3; box-shadow: 0 0 8px rgba(33, 150, 243, 0.6);"></div>
-              <span class="legend-text">MY RESERVATION</span>
+              <span class="legend-text">MI RESERVA</span>
             </div>
             <div class="legend-item">
               <div class="legend-color" style="background-color: #ff9800;"></div>
-              <span class="legend-text">OTHER RESERVATION</span>
+              <span class="legend-text">OTRA RESERVA</span>
             </div>
             <div class="legend-item">
               <div class="legend-color reserved"></div>
-              <span class="legend-text">RESERVED</span>
+              <span class="legend-text">RESERVADO</span>
             </div>
             <div class="legend-item">
               <div class="legend-color unavailable"></div>
-              <span class="legend-text">UNAVAILABLE</span>
+              <span class="legend-text">NO DISPONIBLE</span>
             </div>
           </div>
 
           <div class="desks-grid-wrapper">
             <div *ngIf="!selectedRoomId" class="empty-state">
-              <p>Select a room to view desks</p>
+              <p>Selecciona una sala para ver escritorios</p>
             </div>
 
             <div *ngIf="selectedRoomId && getSelectedFloor()" class="desks-grid">
               <button
                 *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
                 [ngClass]="getDeskStatusClass(deskWithStatus)"
-                [title]="isMyReservation(deskWithStatus) ? 'Your reservation - Click to cancel' : isOtherReservation(deskWithStatus) ? 'Reserved by ' + deskWithStatus.reservedBy : ''"
+                [title]="isMyReservation(deskWithStatus) ? 'Tu reserva - Haz clic para cancelar' : isOtherReservation(deskWithStatus) ? 'Reservado por ' + deskWithStatus.reservedBy : ''"
                 [disabled]="isSelectedRoomUnavailable()"
                 (click)="openDeskDialog(deskWithStatus)"
                 class="desk-btn">
@@ -147,39 +147,39 @@
             <div *ngIf="selectedRoomId && getSelectedFloor() && getSelectedRoom() && isMeetingRoom(getSelectedRoom()!)" class="meeting-room-container">
               <div class="meeting-room-info">
                 <h3>{{ getSelectedRoom()?.room?.name }}</h3>
-                <p class="capacity">Capacity: {{ getSelectedRoom()?.room?.capacity }} people</p>
+                <p class="capacity">Capacidad: {{ getSelectedRoom()?.room?.capacity }} personas</p>
                 <p [ngClass]="'status-' + getSelectedRoom()?.roomStatus?.toLowerCase()">
-                  Status: {{ getStatusText(getSelectedRoom()?.roomStatus!) }}
+                  Estado: {{ getStatusText(getSelectedRoom()?.roomStatus!) }}
                 </p>
               </div>
               <button
                 *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.AVAILABLE"
                 (click)="openMeetingRoomReservationDialog(getSelectedRoom()!)"
                 class="btn btn-primary">
-                Reserve Meeting Room
+                Reservar Sala de Reuniones
               </button>
               <button
                 *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.RESERVED"
                 (click)="openMeetingRoomReservationDialog(getSelectedRoom()!)"
                 class="btn btn-secondary">
-                Reserved
+                Reservado
               </button>
               <button
                 *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.UNAVAILABLE"
                 disabled
                 class="btn btn-secondary">
-                Unavailable
+                No Disponible
               </button>
             </div>
 
             <div
               *ngIf="selectedRoomId && getSelectedFloor() && getDesksByRoom(selectedRoomId).length === 0 && !isMeetingRoom(getSelectedRoom()!) && !loading.floors && !errors.floors"
               class="empty-state">
-              <p>No desks found for this room.</p>
+              <p>No se encontraron escritorios para esta sala.</p>
             </div>
 
             <div *ngIf="loading.floors" class="empty-state">
-              <p class="loading">Loading floor status...</p>
+              <p class="loading">Cargando estado de la planta...</p>
             </div>
 
             <div *ngIf="errors.floors" class="empty-state">
@@ -192,30 +192,30 @@
 
     <!-- Debug Info -->
     <div class="debug-section">
-      <h3 class="font-title-md text-title-md">Debug Info</h3>
+      <h3 class="font-title-md text-title-md">Información de Depuración</h3>
       <div class="debug-grid">
         <div class="debug-item">
-          <strong>Floor:</strong>
-          {{ selectedFloorId || 'None' }}
+          <strong>Planta:</strong>
+          {{ selectedFloorId || 'Ninguno' }}
         </div>
         <div class="debug-item">
-          <strong>Room:</strong>
-          {{ selectedRoomId || 'None' }}
+          <strong>Sala:</strong>
+          {{ selectedRoomId || 'Ninguno' }}
         </div>
         <div class="debug-item">
-          <strong>Date:</strong>
+          <strong>Fecha:</strong>
           {{ selectedDate | date:'yyyy-MM-dd' }}
         </div>
         <div class="debug-item">
-          <strong>Rooms Loaded:</strong>
+          <strong>Salas Cargadas:</strong>
           {{ getSelectedFloor()?.rooms?.length || 0 }}
         </div>
         <div class="debug-item" *ngIf="selectedRoomId">
-          <strong>Desks in Room:</strong>
+          <strong>Escritorios en la Sala:</strong>
           {{ getDesksByRoom(selectedRoomId).length }}
         </div>
         <div class="debug-item" *ngIf="selectedRoomId && getRoomById(selectedRoomId)">
-          <strong>Occupancy Rate:</strong>
+          <strong>Tasa de Ocupación:</strong>
           {{ getOccupancyPercent(getRoomById(selectedRoomId)!) }}
         </div>
       </div>

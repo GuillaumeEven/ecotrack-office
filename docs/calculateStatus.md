@@ -1,53 +1,88 @@
 
-    /**
-     * List<FloorWithStatusDto> calculateFloorsStatusForDate(Long organizationId, LocalDate date)
-     *      J'instancie une liste de FloorWithStatusDto
-     *      Je récupere tous les floors d'une organization
-     *      Pour chaque floor:
-     *            floorsWithStatus.add(new FloorWithStatusDto(floor, getRoomsStatus(floorId, date), date))
-*                 Si c'est le premier floor:
-        *            Je parcours tous les rooms du floor et je calcule leur status pour la date donnée:
-        *            Si room.type == DESK_AREA:
-        *                Si c'est la 1ère room de type DESK_AREA, available
-        *                Si occupancy >= 80%:
-        *                   Si room[i+1] existe et est de type DESK_AREA, room[i+1] est available
-        *                   Sinon, floor.desksOccupied = true
-        *            Sinon, si room.type == MEETING_ROOM:
-        *                Si c'est la 1ère room de type MEETING_ROOM et n'est pas réservée, available
-        *                Si la room est reservée:
-        *                   Si room[i+1] existe et est de type MEETING_ROOM, room[i+1] est available
-        *                   Sinon, floor.meetingRoomsOccupied = true
-        *          Sinon:
-        *                si floor[i-1].desksOccupied == true:
-        *                   Je parcours tous les rooms du floor et je calcule leur status pour la date donnée:
-        *                   Si room.type == DESK_AREA:
-        *                      Si c'est la 1ère room de type DESK_AREA, available
-        *                      Si occupancy >= 80%:
-        *                         Si room[i+1] existe et est de type DESK_AREA, room[i+1] est available
-        *                         Sinon, floor.desksOccupied = true
-        *                si floor[i-1].meetingRoomsOccupied == true:
-        *                   Je parcours tous les rooms du floor et je calcule leur status pour la date
-        *                   Sinon, si room.type == MEETING_ROOM:
-        *                      Si c'est la 1ère room de type MEETING_ROOM et n'est pas réservée, available
+# Algoritmo de Cálculo de Estado de Plantas
 
-        *                      Si la room est reservée:
-        *                         Si room[i+1] existe et est de type MEETING_ROOM, room[i+1] est available
-        *                         Sinon, floor.meetingRoomsOccupied = true
-     *
-     * List<RoomWithStatusDto> calcalulateRoomsOccupancy(List<RoomEntity> rooms, LocalDate date)
-     *      J'instancie une liste de RoomWithStatusDto
-     *      Je cree une liste de room de type DESK_AREA
-     *      List<RoomEntity> deskAreas = rooms.stream().filter(r -> r.getType() == RoomType.DESK_AREA).collect(Collectors.toList());
-     *            Pour chaque room:
-     *
-                  List<DeskWithStatusDto> calculateDesksStatus(Long roomId, LocalDate date)
-                  Calcul de l'occupancy rate de la room
-                  
-            Je cree une liste de room de type MEETING_ROOM
-            List<RoomEntity> meetingRooms = rooms.stream().filter(r -> r.getType() == RoomType.MEETING_ROOM).collect(Collectors.toList());
-            Pour chaque room:
-                    si la room est reservée: status = 'Reserved'
-                    sinon status = 'Unavailable'
-            Je retourne la liste de RoomWithStatusDto
-            return roomsWithStatus;
-     */
+## `calculateFloorsStatusForDate(Long organizationId, LocalDate date)`
+
+**Propósito:** Calcular el estado de todas las plantas para una organización en una fecha específica.
+
+### Lógica General
+
+1. Crear una lista vacía `floorsWithStatus`
+2. Recuperar todas las plantas de la organización
+3. Para cada planta, agregar un `FloorWithStatusDto` con:
+   - Información de la planta
+   - Estado de las salas (usando `getRoomsStatus(floorId, date)`)
+   - La fecha
+
+### Procesamiento por Planta
+
+#### Primera Planta (i=0)
+
+Recorrer todas las salas y calcular su estado:
+
+- **Si la sala es de tipo `DESK_AREA`:**
+  - Si es la primera sala de este tipo → estado: `available`
+  - Si ocupación ≥ 80%:
+    - Si existe sala siguiente [i+1] y es `DESK_AREA` → marcarla como `available`
+    - Si no → establecer `floor.desksOccupied = true`
+
+- **Si la sala es de tipo `MEETING_ROOM`:**
+  - Si es la primera sala de este tipo y NO está reservada → estado: `available`
+  - Si la sala está reservada:
+    - Si existe sala siguiente [i+1] y es `MEETING_ROOM` → marcarla como `available`
+    - Si no → establecer `floor.meetingRoomsOccupied = true`
+
+#### Plantas Siguientes (i>0)
+
+- **Si la planta anterior tenía `desksOccupied == true`:**
+  - Recorrer todas las salas de tipo `DESK_AREA`:
+    - Si es la primera sala de este tipo → estado: `available`
+    - Si ocupación ≥ 80%:
+      - Si existe sala siguiente [i+1] y es `DESK_AREA` → marcarla como `available`
+      - Si no → establecer `floor.desksOccupied = true`
+
+- **Si la planta anterior tenía `meetingRoomsOccupied == true`:**
+  - Recorrer todas las salas de tipo `MEETING_ROOM`:
+    - Si es la primera sala de este tipo y NO está reservada → estado: `available`
+    - Si la sala está reservada:
+      - Si existe sala siguiente [i+1] y es `MEETING_ROOM` → marcarla como `available`
+      - Si no → establecer `floor.meetingRoomsOccupied = true`
+
+---
+
+## `calculateRoomsOccupancy(List<RoomEntity> rooms, LocalDate date)`
+
+**Propósito:** Calcular el estado de ocupación de todas las salas en una fecha específica.
+
+### Lógica General
+
+1. Crear una lista vacía `roomsWithStatus`
+2. Separar las salas en dos grupos:
+
+### Procesamiento de Salas de Escritorio (DESK_AREA)
+
+```java
+List<RoomEntity> deskAreas = rooms.stream()
+  .filter(r -> r.getType() == RoomType.DESK_AREA)
+  .collect(Collectors.toList());
+```
+
+Para cada sala de escritorio:
+- Invocar `calculateDesksStatus(Long roomId, LocalDate date)`
+- Calcular el porcentaje de ocupación de la sala
+
+### Procesamiento de Salas de Reunión (MEETING_ROOM)
+
+```java
+List<RoomEntity> meetingRooms = rooms.stream()
+  .filter(r -> r.getType() == RoomType.MEETING_ROOM)
+  .collect(Collectors.toList());
+```
+
+Para cada sala de reunión:
+- Si tiene reserva para esa fecha → estado: `Reserved`
+- Si no tiene reserva → estado: `Unavailable`
+
+### Retorno
+
+Retornar la lista completa `roomsWithStatus` con todos los estados calculados
