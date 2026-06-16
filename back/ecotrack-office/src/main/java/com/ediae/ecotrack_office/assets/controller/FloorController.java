@@ -57,11 +57,11 @@ public class FloorController {
         return ResponseEntity.ok(floors);
     }
 
-    @GetMapping("/{id}/status")
-    public ResponseEntity<FloorWithStatusDto> getFloorStatus(@PathVariable Long id, @RequestParam String date) {
+    @GetMapping("/status/{id}")
+    public ResponseEntity<List<FloorWithStatusDto>> getFloorsStatusByOrganizationId(@PathVariable Long id, @RequestParam String date) {
         LocalDate localDate = LocalDate.parse(date);
-        FloorWithStatusDto floorWithStatus = resourceStatusCalculatorService.getFloorWithStatusForDate(id, localDate);
-        return ResponseEntity.ok(floorWithStatus);
+        List<FloorWithStatusDto> floorsWithStatus = resourceStatusCalculatorService.calculateFloorsStatusForDate(id, localDate);
+        return ResponseEntity.ok(floorsWithStatus);
     }
 
     @PostMapping

@@ -57,18 +57,228 @@ public class ResourceStatusCalculatorService {
     private FloorMapper floorMapper;
 
     /**
-     * Calcula el estado de un desk para una fecha específica
-     * - RESERVED: si existe una reserva CONFIRMED para ese día
-     * - UNAVAILABLE: si el desk está inactivo (is_active=false)
-     * - AVAILABLE: en otro caso
+     * Calculates floor statuses for all floors in an organization for a given date
+     * Applies global cascading unlock logic: DESK_AREA and MEETING_ROOM are progressively unlocked
+     * based on the occupancy of previous resources across all floors.
+     */
+    public List<FloorWithStatusDto> calculateFloorsStatusForDate(Long organizationId, LocalDate date) {
+        List<FloorWithStatusDto> floorsWithStatus = new java.util.ArrayList<>();
+
+        // Get all floors for the organization
+        List<FloorEntity> floors = floorRepository.findByOrganizationId(organizationId);
+        floors.sort(Comparator.comparingLong(FloorEntity::getId));
+
+        // Step 1: Build complete list of all DESK_AREA and MEETING_ROOM rooms across all floors
+        List<RoomEntity> allDeskAreas = new java.util.ArrayList<>();
+        List<RoomEntity> allMeetingRooms = new java.util.ArrayList<>();
+
+        for (FloorEntity floor : floors) {
+            List<RoomEntity> floorRooms = roomRepository.findByFloor_Id(floor.getId());
+            floorRooms.sort(Comparator.comparingLong(RoomEntity::getId));
+
+            for (RoomEntity room : floorRooms) {
+                if (RoomType.DESK_AREA.equals(room.getType())) {
+                    allDeskAreas.add(room);
+                } else if (RoomType.MEETING_ROOM.equals(room.getType())) {
+                    allMeetingRooms.add(room);
+                }
+            }
+        }
+
+        // Step 2: Calculate statuses with progressive unlock logic
+        List<RoomWithStatusDto> deskAreaStatusList = calculateProgressiveDeskAreaStatus(allDeskAreas, date);
+        List<RoomWithStatusDto> meetingRoomStatusList = calculateProgressiveMeetingRoomStatus(allMeetingRooms, date);
+
+        // Step 3: Build floor DTOs with their rooms and occupancy flags
+        for (FloorEntity floor : floors) {
+            FloorResponseDto floorDto = floorMapper.toResponseDto(floor);
+            List<RoomWithStatusDto> floorRooms = new java.util.ArrayList<>();
+
+            // Collect this floor's desk areas and meeting rooms
+            for (RoomWithStatusDto deskArea : deskAreaStatusList) {
+                if (deskArea.getRoom().getFloorId().equals(floor.getId())) {
+                    floorRooms.add(deskArea);
+                }
+            }
+            for (RoomWithStatusDto meetingRoom : meetingRoomStatusList) {
+                if (meetingRoom.getRoom().getFloorId().equals(floor.getId())) {
+                    floorRooms.add(meetingRoom);
+                }
+            }
+
+            FloorWithStatusDto floorWithStatus = new FloorWithStatusDto(floorDto, floorRooms, date);
+
+            // Calculate floor occupancy flags
+            calculateFloorOccupancyFlags(floorWithStatus, deskAreaStatusList, meetingRoomStatusList, floor.getId());
+
+            floorsWithStatus.add(floorWithStatus);
+        }
+
+        return floorsWithStatus;
+    }
+
+    /**
+     * Calculates DESK_AREA statuses with progressive unlock logic:
+     * - All start as UNAVAILABLE
+     * - First DESK_AREA becomes AVAILABLE
+     * - Each following DESK_AREA becomes AVAILABLE only if previous has occupancy >= 80%
+     */
+    private List<RoomWithStatusDto> calculateProgressiveDeskAreaStatus(List<RoomEntity> allDeskAreas, LocalDate date) {
+        List<RoomWithStatusDto> result = new java.util.ArrayList<>();
+        RoomWithStatusDto previousDeskArea = null;
+
+        for (int i = 0; i < allDeskAreas.size(); i++) {
+            RoomEntity deskArea = allDeskAreas.get(i);
+            RoomWithStatusDto deskAreaDto = convertRoomToWithStatusDto(deskArea, date);
+
+            // First DESK_AREA is always AVAILABLE
+            if (i == 0) {
+                deskAreaDto = new RoomWithStatusDto(
+                        deskAreaDto.getRoom(),
+                        deskAreaDto.getDesks(),
+                        deskAreaDto.getOccupancyRate(),
+                        ResourceStatus.AVAILABLE
+                );
+            } else if (previousDeskArea != null && previousDeskArea.getOccupancyRate() >= OCCUPANCY_THRESHOLD) {
+                // If previous DESK_AREA has occupancy >= 80%, this one becomes AVAILABLE
+                deskAreaDto = new RoomWithStatusDto(
+                        deskAreaDto.getRoom(),
+                        deskAreaDto.getDesks(),
+                        deskAreaDto.getOccupancyRate(),
+                        ResourceStatus.AVAILABLE
+                );
+            } else {
+                // Otherwise, keep as UNAVAILABLE
+                deskAreaDto = new RoomWithStatusDto(
+                        deskAreaDto.getRoom(),
+                        deskAreaDto.getDesks(),
+                        deskAreaDto.getOccupancyRate(),
+                        ResourceStatus.UNAVAILABLE
+                );
+            }
+
+            result.add(deskAreaDto);
+            previousDeskArea = deskAreaDto;
+        }
+
+        return result;
+    }
+
+    /**
+     * Calculates MEETING_ROOM statuses with progressive unlock logic:
+     * - All start as UNAVAILABLE (not reserved is considered AVAILABLE by base logic)
+     * - First MEETING_ROOM not reserved becomes AVAILABLE
+     * - Each following MEETING_ROOM becomes AVAILABLE only if previous is RESERVED
+     */
+    private List<RoomWithStatusDto> calculateProgressiveMeetingRoomStatus(List<RoomEntity> allMeetingRooms, LocalDate date) {
+        List<RoomWithStatusDto> result = new java.util.ArrayList<>();
+        RoomWithStatusDto previousMeetingRoom = null;
+
+        for (int i = 0; i < allMeetingRooms.size(); i++) {
+            RoomEntity meetingRoom = allMeetingRooms.get(i);
+            RoomWithStatusDto meetingRoomDto = convertRoomToWithStatusDto(meetingRoom, date);
+
+            // First MEETING_ROOM: if not reserved, AVAILABLE
+            if (i == 0) {
+                if (meetingRoomDto.getRoomStatus() != ResourceStatus.RESERVED) {
+                    meetingRoomDto = new RoomWithStatusDto(
+                            meetingRoomDto.getRoom(),
+                            meetingRoomDto.getDesks(),
+                            meetingRoomDto.getOccupancyRate(),
+                            ResourceStatus.AVAILABLE,
+                            meetingRoomDto.getReservedBy(),
+                            meetingRoomDto.getReservationId()
+                    );
+                }
+            } else if (previousMeetingRoom != null && previousMeetingRoom.getRoomStatus() == ResourceStatus.RESERVED) {
+                // If previous MEETING_ROOM is RESERVED, this one becomes AVAILABLE (if not reserved itself)
+                if (meetingRoomDto.getRoomStatus() != ResourceStatus.RESERVED) {
+                    meetingRoomDto = new RoomWithStatusDto(
+                            meetingRoomDto.getRoom(),
+                            meetingRoomDto.getDesks(),
+                            meetingRoomDto.getOccupancyRate(),
+                            ResourceStatus.AVAILABLE,
+                            meetingRoomDto.getReservedBy(),
+                            meetingRoomDto.getReservationId()
+                    );
+                }
+            } else {
+                // Otherwise, mark as UNAVAILABLE
+                meetingRoomDto = new RoomWithStatusDto(
+                        meetingRoomDto.getRoom(),
+                        meetingRoomDto.getDesks(),
+                        meetingRoomDto.getOccupancyRate(),
+                        ResourceStatus.UNAVAILABLE,
+                        meetingRoomDto.getReservedBy(),
+                        meetingRoomDto.getReservationId()
+                );
+            }
+
+            result.add(meetingRoomDto);
+            previousMeetingRoom = meetingRoomDto;
+        }
+
+        return result;
+    }
+
+    /**
+     * Calculates and sets floor-level occupancy flags:
+     * - desksOccupied: true if the last DESK_AREA of this floor has occupancy >= 80%
+     * - meetingRoomsOccupied: true if the last MEETING_ROOM of this floor is RESERVED
+     */
+    private void calculateFloorOccupancyFlags(FloorWithStatusDto floorWithStatus,
+                                              List<RoomWithStatusDto> allDeskAreas,
+                                              List<RoomWithStatusDto> allMeetingRooms,
+                                              Long floorId) {
+        // Find this floor's desk areas and meeting rooms
+        RoomWithStatusDto lastDeskArea = null;
+        RoomWithStatusDto lastMeetingRoom = null;
+
+        for (RoomWithStatusDto deskArea : allDeskAreas) {
+            if (deskArea.getRoom().getFloorId().equals(floorId)) {
+                lastDeskArea = deskArea;
+            }
+        }
+
+        for (RoomWithStatusDto meetingRoom : allMeetingRooms) {
+            if (meetingRoom.getRoom().getFloorId().equals(floorId)) {
+                lastMeetingRoom = meetingRoom;
+            }
+        }
+
+        // Set desksOccupied flag
+        boolean desksOccupied = lastDeskArea != null
+                && lastDeskArea.getOccupancyRate() >= OCCUPANCY_THRESHOLD
+                && lastDeskArea.getRoomStatus() == ResourceStatus.AVAILABLE;
+        floorWithStatus.setDesksOccupied(desksOccupied);
+
+        // Set meetingRoomsOccupied flag
+        boolean meetingRoomsOccupied = lastMeetingRoom != null
+                && lastMeetingRoom.getRoomStatus() == ResourceStatus.RESERVED;
+        floorWithStatus.setMeetingRoomsOccupied(meetingRoomsOccupied);
+    }
+
+    /**
+     * Calculates desk status for a specific date
+     * - RESERVED: if confirmed reservation exists for that day
+     * - UNAVAILABLE: if desk is inactive OR if released reservation exists
+     * - AVAILABLE: otherwise
      */
     public ResourceStatus calculateDeskStatus(DeskEntity desk, LocalDate date) {
         if (desk == null || !desk.getIsActive()) {
             return ResourceStatus.UNAVAILABLE;
         }
 
-        // Buscar si existe una reserva confirmada para este desk en esa fecha
         List<ReservationEntity> reservations = reservationRepository.findByResourceId(desk.getId());
+
+        // Check for RELEASED reservations (locked, unavailable)
+        boolean hasReleasedReservation = reservations.stream()
+                .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.RELEASED);
+        if (hasReleasedReservation) {
+            return ResourceStatus.UNAVAILABLE;
+        }
+
+        // Check for CONFIRMED reservations (reserved)
         boolean hasConfirmedReservation = reservations.stream()
                 .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.CONFIRMED);
 
@@ -76,17 +286,17 @@ public class ResourceStatusCalculatorService {
     }
 
     /**
-     * Calcula el estado de una room para una fecha específica
+     * Calculates room status for a specific date
      *
-     * Para DESK_AREA:
-     * - Si occupancy >= 80% → RESERVED
-     * - Si is_active=false → UNAVAILABLE
-     * - Sino → AVAILABLE (pero con lógica de desbloqueo automático)
+     * For DESK_AREA:
+     * - If occupancy >= 80% → RESERVED
+     * - If is_active=false → UNAVAILABLE
+     * - Otherwise → AVAILABLE
      *
-     * Para MEETING_ROOM:
-     * - Si totalmente reservado ese día → RESERVED
-     * - Si is_active=false → UNAVAILABLE
-     * - Sino → AVAILABLE
+     * For MEETING_ROOM:
+     * - If reserved that day → RESERVED
+     * - If is_active=false → UNAVAILABLE
+     * - Otherwise → AVAILABLE
      */
     public ResourceStatus calculateRoomStatus(RoomEntity room, LocalDate date) {
         if (room == null || !room.getIsActive()) {
@@ -103,13 +313,22 @@ public class ResourceStatusCalculatorService {
     }
 
     /**
-     * Calcula estado para MEETING_ROOM
-     * - Si todas las reservas de la room para ese día → RESERVED
-     * - Sino → AVAILABLE
+     * Calculates status for MEETING_ROOM
+     * - If released reservation exists → UNAVAILABLE
+     * - If confirmed reservation exists → RESERVED
+     * - Otherwise → AVAILABLE
      */
     private ResourceStatus calculateMeetingRoomStatus(RoomEntity room, LocalDate date) {
         List<ReservationEntity> roomReservations = reservationRepository.findByResourceId(room.getId());
 
+        // Check for RELEASED reservations (locked, unavailable)
+        boolean hasReleasedReservation = roomReservations.stream()
+                .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.RELEASED);
+        if (hasReleasedReservation) {
+            return ResourceStatus.UNAVAILABLE;
+        }
+
+        // Check for CONFIRMED reservations (reserved)
         boolean isReservedThatDay = roomReservations.stream()
                 .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.CONFIRMED);
 
@@ -117,8 +336,8 @@ public class ResourceStatusCalculatorService {
     }
 
     /**
-     * Calcula estado para DESK_AREA
-     * Basado en tasa de ocupación y lógica de desbloqueo
+     * Calculates status for DESK_AREA
+     * Based on occupancy rate: if >= 80% → RESERVED, otherwise → AVAILABLE
      */
     private ResourceStatus calculateDeskAreaStatus(RoomEntity room, LocalDate date) {
         List<DeskEntity> desks = deskRepository.findByRoom_Id(room.getId());
@@ -126,98 +345,62 @@ public class ResourceStatusCalculatorService {
             return ResourceStatus.AVAILABLE;
         }
 
-        // Contar desks reservados
         long reservedCount = desks.stream()
                 .filter(desk -> calculateDeskStatus(desk, date) == ResourceStatus.RESERVED)
                 .count();
 
         double occupancyRate = (double) reservedCount / desks.size();
 
-        if (occupancyRate >= OCCUPANCY_THRESHOLD) {
-            // Esta desk_area está llena (>= 80%)
-            return ResourceStatus.RESERVED;
-        }
-
-        return ResourceStatus.AVAILABLE;
+        return occupancyRate >= OCCUPANCY_THRESHOLD ? ResourceStatus.RESERVED : ResourceStatus.AVAILABLE;
     }
 
     /**
-     * Busca la siguiente desk_area disponible para desbloquear
-     * Retorna la primera DESK_AREA inactiva después de la room actual,
-     * respetando que is_active=true y que la room anterior esté en RESERVED
-     */
-    public RoomEntity getNextAvailableDeskArea(FloorEntity floor, LocalDate date) {
-        List<RoomEntity> deskAreas = roomRepository.findByFloor_IdAndType(floor.getId(), RoomType.DESK_AREA);
-
-        // Ordenar por ID para mantener orden consistente
-        deskAreas.sort(Comparator.comparingLong(RoomEntity::getId));
-
-        // Buscar la primera desk_area que esté UNAVAILABLE y is_active=true
-        for (RoomEntity deskArea : deskAreas) {
-            if (deskArea.getIsActive() && calculateRoomStatus(deskArea, date) == ResourceStatus.UNAVAILABLE) {
-                return deskArea;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Retorna el floor con todos los rooms y desks con sus estados calculados para una fecha
-     */
-    public FloorWithStatusDto getFloorWithStatusForDate(Long floorId, LocalDate date) {
-        FloorEntity floor = floorRepository.findById(floorId)
-                .orElseThrow(() -> new RuntimeException("Floor no encontrado: " + floorId));
-
-        // Convertir floor a DTO
-        FloorResponseDto floorDto = floorMapper.toResponseDto(floor);
-
-        // Obtener todas las rooms del floor
-        List<RoomEntity> rooms = roomRepository.findByFloor_Id(floorId);
-
-        // Convertir cada room a RoomWithStatusDto
-        List<RoomWithStatusDto> roomDtos = rooms.stream()
-                .map(room -> convertRoomToWithStatusDto(room, date))
-                .collect(Collectors.toList());
-
-        return new FloorWithStatusDto(floorDto, roomDtos, date);
-    }
-
-    /**
-     * Convierte una room entity a RoomWithStatusDto con todos sus desks
+     * Converts a room entity to RoomWithStatusDto with all desks
+     * For MEETING_ROOM types, populates reservedBy and reservationId if reserved
      */
     private RoomWithStatusDto convertRoomToWithStatusDto(RoomEntity room, LocalDate date) {
         RoomResponseDto roomDto = roomMapper.toResponseDto(room);
-
-        // Obtener todos los desks de la room
         List<DeskEntity> desks = deskRepository.findByRoom_Id(room.getId());
 
-        // Convertir cada desk a DeskWithStatusDto
         List<DeskWithStatusDto> deskDtos = desks.stream()
                 .map(desk -> convertDeskToWithStatusDto(desk, date))
                 .collect(Collectors.toList());
 
-        // Calcular tasa de ocupación
         long reservedCount = deskDtos.stream()
                 .filter(d -> d.getCalculatedStatus() == ResourceStatus.RESERVED)
                 .count();
         double occupancyRate = desks.isEmpty() ? 0.0 : (double) reservedCount / desks.size();
 
-        // Calcular estado de la room
         ResourceStatus roomStatus = calculateRoomStatus(room, date);
 
-        return new RoomWithStatusDto(roomDto, deskDtos, occupancyRate, roomStatus);
+        // For MEETING_ROOM types, get reservedBy and reservationId
+        String reservedBy = null;
+        Long reservationId = null;
+        if (roomStatus == ResourceStatus.RESERVED && room.getType() == RoomType.MEETING_ROOM) {
+            List<ReservationEntity> reservations = reservationRepository.findByResourceId(room.getId());
+            Optional<ReservationEntity> reservation = reservations.stream()
+                    .filter(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.CONFIRMED)
+                    .findFirst();
+
+            if (reservation.isPresent()) {
+                reservedBy = reservation.get().getUser().getEmail();
+                reservationId = reservation.get().getId();
+            }
+        }
+
+        return new RoomWithStatusDto(roomDto, deskDtos, occupancyRate, roomStatus, reservedBy, reservationId);
     }
 
     /**
-     * Convierte un desk entity a DeskWithStatusDto
+     * Converts a desk entity to DeskWithStatusDto
+     * Only sets reservedBy and reservationId for CONFIRMED reservations (not RELEASED)
      */
     private DeskWithStatusDto convertDeskToWithStatusDto(DeskEntity desk, LocalDate date) {
         DeskResponseDto deskDto = deskMapper.toResponseDto(desk);
         ResourceStatus status = calculateDeskStatus(desk, date);
 
-        // Obtener el email del usuario que reservó (si aplica)
         String reservedBy = null;
+        Long reservationId = null;
         if (status == ResourceStatus.RESERVED) {
             List<ReservationEntity> reservations = reservationRepository.findByResourceId(desk.getId());
             Optional<ReservationEntity> reservation = reservations.stream()
@@ -226,10 +409,12 @@ public class ResourceStatusCalculatorService {
 
             if (reservation.isPresent()) {
                 reservedBy = reservation.get().getUser().getEmail();
+                reservationId = reservation.get().getId();
             }
         }
+        // RELEASED reservations show as UNAVAILABLE with no reservedBy info
 
-        return new DeskWithStatusDto(deskDto, status, reservedBy);
+        return new DeskWithStatusDto(deskDto, status, reservedBy, reservationId);
     }
 
 }

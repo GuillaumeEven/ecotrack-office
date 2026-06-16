@@ -15,6 +15,7 @@ export interface DeskWithStatus {
   desk: Desk;
   calculatedStatus: ResourceStatus;
   reservedBy?: string; // email of the user who reserved it
+  reservationId?: number; // ID of the reservation (for cancellation)
 }
 
 /**
@@ -25,6 +26,8 @@ export interface RoomWithStatus {
   desks: DeskWithStatus[];
   occupancyRate: number; // 0.0 - 1.0 (e.g., 0.75 = 75%)
   roomStatus: ResourceStatus; // Status of the room itself
+  reservedBy?: string; // For meeting rooms: email of user who reserved
+  reservationId?: number; // For meeting rooms: ID of the reservation
 }
 
 /**
@@ -35,4 +38,6 @@ export interface FloorWithStatus {
   floor: Floor;
   rooms: RoomWithStatus[];
   date: string; // YYYY-MM-DD
+  desksOccupied: boolean; // Flag: last DESK_AREA of this floor has occupancy >= 80%
+  meetingRoomsOccupied: boolean; // Flag: last MEETING_ROOM of this floor is RESERVED
 }

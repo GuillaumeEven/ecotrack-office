@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.reservation.dto.ReservationCreateDto;
@@ -22,16 +21,21 @@ import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
 import com.ediae.ecotrack_office.reservation.mapper.ReservationMapper;
 import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.reservation.service.ReservationService;
+import com.ediae.ecotrack_office.shared.guard.RoleGuard;
+import com.ediae.ecotrack_office.users.enums.Role;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
-    RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS
-})
+// @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
+//     RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS
+// })
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
 
     @Autowired
     private ReservationService service;
+
+    @Autowired
+    private RoleGuard roleGuard;
 
     @GetMapping("/user/{id}")
     public List <ReservationResponseDto> getReservationsByUserId (@PathVariable Long id) {
@@ -78,6 +82,15 @@ public class ReservationController {
     @PostMapping
     public ReservationResponseDto createReservation (@RequestBody ReservationCreateDto dto) {
 
+        System.out.println("Received DTO: " + dto);
+        System.out.println("Date: " + dto.getDate() + " Type: " + dto.getDate().getClass());
+        System.out.println("UserId: " + dto.getUserId());
+        System.out.println("ResourceId: " + dto.getResourceId());
+        System.out.println("Status: " + dto.getStatus());
+
+
+
+
         return ReservationMapper.toResponseDto(service.createReservation(dto));
     }
 
@@ -88,8 +101,12 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean deleteReservation (@PathVariable Long id) {
-
-        return service.deleteReservationById(id);
+    public Boolean deleteReservation (@PathVariable Long id, Authentication auth) {
+        // Authorization: only ADMIN, TECHNICIAN, or the reservation owner can delete
+        roleGuard.requireAnyRole(auth, Role.ADMIN, Role.TECHNICIAN);
+        
+        // If not admin/tech, verify it's the user's own reservation
+        Long currentUserId = (Long) auth.getPrincipal();
+        return service.deleteReservationById(id, currentUserId, roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN));
     }
 }

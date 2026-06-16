@@ -55,17 +55,17 @@ export class FloorService {
   }
 
   /**
-   * Fetch floor with all rooms, desks and their status for a specific date
-   * Single API call replacing 4+ individual calls
-   * 
-   * @param id Floor ID
+   * Fetch all floors with their rooms, desks and status for a specific date
+   * Global progressive unlock logic applied across all floors
+   *
+   * @param organizationId Organization ID
    * @param date Date in format YYYY-MM-DD
-   * @returns Observable of FloorWithStatus (includes all rooms, desks, and calculated statuses)
+   * @returns Observable of FloorWithStatus[] (all floors with global progressive logic applied)
    */
-  getFloorWithStatus(id: number, date: string): Observable<FloorWithStatus> {
-    const url = `${this.apiUrl}/${id}/status`;
+  getFloorsWithStatus(organizationId: number = API_CONFIG.organizationId, date: string): Observable<FloorWithStatus[]> {
+    const url = `${this.apiUrl}/status/${organizationId}`;
     const params = new HttpParams().set('date', date);
-    console.log('📡 FloorService.getFloorWithStatus() calling:', url, 'date:', date);
-    return this.httpClient.get<FloorWithStatus>(url, { params });
+    console.log('📡 FloorService.getFloorsWithStatus() calling:', url, 'date:', date);
+    return this.httpClient.get<FloorWithStatus[]>(url, { params });
   }
 }

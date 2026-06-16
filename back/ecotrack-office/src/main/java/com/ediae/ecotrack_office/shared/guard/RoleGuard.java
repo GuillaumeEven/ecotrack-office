@@ -43,6 +43,19 @@ public class RoleGuard {
                 .contains(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
+    // ─────────────────────────────────────────────
+    // Public helper para verificar roles sin lanzar excepción
+    // ─────────────────────────────────────────────
+    public boolean hasAnyRole(Authentication auth, Role... roles) {
+        if (auth == null || !auth.isAuthenticated()) {
+            return false;
+        }
+        for (Role role : roles) {
+            if (hasRole(auth, role)) return true;
+        }
+        return false;
+    }
+
     private void checkAuthenticated(Authentication auth) {
         if (auth == null || !auth.isAuthenticated()) {
             throw new ForbiddenException("No estás autenticado.");

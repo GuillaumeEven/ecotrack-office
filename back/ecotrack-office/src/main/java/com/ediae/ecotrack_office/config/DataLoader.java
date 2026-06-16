@@ -370,7 +370,6 @@ public class DataLoader implements CommandLineRunner {
                     ReservationEntity reservation = new ReservationEntity(
                             date,
                             ReservationStatus.CONFIRMED,
-                            LocalDateTime.now(),
                             user,
                             desk
                     );

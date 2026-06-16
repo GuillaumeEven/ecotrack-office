@@ -1,32 +1,29 @@
 package com.ediae.ecotrack_office.reservation.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
 import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
-import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ReservationCreateDto {
 
     // Atributos
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
     private ReservationStatus status;
-    private LocalDateTime createdAt;
-    private UserEntity user;
-    private ResourceEntity resource;
+    private Long userId;
+    private Long resourceId;
 
     // Constructores
 
     public ReservationCreateDto () {}
 
-    public ReservationCreateDto (LocalDate date, ReservationStatus status, LocalDateTime createdAt, UserEntity user, ResourceEntity resource) {
+    public ReservationCreateDto (LocalDate date, ReservationStatus status, Long userId, Long resourceId) {
         this.date = date;
         this.status = status;
-        this.createdAt = createdAt;
-        this.user = user;
-        this.resource = resource;
+        this.userId = userId;
+        this.resourceId = resourceId;
     }
 
     // Getter y Setter
@@ -49,30 +46,21 @@ public class ReservationCreateDto {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt () {
+    public Long getUserId () {
 
-        return this.createdAt;
+        return this.userId;
     }
-    public void setCreateAt (LocalDateTime createAt) {
+    public void setUserId (Long userId) {
 
-        this.createdAt = createAt;
-    }
-
-    public UserEntity getUser () {
-
-        return this.user;
-    }
-    public void setUser (UserEntity user) {
-
-        this.user = user;
+        this.userId = userId;
     }
 
-    public ResourceEntity getResource () {
+    public Long getResourceId () {
 
-        return this.resource;
+        return this.resourceId;
     }
-    public void setResource (ResourceEntity resource) {
+    public void setResourceId (Long resourceId) {
 
-        this.resource = resource;
+        this.resourceId = resourceId;
     }
 }

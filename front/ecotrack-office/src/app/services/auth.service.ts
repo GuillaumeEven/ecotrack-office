@@ -11,6 +11,7 @@ export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_ID_KEY = 'user_id';
   private readonly ROLE_KEY = 'user_role';
+  private readonly EMAIL_KEY = 'user_email';
 
   constructor(
     private http: HttpClient,
@@ -31,12 +32,14 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, response.token);
     localStorage.setItem(this.USER_ID_KEY, String(response.userId));
     localStorage.setItem(this.ROLE_KEY, response.role);
+    localStorage.setItem(this.EMAIL_KEY, response.email);
   }
 
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_ID_KEY);
     localStorage.removeItem(this.ROLE_KEY);
+    localStorage.removeItem(this.EMAIL_KEY);
     this.router.navigate(['/login']);
   }
 
@@ -56,5 +59,9 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return this.getToken() !== null;
+  }
+
+  getEmail(): string | null {
+    return localStorage.getItem(this.EMAIL_KEY);
   }
 }

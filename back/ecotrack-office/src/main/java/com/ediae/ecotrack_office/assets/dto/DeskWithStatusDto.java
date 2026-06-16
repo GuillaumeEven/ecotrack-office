@@ -7,6 +7,7 @@ public class DeskWithStatusDto {
     private DeskResponseDto desk;
     private ResourceStatus calculatedStatus;
     private String reservedBy;
+    private Long reservationId; // ID of the reservation (for cancellation)
 
     public DeskWithStatusDto() {
     }
@@ -15,6 +16,14 @@ public class DeskWithStatusDto {
         this.desk = desk;
         this.calculatedStatus = calculatedStatus;
         this.reservedBy = reservedBy;
+        this.reservationId = null;
+    }
+
+    public DeskWithStatusDto(DeskResponseDto desk, ResourceStatus calculatedStatus, String reservedBy, Long reservationId) {
+        this.desk = desk;
+        this.calculatedStatus = calculatedStatus;
+        this.reservedBy = reservedBy;
+        this.reservationId = reservationId;
     }
 
     public DeskResponseDto getDesk() {
@@ -39,6 +48,14 @@ public class DeskWithStatusDto {
 
     public void setReservedBy(String reservedBy) {
         this.reservedBy = reservedBy;
+    }
+
+    public Long getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(Long reservationId) {
+        this.reservationId = reservationId;
     }
 
 }
