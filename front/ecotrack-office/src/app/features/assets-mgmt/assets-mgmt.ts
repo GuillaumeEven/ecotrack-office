@@ -120,6 +120,7 @@ export class AssetsMgmt {
   initializeForms() {
     this.floorForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
+      level: ['', [Validators.required, Validators.min(0)]],
       isActive: [true]
     });
 

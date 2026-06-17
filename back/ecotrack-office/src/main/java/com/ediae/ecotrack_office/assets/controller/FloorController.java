@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +23,17 @@ import com.ediae.ecotrack_office.assets.dto.FloorWithStatusDto;
 import com.ediae.ecotrack_office.assets.mapper.FloorMapper;
 import com.ediae.ecotrack_office.assets.service.FloorService;
 import com.ediae.ecotrack_office.assets.service.ResourceStatusCalculatorService;
+import com.ediae.ecotrack_office.shared.guard.RoleGuard;
+import com.ediae.ecotrack_office.users.enums.Role;
+import com.ediae.ecotrack_office.users.service.UserService;
 
 
 @RestController
 @RequestMapping("/api/v1/floors")
 public class FloorController {
+
+    @Autowired
+    private RoleGuard roleGuard;
 
     @Autowired
     private FloorService floorService;
@@ -36,6 +43,9 @@ public class FloorController {
 
     @Autowired
     private ResourceStatusCalculatorService resourceStatusCalculatorService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<FloorResponseDto>> getAllFloors() {
@@ -65,7 +75,13 @@ public class FloorController {
     }
 
     @PostMapping
-    public ResponseEntity<FloorResponseDto> createFloor(@RequestBody FloorRequestDto floorRequestDto) {
+    public ResponseEntity<FloorResponseDto> createFloor(@RequestBody FloorRequestDto floorRequestDto, Authentication auth) {
+        // check if admin
+        roleGuard.requireAnyRole(auth, Role.ADMIN);
+        // add the organizationId from the authenticated user to the floorRequestDto
+        Long userId = (Long) auth.getPrincipal();
+        Long organizationId = userService.getOrganizationIdByUserId(userId);
+        floorRequestDto.setOrganizationId(organizationId);
         FloorResponseDto floor = floorMapper.toResponseDto(floorService.createFloor(floorRequestDto));
         return ResponseEntity.ok(floor);
     }

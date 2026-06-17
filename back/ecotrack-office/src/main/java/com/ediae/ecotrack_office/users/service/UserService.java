@@ -189,7 +189,7 @@ public class UserService {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-        // MVP: comparación directa. 
+        // MVP: comparación directa.
         // TODO: cuando se añada BCrypt, usar passwordEncoder.matches()
         if (!entity.getPasswordHash().equals(dto.currentPassword())) {
             throw new IllegalArgumentException("La contraseña actual no es correcta");
@@ -200,5 +200,11 @@ public class UserService {
         userRepository.save(entity);
 
         auditLogService.log("PASSWORD_CHANGED", "USER", id, RequestContext.getUserId());
+    }
+
+    public Long getOrganizationIdByUserId(Long userId) {
+        UserEntity entity = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + userId));
+        return entity.getOrganization().getId();
     }
 }
