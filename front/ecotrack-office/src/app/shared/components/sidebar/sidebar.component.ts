@@ -16,11 +16,12 @@ export interface NavItem {
 })
 export class SidebarComponent {
   navItems: NavItem[] = [
-    { icon: 'dashboard', label: 'Dashboard', route: '/dashboard' },
-    { icon: 'calendar_month', label: 'Room Booking', route: '/bookings' },
-    { icon: 'confirmation_number', label: 'Tickets', route: '/tickets' },
-    { icon: 'group', label: 'Employees', route: '/employees' },
-    { icon: 'insights', label: 'Reports', route: '/reports' },
+    { icon: 'dashboard', label: 'Hacer reserva', route: '/home' },
+    { icon: 'calendar_month', label: 'Reservas', route: '/reservation' },
+    { icon: 'confirmation_number', label: 'Incidencias', route: '/incidencias' },
+    { icon: 'group', label: 'Empleados', route: '/admin/user-management' },
+    { icon: 'domain', label: 'Empresa', route: '/organization' },
+    { icon: 'insights', label: 'Analíticas', route: '/analytics' },
   ];
 
   bottomItems: NavItem[] = [
