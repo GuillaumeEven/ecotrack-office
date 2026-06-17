@@ -174,7 +174,8 @@ export class AssetsMgmt {
   submitRoom() {
     if (this.roomForm.invalid) return;
 
-    const roomData = this.roomForm.value;
+    // Use getRawValue() to include disabled fields (e.g., floorId when editing)
+    const roomData = this.roomForm.getRawValue();
 
     if (this.editingRoom) {
       this.roomService.update(this.editingRoom.id, roomData).subscribe({
@@ -349,6 +350,8 @@ export class AssetsMgmt {
         equipmentList: room.equipmentList || '',
         isActive: room.isActive
       });
+      // Disable floor selection when editing (floor is immutable)
+      this.roomForm.get('floorId')?.disable();
     } else {
       this.roomForm.reset({
         name: '',
@@ -359,6 +362,8 @@ export class AssetsMgmt {
         equipmentList: '',
         isActive: true
       });
+      // Enable floor selection when creating new room
+      this.roomForm.get('floorId')?.enable();
     }
     this.isRoomDialogOpen = true;
   }

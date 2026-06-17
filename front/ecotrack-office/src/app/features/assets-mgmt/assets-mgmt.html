@@ -394,7 +394,7 @@
         <label class="text-on-surface font-label-sm text-label-sm block">FLOOR *</label>
         <select
           formControlName="floorId"
-          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary outline-none"
+          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary outline-none disabled:bg-surface-container-lowest disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <option [ngValue]="">Select a floor</option>
           <option *ngFor="let floor of floors" [ngValue]="floor.id">{{ getFloorName(floor.id) }}</option>
