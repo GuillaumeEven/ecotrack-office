@@ -1,79 +1,79 @@
 # 3. Arquitectura del Sistema Frontend
 
-Para el desarrollo de la aplicación web se ha diseñado e implementado una arquitectura modular en el frontend utilizando **Angular (v21+)**. El diseño sigue estrictamente las directrices de la guía oficial de estilo de Angular y los patrones arquitectónicos modernos de la industria, garantizando principios fundamentales de la ingeniería de software como la **separación de responsabilidades (Separation of Concerns)**, la **reutilización de código**, la **mantenibilidad** y la **escalabilidad** (siempre en lo posible).
+Para el desarrollo de la aplicación web se ha diseñado e implementado una arquitectura modular en el frontend utilizando **Angular (v21+)**. El diseño sigue estrictamente las directrices de la guía oficial de estilo de Angular y los patrones arquitectónicos modernos de la industria, garantizando principios fundamentales de la ingeniería de software como la **separación de responsabilidades (Separation of Concerns)**, la **reutilización de código**, la **mantenibilidad** y la **escalabilidad**.
 
-A continuación se detalla la estructura del directorio principal `src/app/` y se justifica la distribución de sus componentes.
+A continuación se detalla la estructura del directorio principal `src/app/` y se justifica la distribución de todos sus elementos, incluyendo componentes, layouts, servicios y modelos de datos.
 
 ---
 
-## 3.1. Estructura de Directorios
+## 3.1. Estructura de Directorios Ampliada
 
 El núcleo del frontend se organiza de la siguiente manera:
 
-```text
+```
 src/app/
 │
 ├── core/                   # Módulos e infraestructura global (Singleton)
-├── shared/                 # Componentes, directivas y pipes reutilizables
+│   ├── guards/             # Guardianes de rutas (ej. AuthGuard)
+│   ├── interceptors/       # Interceptores HTTP (Tokens, errores)
+│   └── services/           # Servicios globales transversales (ej. AuthService)
+│
+├── shared/                 # Elementos reutilizables transversales
+│   ├── components/         # Botones, spinners, modales genéricos
+│   └── models/             # Interfaces de datos compartidas (ej. User, AuthResponse)
 │
 ├── layouts/                # Estructuras maestras visuales (Wrappers)
 │   └── private-layout/     # Layout privado (Header, Sidebar, Content)
 │
-├── features/               # Dominios de negocio / Páginas y Vistas
+├── features/               # Dominios de negocio / Páginas y Vistas autónomas
 │   ├── landing/            # Vista pública inicial
-│   ├── reservation/        # Gestión de reservas (Privado)
-│   └── user-profile/       # Gestión de Perfil de usuario (Privado)
+│   │
+│   └── reservation/           # Módulo de reservas encapsulado
+│       ├── components/     # Subcomponentes exclusivos de esta vista
+│       ├── services/       # Servicio exclusivo del dominio (ej. ReservationService)
+│       ├── models/         # Interfaces de datos exclusivas (ej. FilterReservation)
+│       ├── reservation.component.ts
+│       ├── reservation.component.html
+│       └── reservation.component.css
 │
 ├── app.component.ts        # Componente raíz (Punto de entrada)
 ├── app.component.html      # Contenedor del RouterOutlet global
 └── app.routes.ts           # Enrutamiento principal de la aplicación
+
 ```
-
-
 ---
-
 
 ## 3.2. Justificación Arquitectónica y Buenas Prácticas
 
 ### 3.2.1. Núcleo de la Aplicación (`core/`)
 
-La carpeta `core/` aloja toda la infraestructura global que debe instanciarse como **Singleton** (una única instancia para toda la aplicación). Aquí se ubican:
+La carpeta `core/` aloja toda la infraestructura global que debe instanciarse como **Singleton** (una única instancia para toda la aplicación). Aquí se ubican los guardianes de seguridad, los interceptores HTTP y los servicios core independientes de las vistas (como la gestión del estado de la sesión del usuario).
 
-* **Guardias de seguridad (Guards):** Controlan el flujo de navegación (ej. denegar el acceso a rutas privadas si el usuario no está autenticado).
-* **Interceptores HTTP:** Capturan las peticiones hacia la API para adjuntar automáticamente tokens de autenticación o gestionar errores globales de red.
-* **Servicios del núcleo:** Servicios globales de comunicación con el Backend (ej. `AuthService`).
-
-*Justificación basada en buenas prácticas:* Aislar estos elementos en un módulo central evita la duplicación de lógica crítica de la aplicación y previene fallos de seguridad en la fuga de sesiones.
+*Justificación de Servicios Core:* Los servicios en esta capa (como `AuthService`) administran datos que repercuten en el comportamiento global del sistema. Centralizarlos aquí evita la duplicación de lógica crítica y garantiza una única fuente de verdad para el estado de la autenticación.
 
 ### 3.2.2. Capa Reutilizable Transversal (`shared/`)
 
-El directorio `shared/` contiene elementos puramente visuales y genéricos que no pertenecen a ningún dominio de negocio específico, sino que son consumidos por múltiples pantallas de la aplicación. Ejemplos de ello son botones personalizados, spinners de carga, cuadros de diálogo modales o validadores de formularios reutilizables.
+El directorio `shared/` contiene elementos puramente visuales y estructuras de datos genéricas que carecen de lógica de negocio propia, orientados a ser consumidos de manera transversal por múltiples flujos de la aplicación.
 
-*Justificación basada en buenas prácticas:* Fomenta el principio **DRY (Don't Repeat Yourself)**. Al centralizar los componentes comunes, cualquier cambio estético o funcional en un botón genérico se propaga inmediatamente por todo el software, reduciendo drásticamente la deuda técnica.
+*Justificación de Modelos Globales:* En `shared/models/` se definen las interfaces de TypeScript cuyo ciclo de vida abarca más de un dominio de negocio (por ejemplo, la interfaz `User.model.ts`). Al unificar estos contratos de datos, se asegura que cualquier tipado común sea consistente en todo el proyecto, fomentando el principio **DRY (Don't Repeat Yourself)**.
 
 ### 3.2.3. Patrón de Capas de Diseño (`layouts/`)
 
-Uno de los puntos clave del proyecto es la separación de la estructura estructural del contenido dinámico mediante el uso de Layouts. En `layouts/private-layout/` se agrupa el contenedor maestro de la zona privada de la aplicación.
+Aborda la separación de la estructura visual del contenido dinámico. El `private-layout/` actúa como envoltorio maestro (*wrapper*) persistente para las secciones que requieren controles administrativos o paneles laterales (Header y Sidebar), delegando la inyección dinámica de las páginas a un componente `<router-outlet>` interno.
 
-* El archivo HTML y CSS de este layout define la persistencia del **Header** superior y el **Sidebar** lateral de navegación.
-* Utiliza un elemento `<router-outlet>` interno para renderizar dinámicamente las páginas del usuario.
-
-*Justificación basada en buenas prácticas:* Al extraer los layouts de la raíz (`app.component`), se consigue una experiencia de usuario limpia y desacoplada. Permite coexistir de manera elegante vistas totalmente limpias (como la `Landing Page` o la pantalla de `Login`) con vistas que requieren obligatoriamente una estructura de panel de control o *Dashboard*, delegando la responsabilidad de pintar el menú lateral únicamente a las rutas que lo requieren.
+*Justificación basada en buenas prácticas:* Permite la coexistencia limpia de vistas completamente despejadas (Landing Page, Login) con el área de gestión privada, abstrayendo al componente raíz (`app.component`) de responsabilidades geométricas o estéticas de la interfaz.
 
 ### 3.2.4. Arquitectura Basada en Características (`features/`)
 
-En lugar de organizar el proyecto por el tipo de archivo técnico (todos los componentes juntos, todos los HTML juntos), se ha adoptado una **organización por características u objetivos de negocio (Feature-Driven Architecture)**. Cada carpeta dentro de `features/` representa una página autónoma o un caso de uso dentro de la plataforma:
+Se descarta la clásica organización por tipo de archivo técnico a favor de una **Organización Orientada al Dominio (Feature-Driven Architecture)**. Cada carpeta dentro de `features/` opera como un microentorno funcional y autónomo.
 
-* `landing/`: Se encarga de la presentación pública de la aplicación.
-* `reservas/`: Agrupa toda la lógica de gestión de turnos o citas.
-* `perfil/`: Maneja los datos del usuario logueado.
-
-*Justificación basada en buenas prácticas:* Esta distribución minimiza el acoplamiento. Si un desarrollador necesita modificar la pantalla de reservas, todo el contexto que requiere (HTML, CSS, TypeScript y submódulos) está confinado en un mismo lugar. Esto optimiza el tiempo de mantenimiento y mitiga el riesgo de que una modificación en un módulo rompa colateralmente otra sección del sistema.
+*Justificación de la Cohesión Local (Servicios y Modelos en Features):* Siguiendo las directrices de bajo acoplamiento, si un servicio o modelo de datos es consumido exclusivamente por una característica (por ejemplo, las peticiones a `/api/reservas` en `ReservasService` o el tipado del estado de un formulario local), estos se almacenan **dentro** de su respectiva *feature*.
+Esto maximiza la cohesión: si un caso de uso requiere mantenimiento, el desarrollador tiene todo su contexto operativo (componentes, estilos, tipados y peticiones HTTP) encapsulado en un único espacio de trabajo. Si en el futuro esta funcionalidad fuera trasladada a otra aplicación, bastaría con mover la carpeta contenedora.
 
 ---
 
 ## 3.3. Componentes Standalone y Enrutamiento Eficiente
 
-La aplicación hace uso de los **Componentes Standalone**, el estándar moderno introducido en las últimas versiones de Angular. Al eliminar los archivos pesados de configuración colectiva (`NgModule`), cada componente se autogestiona declarando explícitamente sus propias dependencias (por ejemplo, importando de forma aislada `ReactiveFormsModule` solo en los formularios de registro).
+La aplicación implementa **Componentes Standalone**, el paradigma moderno de arquitectura en Angular. Al prescindir de los módulos globales de configuración (`NgModule`), cada componente declara de manera explícita y aislada sus dependencias técnicas (como la importación de `ReactiveFormsModule` únicamente donde existan formularios), aligerando la carga inicial de la aplicación.
 
-Finalmente, el archivo `app.routes.ts` orquesta la navegación utilizando **rutas vacías con hijos agrupados**. Este patrón permite mapear rutas limpias directamente en la URL del navegador (como `localhost:4200/profile` en lugar de `localhost:4200/app/profile`) mientras se mantiene por debajo el beneficio arquitectónico del `PrivateLayoutComponent`, garantizando URLs estéticas, indexables y semánticas para el usuario final.
+Finalmente, el archivo `app.routes.ts` orquesta el sistema de navegación mediante la técnica de **rutas vacías con hijos agrupados**. Este patrón permite que el enrutador resuelva direcciones URL semánticas y limpias directamente desde la raíz del dominio (como `/reservas` o `/perfil`) al mismo tiempo que hereda jerárquicamente la estructura del layout privado, proveyendo un flujo de navegación eficiente, óptimo y mantenible.
