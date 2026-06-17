@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Floor, FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus } from '../models';
+import { FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus } from '../models';
 import { FloorService } from '../services';
 import { AuthService } from '../../services/auth.service';
 import { DeskReservationDialogComponent } from '../dialogs/desk-reservation-dialog.component';
