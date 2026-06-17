@@ -518,44 +518,44 @@
         <label class="text-on-surface font-label-sm text-label-sm block">ROOM *</label>
         <select
           formControlName="roomId"
-          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary outline-none"
+          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary outline-none disabled:bg-surface-container-lowest disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <option [value]="">Select a room</option>
-          <option *ngFor="let room of allRooms" [value]="room.id">{{ room.name }}</option>
+          <option [ngValue]="">Select a room</option>
+          <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ room.name }}</option>
         </select>
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">DESK CODE *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">DESK NAME *</label>
         <input
           type="text"
-          formControlName="code"
-          placeholder="e.g., A-01, B-02"
+          formControlName="name"
+          placeholder="e.g., Desk A-01, Desk B-02"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
-          [class.border-error]="deskForm.get('code')?.invalid && deskForm.get('code')?.touched"
+          [class.border-error]="deskForm.get('name')?.invalid && deskForm.get('name')?.touched"
+        />
+      </div>
+
+      <div class="space-y-xs">
+        <label class="text-on-surface font-label-sm text-label-sm block">EQUIPMENT LIST</label>
+        <input
+          type="text"
+          formControlName="equipmentList"
+          placeholder="e.g., Monitor, Keyboard, Mouse"
+          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
         />
       </div>
 
       <div class="flex items-center gap-md">
         <input
           type="checkbox"
-          formControlName="isAvailable"
-          id="deskAvailable"
-          class="w-4 h-4 rounded border-outline-variant"
+          formControlName="isActive"
+          id="deskActive"
+          class="w-md h-md cursor-pointer accent-primary"
         />
-        <label for="deskAvailable" class="text-on-surface font-body-md text-body-md"
-          >Available</label
-        >
-      </div>
-
-      <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">ASSIGNED TO</label>
-        <input
-          type="text"
-          formControlName="assignedTo"
-          placeholder="e.g., John Doe"
-          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
-        />
+        <label for="deskActive" class="text-on-surface font-label-sm text-label-sm cursor-pointer">
+          ACTIVE
+        </label>
       </div>
 
       <div class="flex justify-end gap-sm pt-sm">

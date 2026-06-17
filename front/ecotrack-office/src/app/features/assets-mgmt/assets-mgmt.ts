@@ -135,10 +135,10 @@ export class AssetsMgmt {
     });
 
     this.deskForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(2)]],
       roomId: ['', Validators.required],
-      code: ['', [Validators.required, Validators.minLength(1)]],
-      isAvailable: [true],
-      assignedTo: ['']
+      equipmentList: [''],
+      isActive: [true]
     });
   }
 
@@ -208,7 +208,8 @@ export class AssetsMgmt {
   submitDesk() {
     if (this.deskForm.invalid) return;
 
-    const deskData = this.deskForm.value;
+    // Use getRawValue() to include disabled fields
+    const deskData = this.deskForm.getRawValue();
 
     if (this.editingDesk) {
       this.deskService.update(this.editingDesk.id, deskData).subscribe({
@@ -370,6 +371,25 @@ export class AssetsMgmt {
 
   openDeskDialog(desk?: Desk | null) {
     this.editingDesk = desk || null;
+    if (desk) {
+      this.deskForm.patchValue({
+        name: desk.name,
+        roomId: desk.roomId,
+        equipmentList: desk.equipmentList || '',
+        isActive: desk.isActive
+      });
+      // Disable room selection when editing (room is immutable)
+      this.deskForm.get('roomId')?.disable();
+    } else {
+      this.deskForm.reset({
+        name: '',
+        roomId: '',
+        equipmentList: '',
+        isActive: true
+      });
+      // Enable room selection when creating new desk
+      this.deskForm.get('roomId')?.enable();
+    }
     this.isDeskDialogOpen = true;
   }
 
@@ -400,7 +420,7 @@ export class AssetsMgmt {
   }
 
   closeDeskDialog() {
-    this.deskForm.reset({ roomId: '', code: '', isAvailable: true, assignedTo: '' });
+    this.deskForm.reset({ name: '', roomId: '', equipmentList: '', isActive: true });
     this.isDeskDialogOpen = false;
   }
 
