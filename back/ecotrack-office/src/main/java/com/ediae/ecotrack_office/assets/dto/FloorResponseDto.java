@@ -7,15 +7,17 @@ public class FloorResponseDto {
     private Integer level;
     private Boolean isActive;
     private Long organizationId;
+    private String name;
 
     public FloorResponseDto() {
     }
 
-    public FloorResponseDto(Long id, Integer level, Boolean isActive, Long organizationId) {
+    public FloorResponseDto(Long id, Integer level, Boolean isActive, Long organizationId, String name) {
         this.id = id;
         this.level = level;
         this.isActive = isActive;
         this.organizationId = organizationId;
+        this.name = name;
     }
 
     public Long getId() {
@@ -48,5 +50,13 @@ public class FloorResponseDto {
 
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

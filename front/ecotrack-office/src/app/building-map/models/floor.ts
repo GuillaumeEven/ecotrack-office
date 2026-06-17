@@ -7,4 +7,5 @@ export interface Floor {
   level: number;
   isActive: boolean;
   organizationId: number;
+  name?: string;
 }

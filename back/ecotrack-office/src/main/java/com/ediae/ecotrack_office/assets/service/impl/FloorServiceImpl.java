@@ -49,6 +49,9 @@ public class FloorServiceImpl implements FloorService {
     @Override
     public FloorModel createFloor(FloorRequestDto floorRequestDto) {
         FloorModel model = floorMapper.fromRequestDto(floorRequestDto);
+        if (model.getName() == null) {
+            model.setName("Floor " + model.getLevel());
+        }
         FloorEntity entity = floorMapper.toEntity(model);
         FloorEntity savedEntity = floorRepository.save(entity);
         return floorMapper.fromEntity(savedEntity);
@@ -59,6 +62,9 @@ public class FloorServiceImpl implements FloorService {
         FloorEntity existingEntity = floorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Floor not found with id: " + id));
         FloorModel model = floorMapper.fromRequestDto(floorRequestDto);
+        if (model.getName() == null) {
+            model.setName("Floor " + model.getLevel());
+        }
         FloorEntity entity = floorMapper.toEntity(model);
         entity.setId(existingEntity.getId());
         FloorEntity updatedEntity = floorRepository.save(entity);

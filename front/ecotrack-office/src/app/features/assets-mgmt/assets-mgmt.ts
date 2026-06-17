@@ -289,6 +289,19 @@ export class AssetsMgmt {
   // Methods to open dialogs
   openFloorDialog(floor?: Floor | null) {
     this.editingFloor = floor || null;
+    if (floor) {
+      this.floorForm.patchValue({
+        name: floor.name,
+        level: floor.level,
+        isActive: floor.isActive
+      });
+    } else {
+      this.floorForm.reset({
+        name: '',
+        level: '',
+        isActive: true
+      });
+    }
     this.isFloorDialogOpen = true;
   }
 
@@ -404,7 +417,7 @@ export class AssetsMgmt {
   // Methods to get names for display
   getFloorName(floorId: number): string {
     const floor = this.allFloors.find(f => f.id === floorId);
-    return floor ? `Floor ${floor.id}` : 'Unknown Floor';
+    return floor ? (floor.name || `Floor ${floor.level}`) : 'Unknown Floor';
   }
 
   getRoomName(roomId: number): string {
