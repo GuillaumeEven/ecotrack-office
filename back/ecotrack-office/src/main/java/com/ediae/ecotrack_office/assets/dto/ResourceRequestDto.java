@@ -1,6 +1,5 @@
 package com.ediae.ecotrack_office.assets.dto;
 
-
 public abstract class ResourceRequestDto {
 
     private String name;
@@ -18,7 +17,7 @@ public abstract class ResourceRequestDto {
         String equipmentList
     ) {
         this.name = name;
-        this.status = status;
+        this.status = "AVAILABLE";
         this.isActive = isActive;
         this.equipmentList = equipmentList;
     }

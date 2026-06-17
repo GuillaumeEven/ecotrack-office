@@ -125,9 +125,13 @@ export class AssetsMgmt {
     });
 
     this.roomForm = this.fb.group({
-      floorId: ['', Validators.required],
       name: ['', [Validators.required, Validators.minLength(2)]],
-      type: ['', Validators.required]
+      floorId: ['', Validators.required],
+      roomType: ['', Validators.required],
+      capacity: ['', [Validators.required, Validators.min(1)]],
+      surfaceArea: ['', [Validators.required, Validators.min(0.01)]],
+      equipmentList: [''],
+      isActive: [true]
     });
 
     this.deskForm = this.fb.group({
@@ -178,16 +182,24 @@ export class AssetsMgmt {
           const idx = this.allRooms.findIndex(r => r.id === updated.id);
           if (idx !== -1) this.allRooms[idx] = updated;
           this.closeRoomDialog();
+          this.cdr.markForCheck();
         },
-        error: (err) => this.errorMessage = 'Error updating room'
+        error: (err) => {
+          this.errorMessage = 'Error updating room';
+          this.cdr.markForCheck();
+        }
       });
     } else {
       this.roomService.create(roomData).subscribe({
         next: (created) => {
           this.allRooms.push(created);
           this.closeRoomDialog();
+          this.cdr.markForCheck();
         },
-        error: (err) => this.errorMessage = 'Error creating room'
+        error: (err) => {
+          this.errorMessage = 'Error creating room';
+          this.cdr.markForCheck();
+        }
       });
     }
   }
@@ -203,16 +215,24 @@ export class AssetsMgmt {
           const idx = this.allDesks.findIndex(d => d.id === updated.id);
           if (idx !== -1) this.allDesks[idx] = updated;
           this.closeDeskDialog();
+          this.cdr.markForCheck();
         },
-        error: (err) => this.errorMessage = 'Error updating desk'
+        error: (err) => {
+          this.errorMessage = 'Error updating desk';
+          this.cdr.markForCheck();
+        }
       });
     } else {
       this.deskService.create(deskData).subscribe({
         next: (created) => {
           this.allDesks.push(created);
           this.closeDeskDialog();
+          this.cdr.markForCheck();
         },
-        error: (err) => this.errorMessage = 'Error creating desk'
+        error: (err) => {
+          this.errorMessage = 'Error creating desk';
+          this.cdr.markForCheck();
+        }
       });
     }
   }
@@ -319,6 +339,27 @@ export class AssetsMgmt {
 
   openRoomDialog(room?: Room | null) {
     this.editingRoom = room || null;
+    if (room) {
+      this.roomForm.patchValue({
+        name: room.name,
+        floorId: room.floorId,
+        roomType: room.roomType,
+        capacity: room.capacity,
+        surfaceArea: room.surfaceArea,
+        equipmentList: room.equipmentList || '',
+        isActive: room.isActive
+      });
+    } else {
+      this.roomForm.reset({
+        name: '',
+        floorId: '',
+        roomType: '',
+        capacity: '',
+        surfaceArea: '',
+        equipmentList: '',
+        isActive: true
+      });
+    }
     this.isRoomDialogOpen = true;
   }
 
