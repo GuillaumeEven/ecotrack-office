@@ -227,8 +227,12 @@ export class AssetsMgmt {
           next: () => {
             this.allFloors = this.allFloors.filter(f => f.id !== this.deleteItemId);
             this.closeDeleteDialog();
+            this.cdr.markForCheck();
           },
-          error: (err) => this.errorMessage = 'Error deleting floor'
+          error: (err) => {
+            this.errorMessage = 'Error deleting floor';
+            this.cdr.markForCheck();
+          }
         });
         break;
       case 'room':
@@ -236,8 +240,12 @@ export class AssetsMgmt {
           next: () => {
             this.allRooms = this.allRooms.filter(r => r.id !== this.deleteItemId);
             this.closeDeleteDialog();
+            this.cdr.markForCheck();
           },
-          error: (err) => this.errorMessage = 'Error deleting room'
+          error: (err) => {
+            this.errorMessage = 'Error deleting room';
+            this.cdr.markForCheck();
+          }
         });
         break;
       case 'desk':
@@ -245,8 +253,12 @@ export class AssetsMgmt {
           next: () => {
             this.allDesks = this.allDesks.filter(d => d.id !== this.deleteItemId);
             this.closeDeleteDialog();
+            this.cdr.markForCheck();
           },
-          error: (err) => this.errorMessage = 'Error deleting desk'
+          error: (err) => {
+            this.errorMessage = 'Error deleting desk';
+            this.cdr.markForCheck();
+          }
         });
         break;
     }
@@ -323,19 +335,26 @@ export class AssetsMgmt {
   }
 
   closeDeleteDialog() {
+    console.log('[DEBUG closeDeleteDialog] Closing delete dialog');
+    this.deleteItemType = '';
+    this.deleteItemId = null;
+    this.deleteItemName = '';
     this.isDeleteDialogOpen = false;
   }
 
   // Methods to close dialogs
   closeFloorDialog() {
+    this.floorForm.reset({ name: '', level: '', isActive: true });
     this.isFloorDialogOpen = false;
   }
 
   closeRoomDialog() {
+    this.roomForm.reset({ floorId: '', name: '', type: '' });
     this.isRoomDialogOpen = false;
   }
 
   closeDeskDialog() {
+    this.deskForm.reset({ roomId: '', code: '', isAvailable: true, assignedTo: '' });
     this.isDeskDialogOpen = false;
   }
 
