@@ -10,12 +10,16 @@ import { Reservation } from './reservation/reservation';
 import { Organization } from './organization/organization';
 import { AssetsMgmt } from './features/assets-mgmt/assets-mgmt';
 
+// Nuevos componentes añadidos para la tarea EK-27
+import { IncidenciasComponent } from './features/incidencias/incidencias';
+import { AnalyticsComponent } from './features/analytics/analytics';
+
 export const routes: Routes = [
   // RUTAS PÚBLICAS
   { path: '', component: HomeLanding },
   { path: 'login', component: LoginComponent },
 
-  // RUTAS PRIVADAS
+  // RUTAS PRIVADAS (Cargan dentro del menú de la aplicación)
   {
     path: '',
     component: PrivateLayout,
@@ -45,9 +49,17 @@ export const routes: Routes = [
       {
         path: 'assets',
         component: AssetsMgmt,
+      },
+      {
+        path: 'incidencias',
+        component: IncidenciasComponent,
+      },
+      {
+        path: 'analytics',
+        component: AnalyticsComponent,
       }
     ],
   },
-  // RUTA POR DEFECTO
+  // RUTA POR DEFECTO (Redirección si la URL no existe)
   { path: '**', redirectTo: '' },
 ];

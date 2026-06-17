@@ -1,0 +1,128 @@
+<div class="max-w-container-max mx-auto px-lg py-xl">
+  <div class="mb-xl">
+    <h1 class="font-headline-lg text-headline-lg text-on-surface">Mantenimiento e Incidencias</h1>
+    <p class="text-on-surface-variant font-body-lg text-body-lg">
+      Reporta problemas en la infraestructura de los recursos y haz el seguimiento de los tickets de resolución técnica.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-12 gap-gutter">
+    <div class="col-span-12 md:col-span-4">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md sticky top-4">
+        <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
+          <h3 class="font-headline-md text-headline-md text-on-surface">Reportar Incidencia</h3>
+          <span class="material-symbols-outlined text-on-surface-variant">report_problem</span>
+        </div>
+
+        <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()" class="space-y-md">
+          <div class="space-y-xs">
+            <label class="text-on-surface font-label-sm text-label-sm block">ID DEL RECURSO / ACTIVO</label>
+            <input
+              type="text"
+              formControlName="resourceId"
+              placeholder="Ej. 102"
+              class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
+              [class.border-error]="incidentForm.get('resourceId')?.invalid && incidentForm.get('resourceId')?.touched"
+            />
+          </div>
+
+          <div class="space-y-xs">
+            <label class="text-on-surface font-label-sm text-label-sm block">DESCRIPCIÓN</label>
+            <textarea
+              formControlName="description"
+              rows="4"
+              placeholder="Describe el fallo (ej. Pantalla de monitor rota, mobiliario dañado)..."
+              class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none resize-none"
+              [class.border-error]="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched"
+            ></textarea>
+            <p *ngIf="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched" class="text-error text-[12px]">
+              Por favor, introduce al menos 10 caracteres descriptivos.
+            </p>
+          </div>
+
+          <div *ngIf="successMessage || errorMessage" class="pt-xs">
+            <p *ngIf="successMessage" class="text-secondary text-[13px] font-medium">✓ {{ successMessage }}</p>
+            <p *ngIf="errorMessage" class="text-error text-[13px] font-medium">✕ {{ errorMessage }}</p>
+          </div>
+
+          <div class="pt-sm">
+            <button
+              type="submit"
+              [disabled]="incidentForm.invalid || isSaving"
+              class="w-full px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {{ isSaving ? 'Enviando...' : 'Registrar Incidencia' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-span-12 md:col-span-8">
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md overflow-hidden">
+        <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
+          <h3 class="font-headline-md text-headline-md text-on-surface">Historial de Mantenimiento</h3>
+          <span class="material-symbols-outlined text-on-surface-variant">build_circle</span>
+        </div>
+
+        <div *ngIf="isLoading" class="space-y-md py-md animate-pulse">
+          <div class="h-10 bg-surface-container-high rounded-xl w-full"></div>
+          <div class="h-12 bg-surface-container-low rounded-xl w-full"></div>
+          <div class="h-12 bg-surface-container-low rounded-xl w-full"></div>
+        </div>
+
+        <div *ngIf="!isLoading && incidents.length === 0" class="text-center py-xl space-y-sm">
+          <span class="material-symbols-outlined text-[48px] text-on-surface-variant">verified</span>
+          <p class="text-on-surface-variant font-body-lg text-body-lg">Todos los sistemas operativos. No hay incidencias activas.</p>
+        </div>
+
+        <div *ngIf="!isLoading && incidents.length > 0" class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-outline-variant text-label-sm font-label-sm text-on-surface-variant">
+                <th class="pb-sm font-semibold">ID</th>
+                <th class="pb-sm font-semibold">RECURSO</th>
+                <th class="pb-sm font-semibold">DESCRIPCIÓN</th>
+                <th class="pb-sm font-semibold">FECHA REPORTE</th>
+                <th class="pb-sm font-semibold text-center">ESTADO</th>
+                <th class="pb-sm font-semibold text-right">ACCIÓN</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant text-body-md text-on-surface">
+              <tr *ngFor="let item of incidents" class="hover:bg-surface-container-low transition-colors">
+                <td class="py-md pr-sm font-medium">#{{ item.id }}</td>
+                <td class="py-md px-xs">Recurso {{ item.resourceId }}</td>
+                <td class="py-md px-xs max-w-[240px] truncate" [title]="item.description">
+                  {{ item.description }}
+                </td>
+                <td class="py-md px-xs text-on-surface-variant text-[13px]">
+                  {{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                </td>
+                <td class="py-md px-xs text-center">
+                  <span
+                    [ngClass]="item.status === 'OPEN' ? 'bg-error-container/30 text-error' : 'bg-secondary-container/20 text-secondary'"
+                    class="text-[11px] font-bold px-sm py-[2px] rounded-full inline-block"
+                  >
+                    {{ item.status === 'OPEN' ? 'ABIERTA' : 'RESUELTA' }}
+                  </span>
+                </td>
+                <td class="py-md pl-sm text-right">
+                  <button
+                    *ngIf="item.status === 'OPEN'"
+                    (click)="onResolve(item.id)"
+                    class="text-primary text-[13px] font-bold px-sm py-xs hover:bg-surface-container-high rounded-xl transition-colors"
+                  >
+                    Resolver
+                  </button>
+                  <span *ngIf="item.status !== 'OPEN'" class="text-on-surface-variant text-[12px] italic">
+                    Solucionado
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
