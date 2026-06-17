@@ -9,11 +9,13 @@ import { UserManagementComponent } from './features/admin/user-management/user-m
 import { Reservation } from './reservation/reservation';
 import { Organization } from './organization/organization';
 import { AssetsMgmt } from './features/assets-mgmt/assets-mgmt';
+import { RegisterOrganization } from './features/register-organization/register-organization';
 
 export const routes: Routes = [
   // RUTAS PÚBLICAS
   { path: '', component: HomeLanding },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterOrganization},
 
   // RUTAS PRIVADAS
   {
