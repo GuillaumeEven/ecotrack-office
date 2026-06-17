@@ -207,7 +207,7 @@
           class="px-md py-sm bg-surface border border-outline-variant rounded-xl text-on-surface outline-none focus:ring-2 focus:ring-primary"
         >
           <option [ngValue]="null">All Rooms</option>
-          <option *ngFor="let room of allRooms" [ngValue]="room.id">{{ getRoomName(room.id) }}</option>
+          <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ getRoomName(room.id) }}</option>
         </select>
       </div>
       <button

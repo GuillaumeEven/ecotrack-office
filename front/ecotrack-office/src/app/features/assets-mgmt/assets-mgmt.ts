@@ -102,6 +102,11 @@ export class AssetsMgmt {
     return this.allDesks.filter(desk => desk.roomId === this.selectedRoomId);
   }
 
+  get deskAreas(): Room[] {
+    // Only return rooms with roomType DESK_AREA
+    return this.allRooms.filter(room => room.roomType === 'DESK_AREA');
+  }
+
   // ========== TAB MANAGEMENT ==========
 
   setActiveTab(tab: 'floors' | 'rooms' | 'desks') {
