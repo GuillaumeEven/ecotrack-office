@@ -22,7 +22,6 @@ export class FloorService {
    */
   list(organizationId: number = API_CONFIG.organizationId): Observable<Floor[]> {
     const url = `${this.apiUrl}/organization/${organizationId}`;
-    console.log('📡 FloorService.list() calling:', url);
     return this.httpClient.get<Floor[]>(url);
   }
 
@@ -65,7 +64,6 @@ export class FloorService {
   getFloorsWithStatus(organizationId: number = API_CONFIG.organizationId, date: string): Observable<FloorWithStatus[]> {
     const url = `${this.apiUrl}/status/${organizationId}`;
     const params = new HttpParams().set('date', date);
-    console.log('📡 FloorService.getFloorsWithStatus() calling:', url, 'date:', date);
     return this.httpClient.get<FloorWithStatus[]>(url, { params });
   }
 }

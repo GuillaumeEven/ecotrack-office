@@ -29,7 +29,6 @@ export class RoomService {
    */
   listByFloor(floorId: number): Observable<Room[]> {
     const url = `${this.apiUrl}/floor/${floorId}`;
-    console.log('📡 RoomService.listByFloor() calling:', url);
     return this.httpClient.get<Room[]>(url);
   }
 

@@ -79,19 +79,13 @@ export class AssetsMgmt {
   }
 
   get filteredRooms(): Room[] {
-    console.log('[DEBUG filteredRooms] selectedFloorId:', this.selectedFloorId);
-    console.log('[DEBUG filteredRooms] allRooms:', this.allRooms);
-
     if (!this.selectedFloorId) {
-      console.log('[DEBUG filteredRooms] No floor selected, returning all rooms');
       return this.allRooms; // Show all if no floor selected
     }
 
     const filtered = this.allRooms.filter(room => {
-      console.log(`[DEBUG filteredRooms] Room ${room.id} (${room.name}): floorId=${room.floorId}, match=${room.floorId === this.selectedFloorId}`);
       return room.floorId === this.selectedFloorId;
     });
-    console.log('[DEBUG filteredRooms] Filtered result:', filtered);
     return filtered;
   }
 
@@ -401,7 +395,6 @@ export class AssetsMgmt {
   }
 
   closeDeleteDialog() {
-    console.log('[DEBUG closeDeleteDialog] Closing delete dialog');
     this.deleteItemType = '';
     this.deleteItemId = null;
     this.deleteItemName = '';
@@ -428,7 +421,6 @@ export class AssetsMgmt {
 
   // Load all data at component init (parallel calls)
   loadAllData() {
-    console.log('[DEBUG loadAllData] Starting to load all data...');
     this.isLoading = true;
 
     forkJoin({
@@ -437,17 +429,6 @@ export class AssetsMgmt {
       desks: this.deskService.list()
     }).subscribe({
       next: (result) => {
-        console.log('[DEBUG loadAllData] Floors loaded:', result.floors);
-        console.log('[DEBUG loadAllData] Floor IDs:', result.floors.map(f => f.id));
-        console.log('[DEBUG loadAllData] Rooms loaded:', result.rooms);
-        console.log('[DEBUG loadAllData] Desks loaded:', result.desks);
-
-        // Check if rooms have floorId
-        if (result.rooms.length > 0) {
-          console.log('[DEBUG loadAllData] First room:', result.rooms[0]);
-          console.log('[DEBUG loadAllData] First room floorId:', result.rooms[0].floorId);
-        }
-
         this.allFloors = result.floors;
 
         // Get valid floor IDs for current organization
@@ -463,17 +444,12 @@ export class AssetsMgmt {
         this.isLoading = false;
         this.cdr.markForCheck();
 
-        console.log('[DEBUG loadAllData] After filtering - Floors:', this.allFloors.length,
-                    'Rooms:', this.allRooms.length, 'Desks:', this.allDesks.length);
-
         // Auto-select first floor
         if (result.floors.length > 0) {
           this.selectedFloorId = result.floors[0].id;
-          console.log('[DEBUG loadAllData] Auto-selected floor:', this.selectedFloorId);
         }
       },
       error: (err) => {
-        console.error('[DEBUG loadAllData] Error loading data:', err);
         this.errorMessage = 'Error loading data';
         this.isLoading = false;
         this.cdr.markForCheck();

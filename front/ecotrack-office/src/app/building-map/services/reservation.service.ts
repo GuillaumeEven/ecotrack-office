@@ -24,7 +24,6 @@ export class ReservationService {
    */
   getByFloorAndDate(floorId: number, date: string): Observable<Reservation[]> {
     const url = `${this.apiUrl}/floor/${floorId}/date/${date}`;
-    console.log('📡 ReservationService.getByFloorAndDate() calling:', url);
     return this.httpClient.get<Reservation[]>(url);
   }
 
@@ -35,7 +34,6 @@ export class ReservationService {
    */
   getByRoomAndDate(roomId: number, date: string): Observable<Reservation[]> {
     const url = `${this.apiUrl}/room/${roomId}/date/${date}`;
-    console.log('📡 ReservationService.getByRoomAndDate() calling:', url);
     return this.httpClient.get<Reservation[]>(url);
   }
 
@@ -46,7 +44,6 @@ export class ReservationService {
    */
   getByDeskAndDate(deskId: number, date: string): Observable<Reservation[]> {
     const url = `${this.apiUrl}/desk/${deskId}/date/${date}`;
-    console.log('📡 ReservationService.getByDeskAndDate() calling:', url);
     return this.httpClient.get<Reservation[]>(url);
   }
 
@@ -65,9 +62,6 @@ export class ReservationService {
       userId,
       resourceId
     };
-    console.log('💾 ReservationService.create() - URL:', url);
-    console.log('🚀 ReservationService.create() - Payload:', JSON.stringify(payload, null, 2));
-    console.log('🚀 Types - userId:', typeof userId, 'resourceId:', typeof resourceId, 'date:', typeof date);
     return this.httpClient.post(url, payload);
   }
 
@@ -77,7 +71,6 @@ export class ReservationService {
    */
   delete(reservationId: number): Observable<boolean> {
     const url = `${this.apiUrl}/${reservationId}`;
-    console.log('🗑️ ReservationService.delete() - URL:', url);
     return this.httpClient.delete<boolean>(url);
   }
 }
