@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
 import { HomeLanding } from './landing/components/home-landing/home-landing';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
 import { BuildingMapComponent } from './building-map/components/building-map.component';
@@ -28,27 +29,30 @@ export const routes: Routes = [
       {
         path: 'home',
         component: BuildingMapComponent,
+        canActivate: [authGuard], // Tip: Te recomiendo ponérselo también a home para que sea privada
       },
       {
         path: 'admin/user-management',
         component: UserManagementComponent,
-        canActivate: [authGuard],
+        canActivate: [authGuard, adminGuard], // 2. ¡Aquí ocurre el doble candado! Debe estar logueado Y ser Admin
       },
       {
         path: 'reservation',
         component: Reservation,
+        canActivate: [authGuard],
       },
       {
         path: 'organization',
         component: Organization,
+        canActivate: [authGuard],
       },
       {
         // TODO: Filtrar solo los admins
         path: 'assets',
         component: AssetsMgmt,
-      }
+        canActivate: [authGuard],
+      },
     ],
   },
-  // RUTA POR DEFECTO
   { path: '**', redirectTo: '' },
 ];
