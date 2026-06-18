@@ -4,7 +4,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.shared.dto.PageResponseDto;
 import com.ediae.ecotrack_office.shared.guard.AdminGuard;
@@ -12,6 +21,8 @@ import com.ediae.ecotrack_office.users.dto.ChangePasswordRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
+import com.ediae.ecotrack_office.users.dto.UserStatsDto;
+import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.service.UserService;
 import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
 
@@ -70,14 +81,38 @@ public class UserController {
 
     // ─── Endpoints de administración (solo ADMIN) ─────────────────────────────
 
-    // GET /api/v1/users?organizationId=1&page=0&size=20
+    // GET /api/v1/users?organizationId=1&page=0&size=10&search=jose&role=ADMIN&isActive=true
     @GetMapping
     public ResponseEntity<PageResponseDto<UserResponseDto>> getUsers(
             Authentication auth,
             @RequestParam Long organizationId,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Role role,
+            @RequestParam(required = false) Boolean isActive,
             Pageable pageable) {
         adminGuard.requireAdmin(auth);
-        return ResponseEntity.ok(userService.getUsersByOrganization(organizationId, pageable));
+        return ResponseEntity.ok(
+            userService.getUsersByFilters(organizationId, search, role, isActive, pageable)
+        );
+    }
+
+    // GET /api/v1/users/stats?organizationId=1
+    @GetMapping("/stats")
+    public ResponseEntity<UserStatsDto> getUserStats(
+            Authentication auth,
+            @RequestParam Long organizationId) {
+        adminGuard.requireAdmin(auth);
+        return ResponseEntity.ok(userService.getUserStats(organizationId));
+    }
+
+    // PATCH /api/v1/users/{id}/reactivate
+    @PatchMapping("/{id}/reactivate")
+    public ResponseEntity<Void> reactivateUser(
+            Authentication auth,
+            @PathVariable Long id) {
+        adminGuard.requireAdmin(auth);
+        userService.reactivateUser(id);
+        return ResponseEntity.noContent().build();
     }
 
     // GET /api/v1/users/{id}

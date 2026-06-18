@@ -18,7 +18,9 @@ import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
+import com.ediae.ecotrack_office.users.dto.UserStatsDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.mapper.UserMapper;
 import com.ediae.ecotrack_office.users.models.UserModel;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
@@ -230,5 +232,56 @@ public class UserService {
         UserEntity entity = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + userId));
         return entity.getOrganization().getId();
+    // ─────────────────────────────────────────────
+    // GET — lista paginada con filtros opcionales
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
+    public PageResponseDto<UserResponseDto> getUsersByFilters(
+            Long organizationId,
+            String search,
+            Role role,
+            Boolean isActive,
+            Pageable pageable) {
+
+        // Si search está vacío lo tratamos como null para que el filtro lo ignore
+        String searchParam = (search != null && !search.isBlank()) ? search : null;
+
+        Page<UserEntity> page = userRepository.findByFilters(
+            organizationId, searchParam, role, isActive, pageable
+        );
+
+        List<UserResponseDto> content = page.getContent().stream()
+                .map(entity -> userMapper.toModel(entity).toResponseDto())
+                .toList();
+
+        return new PageResponseDto<>(page, content);
+    }
+
+    // ─────────────────────────────────────────────
+    // GET — estadísticas para las KPI cards
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
+    public UserStatsDto getUserStats(Long organizationId) {
+        long total    = userRepository.countByOrganizationId(organizationId);
+        long active   = userRepository.countByOrganizationIdAndIsActive(organizationId, true);
+        long newThisMonth = userRepository.countNewUsersThisMonth(
+            organizationId,
+            LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0)
+        );
+        return new UserStatsDto(total, active, newThisMonth);
+    }
+
+    // ─────────────────────────────────────────────
+    // PATCH — reactivar usuario
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
+    public void reactivateUser(Long id) {
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
+
+        entity.setIsActive(true);
+        userRepository.save(entity);
+
+        auditLogService.log("USER_REACTIVATED", "USER", id, RequestContext.getUserId());
     }
 }
