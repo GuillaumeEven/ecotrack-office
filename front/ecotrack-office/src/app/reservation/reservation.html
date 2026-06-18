@@ -1,18 +1,21 @@
 <div class="bookings-layout">
   <header class="bookings-header">
     <div class="bookings-header__title-block">
-      <h1 class="bookings-header__title">Bookings History</h1>
-      <p class="bookings-header__subtitle">Manage your active reservations and view organization-wide history.</p>
+      <h1 class="bookings-header__title">Historial de reservas</h1>
+      <p class="bookings-header__subtitle">Gestiona tus reservas activas y visualiza el historial de reservas.</p>
     </div>
     
+    <!-- ESTE DIV ME LO GUARDO PARA FUTURO GESTIONAR TEMA DE ROLES
     <div class="bookings-header__tabs-wrapper">
       <div class="bookings-tabs">
         <button class="bookings-tabs__btn bookings-tabs__btn--active">My Bookings</button>
         <button class="bookings-tabs__btn">All Staff</button>
       </div>
     </div>
+    -->
   </header>
 
+  <!-- EL FILTRO ME LO GUARDO PARA CUANDO LO TENGA TODO LISTO IMPLEMENTAR
   <div class="bookings-filters">
     <div class="bookings-filters__grid">
       <div class="bookings-filters__group">
@@ -26,10 +29,10 @@
       </div>
 
       <div class="bookings-filters__group">
-        <label class="bookings-filters__label">DATE RANGE</label>
+        <label class="bookings-filters__label">DATE</label>
         <div class="bookings-filters__input-wrapper">
           <span class="material-symbols-outlined bookings-filters__icon">calendar_today</span>
-          <input class="bookings-filters__input" placeholder="This Week" type="text">
+          <input class="bookings-filters__input" type="date"/>
         </div>
       </div>
 
@@ -48,12 +51,13 @@
       </div>
     </div>
   </div>
+  -->
 
   <section class="active-reservations">
     <div class="active-reservations__header">
       <h2 class="active-reservations__title">
         <span class="active-reservations__indicator-dot"></span>
-        Active Reservations
+        Reservas activas
       </h2>
     </div>
 
@@ -61,23 +65,23 @@
       <div class="booking-card">
         <div class="booking-card__image-wrapper">
           <img class="booking-card__image" alt="Conference room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv5skVvpbHBliejIb8gxNsXWKYyinhWUp-6fX8D_V775NCvImYaXmnyzUPHYo6Dq0TcrGpL4TUbeaBQZ0BXosXLEReA40NZEUBpd2uBfN9iFmuqsG67tmprMuNnD1Kv_TKR3AeyOIkC4p-HDNj_regGA3RNBVy_Ur-8JYxpm6ocPY3CIN8flAGQpLmVW6SHM3ZX_KSt5R1lVBVmjqk7PX-1CmDuyp5a_8_pQFzn1-wmN95_qxfCtMtldGFqJACJ_AfEpZeyXxtHzf3">
-          <div class="booking-card__badge-time">Today</div>
+          <div class="booking-card__badge-time">Hoy</div>
         </div>
         <div class="booking-card__content">
           <div class="booking-card__header">
             <div>
-              <h3 class="booking-card__title">Creative Suite B</h3>
-              <p class="booking-card__meta">Floor 3 • 4-6 People</p>
+              <h3 class="booking-card__title">Sala de reuniones B</h3>
+              <p class="booking-card__meta">Planta 3 • 4-6 Personas</p>
             </div>
-            <span class="booking-card__status-tag">Confirmed</span>
+            <span class="booking-card__status-tag">Confirmada</span>
           </div>
           <div class="booking-card__schedule">
-            <span class="material-symbols-outlined">schedule</span>
-            <span class="booking-card__time">14:00 - 15:30</span>
+            <span class="material-symbols-outlined">calendar_today</span>
+            <span class="booking-card__time">05/06/2026</span>
           </div>
           <div class="booking-card__actions">
-            <button class="booking-card__btn-edit">Edit</button>
-            <button class="booking-card__btn-cancel">Cancel</button>
+            <button class="booking-card__btn-edit">Editar</button>
+            <button class="booking-card__btn-cancel">Cancelar</button>
           </div>
         </div>
       </div>
@@ -85,27 +89,28 @@
       <div class="booking-card">
         <div class="booking-card__image-wrapper">
           <img class="booking-card__image" alt="Individual workstation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcSiZYeVGttJbBzn0lLRqoJYEWtZdwcFWilbbRGY84VX7p_JCj4OH-5gdtEA8lwfUNpF5a_jmObA98zod89bKTcesXvCkb-IQs_p2HUokFErfmGV97hZBJ9DAvgA_LHenhyE89j_QrjJKOHUdyDYqLrmycFMotXtO-a_JBoK1v2Ou13T-SMOmeoy1fbYlzsJd7CxIdJO_k0wqSfaqQivPzMEFYYFO2K5Cuj-4P17e9NnLEWYqUiiPOII6NJHA7XIH-5ZuxXSoNmhAB">
-          <div class="booking-card__badge-time">Tomorrow</div>
+          <div class="booking-card__badge-time">Mañana</div>
         </div>
         <div class="booking-card__content">
           <div class="booking-card__header">
             <div>
-              <h3 class="booking-card__title">Hot Desk 742</h3>
-              <p class="booking-card__meta">Floor 4 • Window View</p>
+              <h3 class="booking-card__title">Escritorio 742</h3>
+              <p class="booking-card__meta">Planta 4 • Ventana</p>
             </div>
-            <span class="booking-card__status-tag">Confirmed</span>
+            <span class="booking-card__status-tag">Confirmada</span>
           </div>
           <div class="booking-card__schedule">
-            <span class="material-symbols-outlined">schedule</span>
-            <span class="booking-card__time">09:00 - 18:00</span>
+            <span class="material-symbols-outlined">calendar_today</span>
+            <span class="booking-card__time">06/06/2026</span>
           </div>
           <div class="booking-card__actions">
-            <button class="booking-card__btn-edit">Edit</button>
-            <button class="booking-card__btn-cancel">Cancel</button>
+            <button class="booking-card__btn-edit">Editar</button>
+            <button class="booking-card__btn-cancel">Cancelar</button>
           </div>
         </div>
       </div>
 
+      <!-- PODRÍA SER GRACIOSO METERLO PERO SI SOBRA TIEMPO
       <div class="stats-card">
         <div class="stats-card__background-icon">
           <span class="material-symbols-outlined">event_available</span>
@@ -125,27 +130,32 @@
           <p class="stats-card__footer-text">Top resources: Room B, Desk 4</p>
         </div>
       </div>
+      -->
     </div>
   </section>
 
+
   <section class="global-history">
     <div class="global-history__header">
-      <h2 class="global-history__title">Global Booking History</h2>
+      <h2 class="global-history__title">Historial de reservas</h2>
+      <!-- PARA DESCARGAR EL HISTORIAL IMPLEMENTAR SI SE QUIERE
       <button class="global-history__btn-export">
         <span class="material-symbols-outlined">download</span>
         Export CSV
       </button>
+      -->
     </div>
 
     <div class="global-history__table-wrapper">
       <table class="history-table">
         <thead class="history-table__thead">
           <tr>
-            <th class="history-table__th">Employee</th>
-            <th class="history-table__th">Resource</th>
-            <th class="history-table__th">Date</th>
-            <th class="history-table__th">Duration</th>
-            <th class="history-table__th">Status</th>
+            <th class="history-table__th">Empleado</th>
+            <th class="history-table__th">Recurso</th>
+            <th class="history-table__th">Fecha</th>
+            <!--
+            <th class="history-table__th">Estado</th>
+            -->
             <th class="history-table__th"></th>
           </tr>
         </thead>
@@ -153,52 +163,58 @@
           <tr class="history-table__tr">
             <td class="history-table__td">
               <div class="employee-cell">
-                <div class="employee-cell__avatar">JD</div>
+                <div class="employee-cell__avatar">IMG</div>
                 <div>
                   <div class="employee-cell__name">Jane Doe</div>
-                  <div class="employee-cell__dept">Marketing Team</div>
+                  <div class="employee-cell__dept">Rol</div>
                 </div>
               </div>
             </td>
-            <td class="history-table__td history-table__td--bold">Conference A</td>
+            <td class="history-table__td history-table__td--bold">Sala de conferencias A</td>
             <td class="history-table__td history-table__td--muted">Oct 24, 2023</td>
-            <td class="history-table__td history-table__td--muted">2.0 hrs</td>
+            <!--
             <td class="history-table__td">
-              <span class="status-pill status-pill--completed">COMPLETED</span>
+              <span class="status-pill status-pill--cancelled">PASADA</span>
             </td>
+            -->
+            <!-- NO TIENE SENTIDO EDITAR RESERVAS PASADAS
             <td class="history-table__td history-table__td--action">
               <button class="history-table__btn-more">
                 <span class="material-symbols-outlined">more_vert</span>
               </button>
             </td>
+            -->
           </tr>
           <tr class="history-table__tr">
             <td class="history-table__td">
               <div class="employee-cell">
-                <div class="employee-cell__avatar">RK</div>
+                <div class="employee-cell__avatar">IMG</div>
                 <div>
                   <div class="employee-cell__name">Robert King</div>
-                  <div class="employee-cell__dept">Engineering</div>
+                  <div class="employee-cell__dept">ROL</div>
                 </div>
               </div>
             </td>
-            <td class="history-table__td history-table__td--bold">Quiet Pod 4</td>
+            <td class="history-table__td history-table__td--bold">Escritorio 4</td>
             <td class="history-table__td history-table__td--muted">Oct 23, 2023</td>
-            <td class="history-table__td history-table__td--muted">4.0 hrs</td>
+            <!--
             <td class="history-table__td">
-              <span class="status-pill status-pill--cancelled">CANCELLED</span>
+              <span class="status-pill status-pill--cancelled">PASADA</span>
             </td>
+            -->
+            <!-- NO TIENE SENTIDO EDITAR RESERVAS PASADAS
             <td class="history-table__td history-table__td--action">
               <button class="history-table__btn-more">
                 <span class="material-symbols-outlined">more_vert</span>
               </button>
             </td>
+            -->
           </tr>
         </tbody>
       </table>
 
       <footer class="history-pagination">
-        <span class="history-pagination__info">Showing 3 of 124 bookings</span>
+        <span class="history-pagination__info">Mostrando 3 of 124 reservas</span>
         <div class="history-pagination__actions">
           <button class="history-pagination__btn" disabled>
             <span class="material-symbols-outlined">chevron_left</span>
