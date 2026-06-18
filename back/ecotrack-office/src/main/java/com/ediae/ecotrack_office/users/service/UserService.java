@@ -85,6 +85,9 @@ public class UserService {
         entity.setPasswordHash(dto.password());
         entity.setIsActive(true);
         entity.setCreatedAt(LocalDateTime.now());
+        
+        // 🆕 Salvaguarda: Forzamos el consentimiento por defecto al crear el usuario
+        entity.setConsentGiven(false);
 
         // Registramos que el admin creó un usuario
         UserEntity saved = userRepository.save(entity);
@@ -124,14 +127,24 @@ public class UserService {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-        // Guardamos el rol anterior para saber si cambió
+        // 🆕 Preservamos los valores no mutables o requeridos que Angular no maneja en el form común
         var previousRole = entity.getRole();
+        var currentConsent = entity.getConsentGiven();
+        var createdAt = entity.getCreatedAt();
 
         // El mapper actualiza los campos comunes
         userMapper.updateEntityFromDto(dto, entity);
 
         // El rol solo lo gestiona el ADMIN desde este método
         entity.setRole(dto.role());
+        
+        // 🆕 Forzamos a mantener los valores previos si el mapper los ha machacado con null
+        if (entity.getConsentGiven() == null) {
+            entity.setConsentGiven(currentConsent != null ? currentConsent : false);
+        }
+        if (entity.getCreatedAt() == null) {
+            entity.setCreatedAt(createdAt);
+        }
 
         UserEntity saved = userRepository.save(entity);
 

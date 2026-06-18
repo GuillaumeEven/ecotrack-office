@@ -140,6 +140,13 @@ public class UserController {
             Authentication auth,
             @PathVariable Long id,
             @Valid @RequestBody UserRequestDto dto) {
+                System.out.println("=== DEBUGEANDO EL PUT ===");
+    System.out.println("¿Auth es nulo?: " + (auth == null));
+    if (auth != null) {
+        System.out.println("Usuario principal: " + auth.getPrincipal());
+        System.out.println("Authorities reales en el PUT: " + auth.getAuthorities());
+    }
+    System.out.println("=========================");
         adminGuard.requireAdmin(auth);
         return ResponseEntity.ok(userService.updateUser(id, dto).toResponseDto());
     }
