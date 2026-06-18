@@ -1,13 +1,13 @@
 <div class="max-w-container-max mx-auto px-lg py-xl">
-  <!-- Page Header -->
+  <!-- Encabezado de la página -->
   <div class="mb-xl">
-    <h1 class="font-headline-lg text-headline-lg text-on-surface">Assets Management</h1>
+    <h1 class="font-headline-lg text-headline-lg text-on-surface">Gestión de Recursos</h1>
     <p class="text-on-surface-variant font-body-lg text-body-lg">
-      Manage your building infrastructure: floors, rooms, and desks.
+      Gestione la infraestructura de su edificio: pisos, Salas y Mesas.
     </p>
   </div>
 
-  <!-- Tabs Navigation -->
+  <!-- Navegación por pestañas -->
   <div class="flex gap-md border-b border-outline-variant mb-xl overflow-x-auto">
     <button
       *ngFor="let tab of tabs"
@@ -18,39 +18,39 @@
       [class.text-on-surface-variant]="activeTab !== tab"
       class="px-md py-md font-title-md text-title-md hover:text-primary transition-colors whitespace-nowrap"
     >
-      {{ tab | uppercase }}
+      {{ getTabLabel(tab) }}
     </button>
   </div>
 
-  <!-- FLOORS TAB -->
+  <!-- PESTAÑA PISOS -->
   <div *ngIf="activeTab === 'floors'" class="space-y-lg">
-    <!-- Create Button -->
+    <!-- Botón Crear -->
     <div class="flex justify-end">
       <button
         (click)="openFloorDialog(null)"
         class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold flex items-center gap-sm"
       >
         <span class="material-symbols-outlined">add</span>
-        New Floor
+        Nuevo Piso
       </button>
     </div>
 
-    <!-- Floors Table -->
+    <!-- Tabla de Pisos -->
     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
       <table class="w-full">
         <thead class="bg-surface-container-low border-b border-outline-variant">
           <tr>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Floor Name
+              Nombre del Piso
             </th>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Rooms
+              Salas
             </th>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Status
+              Estado
             </th>
             <th class="px-md py-md text-center text-on-surface font-title-sm text-title-sm">
-              Actions
+              Acciones
             </th>
           </tr>
         </thead>
@@ -63,7 +63,7 @@
               {{ getFloorName(floor.id) }}
             </td>
             <td class="px-md py-md text-on-surface-variant font-body-md text-body-md">
-              {{ getRoomCount(floor.id) || 0 }} room(s)
+              {{ getRoomCount(floor.id) || 0 }} Sala(es)
             </td>
             <td class="px-md py-md">
               <span
@@ -73,7 +73,7 @@
                 [class.text-error]="!floor.isActive"
                 class="px-sm py-[2px] rounded-full text-label-sm font-label-sm font-bold"
               >
-                {{ floor.isActive ? 'Active' : 'Inactive' }}
+                {{ floor.isActive ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
             <td class="px-md py-md">
@@ -81,14 +81,14 @@
                 <button
                   (click)="openFloorDialog(floor)"
                   class="p-sm text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                  title="Edit floor"
+                  title="Editar piso"
                 >
                   <span class="material-symbols-outlined text-[20px]">edit</span>
                 </button>
                 <button
                   (click)="openDeleteDialog('floor', floor.id)"
                   class="p-sm text-error hover:bg-error/10 rounded-lg transition-colors"
-                  title="Delete floor"
+                  title="Eliminar piso"
                 >
                   <span class="material-symbols-outlined text-[20px]">delete</span>
                 </button>
@@ -97,7 +97,7 @@
           </tr>
           <tr *ngIf="floors.length === 0">
             <td colSpan="4" class="px-md py-lg text-center text-on-surface-variant">
-              No floors yet. Create one to get started.
+              Sin pisos aún. Cree uno para comenzar.
             </td>
           </tr>
         </tbody>
@@ -105,18 +105,18 @@
     </div>
   </div>
 
-  <!-- ROOMS TAB -->
+  <!-- PESTAÑA Salas -->
   <div *ngIf="activeTab === 'rooms'" class="space-y-lg">
-    <!-- Filters & Create -->
+    <!-- Filtros y Crear -->
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-md">
-        <label class="text-on-surface-variant font-label-sm text-label-sm">Filter by Floor:</label>
+        <label class="text-on-surface-variant font-label-sm text-label-sm">Filtrar por Piso:</label>
         <select
           [(ngModel)]="selectedFloorId"
           (change)="onFloorChange()"
           class="px-md py-sm bg-surface border border-outline-variant rounded-xl text-on-surface outline-none focus:ring-2 focus:ring-primary"
         >
-          <option [ngValue]="null">All Floors</option>
+          <option [ngValue]="null">Todos los Pisos</option>
           <option *ngFor="let floor of floors" [ngValue]="floor.id">{{ getFloorName(floor.id) }}</option>
         </select>
       </div>
@@ -125,29 +125,29 @@
         class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold flex items-center gap-sm"
       >
         <span class="material-symbols-outlined">add</span>
-        New Room
+        Nueva Sala
       </button>
     </div>
 
-    <!-- Rooms Grid/Table -->
+    <!-- Cuadrícula/Tabla de Salas -->
     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
       <table class="w-full">
         <thead class="bg-surface-container-low border-b border-outline-variant">
           <tr>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Room Name
+              Nombre de la Sala
             </th>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Floor
+              Piso
             </th>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Type
+              Tipo
             </th>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Desks
+              Mesas
             </th>
             <th class="px-md py-md text-center text-on-surface font-title-sm text-title-sm">
-              Actions
+              Acciones
             </th>
           </tr>
         </thead>
@@ -187,7 +187,7 @@
           </tr>
           <tr *ngIf="filteredRooms.length === 0">
             <td colSpan="5" class="px-md py-lg text-center text-on-surface-variant">
-              No rooms found.
+              No se encontraron Salas.
             </td>
           </tr>
         </tbody>
@@ -195,18 +195,18 @@
     </div>
   </div>
 
-  <!-- DESKS TAB -->
+  <!-- PESTAÑA MesaS -->
   <div *ngIf="activeTab === 'desks'" class="space-y-lg">
-    <!-- Filters & Create -->
+    <!-- Filtros y Crear -->
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-md">
-        <label class="text-on-surface-variant font-label-sm text-label-sm">Filter by Room:</label>
+        <label class="text-on-surface-variant font-label-sm text-label-sm">Filtrar por Sala:</label>
         <select
           [(ngModel)]="selectedRoomId"
           (change)="onRoomChange()"
           class="px-md py-sm bg-surface border border-outline-variant rounded-xl text-on-surface outline-none focus:ring-2 focus:ring-primary"
         >
-          <option [ngValue]="null">All Rooms</option>
+          <option [ngValue]="null">Todas las Salas</option>
           <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ getRoomName(room.id) }}</option>
         </select>
       </div>
@@ -215,26 +215,26 @@
         class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold flex items-center gap-sm"
       >
         <span class="material-symbols-outlined">add</span>
-        New Desk
+        Nuevo Mesa
       </button>
     </div>
 
-    <!-- Desks Table -->
+    <!-- Tabla de Mesas -->
     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
       <table class="w-full">
         <thead class="bg-surface-container-low border-b border-outline-variant">
           <tr>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Desk Name
+              Nombre del Mesa
             </th>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Room
+              Sala
             </th>
             <th class="px-md py-md text-left text-on-surface font-title-sm text-title-sm">
-              Status
+              Estado
             </th>
             <th class="px-md py-md text-center text-on-surface font-title-sm text-title-sm">
-              Actions
+              Acciones
             </th>
           </tr>
         </thead>
@@ -257,7 +257,7 @@
                 [class.text-tertiary]="!desk.isActive"
                 class="px-sm py-[2px] rounded-full text-label-sm font-label-sm font-bold"
               >
-                {{ desk.isActive ? 'Active' : 'Inactive' }}
+                {{ desk.isActive ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
             <td class="px-md py-md">
@@ -279,7 +279,7 @@
           </tr>
           <tr *ngIf="filteredDesks.length === 0">
             <td colSpan="5" class="px-md py-lg text-center text-on-surface-variant">
-              No desks found.
+              No se encontraron Mesas.
             </td>
           </tr>
         </tbody>
@@ -288,9 +288,9 @@
   </div>
 </div>
 
-<!-- DIALOGS -->
+<!-- DIÁLOGOS -->
 
-<!-- Floor Dialog -->
+<!-- Diálogo de Piso -->
 <div
   *ngIf="isFloorDialogOpen"
   class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
@@ -302,7 +302,7 @@
   >
     <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
       <h3 class="font-headline-md text-headline-md text-on-surface">
-        {{ editingFloor ? 'Edit Floor' : 'New Floor' }}
+        {{ editingFloor ? 'Editar Piso' : 'Nuevo Piso' }}
       </h3>
       <button
         (click)="closeFloorDialog()"
@@ -314,22 +314,22 @@
 
     <form [formGroup]="floorForm" (ngSubmit)="submitFloor()" class="space-y-md">
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">FLOOR NAME *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">NOMBRE DEL PISO *</label>
         <input
           type="text"
           formControlName="name"
-          placeholder="e.g., Ground Floor, Level 1"
+          placeholder="p. ej., Planta Baja, Nivel 1"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
           [class.border-error]="floorForm.get('name')?.invalid && floorForm.get('name')?.touched"
         />
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">FLOOR LEVEL *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">NIVEL DEL PISO *</label>
         <input
           type="number"
           formControlName="level"
-          placeholder="e.g., 0, 1, 2"
+          placeholder="p. ej., 0, 1, 2"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
           [class.border-error]="floorForm.get('level')?.invalid && floorForm.get('level')?.touched"
         />
@@ -343,7 +343,7 @@
           class="w-4 h-4 rounded border-outline-variant"
         />
         <label for="floorActive" class="text-on-surface font-body-md text-body-md"
-          >Active</label
+          >Activo</label
         >
       </div>
 
@@ -353,21 +353,21 @@
           (click)="closeFloorDialog()"
           class="px-lg py-sm text-on-surface-variant border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-bold"
         >
-          Cancel
+          Cancelar
         </button>
         <button
           type="submit"
           [disabled]="floorForm.invalid"
           class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {{ editingFloor ? 'Update' : 'Create' }}
+          {{ editingFloor ? 'Actualizar' : 'Crear' }}
         </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Room Dialog -->
+<!-- Diálogo de Sala -->
 <div
   *ngIf="isRoomDialogOpen"
   class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
@@ -379,7 +379,7 @@
   >
     <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
       <h3 class="font-headline-md text-headline-md text-on-surface">
-        {{ editingRoom ? 'Edit Room' : 'New Room' }}
+        {{ editingRoom ? 'Editar Sala' : 'Nueva Sala' }}
       </h3>
       <button
         (click)="closeRoomDialog()"
@@ -391,45 +391,45 @@
 
     <form [formGroup]="roomForm" (ngSubmit)="submitRoom()" class="space-y-md">
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">FLOOR *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">PISO *</label>
         <select
           formControlName="floorId"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary outline-none disabled:bg-surface-container-lowest disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <option [ngValue]="">Select a floor</option>
+          <option [ngValue]="">Seleccione un piso</option>
           <option *ngFor="let floor of floors" [ngValue]="floor.id">{{ getFloorName(floor.id) }}</option>
         </select>
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">ROOM NAME *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">NOMBRE DE LA Sala *</label>
         <input
           type="text"
           formControlName="name"
-          placeholder="e.g., Meeting Room A, Open Space"
+          placeholder="p. ej., Sala de Reuniones A, Espacio Abierto"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
           [class.border-error]="roomForm.get('name')?.invalid && roomForm.get('name')?.touched"
         />
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">ROOM TYPE *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">TIPO DE Sala *</label>
         <select
           formControlName="roomType"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary outline-none"
         >
-          <option value="">Select type</option>
-          <option value="MEETING_ROOM">Meeting Room</option>
-          <option value="DESK_AREA">Desk Area</option>
+          <option value="">Seleccione el tipo</option>
+          <option value="MEETING_ROOM">Sala de Reuniones</option>
+          <option value="DESK_AREA">Área de Mesas</option>
         </select>
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">CAPACITY *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">CAPACIDAD *</label>
         <input
           type="number"
           formControlName="capacity"
-          placeholder="e.g., 10"
+          placeholder="p. ej., 10"
           min="1"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
           [class.border-error]="roomForm.get('capacity')?.invalid && roomForm.get('capacity')?.touched"
@@ -437,11 +437,11 @@
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">SURFACE AREA (m²) *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">ÁREA DE SUPERFICIE (m²) *</label>
         <input
           type="number"
           formControlName="surfaceArea"
-          placeholder="e.g., 50.5"
+          placeholder="p. ej., 50,5"
           min="0.01"
           step="0.01"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
@@ -450,11 +450,11 @@
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">EQUIPMENT LIST</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">LISTA DE EQUIPOS</label>
         <input
           type="text"
           formControlName="equipmentList"
-          placeholder="e.g., Projector, Whiteboard, Chairs"
+          placeholder="p. ej., Proyector, Pizarrón, Sillas"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
         />
       </div>
@@ -467,7 +467,7 @@
           class="w-md h-md cursor-pointer accent-primary"
         />
         <label for="roomActive" class="text-on-surface font-label-sm text-label-sm cursor-pointer">
-          ACTIVE
+          ACTIVO
         </label>
       </div>
 
@@ -477,21 +477,21 @@
           (click)="closeRoomDialog()"
           class="px-lg py-sm text-on-surface-variant border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-bold"
         >
-          Cancel
+          Cancelar
         </button>
         <button
           type="submit"
           [disabled]="roomForm.invalid"
           class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {{ editingRoom ? 'Update' : 'Create' }}
+          {{ editingRoom ? 'Actualizar' : 'Crear' }}
         </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Desk Dialog -->
+<!-- Diálogo de Mesa -->
 <div
   *ngIf="isDeskDialogOpen"
   class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
@@ -503,7 +503,7 @@
   >
     <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
       <h3 class="font-headline-md text-headline-md text-on-surface">
-        {{ editingDesk ? 'Edit Desk' : 'New Desk' }}
+        {{ editingDesk ? 'Editar Mesa' : 'Nuevo Mesa' }}
       </h3>
       <button
         (click)="closeDeskDialog()"
@@ -515,33 +515,33 @@
 
     <form [formGroup]="deskForm" (ngSubmit)="submitDesk()" class="space-y-md">
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">ROOM *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">Sala *</label>
         <select
           formControlName="roomId"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary outline-none disabled:bg-surface-container-lowest disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <option [ngValue]="">Select a room</option>
+          <option [ngValue]="">Seleccione una Sala</option>
           <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ room.name }}</option>
         </select>
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">DESK NAME *</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">NOMBRE DEL Mesa *</label>
         <input
           type="text"
           formControlName="name"
-          placeholder="e.g., Desk A-01, Desk B-02"
+          placeholder="p. ej., Mesa A-01, Mesa B-02"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
           [class.border-error]="deskForm.get('name')?.invalid && deskForm.get('name')?.touched"
         />
       </div>
 
       <div class="space-y-xs">
-        <label class="text-on-surface font-label-sm text-label-sm block">EQUIPMENT LIST</label>
+        <label class="text-on-surface font-label-sm text-label-sm block">LISTA DE EQUIPOS</label>
         <input
           type="text"
           formControlName="equipmentList"
-          placeholder="e.g., Monitor, Keyboard, Mouse"
+          placeholder="p. ej., Monitor, Teclado, Ratón"
           class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
         />
       </div>
@@ -554,7 +554,7 @@
           class="w-md h-md cursor-pointer accent-primary"
         />
         <label for="deskActive" class="text-on-surface font-label-sm text-label-sm cursor-pointer">
-          ACTIVE
+          ACTIVO
         </label>
       </div>
 
@@ -564,21 +564,21 @@
           (click)="closeDeskDialog()"
           class="px-lg py-sm text-on-surface-variant border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-bold"
         >
-          Cancel
+          Cancelar
         </button>
         <button
           type="submit"
           [disabled]="deskForm.invalid"
           class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {{ editingDesk ? 'Update' : 'Create' }}
+          {{ editingDesk ? 'Actualizar' : 'Crear' }}
         </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Delete Confirmation Dialog -->
+<!-- Diálogo de Confirmación de Eliminación -->
 <div
   *ngIf="isDeleteDialogOpen"
   class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
@@ -590,12 +590,11 @@
   >
     <div class="flex items-center gap-md mb-lg">
       <span class="material-symbols-outlined text-error text-[32px]">warning</span>
-      <h3 class="font-headline-md text-headline-md text-on-surface">Delete {{ deleteItemType }}</h3>
+      <h3 class="font-headline-md text-headline-md text-on-surface">Eliminar {{ deleteItemType }}</h3>
     </div>
 
     <p class="text-on-surface-variant font-body-md text-body-md mb-lg">
-      Are you sure you want to delete <strong>{{ deleteItemName }}</strong>? This action cannot be
-      undone.
+      ¿Está seguro de que desea eliminar <strong>{{ deleteItemName }}</strong>? Esta acción no se puede deshacer.
     </p>
 
     <div class="flex justify-end gap-sm">
@@ -603,13 +602,13 @@
         (click)="closeDeleteDialog()"
         class="px-lg py-sm text-on-surface-variant border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-bold"
       >
-        Cancel
+        Cancelar
       </button>
       <button
         (click)="confirmDelete()"
         class="px-lg py-sm bg-error text-on-error rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold"
       >
-        Delete
+        Eliminar
       </button>
     </div>
   </div>

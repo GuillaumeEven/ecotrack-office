@@ -5,14 +5,14 @@ import { forkJoin } from 'rxjs';
 import { FloorService } from '../../building-map/services/floor.service';
 import { RoomService } from '../../building-map/services/room.service';
 import { DeskService } from '../../building-map/services/desk.service';
-import { CommonModule, UpperCasePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
 @Component({
   selector: 'app-assets-mgmt',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, UpperCasePipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './assets-mgmt.html',
   styleUrls: ['./assets-mgmt.css'],
 })
@@ -31,6 +31,13 @@ export class AssetsMgmt {
   editingDesk: Desk | null = null;
   tabs: ('floors' | 'rooms' | 'desks')[] = ['floors', 'rooms', 'desks'];
   activeTab: 'floors' | 'rooms' | 'desks' = 'floors';
+
+  // Tab labels mapping for Spanish display
+  tabLabels: Record<'floors' | 'rooms' | 'desks', string> = {
+    floors: 'Pisos',
+    rooms: 'Salas',
+    desks: 'Mesas'
+  };
 
   // Dialog state
   isFloorDialogOpen = false;
@@ -106,6 +113,10 @@ export class AssetsMgmt {
   setActiveTab(tab: 'floors' | 'rooms' | 'desks') {
     this.activeTab = tab;
     // No need to fetch data - already loaded at init
+  }
+
+  getTabLabel(tab: 'floors' | 'rooms' | 'desks'): string {
+    return this.tabLabels[tab];
   }
 
 
