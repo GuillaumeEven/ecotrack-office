@@ -38,7 +38,7 @@
         <section class="section">
           <h3 class="font-title-md text-title-md text-on-surface">
             <span class="material-symbols-outlined text-primary">filter_list</span>
-            Horario
+            Fecha
           </h3>
 
           <div class="form-group">
@@ -135,7 +135,7 @@
               <button
                 *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
                 [ngClass]="getDeskStatusClass(deskWithStatus)"
-                [title]="isMyReservation(deskWithStatus) ? 'Tu reserva - Haz clic para cancelar' : isOtherReservation(deskWithStatus) ? 'Reservado por ' + deskWithStatus.reservedBy : ''"
+                [title]="isMyReservation(deskWithStatus) ? 'Tu reserva - Haz clic para cancelar' : canCancelReservation(deskWithStatus) ? 'Reservado por ' + deskWithStatus.reservedBy + ' - Haz clic para cancelar' : isOtherReservation(deskWithStatus) ? 'Reservado por ' + deskWithStatus.reservedBy : ''"
                 [disabled]="isSelectedRoomUnavailable()"
                 (click)="openDeskDialog(deskWithStatus)"
                 class="desk-btn">
