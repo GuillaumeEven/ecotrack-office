@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core'; // 🆕 Añadido ChangeDetectorRef
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, takeUntil, switchMap } from 'rxjs';
-import { UserService, PageResponse, UserStats } from '../../../services/user.service';
-import { UserService as UserSvc } from '../../../services/user.service';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { UserService, UserStats } from '../../../services/user.service';
 import { UserResponse, Role } from '../../../models/user.model';
 
 @Component({
@@ -45,6 +44,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private fb: FormBuilder,
+    private cdr: ChangeDetectorRef, // 🆕 Inyectado en el constructor
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +61,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         this.organizationId = me.organizationId;
         this.loadStats();
         this.loadUsers();
+        this.cdr.detectChanges(); // 🆕 Forzar actualización tras obtener perfil
       },
     });
 
@@ -83,6 +84,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   loadUsers(): void {
     if (!this.organizationId) return;
     this.isLoading = true;
+    this.cdr.detectChanges(); // 🆕 Actualiza la vista para mostrar el spinner inmediatamente
 
     this.userService
       .getUsers(this.organizationId, {
@@ -98,9 +100,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
           this.totalPages = response.totalPages;
           this.totalElements = response.totalElements;
           this.isLoading = false;
+          this.cdr.detectChanges(); // 🆕 Fuerza el renderizado de la tabla con los usuarios nuevos
         },
         error: () => {
           this.isLoading = false;
+          this.cdr.detectChanges(); // 🆕 Fuerza el renderizado si da error para quitar el spinner
         },
       });
   }
@@ -111,6 +115,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       next: (stats) => {
         this.stats = stats;
         this.isLoadingStats = false;
+        this.cdr.detectChanges(); // 🆕 Redibuja las tarjetas KPI con las nuevas estadísticas
       },
     });
   }
@@ -164,6 +169,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       role: user.role,
     });
     this.showEditModal = true;
+    this.cdr.detectChanges(); // 🆕 Asegura que el modal de edición se pinte en pantalla
   }
 
   onSaveEdit(): void {
@@ -173,6 +179,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         this.showEditModal = false;
         this.loadUsers();
         this.loadStats();
+        this.cdr.detectChanges(); // 🆕 Cierra el modal y refresca los cambios visualmente
       },
     });
   }
@@ -186,6 +193,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadUsers();
         this.loadStats();
+        this.cdr.detectChanges(); // 🆕 Actualiza el switch/badge de Activo/Inactivo sin retraso
       },
     });
   }
@@ -193,6 +201,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   openDeleteModal(user: UserResponse): void {
     this.selectedUser = user;
     this.showDeleteModal = true;
+    this.cdr.detectChanges(); // 🆕 Garantiza que aparezca el modal de confirmación de borrado
   }
 
   onConfirmDelete(): void {
@@ -203,6 +212,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         this.selectedUser = null;
         this.loadUsers();
         this.loadStats();
+        this.cdr.detectChanges(); // 🆕 Cierra el modal de confirmación y purga al usuario de la tabla
       },
     });
   }
