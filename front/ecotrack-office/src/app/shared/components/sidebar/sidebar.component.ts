@@ -21,6 +21,7 @@ export class SidebarComponent {
     { icon: 'confirmation_number', label: 'Incidencias', route: '/incidencias' },
     { icon: 'group', label: 'Empleados', route: '/admin/user-management' },
     { icon: 'domain', label: 'Empresa', route: '/organization' },
+    { icon: 'map', label: 'Gestionar espacio', route: '/assets'},
     { icon: 'insights', label: 'Analíticas', route: '/analytics' },
   ];
 
