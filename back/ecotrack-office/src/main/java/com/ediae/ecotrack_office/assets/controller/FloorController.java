@@ -103,6 +103,7 @@ public class FloorController {
     }
 
     @DeleteMapping("/{id}")
+    // @PreAuthorize("hasRole('ADMIN')") TODO a mirar
     public ResponseEntity<Void> deleteFloor(@PathVariable Long id, Authentication auth) {
         // check if admin
         roleGuard.requireAnyRole(auth, Role.ADMIN);
