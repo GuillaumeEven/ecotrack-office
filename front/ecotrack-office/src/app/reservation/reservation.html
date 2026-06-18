@@ -1,1 +1,213 @@
-<p>reservation works!</p>
+<div class="bookings-layout">
+  <header class="bookings-header">
+    <div class="bookings-header__title-block">
+      <h1 class="bookings-header__title">Bookings History</h1>
+      <p class="bookings-header__subtitle">Manage your active reservations and view organization-wide history.</p>
+    </div>
+    
+    <div class="bookings-header__tabs-wrapper">
+      <div class="bookings-tabs">
+        <button class="bookings-tabs__btn bookings-tabs__btn--active">My Bookings</button>
+        <button class="bookings-tabs__btn">All Staff</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bookings-filters">
+    <div class="bookings-filters__grid">
+      <div class="bookings-filters__group">
+        <label class="bookings-filters__label">STATUS</label>
+        <select class="bookings-filters__select">
+          <option>All Statuses</option>
+          <option>Confirmed</option>
+          <option>Pending</option>
+          <option>Cancelled</option>
+        </select>
+      </div>
+
+      <div class="bookings-filters__group">
+        <label class="bookings-filters__label">DATE RANGE</label>
+        <div class="bookings-filters__input-wrapper">
+          <span class="material-symbols-outlined bookings-filters__icon">calendar_today</span>
+          <input class="bookings-filters__input" placeholder="This Week" type="text">
+        </div>
+      </div>
+
+      <div class="bookings-filters__group">
+        <label class="bookings-filters__label">RESOURCE TYPE</label>
+        <select class="bookings-filters__select">
+          <option>All Rooms</option>
+          <option>Conference Rooms</option>
+          <option>Hot Desks</option>
+          <option>Quiet Zones</option>
+        </select>
+      </div>
+
+      <div class="bookings-filters__group bookings-filters__group--actions">
+        <button class="bookings-filters__btn-apply">Apply Filters</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="active-reservations">
+    <div class="active-reservations__header">
+      <h2 class="active-reservations__title">
+        <span class="active-reservations__indicator-dot"></span>
+        Active Reservations
+      </h2>
+    </div>
+
+    <div class="active-reservations__grid">
+      <div class="booking-card">
+        <div class="booking-card__image-wrapper">
+          <img class="booking-card__image" alt="Conference room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv5skVvpbHBliejIb8gxNsXWKYyinhWUp-6fX8D_V775NCvImYaXmnyzUPHYo6Dq0TcrGpL4TUbeaBQZ0BXosXLEReA40NZEUBpd2uBfN9iFmuqsG67tmprMuNnD1Kv_TKR3AeyOIkC4p-HDNj_regGA3RNBVy_Ur-8JYxpm6ocPY3CIN8flAGQpLmVW6SHM3ZX_KSt5R1lVBVmjqk7PX-1CmDuyp5a_8_pQFzn1-wmN95_qxfCtMtldGFqJACJ_AfEpZeyXxtHzf3">
+          <div class="booking-card__badge-time">Today</div>
+        </div>
+        <div class="booking-card__content">
+          <div class="booking-card__header">
+            <div>
+              <h3 class="booking-card__title">Creative Suite B</h3>
+              <p class="booking-card__meta">Floor 3 • 4-6 People</p>
+            </div>
+            <span class="booking-card__status-tag">Confirmed</span>
+          </div>
+          <div class="booking-card__schedule">
+            <span class="material-symbols-outlined">schedule</span>
+            <span class="booking-card__time">14:00 - 15:30</span>
+          </div>
+          <div class="booking-card__actions">
+            <button class="booking-card__btn-edit">Edit</button>
+            <button class="booking-card__btn-cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="booking-card">
+        <div class="booking-card__image-wrapper">
+          <img class="booking-card__image" alt="Individual workstation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcSiZYeVGttJbBzn0lLRqoJYEWtZdwcFWilbbRGY84VX7p_JCj4OH-5gdtEA8lwfUNpF5a_jmObA98zod89bKTcesXvCkb-IQs_p2HUokFErfmGV97hZBJ9DAvgA_LHenhyE89j_QrjJKOHUdyDYqLrmycFMotXtO-a_JBoK1v2Ou13T-SMOmeoy1fbYlzsJd7CxIdJO_k0wqSfaqQivPzMEFYYFO2K5Cuj-4P17e9NnLEWYqUiiPOII6NJHA7XIH-5ZuxXSoNmhAB">
+          <div class="booking-card__badge-time">Tomorrow</div>
+        </div>
+        <div class="booking-card__content">
+          <div class="booking-card__header">
+            <div>
+              <h3 class="booking-card__title">Hot Desk 742</h3>
+              <p class="booking-card__meta">Floor 4 • Window View</p>
+            </div>
+            <span class="booking-card__status-tag">Confirmed</span>
+          </div>
+          <div class="booking-card__schedule">
+            <span class="material-symbols-outlined">schedule</span>
+            <span class="booking-card__time">09:00 - 18:00</span>
+          </div>
+          <div class="booking-card__actions">
+            <button class="booking-card__btn-edit">Edit</button>
+            <button class="booking-card__btn-cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-card">
+        <div class="stats-card__background-icon">
+          <span class="material-symbols-outlined">event_available</span>
+        </div>
+        <div class="stats-card__top">
+          <h3 class="stats-card__label">Usage This Month</h3>
+          <div class="stats-card__value">24.5<span class="stats-card__unit">Hrs</span></div>
+        </div>
+        <div class="stats-card__bottom">
+          <div class="stats-card__progress-info">
+            <span>Quota used</span>
+            <span>82%</span>
+          </div>
+          <div class="stats-card__progress-bar">
+            <div class="stats-card__progress-fill" style="width: 82%"></div>
+          </div>
+          <p class="stats-card__footer-text">Top resources: Room B, Desk 4</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="global-history">
+    <div class="global-history__header">
+      <h2 class="global-history__title">Global Booking History</h2>
+      <button class="global-history__btn-export">
+        <span class="material-symbols-outlined">download</span>
+        Export CSV
+      </button>
+    </div>
+
+    <div class="global-history__table-wrapper">
+      <table class="history-table">
+        <thead class="history-table__thead">
+          <tr>
+            <th class="history-table__th">Employee</th>
+            <th class="history-table__th">Resource</th>
+            <th class="history-table__th">Date</th>
+            <th class="history-table__th">Duration</th>
+            <th class="history-table__th">Status</th>
+            <th class="history-table__th"></th>
+          </tr>
+        </thead>
+        <tbody class="history-table__tbody">
+          <tr class="history-table__tr">
+            <td class="history-table__td">
+              <div class="employee-cell">
+                <div class="employee-cell__avatar">JD</div>
+                <div>
+                  <div class="employee-cell__name">Jane Doe</div>
+                  <div class="employee-cell__dept">Marketing Team</div>
+                </div>
+              </div>
+            </td>
+            <td class="history-table__td history-table__td--bold">Conference A</td>
+            <td class="history-table__td history-table__td--muted">Oct 24, 2023</td>
+            <td class="history-table__td history-table__td--muted">2.0 hrs</td>
+            <td class="history-table__td">
+              <span class="status-pill status-pill--completed">COMPLETED</span>
+            </td>
+            <td class="history-table__td history-table__td--action">
+              <button class="history-table__btn-more">
+                <span class="material-symbols-outlined">more_vert</span>
+              </button>
+            </td>
+          </tr>
+          <tr class="history-table__tr">
+            <td class="history-table__td">
+              <div class="employee-cell">
+                <div class="employee-cell__avatar">RK</div>
+                <div>
+                  <div class="employee-cell__name">Robert King</div>
+                  <div class="employee-cell__dept">Engineering</div>
+                </div>
+              </div>
+            </td>
+            <td class="history-table__td history-table__td--bold">Quiet Pod 4</td>
+            <td class="history-table__td history-table__td--muted">Oct 23, 2023</td>
+            <td class="history-table__td history-table__td--muted">4.0 hrs</td>
+            <td class="history-table__td">
+              <span class="status-pill status-pill--cancelled">CANCELLED</span>
+            </td>
+            <td class="history-table__td history-table__td--action">
+              <button class="history-table__btn-more">
+                <span class="material-symbols-outlined">more_vert</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <footer class="history-pagination">
+        <span class="history-pagination__info">Showing 3 of 124 bookings</span>
+        <div class="history-pagination__actions">
+          <button class="history-pagination__btn" disabled>
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <button class="history-pagination__btn">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+  </section>
+</div>
