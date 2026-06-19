@@ -164,6 +164,11 @@
   box-shadow: 0 0 8px rgba(244, 67, 54, 0.6);
 }
 
+.status-badge.out-of-service {
+  background-color: #9c27b0;
+  box-shadow: 0 0 8px rgba(156, 39, 176, 0.6);
+}
+
 /* Status bar - left border accent */
 .btn-floor.status-available::before,
 .btn-room.status-available::before {
@@ -198,13 +203,26 @@
   background-color: #f44336;
 }
 
+.btn-floor.status-out-of-service::before,
+.btn-room.status-out-of-service::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #9c27b0;
+}
+
 /* Add padding to accommodate status bar */
 .btn-floor.status-available,
 .btn-floor.status-reserved,
 .btn-floor.status-unavailable,
+.btn-floor.status-out-of-service,
 .btn-room.status-available,
 .btn-room.status-reserved,
-.btn-room.status-unavailable {
+.btn-room.status-unavailable,
+.btn-room.status-out-of-service {
   padding-left: 0.75rem;
 }
 
@@ -294,6 +312,10 @@
 
 .legend-color.reserved {
   background-color: #f44336;
+}
+
+.legend-color.out-of-service {
+  background-color: #9c27b0;
 }
 
 .legend-color.unavailable {
@@ -391,6 +413,12 @@
 
 .desk-btn.unavailable {
   background-color: #f44336;
+  color: white;
+  cursor: not-allowed;
+}
+
+.desk-btn.out-of-service {
+  background-color: #9c27b0;
   color: white;
   cursor: not-allowed;
 }

@@ -219,28 +219,65 @@ export class BuildingMapComponent implements OnInit {
    * Check if desk is available for reservation
    */
   isDeskAvailable(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.AVAILABLE;
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.AVAILABLE;
   }
 
   /**
    * Check if desk is unavailable
    */
   isDeskUnavailable(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.UNAVAILABLE;
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.UNAVAILABLE;
+  }
+
+  /**
+   * Check if desk is out of service
+   */
+  isDeskOutOfService(desk: DeskWithStatus): boolean {
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.OUT_OF_SERVICE;
   }
 
   /**
    * Check if the desk is reserved by the current user
    */
   isMyReservation(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.RESERVED && desk.reservedBy === this.currentUserEmail;
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.RESERVED && desk.reservedBy === this.currentUserEmail;
   }
 
   /**
    * Check if the desk is reserved by someone else
    */
   isOtherReservation(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.RESERVED && desk.reservedBy !== this.currentUserEmail;
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.RESERVED && desk.reservedBy !== this.currentUserEmail;
+  }
+
+  /**
+   * Normalize backend status values to the frontend enum format
+   */
+  private normalizeStatus(status: ResourceStatus | string | null | undefined): ResourceStatus | string {
+    return String(status ?? '')
+      .trim()
+      .toUpperCase()
+      .replace(/[-\s]+/g, '_');
+  }
+
+  /**
+   * Get tooltip text for desk button
+   */
+  getDeskTooltip(desk: DeskWithStatus): string {
+    if (this.isDeskOutOfService(desk)) {
+      return 'Mesa averiada';
+    }
+    if (this.isDeskUnavailable(desk)) {
+      return 'No disponible';
+    }
+    if (this.isMyReservation(desk)) {
+      return 'Tu reserva - Haz clic para cancelar';
+    }
+    if (this.isOtherReservation(desk)) {
+      const reservedBy = desk.reservedBy ?? 'otro usuario';
+      return `Reservado por ${reservedBy} - Haz clic para cancelar`;
+    }
+    return 'Disponible';
   }
 
   /**
@@ -266,6 +303,9 @@ export class BuildingMapComponent implements OnInit {
     }
     if (this.isOtherReservation(desk)) {
       return 'reserved-other';
+    }
+    if (this.isDeskOutOfService(desk)) {
+      return 'out-of-service';
     }
     if (this.isDeskAvailable(desk)) {
       return 'available';
@@ -318,6 +358,8 @@ export class BuildingMapComponent implements OnInit {
         return 'Available';
       case ResourceStatus.RESERVED:
         return 'Reserved';
+      case ResourceStatus.OUT_OF_SERVICE:
+        return 'Out of service';
       case ResourceStatus.UNAVAILABLE:
         return 'Unavailable';
       default:
@@ -327,9 +369,14 @@ export class BuildingMapComponent implements OnInit {
 
   /**
    * Open desk reservation dialog
-   * Don't open if desk is reserved by someone else
+   * Don't open if desk is reserved by someone else, out of service, or unavailable
    */
   openDeskDialog(desk: DeskWithStatus): void {
+    // Can't reserve out-of-service or unavailable desks
+    if (this.isDeskOutOfService(desk) || this.isDeskUnavailable(desk)) {
+      return;
+    }
+
     const userRole = this.authService.getRole();
     if (this.isOtherReservation(desk) && userRole !== 'ADMIN' && userRole !== 'TECHNICIAN') {
       return; // Don't open dialog for other people's reservations unless user is ADMIN or TECHNICIAN
