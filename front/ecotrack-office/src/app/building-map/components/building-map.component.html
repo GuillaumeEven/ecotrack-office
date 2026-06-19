@@ -26,7 +26,7 @@
                 [class.active]="selectedFloorId === floorWithStatus.floor.id"
                 [ngClass]="getFloorStatusClass(floorWithStatus)"
                 class="btn-floor">
-                <strong>Planta {{ floorWithStatus.floor.level }}</strong>
+                <strong>{{ floorWithStatus.floor.name || `Floor ${floorWithStatus.floor.level}` }}</strong>
                 <span class="status-badge" [ngClass]="getFloorStatusClass(floorWithStatus).split('-')[1]" [title]="getStatusText(getFloorStatus(floorWithStatus))"></span>
                 <br>
                 <small class="text-on-surface-variant">{{ floorWithStatus.floor.isActive ? 'Activo' : 'Inactivo' }}</small>

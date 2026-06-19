@@ -135,6 +135,9 @@ Hoy creamos las paginas que nos hacen falta (mi component works !), mañana Rai 
   - [ ] form de inscripción -> Rai
   - [ ] editar organization -> Rai
   - [ ] reformar la arquitectura del front (Rai hace una propuesta)
+  - [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
+(imprescindible ?)
+- [ ] Vizualizar errores en front
 
 - [ ] Form registro dinamico:
   - [ ] un formulario comun de user

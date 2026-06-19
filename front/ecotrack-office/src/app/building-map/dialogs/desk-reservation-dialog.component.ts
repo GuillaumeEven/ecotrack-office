@@ -110,18 +110,11 @@ export class DeskReservationDialogComponent implements OnInit {
     const dateStr = this.formatDateToISO(this.selectedDate);
     const userIdNum = typeof userId === 'string' ? parseInt(userId, 10) : userId;
 
-    console.log('💾 Dialog - Attempting reservation:');
-    console.log('   User ID:', userIdNum, 'Type:', typeof userIdNum);
-    console.log('   Resource ID:', this.deskWithStatus.desk.id, 'Type:', typeof this.deskWithStatus.desk.id);
-    console.log('   Date:', dateStr, 'Type:', typeof dateStr);
-    console.log('   Current User Email:', this.currentUserEmail);
-
     this.reservationService
       .create(userIdNum, this.deskWithStatus.desk.id, dateStr)
       .subscribe({
         next: (response) => {
           this.isLoading = false;
-          console.log('✅ Reservation successful:', response);
           const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
           this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" reserved successfully!`;
           setTimeout(() => {
@@ -131,13 +124,6 @@ export class DeskReservationDialogComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          console.error('❌ Reservation failed:');
-          console.error('   Status:', error.status);
-          console.error('   Status Text:', error.statusText);
-          console.error('   Error:', error.error);
-          console.error('   Message:', error.message);
-          console.error('   Full error:', error);
-
           this.errorMessage =
             error.error?.message ||
             error.message ||
@@ -167,14 +153,11 @@ export class DeskReservationDialogComponent implements OnInit {
     this.errorMessage = null;
     this.successMessage = null;
 
-    console.log('🗑️ Attempting to cancel reservation:', this.deskWithStatus.reservationId);
-
     this.reservationService
       .delete(this.deskWithStatus.reservationId)
       .subscribe({
         next: (response) => {
           this.isLoading = false;
-          console.log('✅ Reservation cancelled successfully');
           const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
           this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" cancelled successfully!`;
           setTimeout(() => {
@@ -184,7 +167,6 @@ export class DeskReservationDialogComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          console.error('❌ Cancellation failed:', error);
           this.errorMessage =
             error.error?.message ||
             error.message ||

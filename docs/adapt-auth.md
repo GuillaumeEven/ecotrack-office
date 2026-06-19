@@ -28,10 +28,10 @@ graph TB
     
     H -->|9. Retorna datos| A
     
-    style A fill:#e1f5ff
-    style B fill:#fff3e0
-    style E fill:#f3e5f5
-    style H fill:#e8f5e9
+    style A fill:#521616
+    style B fill:#521616
+    style E fill:#521616
+    style H fill:#521616
 ```
 
 ---
@@ -151,9 +151,9 @@ graph LR
     D -->|❌ No tiene rol| E[403 Forbidden]
     D -->|✅ Tiene rol| F[Endpoint ejecutado]
     
-    style C fill:#ffebee
-    style E fill:#fff3e0
-    style F fill:#e8f5e9
+    style C fill:#521616
+    style E fill:#521616
+    style F fill:#521616
 ```
 
 ### 2.2 Ejemplo: FloorController.java

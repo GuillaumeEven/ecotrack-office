@@ -5,6 +5,7 @@ public class FloorRequestDto {
     private Integer level;
     private Boolean isActive;
     private Long organizationId;
+    private String name;
 
     public FloorRequestDto() {
     }
@@ -37,5 +38,13 @@ public class FloorRequestDto {
 
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

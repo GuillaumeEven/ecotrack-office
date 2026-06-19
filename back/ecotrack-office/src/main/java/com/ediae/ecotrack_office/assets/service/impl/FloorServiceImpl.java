@@ -11,7 +11,9 @@ import com.ediae.ecotrack_office.assets.entity.FloorEntity;
 import com.ediae.ecotrack_office.assets.mapper.FloorMapper;
 import com.ediae.ecotrack_office.assets.model.FloorModel;
 import com.ediae.ecotrack_office.assets.repository.FloorRepository;
+import com.ediae.ecotrack_office.assets.repository.RoomRepository;
 import com.ediae.ecotrack_office.assets.service.FloorService;
+import com.ediae.ecotrack_office.shared.exception.ConstraintViolationException;
 
 
 @Service
@@ -19,6 +21,9 @@ public class FloorServiceImpl implements FloorService {
 
     @Autowired
     private FloorRepository floorRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Autowired
     private FloorMapper floorMapper;
@@ -49,6 +54,9 @@ public class FloorServiceImpl implements FloorService {
     @Override
     public FloorModel createFloor(FloorRequestDto floorRequestDto) {
         FloorModel model = floorMapper.fromRequestDto(floorRequestDto);
+        if (model.getName() == null) {
+            model.setName("Floor " + model.getLevel());
+        }
         FloorEntity entity = floorMapper.toEntity(model);
         FloorEntity savedEntity = floorRepository.save(entity);
         return floorMapper.fromEntity(savedEntity);
@@ -59,6 +67,9 @@ public class FloorServiceImpl implements FloorService {
         FloorEntity existingEntity = floorRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Floor not found with id: " + id));
         FloorModel model = floorMapper.fromRequestDto(floorRequestDto);
+        if (model.getName() == null) {
+            model.setName("Floor " + model.getLevel());
+        }
         FloorEntity entity = floorMapper.toEntity(model);
         entity.setId(existingEntity.getId());
         FloorEntity updatedEntity = floorRepository.save(entity);
@@ -70,6 +81,13 @@ public class FloorServiceImpl implements FloorService {
         if (!floorRepository.existsById(id)) {
             throw new RuntimeException("Floor not found with id: " + id);
         }
+
+        // Check if floor has any rooms
+        Long roomCount = roomRepository.countByFloor_Id(id);
+        if (roomCount > 0) {
+            throw new ConstraintViolationException("Cannot delete floor with id: " + id + ". It still has " + roomCount + " room(s). Please delete all rooms first.");
+        }
+
         floorRepository.deleteById(id);
     }
 }

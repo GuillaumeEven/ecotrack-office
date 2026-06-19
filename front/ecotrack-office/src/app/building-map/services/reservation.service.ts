@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Reservation } from '../models';
-import { API_CONFIG } from './api.config';
+import { environment } from '../../../environments/environment';
 
 /**
  * Reservation Service
@@ -13,7 +13,7 @@ import { API_CONFIG } from './api.config';
   providedIn: 'root'
 })
 export class ReservationService {
-  private apiUrl = API_CONFIG.baseUrl + '/reservations';
+  private readonly BASE_URL = `${environment.apiUrl}/reservations`;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -23,8 +23,7 @@ export class ReservationService {
    * @param date - The date in ISO format (YYYY-MM-DD)
    */
   getByFloorAndDate(floorId: number, date: string): Observable<Reservation[]> {
-    const url = `${this.apiUrl}/floor/${floorId}/date/${date}`;
-    console.log('📡 ReservationService.getByFloorAndDate() calling:', url);
+    const url = `${this.BASE_URL}/floor/${floorId}/date/${date}`;
     return this.httpClient.get<Reservation[]>(url);
   }
 
@@ -34,8 +33,7 @@ export class ReservationService {
    * @param date - The date in ISO format (YYYY-MM-DD)
    */
   getByRoomAndDate(roomId: number, date: string): Observable<Reservation[]> {
-    const url = `${this.apiUrl}/room/${roomId}/date/${date}`;
-    console.log('📡 ReservationService.getByRoomAndDate() calling:', url);
+    const url = `${this.BASE_URL}/room/${roomId}/date/${date}`;
     return this.httpClient.get<Reservation[]>(url);
   }
 
@@ -45,8 +43,7 @@ export class ReservationService {
    * @param date - The date in ISO format (YYYY-MM-DD)
    */
   getByDeskAndDate(deskId: number, date: string): Observable<Reservation[]> {
-    const url = `${this.apiUrl}/desk/${deskId}/date/${date}`;
-    console.log('📡 ReservationService.getByDeskAndDate() calling:', url);
+    const url = `${this.BASE_URL}/desk/${deskId}/date/${date}`;
     return this.httpClient.get<Reservation[]>(url);
   }
 
@@ -57,7 +54,7 @@ export class ReservationService {
    * @param date - The date in ISO format (YYYY-MM-DD)
    */
   create(userId: number, resourceId: number, date: string): Observable<any> {
-    const url = this.apiUrl;
+    const url = this.BASE_URL;
     // Match the exact payload structure from Postman that works (status CONFIRMED)
     const payload = {
       date,
@@ -65,10 +62,7 @@ export class ReservationService {
       userId,
       resourceId
     };
-    console.log('💾 ReservationService.create() - URL:', url);
-    console.log('🚀 ReservationService.create() - Payload:', JSON.stringify(payload, null, 2));
-    console.log('🚀 Types - userId:', typeof userId, 'resourceId:', typeof resourceId, 'date:', typeof date);
-    return this.httpClient.post(url, payload);
+    return this.httpClient.post(this.BASE_URL, payload);
   }
 
   /**
@@ -76,8 +70,7 @@ export class ReservationService {
    * @param reservationId - The reservation ID to delete
    */
   delete(reservationId: number): Observable<boolean> {
-    const url = `${this.apiUrl}/${reservationId}`;
-    console.log('🗑️ ReservationService.delete() - URL:', url);
+    const url = `${this.BASE_URL}/${reservationId}`;
     return this.httpClient.delete<boolean>(url);
   }
 }
