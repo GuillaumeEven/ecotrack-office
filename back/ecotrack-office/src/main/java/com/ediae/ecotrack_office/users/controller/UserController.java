@@ -32,7 +32,7 @@ public class UserController {
 
     // --- Endpoints públicos --------
 
-    @PostMapping("/create-user")
+    @PostMapping("public/create-user")
     public ResponseEntity<UserResponseDto> createUserWithCif(@Valid @RequestBody UserCreateRequestDto dto) {
         
          return ResponseEntity.status(HttpStatus.CREATED)

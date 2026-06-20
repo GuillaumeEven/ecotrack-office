@@ -24,7 +24,7 @@ export class UserService {
 
   registerAndAssociate (data: CreateUserRequest): Observable<UserResponse> {
 
-    return this.http.post<UserResponse>(`${this.BASE_URL}/create-user`, data);
+    return this.http.post<UserResponse>(`${this.BASE_URL}/public/create-user`, data);
   }
 
 }

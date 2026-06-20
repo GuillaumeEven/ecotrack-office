@@ -689,7 +689,64 @@ input.ng-invalid.ng-touched {
 }
 
 /* ==========================================================================
-   8. MEDIA QUERIES (Ubicadas abajo del todo para un comportamiento cascada óptimo)
+   8. FORMULARIO Y SECCIÓN DE REGISTRO
+   ========================================================================== */
+
+   .toast-notification {
+    position: fixed;
+    top: 70px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
+}
+
+.toast-notification.success {
+    background-color: #006a61; /* Verde esmeralda de tu paleta */
+}
+
+.toast-notification.error {
+    background-color: #ba1a1a; /* Rojo corporativo de errores */
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toast-content p {
+    margin: 0;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+.toast-close:hover { color: #ffffff; }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* ==========================================================================
+   9. MEDIA QUERIES (Ubicadas abajo del todo para un comportamiento cascada óptimo)
    ========================================================================== */
 
 /* Pantallas Medianas (Móviles grandes y Tablets) */

@@ -44,6 +44,7 @@ export interface CreateUserRequest {
   firstName: string;
   lastName: string;
   email: string;
-  passwordHash: string;
-  companyCifAsociar: string;
+  password: string;
+  cif: string;
+  role: Role | null;
 }

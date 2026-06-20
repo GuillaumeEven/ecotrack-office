@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
                 
                 //MENOS LAS RUTAS PÚBLICAS COMO EL LOGIN Y EL REGISTRO
                 .excludePathPatterns(
-                    "/api/v1/users/create-user",
+                    "/api/v1/users/public/create-user",
                     "/api/v1/auth/loing"
                 );
     }

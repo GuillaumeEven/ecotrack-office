@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators, FormGroup, FormBuilder } from '@angular/forms';
@@ -20,6 +20,7 @@ export class HomeLanding implements OnInit {
 
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
+  private cdr = inject(ChangeDetectorRef);
 
   registerForm!: FormGroup;
   
@@ -93,7 +94,9 @@ export class HomeLanding implements OnInit {
 
   // MÉTODO DE ENVÍO A LA API
   submitRegistro(): void {
+
     if (this.registerForm.invalid) {
+
       this.registerForm.markAllAsTouched();
       return;
     }
@@ -118,15 +121,55 @@ export class HomeLanding implements OnInit {
       });
       
     } else if (this.pasoActual === 'EMPRESA_EXISTENTE') {
+
       const payload: CreateUserRequest = {
         firstName: datosForm.firstName,
         lastName: datosForm.lastName,
         email: datosForm.email,
-        passwordHash: datosForm.passwordHash,
-        rol: 'EMPLOYEE'
+        password: datosForm.passwordHash,
+        role: 'EMPLOYEE',
+        cif: datosForm.companyCifAsociate
+      };
+      this.userService.registerAndAssociate(payload).subscribe({
+        next: (response) => {
 
-        //TENGO QUE HACER QUE EL ROL SE ASIGNE AL LLAMAR AL SERVICIO DE CREAR UN USUARIO CON EL CIF DE LA EMPRESA
+          //SI SE HA CREADO CORRECTAMENTE MOSTRAMOS EL POPUP DE ÉXITO
+          this.mostrarNotificacion('success', 'Usuario registrado con éxito.');
+          //USO EL CD PARA QUE PINGE EL POPUP
+          this.cdr.detectChanges();
+          //RECARGO LA PÁGINA
+          setTimeout(() => {
+            window.location.reload();
+          }, 3500);
+        },
+        error: (err) => {
+
+          //SI LA LLAMADA HA DADO ERROR MOSTRAMOS POPUP EN ROJO
+          console.error('Error capturado desde el servidor:', err);
+          // 1. Intentamos leer el mensaje específico que envíe el backend
+          let mensajeError = 'Hubo un fallo al intentar registrar el usuario.';
+          if (err?.error?.message) {
+
+            mensajeError = err.error.message;
+          } else if (err.status === 403 || err.status === 401) {
+
+            // 2. Si el backend sigue devolviendo 403 por el CIF, lo interceptamos manualmente aquí:
+            mensajeError = 'El CIF introducido no coincide con ninguna empresa registrada.';
+          }
+          // 3. Forzamos la activación del pop-up con el mensaje correspondiente
+          this.mostrarNotificacion('error', mensajeError);
+          this.cdr.detectChanges();
+        }
       });
     }
+  }
+
+  //MÉTODO PARA ACTIVAR EL POPUP Y AUTODESTRUIRSE A LOS 5 SEGUNDOS
+  private mostrarNotificacion(tipo: 'success' | 'error', mensaje: string) {
+
+    this.notificacion = { visible: true, tipo, mensaje};
+    setTimeout(() => {
+      this.notificacion.visible = false;
+    }, 5000);
   }
 }
