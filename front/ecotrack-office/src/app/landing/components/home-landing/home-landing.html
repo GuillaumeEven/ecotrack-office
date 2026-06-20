@@ -126,7 +126,7 @@
                 <div class="registration-form-container">
                     <div class="form-card">
                         <h3 class="form-title">
-                            @if (pasoActual === 'USUARIO') { Registro de Cuenta }
+                            @if (pasoActual === 'USUARIO') { Registro de Usuario }
                             @else if (pasoActual === 'EMPRESA_NUEVA') { Datos de tu Empresa }
                             @else if (pasoActual === 'EMPRESA_EXISTENTE') { Vincular Empresa }
                         </h3>
@@ -201,10 +201,29 @@
                                     }
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="companyCifNueva">CIF DE LA EMPRESA</label>
-                                    <input class="form-input" placeholder="B12345678" type="text" id="companyCifNueva" formControlName="companyCifNueva"/>
-                                    @if (registerForm.get('companyCifNueva')?.invalid && registerForm.get('companyCifNueva')?.touched) {
+                                    <label class="form-label" for="companyCif">CIF DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="B12345678" type="text" id="companyCif" formControlName="companyCif"/>
+                                    @if (registerForm.get('companyCif')?.invalid && registerForm.get('companyCif')?.touched) {
                                         <small class="error-message">El CIF es obligatorio para registrar la empresa.</small>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="companyAddress">DIRECCIÓN DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="Calle Ángel Pareja, 5" type="text" id="companyAddress" formControlName="companyAddress"/>
+                                    @if (registerForm.get('companyAddress')?.invalid && registerForm.get('companyAddress')?.touched) {
+                                        <small class="error-message">La dirección es obligatoria para registrar la empresa.</small>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="companyEmail">CORREO ELECTRÓNICO DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="ecotack@company.com" type="email" id="companyEmail" formControlName="companyEmail"/>
+                                    @if (registerForm.get('companyEmail')?.invalid && registerForm.get('companyEmail')?.touched) {
+                                        @if (registerForm.get('companyEmail')?.hasError('required')) {
+                                            <small class="error-message">El correo electrónico es obligatorio.</small>
+                                        }
+                                        @if (registerForm.get('companyEmail')?.hasError('email')) {
+                                            <small class="error-message">Por favor, introduce un formato de email válido.</small>
+                                        }
                                     }
                                 </div>
 
@@ -213,16 +232,16 @@
                                         Atrás
                                     </button>
                                     <button type="submit" class="btn-submit-form" [disabled]="registerForm.invalid">
-                                        Registrar todo
+                                        Finalizar registro
                                     </button>
                                 </div>
                             }
 
                             @else if (pasoActual === 'EMPRESA_EXISTENTE') {
                                 <div class="form-group">
-                                    <label class="form-label" for="companyCifAsociar">CIF DE LA EMPRESA REGISTRADA</label>
-                                    <input class="form-input" placeholder="Introduce el CIF de tu empresa" type="text" id="companyCifAsociar" formControlName="companyCifAsociar"/>
-                                    @if (registerForm.get('companyCifAsociar')?.invalid && registerForm.get('companyCifAsociar')?.touched) {
+                                    <label class="form-label" for="companyCifAsociate">CIF DE LA EMPRESA REGISTRADA</label>
+                                    <input class="form-input" placeholder="Introduce el CIF de tu empresa" type="text" id="companyCifAsociate" formControlName="companyCifAsociate"/>
+                                    @if (registerForm.get('companyCifAsociate')?.invalid && registerForm.get('companyCifAsociate')?.touched) {
                                         <small class="error-message">Debes introducir un CIF válido para asociarte.</small>
                                     }
                                 </div>
@@ -232,7 +251,7 @@
                                         Atrás
                                     </button>
                                     <button type="submit" class="btn-submit-form" [disabled]="registerForm.invalid">
-                                        Registrarse
+                                        Finalizar registro
                                     </button>
                                 </div>
                             }

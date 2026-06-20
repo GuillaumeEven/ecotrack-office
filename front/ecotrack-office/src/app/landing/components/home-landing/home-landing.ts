@@ -33,10 +33,13 @@ export class HomeLanding implements OnInit {
       
       // Datos si crea empresa nueva (Paso 2)
       companyName: [''],
-      companyCifNueva: [''],
+      companyCif: [''],
+      companyAddress: [''],
+      companyEmail: [''],
+
       
       // Datos si se asocia a empresa existente (Paso 3)
-      companyCifAsociar: ['']
+      companyCifAsociate: ['']
     }, {
       validators: matchPasswordValidator
     });
@@ -47,26 +50,34 @@ export class HomeLanding implements OnInit {
     this.pasoActual = paso;
     
     const companyNameCtrl = this.registerForm.get('companyName');
-    const cifNuevaCtrl = this.registerForm.get('companyCifNueva');
-    const cifAsociarCtrl = this.registerForm.get('companyCifAsociar');
+    const companyCifCtrl = this.registerForm.get('companyCif');
+    const companyAddressCtrl = this.registerForm.get('companyAddress');
+    const companyEmailCtrl = this.registerForm.get('companyEmail');
+    const companyCifAsociateCtrl = this.registerForm.get('companyCifAsociate');
 
     // Limpiamos validadores previos para evitar conflictos
     companyNameCtrl?.clearValidators();
-    cifNuevaCtrl?.clearValidators();
-    cifAsociarCtrl?.clearValidators();
+    companyCifCtrl?.clearValidators();
+    companyAddressCtrl?.clearValidators();
+    companyEmailCtrl?.clearValidators();
+    companyCifAsociateCtrl?.clearValidators();
 
     // Añadimos dinámicamente según el flujo elegido
     if (paso === 'EMPRESA_NUEVA') {
       companyNameCtrl?.setValidators([Validators.required]);
-      cifNuevaCtrl?.setValidators([Validators.required]);
+      companyCifCtrl?.setValidators([Validators.required]);
+      companyAddressCtrl?.setValidators([Validators.required]);
+      companyEmailCtrl?.setValidators([Validators.required, Validators.email])
     } else if (paso === 'EMPRESA_EXISTENTE') {
-      cifAsociarCtrl?.setValidators([Validators.required]);
+      companyCifAsociateCtrl?.setValidators([Validators.required]);
     }
 
     // Forzamos la actualización del estado de validez
     companyNameCtrl?.updateValueAndValidity();
-    cifNuevaCtrl?.updateValueAndValidity();
-    cifAsociarCtrl?.updateValueAndValidity();
+    companyCifCtrl?.updateValueAndValidity();
+    companyAddressCtrl?.updateValueAndValidity();
+    companyEmailCtrl?.updateValueAndValidity();
+    companyCifAsociateCtrl?.updateValueAndValidity();
   }
 
   // Método unificado de envío final
@@ -81,14 +92,28 @@ export class HomeLanding implements OnInit {
     if (this.pasoActual === 'EMPRESA_NUEVA') {
       console.log('1. Enviando a API para CREAR empresa:', {
         name: datosForm.companyName,
-        cif: datosForm.companyCifNueva
+        cif: datosForm.companyCif,
+        address: datosForm.companyAddress,
+        email: datosForm.companyEmail
       });
       
       // Aquí iría el subscribe de tu servicio de empresa, y en el éxito ejecutas el del usuario:
-      console.log('2. Empresa creada con éxito. Creando usuario administrador...');
+      console.log('2. Empresa creada con éxito. Creando usuario administrador:', {
+        firstName: datosForm.firstName,
+        lastName: datosForm.lastName,
+        email: datosForm.email,
+        passwordHash: datosForm.passwordHash,
+        rol: 'Admin'
+      });
       
     } else if (this.pasoActual === 'EMPRESA_EXISTENTE') {
-      console.log('Enviando a API para CREAR usuario asociado al CIF existente:', datosForm.companyCifAsociar);
+      console.log('Enviando a API para CREAR usuario asociado al CIF existente:', datosForm.companyCifAsociar, {
+        firstName: datosForm.firstName,
+        lastName: datosForm.lastName,
+        email: datosForm.email,
+        passwordHash: datosForm.passwordHash,
+        rol: 'Employee'
+      });
     }
   }
 }
