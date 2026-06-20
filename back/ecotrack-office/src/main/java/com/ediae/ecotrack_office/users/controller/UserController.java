@@ -13,8 +13,10 @@ import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
 import com.ediae.ecotrack_office.users.service.UserService;
+import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
 
 import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -28,6 +30,15 @@ public class UserController {
         this.adminGuard = adminGuard;
     }
 
+    // --- Endpoints públicos --------
+
+    @PostMapping("/create-user")
+    public ResponseEntity<UserResponseDto> createUserWithCif(@Valid @RequestBody UserCreateRequestDto dto) {
+        
+         return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.createUserWithCif(dto).toResponseDto());
+    }
+    
     // ─── Endpoints /me (cualquier usuario autenticado) ───────────────────────
 
     // GET /api/v1/users/me

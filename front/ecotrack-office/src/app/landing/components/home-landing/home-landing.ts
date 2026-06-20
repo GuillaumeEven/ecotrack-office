@@ -3,6 +3,8 @@ import { RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { matchPasswordValidator } from '@validators/match-password.validator';
+import { UserService } from '../../../services/user.service';
+import { CreateUserRequest } from '@models/user.model';
 
 // Definimos los pasos posibles para controlar el flujo visual
 type RegistroPaso = 'USUARIO' | 'EMPRESA_NUEVA' | 'EMPRESA_EXISTENTE';
@@ -17,10 +19,19 @@ type RegistroPaso = 'USUARIO' | 'EMPRESA_NUEVA' | 'EMPRESA_EXISTENTE';
 export class HomeLanding implements OnInit {
 
   private fb = inject(FormBuilder);
+  private userService = inject(UserService);
+
   registerForm!: FormGroup;
   
   // Control de estado del flujo secuencial
   pasoActual: RegistroPaso = 'USUARIO';
+
+  // ESTADO LOCAL PARA CONTROLAR EL POPUP DE ÉXITO O ERROR EN LA PETICIÓN
+  notificacion = {
+    visible: false,
+    tipo: 'success' as 'success' | 'error',
+    mensaje: ''
+  };
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -80,7 +91,7 @@ export class HomeLanding implements OnInit {
     companyCifAsociateCtrl?.updateValueAndValidity();
   }
 
-  // Método unificado de envío final
+  // MÉTODO DE ENVÍO A LA API
   submitRegistro(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
@@ -107,12 +118,14 @@ export class HomeLanding implements OnInit {
       });
       
     } else if (this.pasoActual === 'EMPRESA_EXISTENTE') {
-      console.log('Enviando a API para CREAR usuario asociado al CIF existente:', datosForm.companyCifAsociar, {
+      const payload: CreateUserRequest = {
         firstName: datosForm.firstName,
         lastName: datosForm.lastName,
         email: datosForm.email,
         passwordHash: datosForm.passwordHash,
-        rol: 'Employee'
+        rol: 'EMPLOYEE'
+
+        //TENGO QUE HACER QUE EL ROL SE ASIGNE AL LLAMAR AL SERVICIO DE CREAR UN USUARIO CON EL CIF DE LA EMPRESA
       });
     }
   }

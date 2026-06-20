@@ -39,3 +39,11 @@ export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface CreateUserRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  passwordHash: string;
+  companyCifAsociar: string;
+}

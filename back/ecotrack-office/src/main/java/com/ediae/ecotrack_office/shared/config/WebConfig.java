@@ -19,7 +19,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/**"); // ← todas las rutas
+                .addPathPatterns("/**") // ← todas las rutas
+                
+                //MENOS LAS RUTAS PÚBLICAS COMO EL LOGIN Y EL REGISTRO
+                .excludePathPatterns(
+                    "/api/v1/users/create-user",
+                    "/api/v1/auth/loing"
+                );
     }
 
     
