@@ -125,61 +125,119 @@
                 </div>
                 <div class="registration-form-container">
                     <div class="form-card">
-                        <h3 class="form-title">Formualario de Registro</h3>
-                        <form class="custom-form" [formGroup]="registerForm" (ngSubmit)="register()">
-                            <div class="form-grid-2col">
+                        <h3 class="form-title">
+                            @if (pasoActual === 'USUARIO') { Registro de Cuenta }
+                            @else if (pasoActual === 'EMPRESA_NUEVA') { Datos de tu Empresa }
+                            @else if (pasoActual === 'EMPRESA_EXISTENTE') { Vincular Empresa }
+                        </h3>
+                        
+                        <form class="custom-form" [formGroup]="registerForm" (ngSubmit)="submitRegistro()">
+                            
+                            @if (pasoActual === 'USUARIO') {
+                                <div class="form-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label" for="firstName">NOMBRE</label>
+                                        <input class="form-input" placeholder="John" type="text" id="firstName" formControlName="firstName"/>
+                                        @if (registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
+                                            <small class="error-message">El nombre es obligatorio.</small>
+                                        }
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="lastName">APELLIDOS</label>
+                                        <input class="form-input" placeholder="Doe" type="text" id="lastName" formControlName="lastName"/>
+                                        @if (registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
+                                            <small class="error-message">El apellido es obligatorio.</small>
+                                        }
+                                    </div>
+                                </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="firstName">NOMBRE</label>
-                                    <input class="form-input" placeholder="John" type="text" id="firstName" formControlName="firstName"/>
-                                    @if (registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
-                                        <small class="error-message">El nombre es obligatorio.</small>
+                                    <label class="form-label" for="email">CORREO ELECTRÓNICO</label>
+                                    <input class="form-input" placeholder="john@company.com" type="email" id="email" formControlName="email"/>
+                                    @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                                        @if (registerForm.get('email')?.hasError('required')) {
+                                            <small class="error-message">El correo electrónico es obligatorio.</small>
+                                        }
+                                        @if (registerForm.get('email')?.hasError('email')) {
+                                            <small class="error-message">Por favor, introduce un formato de email válido.</small>
+                                        }
                                     }
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="lastName">APELLIDOS</label>
-                                    <input class="form-input" placeholder="Doe" type="text" id="lastName" formControlName="lastName"/>
-                                    @if (registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
-                                        <small class="error-message">El apellido es obligatorio.</small>
-                                    }
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="email">CORREO ELECTRÓNICO</label>
-                                <input class="form-input" placeholder="john@company.com" type="email" id="email" formControlName="email"/>
-                                @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-                                    @if (registerForm.get('email')?.hasError('required')) {
-                                        <small class="error-message">El correo electrónico es obligatorio.</small>
-                                    }
-                                    @if (registerForm.get('email')?.hasError('email')) {
-                                        <small class="error-message">Por favor, introduce un formato de email valido.</small>
-                                    }
-                                }
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="passwordHash">CONTRASEÑA</label>
-                                <input class="form-input" placeholder="Introduce tu contraseña" type="password" id="passwordHash" formControlName="passwordHash"/>
-                                @if (registerForm.get('passwordHash')?.invalid && registerForm.get('passwordHash')?.touched) {
-                                    @if (registerForm.get('passwordHash')?.hasError('required')) {
+                                    <label class="form-label" for="passwordHash">CONTRASEÑA</label>
+                                    <input class="form-input" placeholder="Introduce tu contraseña" type="password" id="passwordHash" formControlName="passwordHash"/>
+                                    @if (registerForm.get('passwordHash')?.invalid && registerForm.get('passwordHash')?.touched) {
                                         <small class="error-message">La contraseña es obligatoria.</small>
                                     }
-                                }
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="confirmPassword">REPETIR CONTRASEÑA</label>
-                                <input class="form-input" placeholder="Repite tu contraseña" type="password" id="confirmPassword" formControlName="confirmPassword"/>
-                                @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('passwordHash')?.touched) {
-                                    @if (registerForm.get('confirmPassword')?.hasError('required')) {
-                                        <small class="error-message">Debes confirmar la contraseña.</small>
-                                    } 
-                                    @if (registerForm.get('confirmPassword')?.hasError('passwordsNotMatch')) {
-                                        <small class="error-message">Las contraseñas no coinciden.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="confirmPassword">REPETIR CONTRASEÑA</label>
+                                    <input class="form-input" placeholder="Repite tu contraseña" type="password" id="confirmPassword" formControlName="confirmPassword"/>
+                                    @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('passwordHash')?.touched) {
+                                        @if (registerForm.get('confirmPassword')?.hasError('required')) {
+                                            <small class="error-message">Debes confirmar la contraseña.</small>
+                                        } 
+                                        @if (registerForm.get('confirmPassword')?.hasError('passwordsNotMatch')) {
+                                            <small class="error-message">Las contraseñas no coinciden.</small>
+                                        }
                                     }
-                                }
-                            </div>
-                            <button class="btn-submit-form" type="submit" [disabled]="registerForm.invalid">
-                                Continuar con el registro
-                            </button>
-                            </form>
+                                </div>
+
+                                <div class="form-actions-stack" style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px;">
+                                    <button type="button" class="btn-submit-form" (click)="irAPaso('EMPRESA_NUEVA')" [disabled]="registerForm.invalid">
+                                        Registrar nueva empresa
+                                    </button>
+                                    <button type="button" class="btn-submit-form btn-secondary-action-form" (click)="irAPaso('EMPRESA_EXISTENTE')" [disabled]="registerForm.invalid">
+                                        Asociarse a una empresa existente
+                                    </button>
+                                </div>
+                            }
+
+                            @else if (pasoActual === 'EMPRESA_NUEVA') {
+                                <div class="form-group">
+                                    <label class="form-label" for="companyName">NOMBRE DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="Mi Empresa S.L." type="text" id="companyName" formControlName="companyName"/>
+                                    @if (registerForm.get('companyName')?.invalid && registerForm.get('companyName')?.touched) {
+                                        <small class="error-message">El nombre de la empresa es obligatorio.</small>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="companyCifNueva">CIF DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="B12345678" type="text" id="companyCifNueva" formControlName="companyCifNueva"/>
+                                    @if (registerForm.get('companyCifNueva')?.invalid && registerForm.get('companyCifNueva')?.touched) {
+                                        <small class="error-message">El CIF es obligatorio para registrar la empresa.</small>
+                                    }
+                                </div>
+
+                                <div class="form-actions-inline" style="display: flex; gap: 12px; margin-top: 24px;">
+                                    <button type="button" class="btn-submit-form" style="background-color: #76777d;" (click)="irAPaso('USUARIO')">
+                                        Atrás
+                                    </button>
+                                    <button type="submit" class="btn-submit-form" [disabled]="registerForm.invalid">
+                                        Registrar todo
+                                    </button>
+                                </div>
+                            }
+
+                            @else if (pasoActual === 'EMPRESA_EXISTENTE') {
+                                <div class="form-group">
+                                    <label class="form-label" for="companyCifAsociar">CIF DE LA EMPRESA REGISTRADA</label>
+                                    <input class="form-input" placeholder="Introduce el CIF de tu empresa" type="text" id="companyCifAsociar" formControlName="companyCifAsociar"/>
+                                    @if (registerForm.get('companyCifAsociar')?.invalid && registerForm.get('companyCifAsociar')?.touched) {
+                                        <small class="error-message">Debes introducir un CIF válido para asociarte.</small>
+                                    }
+                                </div>
+
+                                <div class="form-actions-inline" style="display: flex; gap: 12px; margin-top: 24px;">
+                                    <button type="button" class="btn-submit-form" style="background-color: #76777d;" (click)="irAPaso('USUARIO')">
+                                        Atrás
+                                    </button>
+                                    <button type="submit" class="btn-submit-form" [disabled]="registerForm.invalid">
+                                        Registrarse
+                                    </button>
+                                </div>
+                            }
+
+                        </form>
                     </div>
                 </div>
             </div>
