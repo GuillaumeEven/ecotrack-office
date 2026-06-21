@@ -4,7 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { matchPasswordValidator } from '@validators/match-password.validator';
 import { UserService } from '../../../services/user.service';
+import { Organization } from '../../../services/organization';
 import { CreateUserRequest } from '@models/user.model';
+import { CreateOrganizationRequest, OrganizationResponse } from '@models/organization.model';
+import { switchMap, catchError, throwError } from 'rxjs';
 
 // Definimos los pasos posibles para controlar el flujo visual
 type RegistroPaso = 'USUARIO' | 'EMPRESA_NUEVA' | 'EMPRESA_EXISTENTE';
@@ -20,6 +23,7 @@ export class HomeLanding implements OnInit {
 
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
+  private organizationService = inject(Organization);
   private cdr = inject(ChangeDetectorRef);
 
   registerForm!: FormGroup;
@@ -119,7 +123,66 @@ export class HomeLanding implements OnInit {
         passwordHash: datosForm.passwordHash,
         rol: 'Admin'
       });
-      
+
+      const payloadOrg: CreateOrganizationRequest = {
+
+        name: datosForm.companyName,
+        cif: datosForm.companyCif,
+        address: datosForm.companyAddress,
+        email: datosForm.companyEmail
+      };
+      this.organizationService.createOrganization(payloadOrg).pipe(
+
+        catchError((err) => {
+
+          err.origenError = 'EMPRESA';
+          return throwError(() => err);
+        }),
+        switchMap((empresaCreada: OrganizationResponse) => {
+
+          console.log('Empresa creada con éxito:', empresaCreada);
+          const payloadUsr: CreateUserRequest = {
+
+            firstName: datosForm.firstName,
+            lastName: datosForm.lastName,
+            email: datosForm.email,
+            password: datosForm.passwordHash,
+            role: 'ADMIN',
+            cif: empresaCreada.cif
+          };
+          return this.userService.registerAndAssociate(payloadUsr).pipe(
+
+            catchError((err) => {
+
+              err.origenError = 'USUARIO';
+              return throwError(() => err);
+            })
+          );
+        })
+      ).subscribe({
+
+        next: (usuarioCreado) => {
+          this.mostrarNotificacion('success', 'Empresa y Usuario registrados con exito.');
+          this.cdr.detectChanges();
+          setTimeout(() => {
+            window.location.reload();
+          }, 3500);
+        },
+        error: (err) => {
+
+          console.error('Error completo capturado:', err);
+          let mensajePersonalizado = 'Hubo un falle en el proceso de registro.';
+          if(err.origenError === 'EMPRESA') {
+
+            mensajePersonalizado = 'No se pudo crear la empresa. Revisa el CIF o el correo electrónico.';
+          } else if (err.origenError === 'USUARIO') {
+
+            mensajePersonalizado = 'La empresa se creó con éxito, pero falló el registro de tus datos de usuario. Intente ahora registrarse asociandose a su empresa.';
+          }
+          this.mostrarNotificacion('error', mensajePersonalizado);
+          this.cdr.detectChanges();
+        }
+      });
     } else if (this.pasoActual === 'EMPRESA_EXISTENTE') {
 
       const payload: CreateUserRequest = {
