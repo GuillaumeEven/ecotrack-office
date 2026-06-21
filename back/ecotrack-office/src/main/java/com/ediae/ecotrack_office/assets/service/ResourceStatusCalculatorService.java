@@ -26,6 +26,9 @@ import com.ediae.ecotrack_office.assets.mapper.RoomMapper;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.FloorRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
+import com.ediae.ecotrack_office.incident.entity.IncidentEntity;
+import com.ediae.ecotrack_office.incident.enums.IncidentStatus;
+import com.ediae.ecotrack_office.incident.repository.IncidentRepository;
 import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
 import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
 import com.ediae.ecotrack_office.reservation.repository.ReservationRepository;
@@ -46,6 +49,9 @@ public class ResourceStatusCalculatorService {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private IncidentRepository incidentRepository;
 
     @Autowired
     private DeskMapper deskMapper;
@@ -270,12 +276,20 @@ public class ResourceStatusCalculatorService {
         }
 
         List<ReservationEntity> reservations = reservationRepository.findByResourceId(desk.getId());
+        List<IncidentEntity> incidents = incidentRepository.findByResourceId(desk.getId());
 
         // Check for RELEASED reservations (locked, unavailable)
         boolean hasReleasedReservation = reservations.stream()
                 .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.RELEASED);
         if (hasReleasedReservation) {
             return ResourceStatus.UNAVAILABLE;
+        }
+
+        // Check for incidents that make the desk unavailable
+        boolean hasIncident = incidents.stream()
+                .anyMatch(i -> i.getStatus() == IncidentStatus.IN_PROGRESS);
+        if (hasIncident) {
+            return ResourceStatus.OUT_OF_SERVICE;
         }
 
         // Check for CONFIRMED reservations (reserved)

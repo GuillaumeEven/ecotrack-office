@@ -20,6 +20,9 @@ import com.ediae.ecotrack_office.assets.enums.RoomType;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.FloorRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
+import com.ediae.ecotrack_office.incident.entity.IncidentEntity;
+import com.ediae.ecotrack_office.incident.enums.IncidentStatus;
+import com.ediae.ecotrack_office.incident.repository.IncidentRepository;
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
 import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
@@ -42,6 +45,7 @@ public class DataLoader implements CommandLineRunner {
     private final RoomRepository roomRepository;
     private final DeskRepository deskRepository;
     private final ReservationRepository reservationRepository;
+    private final IncidentRepository incidentRepository;
     private final JdbcTemplate jdbcTemplate;
 
     public DataLoader(OrganizationRepository organizationRepository,
@@ -50,6 +54,7 @@ public class DataLoader implements CommandLineRunner {
                       RoomRepository roomRepository,
                       DeskRepository deskRepository,
                       ReservationRepository reservationRepository,
+                      IncidentRepository incidentRepository,
                       JdbcTemplate jdbcTemplate) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
@@ -57,6 +62,7 @@ public class DataLoader implements CommandLineRunner {
         this.roomRepository = roomRepository;
         this.deskRepository = deskRepository;
         this.reservationRepository = reservationRepository;
+        this.incidentRepository = incidentRepository;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -75,6 +81,7 @@ public class DataLoader implements CommandLineRunner {
         createRoomsAndDesksIfMissing(org2);
 
         createReservationsIfMissing(org);
+        createIncidentsIfMissing();
     }
 
     /**
@@ -381,6 +388,48 @@ public class DataLoader implements CommandLineRunner {
             } else {
                 log.warn("Escritorio con patrón '{}' no encontrado, omitiendo reservación.", deskNamePattern);
             }
+        }
+    }
+
+    /**
+     * Método auxiliar para crear un incidente para el desk ID 3
+     */
+    private void createIncidentsIfMissing() {
+        // Obtener usuario técnico
+        UserEntity tech = userRepository.findByEmail("tech@ecotrack.local")
+                .orElse(null);
+
+        if (tech == null) {
+            log.warn("Usuario técnico no encontrado, omitiendo siembra de incidentes.");
+            return;
+        }
+
+        // Obtener desk con ID 3
+        DeskEntity desk = deskRepository.findById(3L)
+                .orElse(null);
+
+        if (desk == null) {
+            log.warn("Desk con ID 3 no encontrado, omitiendo siembra de incidente.");
+            return;
+        }
+
+        // Verificar si ya existe un incidente para este desk
+        boolean incidentExists = incidentRepository.findByResourceId(desk.getId())
+                .stream()
+                .anyMatch(i -> i.getStatus() == IncidentStatus.IN_PROGRESS);
+
+        if (!incidentExists) {
+            IncidentEntity incident = new IncidentEntity(
+                    "La silla está rota",
+                    IncidentStatus.IN_PROGRESS,
+                    LocalDateTime.now(),
+                    tech,
+                    desk
+            );
+            incidentRepository.save(incident);
+            log.info("Incidente sembrado para el desk '{}' (ID: 3) con descripción: 'La silla está rota'", desk.getName());
+        } else {
+            log.info("Incidente para el desk con ID 3 ya existe, omitiendo.");
         }
     }
 
