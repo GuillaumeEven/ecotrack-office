@@ -19,6 +19,7 @@ import com.ediae.ecotrack_office.reservation.mapper.ReservationMapper;
 import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.reservation.repository.ReservationRepository;
 import com.ediae.ecotrack_office.shared.exception.ForbiddenException;
+import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
@@ -127,19 +128,16 @@ public class ReservationService {
         return ReservationMapper.fromEntity(savedEntity);
     }
 
-    public Boolean deleteReservationById (Long id, Long currentUserId, boolean isAdminOrTech) {
+    public Boolean deleteReservationById (Long id, Long currentUserId) {
 
         Optional <ReservationEntity> entity = repository.findById(id);
         if (entity.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado una reserva con id: " + id);
+            throw new NotFoundException("No se ha encontrado una reserva con id: " + id);
         }
-
         ReservationEntity reservation = entity.get();
 
-        // Authorization:
-        // - ADMIN and TECHNICIAN can always delete
-        // - Others can only delete their own reservation
-        if (!isAdminOrTech && !reservation.getUser().getId().equals(currentUserId)) {
+        // Authorization check should be in controller using RoleGuard
+        if (!reservation.getUser().getId().equals(currentUserId)) {
             throw new ForbiddenException("No tienes permisos para eliminar esta reserva.");
         }
 

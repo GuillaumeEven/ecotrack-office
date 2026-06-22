@@ -18,6 +18,8 @@ public class AuthController {
 
     private final AuthService authService;
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AuthController.class);
+
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
@@ -26,6 +28,7 @@ public class AuthController {
     // Ruta pública — no requiere autenticación
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto dto) {
+        logger.info("Intento de login para el usuario: {}", dto);
         return ResponseEntity.ok(authService.login(dto));
     }
 }

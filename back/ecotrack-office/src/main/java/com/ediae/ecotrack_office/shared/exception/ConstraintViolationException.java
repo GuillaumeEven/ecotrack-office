@@ -1,11 +1,18 @@
 package com.ediae.ecotrack_office.shared.exception;
 
-public class ConstraintViolationException extends RuntimeException {
+/**
+ * Excepción lanzada cuando se viola una restricción de validación personalizada.
+ */
+public class ConstraintViolationException extends ApplicationException {
+    public ConstraintViolationException() {
+        super(ErrorCode.VALIDATION_ERROR, "Error de validación");
+    }
+
     public ConstraintViolationException(String message) {
-        super(message);
+        super(ErrorCode.VALIDATION_ERROR, message);
     }
 
     public ConstraintViolationException(String message, Throwable cause) {
-        super(message, cause);
+        super(ErrorCode.VALIDATION_ERROR, message, cause);
     }
 }
