@@ -9,12 +9,12 @@ import { CreateOrganizationRequest, OrganizationResponse } from '@models/organiz
 })
 export class Organization {
 
-  private readonly BASE_URL = `${environment.apiUrl}/organization`;
+  private readonly BASE_URL = `${environment.apiUrl}/organizations`;
 
   constructor(private http: HttpClient) {}
 
   createOrganization(data: CreateOrganizationRequest): Observable <OrganizationResponse> {
 
-    return this.http.post<OrganizationResponse>(`${this.BASE_URL}`, data);
+    return this.http.post<OrganizationResponse>(`${this.BASE_URL}/public/create`, data);
   }
 }
