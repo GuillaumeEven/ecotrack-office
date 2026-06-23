@@ -62,53 +62,46 @@
     </div>
 
     <div class="active-reservations__grid">
-      <div class="booking-card">
-        <div class="booking-card__image-wrapper">
-          <img class="booking-card__image" alt="Conference room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv5skVvpbHBliejIb8gxNsXWKYyinhWUp-6fX8D_V775NCvImYaXmnyzUPHYo6Dq0TcrGpL4TUbeaBQZ0BXosXLEReA40NZEUBpd2uBfN9iFmuqsG67tmprMuNnD1Kv_TKR3AeyOIkC4p-HDNj_regGA3RNBVy_Ur-8JYxpm6ocPY3CIN8flAGQpLmVW6SHM3ZX_KSt5R1lVBVmjqk7PX-1CmDuyp5a_8_pQFzn1-wmN95_qxfCtMtldGFqJACJ_AfEpZeyXxtHzf3">
-          <div class="booking-card__badge-time">Hoy</div>
-        </div>
-        <div class="booking-card__content">
-          <div class="booking-card__header">
-            <div>
-              <h3 class="booking-card__title">Sala de reuniones B</h3>
-              <p class="booking-card__meta">Planta 3 • 4-6 Personas</p>
+      @for (reserva of activeReservations; track reserva.id) {
+        <div class="booking-card">
+          <div class="booking-card__image-wrapper">
+            <img class="booking-card__image" [alt]="reserva.resource.name" src='assets/images/default-resource.png'>
+            
+            <div class="booking-card__badge-time">{{ reserva.date }}</div>
+          </div>
+          
+          <div class="booking-card__content">
+            <div class="booking-card__header">
+              <div>
+                <h3 class="booking-card__title">{{ reserva.resource.name }}</h3>
+                
+                <p class="booking-card__meta">
+                  Equipamiento: {{ reserva.resource.equipmentList }}
+                </p>
+              </div>
+              <span class="booking-card__status-tag" [class]="reserva.status.toLowerCase()">
+                {{ reserva.status }}
+              </span>
             </div>
-            <span class="booking-card__status-tag">Confirmada</span>
-          </div>
-          <div class="booking-card__schedule">
-            <span class="material-symbols-outlined">calendar_today</span>
-            <span class="booking-card__time">05/06/2026</span>
-          </div>
-          <div class="booking-card__actions">
-            <button class="booking-card__btn-edit">Editar</button>
-            <button class="booking-card__btn-cancel">Cancelar</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="booking-card">
-        <div class="booking-card__image-wrapper">
-          <img class="booking-card__image" alt="Individual workstation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcSiZYeVGttJbBzn0lLRqoJYEWtZdwcFWilbbRGY84VX7p_JCj4OH-5gdtEA8lwfUNpF5a_jmObA98zod89bKTcesXvCkb-IQs_p2HUokFErfmGV97hZBJ9DAvgA_LHenhyE89j_QrjJKOHUdyDYqLrmycFMotXtO-a_JBoK1v2Ou13T-SMOmeoy1fbYlzsJd7CxIdJO_k0wqSfaqQivPzMEFYYFO2K5Cuj-4P17e9NnLEWYqUiiPOII6NJHA7XIH-5ZuxXSoNmhAB">
-          <div class="booking-card__badge-time">Mañana</div>
-        </div>
-        <div class="booking-card__content">
-          <div class="booking-card__header">
-            <div>
-              <h3 class="booking-card__title">Escritorio 742</h3>
-              <p class="booking-card__meta">Planta 4 • Ventana</p>
+            
+            <div class="booking-card__schedule">
+              <span class="material-symbols-outlined">calendar_today</span>
+              <span class="booking-card__time">{{ reserva.date }}</span>
             </div>
-            <span class="booking-card__status-tag">Confirmada</span>
-          </div>
-          <div class="booking-card__schedule">
-            <span class="material-symbols-outlined">calendar_today</span>
-            <span class="booking-card__time">06/06/2026</span>
-          </div>
-          <div class="booking-card__actions">
-            <button class="booking-card__btn-edit">Editar</button>
-            <button class="booking-card__btn-cancel">Cancelar</button>
+            
+            <div class="booking-card__actions">
+              <button class="booking-card__btn-edit" (click)="editReservation(reserva.id)">Editar</button>
+              <button class="booking-card__btn-cancel" (click)="cancelReservation(reserva.id)">Cancelar</button>
+            </div>
           </div>
         </div>
-      </div>
+      } @empty {
+        <div class="no-reservations-message">
+          <span class="material-symbols-outlined">calendar_today</span>
+          <p>Sin reservas activas</p>
+        </div>
+      }
+    </div>
 
       <!-- PODRÍA SER GRACIOSO METERLO PERO SI SOBRA TIEMPO
       <div class="stats-card">
@@ -131,7 +124,6 @@
         </div>
       </div>
       -->
-    </div>
   </section>
 
 

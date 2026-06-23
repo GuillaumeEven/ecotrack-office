@@ -371,6 +371,23 @@
     color: rgba(255, 255, 255, 0.6);
 }
 
+.no-reservations-message {
+  grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #a0aec0; /* Un gris elegante */
+  text-align: center;
+  gap: 8px;
+}
+
+.no-reservations-message span {
+  font-size: 48px; /* Icono grande desvanecido */
+  opacity: 0.5;
+}
+
 /* ==========================================================================
    5. SECCIÓN TABLA HISTORIAL GLOBAL
    ========================================================================== */
