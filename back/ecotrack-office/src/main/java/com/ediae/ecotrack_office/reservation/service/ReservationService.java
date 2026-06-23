@@ -105,7 +105,7 @@ public class ReservationService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + dto.getUserId()));
 
         var resource = resourceRepository.findById(dto.getResourceId())
-                .orElseThrow(() -> new RuntimeException("Recurso no encontrado con id: " + dto.getResourceId()));
+                .orElseThrow(() -> new NotFoundException("Recurso no encontrado con id: " + dto.getResourceId()));
 
         // Create entity directly
         ReservationEntity entity = new ReservationEntity(dto.getDate(), dto.getStatus(), user, resource);
