@@ -16,43 +16,41 @@ export const routes: Routes = [
   { path: '', component: HomeLanding },
   { path: 'login', component: LoginComponent },
 
-  // RUTAS PRIVADAS
+  // RUTAS PRIVADAS (Toda la sección requiere estar autenticado)
   {
     path: '',
     component: PrivateLayout,
+    canActivate: [authGuard], // 🔒 PADRE BLINDADO: Aplica 'authGuard' a todos los hijos automáticamente
     children: [
       {
         path: 'profile',
         component: UserProfileComponent,
-        canActivate: [authGuard],
       },
       {
         path: 'home',
         component: BuildingMapComponent,
-        canActivate: [authGuard], // Tip: Te recomiendo ponérselo también a home para que sea privada
       },
       {
         path: 'admin/user-management',
         component: UserManagementComponent,
-        canActivate: [authGuard, adminGuard], // 2. ¡Aquí ocurre el doble candado! Debe estar logueado Y ser Admin
+        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
       },
       {
         path: 'reservation',
         component: Reservation,
-        canActivate: [authGuard],
       },
       {
         path: 'organization',
         component: Organization,
-        canActivate: [authGuard],
       },
       {
         // TODO: Filtrar solo los admins
         path: 'assets',
         component: AssetsMgmt,
-        canActivate: [authGuard],
       },
     ],
   },
+
+  // COMODÍN: Redirección por defecto para URLs inexistentes
   { path: '**', redirectTo: '' },
 ];
