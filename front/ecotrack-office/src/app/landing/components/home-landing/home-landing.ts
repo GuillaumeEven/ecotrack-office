@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { RouterLink, Router } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { matchPasswordValidator } from '@validators/match-password.validator';
@@ -8,6 +8,7 @@ import { Organization } from '../../../services/organization';
 import { CreateUserRequest } from '@models/user.model';
 import { CreateOrganizationRequest, OrganizationResponse } from '@models/organization.model';
 import { switchMap, catchError, throwError } from 'rxjs';
+import { NotificationService } from '@core/services/notification.service';
 
 // Definimos los pasos posibles para controlar el flujo visual
 type RegistroPaso = 'USUARIO' | 'EMPRESA_NUEVA' | 'EMPRESA_EXISTENTE';
@@ -24,6 +25,8 @@ export class HomeLanding implements OnInit {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
   private organizationService = inject(Organization);
+  private notificationService = inject(NotificationService);
+  private router = inject(Router);
 
   registerForm!: FormGroup;
 
@@ -154,10 +157,8 @@ export class HomeLanding implements OnInit {
       ).subscribe({
 
         next: (usuarioCreado) => {
-          // SI SE HA CREADO CORRECTAMENTE RECARGAMOS LA PÁGINA
-          setTimeout(() => {
-            window.location.reload();
-          }, 3500);
+          this.notificationService.success('¡Registro exitoso!');
+          this.router.navigate(['/login']);
         },
         error: (err) => {
           // Error capturado y mostrado por el interceptor
@@ -176,10 +177,8 @@ export class HomeLanding implements OnInit {
       };
       this.userService.registerAndAssociate(payload).subscribe({
         next: (response) => {
-          // SI SE HA CREADO CORRECTAMENTE RECARGAMOS LA PÁGINA
-          setTimeout(() => {
-            window.location.reload();
-          }, 3500);
+          this.notificationService.success('¡Registro exitoso!');
+          this.router.navigate(['/login']);
         },
         error: (err) => {
           // Error capturado y mostrado por el interceptor

@@ -28,7 +28,6 @@ public class AuthService {
     // ─────────────────────────────────────────────
     public LoginResponseDto login(LoginRequestDto dto) {
 
-        logger.info("Intento de service.login para el usuario: {}", dto);
 
         // 1. Buscamos el usuario por email
         UserEntity user = userRepository.findByEmail(dto.email())
