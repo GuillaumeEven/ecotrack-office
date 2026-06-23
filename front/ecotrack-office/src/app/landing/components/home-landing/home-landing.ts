@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators, FormGroup, FormBuilder } from '@angular/forms';
@@ -24,19 +24,11 @@ export class HomeLanding implements OnInit {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
   private organizationService = inject(Organization);
-  private cdr = inject(ChangeDetectorRef);
 
   registerForm!: FormGroup;
-  
+
   // Control de estado del flujo secuencial
   pasoActual: RegistroPaso = 'USUARIO';
-
-  // ESTADO LOCAL PARA CONTROLAR EL POPUP DE ÉXITO O ERROR EN LA PETICIÓN
-  notificacion = {
-    visible: false,
-    tipo: 'success' as 'success' | 'error',
-    mensaje: ''
-  };
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -46,14 +38,14 @@ export class HomeLanding implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       passwordHash: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
-      
+
       // Datos si crea empresa nueva (Paso 2)
       companyName: [''],
       companyCif: [''],
       companyAddress: [''],
       companyEmail: [''],
 
-      
+
       // Datos si se asocia a empresa existente (Paso 3)
       companyCifAsociate: ['']
     }, {
@@ -64,7 +56,7 @@ export class HomeLanding implements OnInit {
   // Navegación entre pasos actualizando dinámicamente los validadores requeridos
   irAPaso(paso: RegistroPaso): void {
     this.pasoActual = paso;
-    
+
     const companyNameCtrl = this.registerForm.get('companyName');
     const companyCifCtrl = this.registerForm.get('companyCif');
     const companyAddressCtrl = this.registerForm.get('companyAddress');
@@ -114,7 +106,7 @@ export class HomeLanding implements OnInit {
         address: datosForm.companyAddress,
         email: datosForm.companyEmail
       });
-      
+
       // Aquí iría el subscribe de tu servicio de empresa, y en el éxito ejecutas el del usuario:
       console.log('2. Empresa creada con éxito. Creando usuario administrador:', {
         firstName: datosForm.firstName,
@@ -162,25 +154,14 @@ export class HomeLanding implements OnInit {
       ).subscribe({
 
         next: (usuarioCreado) => {
-          this.mostrarNotificacion('success', 'Empresa y Usuario registrados con exito.');
-          this.cdr.detectChanges();
+          // SI SE HA CREADO CORRECTAMENTE RECARGAMOS LA PÁGINA
           setTimeout(() => {
             window.location.reload();
           }, 3500);
         },
         error: (err) => {
-
+          // Error capturado y mostrado por el interceptor
           console.error('Error completo capturado:', err);
-          let mensajePersonalizado = 'Hubo un falle en el proceso de registro.';
-          if(err.origenError === 'EMPRESA') {
-
-            mensajePersonalizado = 'No se pudo crear la empresa. Revisa el CIF o el correo electrónico.';
-          } else if (err.origenError === 'USUARIO') {
-
-            mensajePersonalizado = 'La empresa se creó con éxito, pero falló el registro de tus datos de usuario. Intente ahora registrarse asociandose a su empresa.';
-          }
-          this.mostrarNotificacion('error', mensajePersonalizado);
-          this.cdr.detectChanges();
         }
       });
     } else if (this.pasoActual === 'EMPRESA_EXISTENTE') {
@@ -195,44 +176,16 @@ export class HomeLanding implements OnInit {
       };
       this.userService.registerAndAssociate(payload).subscribe({
         next: (response) => {
-
-          //SI SE HA CREADO CORRECTAMENTE MOSTRAMOS EL POPUP DE ÉXITO
-          this.mostrarNotificacion('success', 'Usuario registrado con éxito.');
-          //USO EL CD PARA QUE PINGE EL POPUP
-          this.cdr.detectChanges();
-          //RECARGO LA PÁGINA
+          // SI SE HA CREADO CORRECTAMENTE RECARGAMOS LA PÁGINA
           setTimeout(() => {
             window.location.reload();
           }, 3500);
         },
         error: (err) => {
-
-          //SI LA LLAMADA HA DADO ERROR MOSTRAMOS POPUP EN ROJO
+          // Error capturado y mostrado por el interceptor
           console.error('Error capturado desde el servidor:', err);
-          // 1. Intentamos leer el mensaje específico que envíe el backend
-          let mensajeError = 'Hubo un fallo al intentar registrar el usuario.';
-          if (err?.error?.message) {
-
-            mensajeError = err.error.message;
-          } else if (err.status === 403 || err.status === 401) {
-
-            // 2. Si el backend sigue devolviendo 403 por el CIF, lo interceptamos manualmente aquí:
-            mensajeError = 'El CIF introducido no coincide con ninguna empresa registrada.';
-          }
-          // 3. Forzamos la activación del pop-up con el mensaje correspondiente
-          this.mostrarNotificacion('error', mensajeError);
-          this.cdr.detectChanges();
         }
       });
     }
-  }
-
-  //MÉTODO PARA ACTIVAR EL POPUP Y AUTODESTRUIRSE A LOS 5 SEGUNDOS
-  private mostrarNotificacion(tipo: 'success' | 'error', mensaje: string) {
-
-    this.notificacion = { visible: true, tipo, mensaje};
-    setTimeout(() => {
-      this.notificacion.visible = false;
-    }, 5000);
   }
 }
