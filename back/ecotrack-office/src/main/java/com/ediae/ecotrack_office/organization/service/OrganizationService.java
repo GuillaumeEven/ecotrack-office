@@ -1,6 +1,9 @@
 package com.ediae.ecotrack_office.organization.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,10 +51,12 @@ public class OrganizationService {
             throw new RuntimeException ("Ya existe una organización con este CIF o email.");
         }
         OrganizationModel model = OrganizationMapper.fromCreateDto(dto);
-        System.out.println("La dirección en el modelo es: "+model.getAddress());
         OrganizationEntity entity = OrganizationMapper.toEntity(model);
         entity.setIsActive(true);
-        System.out.println("La dirección en la entidad es: "+entity.getAddress());
+        entity.setCreatedAt(LocalDateTime.now());
+        LocalDateTime endSubs = LocalDateTime.now().plusDays(30);
+        Date endSubsConvert = Date.from(endSubs.atZone(ZoneId.systemDefault()).toInstant());
+        entity.setEndSubscription(endSubsConvert);
         repository.save(entity);
         return OrganizationMapper.fromEntity(entity);
 

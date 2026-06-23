@@ -16,6 +16,7 @@ import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.dto.ChangePasswordRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
+import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.mapper.UserMapper;
@@ -86,6 +87,29 @@ public class UserService {
         // Registramos que el admin creó un usuario
         UserEntity saved = userRepository.save(entity);
         auditLogService.log("USER_CREATED", "USER", saved.getId(), RequestContext.getUserId());
+
+        return userMapper.toModel(saved);
+    }
+
+    // ─────────────────────────────────────────────
+    // POST — crear usuario
+    // Público para poder hacer el registro
+    // ─────────────────────────────────────────────
+    public UserModel createUserWithCif(UserCreateRequestDto dto) {
+        if (userRepository.existsByEmail(dto.email())) {
+            throw new RuntimeException("Ya existe un usuario con el email: " + dto.email());
+        }
+
+        OrganizationEntity organization = organizationRepository.findByCif(dto.cif())
+                .orElseThrow(() -> new NotFoundException("Organización no encontrada con CIF: " + dto.cif()));
+
+        UserEntity entity = userMapper.fromCreateDtoEntity(dto, organization);
+        entity.setPasswordHash(dto.password());
+        entity.setIsActive(true);
+        entity.setCreatedAt(LocalDateTime.now());
+
+        // Registramos que se creó el usuario
+        UserEntity saved = userRepository.save(entity);
 
         return userMapper.toModel(saved);
     }

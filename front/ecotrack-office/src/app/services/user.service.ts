@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserResponse, UserMeRequest, ChangePasswordRequest } from '../models/user.model';
+import { UserResponse, UserMeRequest, ChangePasswordRequest, CreateUserRequest } from '../models/user.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -21,4 +21,10 @@ export class UserService {
   changePassword(data: ChangePasswordRequest): Observable<void> {
     return this.http.patch<void>(`${this.BASE_URL}/me/password`, data);
   }
+
+  registerAndAssociate (data: CreateUserRequest): Observable<UserResponse> {
+
+    return this.http.post<UserResponse>(`${this.BASE_URL}/public/create-user`, data);
+  }
+
 }

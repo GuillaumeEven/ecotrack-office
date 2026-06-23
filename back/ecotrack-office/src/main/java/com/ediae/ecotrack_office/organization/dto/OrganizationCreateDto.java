@@ -11,9 +11,6 @@ public class OrganizationCreateDto {
     private String cif;
     private String address;
     private String email;
-    private Date endSubscription;
-    private Boolean isActive;
-    private LocalDateTime createdAt;
 
     // Constructores
 
@@ -24,9 +21,6 @@ public class OrganizationCreateDto {
         this.cif = cif;
         this.address = address;
         this.email = email;
-        this.endSubscription = endSubscription;
-        this.isActive = isActivate;
-        this.createdAt = createAt;
     } 
 
     // Getters y Setters 
@@ -57,26 +51,5 @@ public class OrganizationCreateDto {
     }
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Date getEndSubscription() {
-        return endSubscription;
-    }
-    public void setEndSubscription(Date endSubscription) {
-        this.endSubscription = endSubscription;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }
