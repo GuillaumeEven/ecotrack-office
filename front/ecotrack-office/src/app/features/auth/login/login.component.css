@@ -1,20 +1,9 @@
-/* ============================================================================
-   LOGIN COMPONENT - ESTILOS PERSONALIZADOS
-   ============================================================================
-   Página de autenticación.
-
-   MIGRACIÓN A CSS PURO (Sin Tailwind):
-   - Encapsulación Angular para estilos específicos del componente
-   - Utiliza componentes globales (.form-group, .btn) de ser necesario
-   ============================================================================ */
-
 :host {
   display: block;
 }
 
 .login-container {
   min-height: 100vh;
-  background-color: var(--surface);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,7 +22,6 @@
 
 .login-header h1 {
   font: var(--font-headline-lg);
-  color: var(--on-surface);
   margin-bottom: var(--spacing-xs);
 }
 
@@ -56,42 +44,16 @@ form {
   gap: var(--spacing-md);
 }
 
+label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
-}
-
-label {
-  color: var(--on-surface);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-  display: block;
-}
-
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  background-color: var(--surface);
-  border: var(--border-width-1) solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-sm);
-  font: var(--font-body-md);
-  box-sizing: border-box;
-  transition: all var(--transition-fast);
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus {
-  outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px var(--on-tertiary-container);
-}
-
-input[type="email"].border-error,
-input[type="password"].border-error {
-  border-color: var(--error);
 }
 
 .error-message {
@@ -104,11 +66,6 @@ input[type="password"].border-error {
   padding: var(--spacing-sm);
   background-color: var(--primary);
   color: var(--on-primary);
-  border: none;
-  border-radius: var(--radius-lg);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
-  transition: all var(--transition-fast);
 }
 
 .submit-btn:hover:not(:disabled) {
@@ -117,16 +74,6 @@ input[type="password"].border-error {
 
 .submit-btn:active:not(:disabled) {
   transform: scale(0.95);
-}
-
-.submit-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.submit-btn:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
 }
 
 .auth-error {
