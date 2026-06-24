@@ -3,7 +3,7 @@
 ## Consideraciones
 
 - Papel de la IA en el proyecto: presentarla desde el inicio podría ser una ventaja.
-
+`
 ## Preguntas
 
 - Presentación del TFM (Trabajo Fin de Máster): es en grupo
@@ -124,20 +124,19 @@ TODO:
 Imprescindible:
 Hoy creamos las paginas que nos hacen falta (mi component works !), mañana Rai configura los botones de nav
 - [ ] paginas:
-  - [ ] gestión edificio: crud floors/recursos para -> gui
-  - [ ] gestion usuarios para el admin -> JL
+  - [x] gestión edificio: crud floors/recursos para -> gui
+  - [x] gestion usuarios para el admin -> JL
+  - [x] editar perfil: operativo -> JL
+  - [x] form de inscripción -> Rai
+  - [x] limpiar header y hacer botones operativos (quitar lo que es navegacion)-> ??
+  - [x] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
+  - [x] Vizualizar errores en front
+  - [x] limpiar sidebar y hacer botones operativos (navegacion: home, reservas, incident, empresa(admin)) -> Rai
+  - [ ] editar organization -> Rai
   - [ ] incidencias (vinculo desde desk/room dialog ?) -> Edu ?
   - [ ] analytics -> Edu
-  - [ ] editar perfil: operativo -> JL
   - [ ] reservas -> Rai
-  - [ ] limpiar header y hacer botones operativos (quitar lo que es navegacion)-> ??
-  - [ ] limpiar sidebar y hacer botones operativos (navegacion: home, reservas, incident, empresa(admin)) -> Rai
-  - [ ] form de inscripción -> Rai
-  - [ ] editar organization -> Rai
   - [ ] reformar la arquitectura del front (Rai hace una propuesta)
-  - [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
-(imprescindible ?)
-- [ ] Vizualizar errores en front
 
 - [ ] Form registro dinamico:
   - [ ] un formulario comun de user
@@ -147,11 +146,9 @@ Hoy creamos las paginas que nos hacen falta (mi component works !), mañana Rai 
       - [ ] form creacion empres
 
 En nuestros sueños:
-- [ ] gestion de recurso averiado: bloqueado
 - [ ] generacion de codigo empresa para que admin invite a nueavos usuarios
 - [ ] clean code: comentarios, logging, sonarCube...
 - [ ] hash passwords (a JL ?)
-- [ ] harmonizar la gestión de las exceptiones
 - [x] Recuperar la estructura de la memoria
 - [ ] harmonizar los controladores: poner cualquier respuesta como ResponseEntity
 - [ ] desiciones de diseño
@@ -159,7 +156,7 @@ En nuestros sueños:
 - [ ] añadir docstring para swagguer
 - [ ] harmonizar el css
 - [ ] docker/deploy
-- [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
+- [x] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
 - [ ] enviar un email de invitacion
 - [x] repensar los status de resources: una resource no puede ser reservada o disponible en si misma, depende de las reservas.
 
@@ -167,3 +164,10 @@ Muchas gracias chicos, un placer trabajar con vosotros ! Y esas cosas...
 
 incidentRepository
 @Query("SELECT i FROM IncidentEntity i WHERE i.user.organization.id = :organizationId")
+
+
+Rai: reserva pagina
+Buenas chicos aquí os dejo mi propuesta. Fata poner algunas cosas de las tablas al gusto y pensar si se quiere salgan todas las reservas o solo algunas o incluso pensar en poner algún filtro? No se jajaja bueno. He vuelto a tocar bastantes cosas porque tenía que arreglar cositas en el back de reservation. De nuevo he vuelto a apuntar algunas cositas para mi, las dejo aquí para que lo penséis también uwu
+
+    TENGO UNA DUDA CON EL TEMA DE LAS RESERVAS Y ES QUE YO AHORA VOY A CAMBIAR EL RESPONSEDTO PERO NO SE SI ESTO VA ROMPER EL FRONT DEL BUILDINGMAP DE GUILLAUME. ADEMÁS HE VISTO QUE ÉL EN EL REPOSITORY PUEDE HACER UN SELECT HACIENDO REFERENCIA AL FLOORID DEL RESOURCE PERO CLARO EL RESOURCE A VECES SERÁ UNA SALA O UN ESCRITORIO Y ESO ME TIENE DANDO VOLTERETAS PORQUE NO SE COMO FUNCIONA YA QUE ES DIFERENTE Y TAL NO SE.
+    ESTOY TENIENDO UN PROBLEMA CON QUITAR EL RESOURCEENTITY DEL RESERVATIONRESPONSEDTO YA QUE NO PUEDO CAMBIARLO POR UN RESOURCERESPONSEDTO PORQUE ESTE ES ABSTRACTO. SUPONGO QUE EL MÉTODO SERÍA PONER EL ID Y SI QUIERO MOSTRAR MÁS CAMPOS QUE PERTENECEN AL RESOURCE PUES PONERLOS DIRECTAMENTE AUNQUE NO SE MUY BIEN COMO SERÍA YA QUE PUEDEN SER MESAS O SALAS Y ADEMÁS ESTARÍA BIEN SABER LA PLANTA.

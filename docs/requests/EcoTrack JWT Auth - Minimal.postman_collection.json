@@ -1,0 +1,242 @@
+{
+  "info": {
+    "_postman_id": "7eeea6b5-fb3a-42de-9ffe-e1bd99af0fc3",
+    "name": "EcoTrack JWT Auth - Minimal",
+    "description": "Colección mínima para demostrar autenticación JWT automática por rol. Gestiona tokens para admin y employee con caché y renovación automática.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52915145"
+  },
+  "item": [
+    {
+      "name": "Errors",
+      "item": [
+        {
+          "name": "Error 403 - Forbidden",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users?organizationId=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "organizationId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "Admin - List users by organization",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Obtain admin JWT and inject Authorization header for this request",
+                  "var loginReq = {",
+                  "  url: pm.variables.get('base_url') + '/auth/login',",
+                  "  method: 'POST',",
+                  "  header: { 'Content-Type': 'application/json' },",
+                  "  body: { mode: 'raw', raw: JSON.stringify({ email: 'admin@ecotrack.local', password: 'password' }) }",
+                  "};",
+                  "pm.sendRequest(loginReq, function (err, res) {",
+                  "  if (err) { console.error(err); return; }",
+                  "  var json = res.json();",
+                  "  var token = json.token || json.accessToken || json.jwt || (json.data && json.data.token);",
+                  "  if (!token) { console.error('No token in login response'); return; }",
+                  "  pm.environment.set('jwt_token_admin', token);",
+                  "  pm.environment.set('jwt_token', token);",
+                  "  pm.request.headers.upsert({ key: 'Authorization', value: 'Bearer ' + token });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Admin - lista usuarios OK (200)', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users?organizationId=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "organizationId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Employee - List users by organization",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Obtain employee JWT and inject Authorization header for this request",
+                  "var loginReq = {",
+                  "  url: pm.variables.get('base_url') + '/auth/login',",
+                  "  method: 'POST',",
+                  "  header: { 'Content-Type': 'application/json' },",
+                  "  body: { mode: 'raw', raw: JSON.stringify({ email: 'employee@ecotrack.local', password: 'password' }) }",
+                  "};",
+                  "pm.sendRequest(loginReq, function (err, res) {",
+                  "  if (err) { console.error(err); return; }",
+                  "  var json = res.json();",
+                  "  var token = json.token || json.accessToken || json.jwt || (json.data && json.data.token);",
+                  "  if (!token) { console.error('No token in login response'); return; }",
+                  "  pm.environment.set('jwt_token_employee', token);",
+                  "  pm.environment.set('jwt_token', token);",
+                  "  pm.request.headers.upsert({ key: 'Authorization', value: 'Bearer ' + token });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Employee - debe recibir 403', function () {",
+                  "  pm.response.to.have.status(403);",
+                  "});",
+                  "",
+                  "pm.test('Error code should be 2002', function () {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.expect(jsonData.code).to.equal(2002);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users?organizationId=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "organizationId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api/v1"
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    },
+    {
+      "key": "jwt_token_admin",
+      "value": ""
+    },
+    {
+      "key": "jwt_token_employee",
+      "value": ""
+    }
+  ]
+}

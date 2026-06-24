@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +48,7 @@ public class DataLoader implements CommandLineRunner {
     private final ReservationRepository reservationRepository;
     private final IncidentRepository incidentRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final PasswordEncoder passwordEncoder;
 
     public DataLoader(OrganizationRepository organizationRepository,
                       UserRepository userRepository,
@@ -55,7 +57,8 @@ public class DataLoader implements CommandLineRunner {
                       DeskRepository deskRepository,
                       ReservationRepository reservationRepository,
                       IncidentRepository incidentRepository,
-                      JdbcTemplate jdbcTemplate) {
+                      JdbcTemplate jdbcTemplate,
+                      PasswordEncoder passwordEncoder) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.floorRepository = floorRepository;
@@ -64,6 +67,7 @@ public class DataLoader implements CommandLineRunner {
         this.reservationRepository = reservationRepository;
         this.incidentRepository = incidentRepository;
         this.jdbcTemplate = jdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -155,7 +159,7 @@ public class DataLoader implements CommandLineRunner {
 
         UserEntity admin = new UserEntity();
         admin.setEmail(adminEmail);
-        admin.setPasswordHash("password");
+        admin.setPasswordHash(passwordEncoder.encode("password"));
         admin.setFirstName("Admin");
         admin.setLastName("Ecotrack");
         admin.setRole(Role.ADMIN);
@@ -176,7 +180,7 @@ public class DataLoader implements CommandLineRunner {
         if (!userRepository.existsByEmail(techEmail)) {
             UserEntity tech = new UserEntity();
             tech.setEmail(techEmail);
-            tech.setPasswordHash("password");
+            tech.setPasswordHash(passwordEncoder.encode("password"));
             tech.setFirstName("Tech");
             tech.setLastName("Usuario");
             tech.setRole(Role.TECHNICIAN);
@@ -194,7 +198,7 @@ public class DataLoader implements CommandLineRunner {
         if (!userRepository.existsByEmail(empEmail)) {
             UserEntity emp = new UserEntity();
             emp.setEmail(empEmail);
-            emp.setPasswordHash("password");
+            emp.setPasswordHash(passwordEncoder.encode("password"));
             emp.setFirstName("Empleado");
             emp.setLastName("Usuario");
             emp.setRole(Role.EMPLOYEE);

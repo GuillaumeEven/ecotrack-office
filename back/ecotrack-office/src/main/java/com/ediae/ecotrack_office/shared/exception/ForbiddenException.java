@@ -1,13 +1,14 @@
 package com.ediae.ecotrack_office.shared.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-// Le decimos a Spring que cuando se lance esta excepción, responda con 403
-@ResponseStatus(HttpStatus.FORBIDDEN)
-public class ForbiddenException extends RuntimeException {
+/**
+ * Excepción lanzada cuando se deniega el acceso a un recurso (403 Forbidden).
+ */
+public class ForbiddenException extends ApplicationException {
+    public ForbiddenException() {
+        super(ErrorCode.FORBIDDEN, "Acceso denegado");
+    }
 
     public ForbiddenException(String message) {
-        super(message);
+        super(ErrorCode.FORBIDDEN, message);
     }
 }

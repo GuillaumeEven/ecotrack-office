@@ -8,13 +8,14 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './header.component.html',
+  styleUrl: './header.component.css'
 })
 export class HeaderComponent {
 
   private authService = inject(AuthService);
-  
+
   onLogout(): void {
-    
+
     this.authService.logout();
   }
 }

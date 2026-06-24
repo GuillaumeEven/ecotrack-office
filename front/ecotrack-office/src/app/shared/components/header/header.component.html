@@ -1,43 +1,39 @@
-<header class="bg-surface border-b border-outline-variant fixed top-0 left-0 right-0 z-50">
-  <div class="flex justify-between items-center w-full px-lg h-20 max-w-container-max mx-auto">
+<header>
+  <div>
     <!-- Logo  -->
-    <div class="flex items-center gap-xl">
-      <a [routerLink] = "['/home']" aria-label = "Ir a la página principal">
-        <span class="font-headline-md text-headline-md font-bold text-on-surface"
-          >EcoTrack Office</span>
+    <div class="logo-section">
+      <a [routerLink]="['/home']" aria-label="Ir a la página principal">
+        <span>EcoTrack Office</span>
       </a>
     </div>
 
     <!-- Usuario y cerrar sesión -->
-    <div class="flex items-center gap-md">
+    <div class="user-actions">
       <!-- COMENTO ESTO POR SI QUEREMOS IMPLEMENTAR LA BÚSQUEDA MÁS ADELANTE
       <div class="relative hidden sm:block">
-        <span
-          class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant"
-          >search</span
-        >
+        <span class="material-symbols-outlined">search</span>
         <input
           type="text"
           placeholder="Search..."
-          class="pl-xl pr-md py-xs bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary w-64 text-body-md"
+          class="search-input"
         />
       </div>
       -->
-      <div class="flex items-center gap-sm">
-        <button
-          (click)="onLogout()"
-          class="text-primary font-bold font-body-md text-body-md cursor-pointer active:scale-95 duration-150"
-        >
-          Cerrar sesión
-        </button>
-        <a [routerLink] =  "['/profile']" class= "avatar-link" aria-label= "Ir al perfil de usuario">
-          <img
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzmUZQ5PFwSaq7CQiv8mbs2sjHy-BJWI7JEAdTOqiooNU3ZdUcj0NAfVv2iNQMkC5FpUA58ZEIPhNinldPTwoCGI5JPr60SPzZ5t1citFachxqRQQt9bE5QK7Jl_n2msUoOwwturFie7jR0tAx_Ev_9uxKIwvsaJkFk8DF3-uuKi80PKcusGw8RDK0-Z89gQpKf8zqPSs9BZyJr4Xe5d7S6LDLOTTeri4MHPu1iyuzCPsIyJxLdp0Xuj_HL9OQuzi192AedbeZ1Cj5"
-            alt="User profile photo"
-            class="w-10 h-10 rounded-full object-cover"
-          />
-        </a>
-      </div>
+      <button
+        (click)="onLogout()"
+        class="logout-btn"
+      >
+        Cerrar sesión
+      </button>
+      <a
+        [routerLink]="['/profile']"
+        class="avatar-link"
+        aria-label="Ir al perfil de usuario">
+        <img
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzmUZQ5PFwSaq7CQiv8mbs2sjHy-BJWI7JEAdTOqiooNU3ZdUcj0NAfVv2iNQMkC5FpUA58ZEIPhNinldPTwoCGI5JPr60SPzZ5t1citFachxqRQQt9bE5QK7Jl_n2msUoOwwturFie7jR0tAx_Ev_9uxKIwvsaJkFk8DF3-uuKi80PKcusGw8RDK0-Z89gQpKf8zqPSs9BZyJr4Xe5d7S6LDLOTTeri4MHPu1iyuzCPsIyJxLdp0Xuj_HL9OQuzi192AedbeZ1Cj5"
+          alt="User profile photo"
+        />
+      </a>
     </div>
   </div>
 </header>

@@ -7,22 +7,27 @@ import com.ediae.ecotrack_office.auth.dto.LoginResponseDto;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+    
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, JwtService jwtService) {
+    public AuthService(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // ─────────────────────────────────────────────
     // Login — verifica credenciales y devuelve JWT
     // ─────────────────────────────────────────────
     public LoginResponseDto login(LoginRequestDto dto) {
+
 
         // 1. Buscamos el usuario por email
         UserEntity user = userRepository.findByEmail(dto.email())
@@ -33,9 +38,10 @@ public class AuthService {
             throw new IllegalArgumentException("El usuario está desactivado");
         }
 
-        // 3. Verificamos la contraseña
-        // TODO: cuando se añada BCrypt, usar passwordEncoder.matches()
-        if (!user.getPasswordHash().equals(dto.password())) {
+        // 3. Verificamos la contraseña de forma segura
+        // 🆕 Cambiado de .equals() al método matches() de BCrypt
+        if (!passwordEncoder.matches(dto.password(), user.getPasswordHash())) {
+            // Nota de TFM: Por seguridad, si falla la contraseña, es mejor lanzar "Credenciales incorrectas"
             throw new IllegalArgumentException("Credenciales incorrectas");
         }
 

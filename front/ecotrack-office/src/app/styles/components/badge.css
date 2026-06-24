@@ -1,0 +1,66 @@
+/* ============================================================================
+   INSIGNIAS
+   ============================================================================
+   Estilos para las insignias e indicadores de estado.
+   ============================================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+.badge-primary {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.badge-success {
+  background-color: #dcfce7;
+  color: var(--success);
+}
+
+.badge-warning {
+  background-color: #fef3c7;
+  color: var(--warning);
+}
+
+.badge-danger {
+  background-color: #fee2e2;
+  color: var(--danger);
+}
+
+.badge-neutral {
+  background-color: var(--surface-variant);
+  color: var(--on-surface-variant);
+}
+
+/* Insignias de Estado */
+.status-badge {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  margin-left: var(--spacing-xs);
+}
+
+.status-badge.available {
+  background-color: var(--status-available);
+}
+
+.status-badge.occupied {
+  background-color: var(--status-occupied);
+}
+
+.status-badge.reserved {
+  background-color: var(--status-reserved);
+}
+
+.status-badge.unavailable {
+  background-color: var(--status-unavailable);
+}

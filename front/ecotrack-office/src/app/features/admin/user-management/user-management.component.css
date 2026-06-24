@@ -1,0 +1,102 @@
+/* ============================================================================
+   USER MANAGEMENT COMPONENT - STYLES
+   ============================================================================
+   Panel de administración de usuarios con modales de edición/eliminación.
+   ============================================================================ */
+
+/* Contenedor principal */
+.management-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
+}
+
+.page-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.page-header h1 {
+  font: var(--font-headline-lg);
+  color: var(--on-surface);
+}
+
+.page-header p {
+  font: var(--font-body-lg);
+  color: var(--on-surface-variant);
+}
+
+/* KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-gutter);
+  margin-bottom: var(--spacing-xl);
+}
+
+.kpi-card {
+  background-color: var(--surface-container-lowest);
+  border: var(--border-width-1) solid var(--outline-variant);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+}
+
+.kpi-label {
+  font: var(--font-label-sm);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--on-surface-variant);
+  margin-bottom: var(--spacing-xs);
+}
+
+.kpi-value {
+  font: var(--font-headline-lg);
+  color: var(--on-surface);
+}
+
+.kpi-value.secondary {
+  color: var(--secondary);
+}
+
+/* Skeleton loading */
+.skeleton {
+  height: 32px;
+  width: 64px;
+  background-color: var(--surface-container-high);
+  border-radius: var(--radius-md);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive table - show EMAIL column on desktop */
+@media (min-width: 1024px) {
+  .users-table th[style*="display: none"],
+  .users-table td[style*="display: none"] {
+    display: table-cell !important;
+  }
+}
+
+/* Status badge */
+.status-badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.status-badge.active {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--status-available);
+}
+
+.status-badge.inactive {
+  background-color: rgba(107, 114, 128, 0.1);
+  color: var(--on-surface-variant);
+}

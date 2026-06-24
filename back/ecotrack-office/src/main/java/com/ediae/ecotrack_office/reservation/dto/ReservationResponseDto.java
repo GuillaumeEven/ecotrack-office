@@ -3,10 +3,9 @@ package com.ediae.ecotrack_office.reservation.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.ediae.ecotrack_office.assets.dto.ResourceResponseDto;
 import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
 import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
-import com.ediae.ecotrack_office.users.entity.UserEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ReservationResponseDto {
 
@@ -16,22 +15,22 @@ public class ReservationResponseDto {
     private LocalDate date;
     private ReservationStatus status;
     private LocalDateTime createdAt;
-    @JsonIgnore
-    private UserEntity user;
-    @JsonIgnore
-    private ResourceEntity resource;
+    private Long userId;
+    private String resourceName;
+    private String resourceEquipmentList;
 
     // Constructores
 
     public ReservationResponseDto () {}
 
-    public ReservationResponseDto (Long id, LocalDate date, ReservationStatus status, LocalDateTime createdAt, UserEntity user, ResourceEntity resource) {
+    public ReservationResponseDto (Long id, LocalDate date, ReservationStatus status, LocalDateTime createdAt, Long userId, String resourceName, String resourceEquipmentList) {
         this.id = id;
         this.date = date;
         this.status = status;
         this.createdAt = createdAt;
-        this.user = user;
-        this.resource = resource;
+        this.userId = userId;
+        this.resourceName = resourceName;
+        this.resourceEquipmentList = resourceEquipmentList;
     }
 
     // Getter y Setter
@@ -72,21 +71,30 @@ public class ReservationResponseDto {
         this.createdAt = createdAt;
     }
 
-    public UserEntity getUser () {
+    public Long getUserId () {
 
-        return this.user;
+        return this.userId;
     }
-    public void setUser (UserEntity user) {
+    public void setUserId (Long userId) {
 
-        this.user = user;
+        this.userId = userId;
     }
 
-    public ResourceEntity getResource () {
+    public String getResourceName () {
 
-        return this.resource;
+        return this.resourceName;
     }
-    public void setResource (ResourceEntity resource) {
+    public void setResourceName (String resourceName) {
 
-        this.resource = resource;
+        this.resourceName = resourceName;
+    }
+
+    public String getResourceEquipmentList () {
+
+        return this.resourceEquipmentList;
+    }
+    public void setResourceEquipmentList (String resourceEquipmentList) {
+
+        this.resourceEquipmentList = resourceEquipmentList;
     }
 }

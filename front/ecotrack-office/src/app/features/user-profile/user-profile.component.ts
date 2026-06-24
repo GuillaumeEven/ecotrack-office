@@ -12,6 +12,7 @@ export type ProfileSection = 'personal' | 'security' | 'notifications';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DatePipe, ChangePasswordModalComponent],
   templateUrl: './user-profile.component.html',
+  styleUrl: './user-profile.component.css'
 })
 export class UserProfileComponent implements OnInit {
   activeSection: ProfileSection = 'personal';

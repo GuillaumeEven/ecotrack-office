@@ -1,60 +1,56 @@
-<div class="min-h-screen bg-surface flex items-center justify-center px-md">
-  <div class="w-full max-w-md">
+<div class="login-container">
+  <div class="login-card">
     <!-- Logo -->
-    <div class="text-center mb-xl">
-      <h1 class="font-headline-lg text-headline-lg text-on-surface">EcoTrack Office</h1>
-      <p class="text-on-surface-variant font-body-lg text-body-lg mt-xs">Sign in to your account</p>
+    <div class="login-header">
+      <h1>EcoTrack Office</h1>
+      <p>Sign in to your account</p>
     </div>
 
     <!-- Card -->
-    <div
-      class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm"
-    >
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-md">
+    <div class="card">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <!-- Email -->
-        <div class="space-y-xs">
-          <label class="text-on-surface font-label-sm text-label-sm block">EMAIL ADDRESS</label>
+        <div class="form-group">
+          <label>Email Address</label>
           <input
             type="email"
             formControlName="email"
             placeholder="you@example.com"
-            class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
             [class.border-error]="form.get('email')?.invalid && form.get('email')?.touched"
           />
           <p
             *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
-            class="text-error text-[12px]"
+            class="error-message"
           >
             Please enter a valid email.
           </p>
         </div>
 
         <!-- Password -->
-        <div class="space-y-xs">
-          <label class="text-on-surface font-label-sm text-label-sm block">PASSWORD</label>
+        <div class="form-group">
+          <label>Password</label>
           <input
             type="password"
             formControlName="password"
             placeholder="••••••••"
-            class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
             [class.border-error]="form.get('password')?.invalid && form.get('password')?.touched"
           />
           <p
             *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
-            class="text-error text-[12px]"
+            class="error-message"
           >
             Password is required.
           </p>
         </div>
 
         <!-- Error message -->
-        <p *ngIf="errorMessage" class="text-error text-[13px] font-medium">✕ {{ errorMessage }}</p>
+        <div *ngIf="errorMessage" class="auth-error">✕ {{ errorMessage }}</div>
 
         <!-- Submit -->
         <button
           type="submit"
           [disabled]="form.invalid || isLoading"
-          class="w-full py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn btn-primary btn-block"
         >
           {{ isLoading ? 'Signing in...' : 'Sign in' }}
         </button>

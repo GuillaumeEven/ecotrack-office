@@ -8,6 +8,7 @@ import { UserService } from '../../../services/user.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './change-password-modal.component.html',
+  styleUrl: './change-password-modal.component.css',
 })
 export class ChangePasswordModalComponent {
   @Output() closed = new EventEmitter<void>();
