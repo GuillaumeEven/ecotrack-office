@@ -76,9 +76,9 @@ public class ReservationService {
         return models;
     }
 
-    public List <ReservationModel> getAllReservations () {
+    public List <ReservationModel> getAllReservationsByOrganizationId (Long organizationId) {
 
-        List <ReservationEntity> entities = repository.findAll();
+        List <ReservationEntity> entities = repository.findByOrganizationId(organizationId);
         List <ReservationModel> models = new ArrayList <>();
         for (ReservationEntity entity : entities) {
 
@@ -113,6 +113,7 @@ public class ReservationService {
         return ReservationMapper.fromEntity(savedEntity);
     }
 
+    
     public ReservationModel updateReservationById (Long id, ReservationUpdateDto dto) {
 
         Optional <ReservationEntity> initialEntity = repository.findById(id);
@@ -120,8 +121,9 @@ public class ReservationService {
 
             throw new RuntimeException("No se ha econtrado una reserva con id: " + id);
         }
-        ReservationModel model = ReservationMapper.fromUpdateDto(dto);
-        ReservationEntity savedEntity = repository.save(ReservationMapper.toEntity(model));
+        ReservationEntity entity = initialEntity.get();
+        entity.setDate(dto.getDate());
+        ReservationEntity savedEntity = repository.save(entity);
         return ReservationMapper.fromEntity(savedEntity);
     }
 

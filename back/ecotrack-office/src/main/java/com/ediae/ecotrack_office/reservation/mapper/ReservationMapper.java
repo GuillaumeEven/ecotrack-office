@@ -1,11 +1,14 @@
     package com.ediae.ecotrack_office.reservation.mapper;
 
-    import org.springframework.stereotype.Component;
+    import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
     import com.ediae.ecotrack_office.reservation.dto.ReservationResponseDto;
     import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
     import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
     import com.ediae.ecotrack_office.reservation.model.ReservationModel;
+import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.ediae.ecotrack_office.users.service.UserService;
 
     @Component
     public class ReservationMapper {
@@ -34,18 +37,6 @@
             return entity;
         }
 
-        public static ReservationModel fromUpdateDto (ReservationUpdateDto updateDto) {
-
-            ReservationModel model = new ReservationModel();
-            model.setId(updateDto.getId());
-            model.setDate(updateDto.getDate());
-            model.setStatus(updateDto.getStatus());
-            model.setCreatedAt(updateDto.getCreatedAt());
-            model.setUser(updateDto.getUser());
-            model.setResource(updateDto.getResource());
-            return model;
-        }
-
         public static ReservationResponseDto toResponseDto (ReservationModel model) {
 
             ReservationResponseDto response = new ReservationResponseDto();
@@ -53,8 +44,9 @@
             response.setDate(model.getDate());
             response.setStatus(model.getStatus());
             response.setCreatedAt(model.getCreatedAt());
-            response.setUser(model.getUser());
-            response.setResource(model.getResource());
+            response.setUserId(model.getUser().getId());
+            response.setResourceName(model.getResource().getName());
+            response.setResourceEquipmentList(model.getResource().getEquipmentList());
             return response;
         }
     }
