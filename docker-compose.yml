@@ -1,0 +1,112 @@
+version: '3.9'
+
+services:
+  # ============================================================================
+  # MySQL Database
+  # ============================================================================
+  mysql:
+    image: mysql:8.0
+    container_name: ecotrack-mysql
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-ecotrack}
+      MYSQL_USER: ${DB_USERNAME:-ecotrack_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-ecotrack_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_INITDB_SKIP_TZINFO: "yes"
+    ports:
+      - "3306:3306"
+    volumes:
+      # Init database with schema
+      - ./back/ecotrack-office/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      # Persist data
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ecotrack-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  # ============================================================================
+  # Spring Boot Backend
+  # ============================================================================
+  backend:
+    build:
+      context: ./back/ecotrack-office
+      dockerfile: Dockerfile
+    container_name: ecotrack-backend
+    environment:
+      # Database configuration
+      DB_USERNAME: ${DB_USERNAME:-ecotrack_user}
+      DB_PASSWORD: ${DB_PASSWORD:-ecotrack_password}
+      DB_URL: jdbc:mysql://mysql:3306/${DB_NAME:-ecotrack}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      
+      # Spring configuration
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE:-dev}
+      SERVER_PORT: 8080
+      
+      # JWT configuration (update these!)
+      JWT_SECRET: ${JWT_SECRET:-dev-secret-key-change-in-production}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      
+      # API configuration
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost,http://localhost:4200,http://frontend:8080}
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ecotrack-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    # Enable hot-reload in dev (optional)
+    volumes:
+      - ${BACKEND_VOLUME_PATH:-.}/back/ecotrack-office/src:/app/src:ro
+
+  # ============================================================================
+  # Angular Frontend (Nginx)
+  # ============================================================================
+  frontend:
+    build:
+      context: ./front/ecotrack-office
+      dockerfile: Dockerfile
+    container_name: ecotrack-frontend
+    environment:
+      ANGULAR_API_URL: ${ANGULAR_API_URL:-http://localhost:8080/api}
+      API_BASE_URL: ${API_BASE_URL:-http://backend:8080/api}
+    ports:
+      - "80:8080"
+    depends_on:
+      - backend
+    networks:
+      - ecotrack-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  ecotrack-network:
+    driver: bridge
+
+# ============================================================================
+# Volumes
+# ============================================================================
+volumes:
+  mysql_data:
+    driver: local
