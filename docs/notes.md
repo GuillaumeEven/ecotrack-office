@@ -164,3 +164,10 @@ Muchas gracias chicos, un placer trabajar con vosotros ! Y esas cosas...
 
 incidentRepository
 @Query("SELECT i FROM IncidentEntity i WHERE i.user.organization.id = :organizationId")
+
+
+Rai: reserva pagina
+Buenas chicos aquí os dejo mi propuesta. Fata poner algunas cosas de las tablas al gusto y pensar si se quiere salgan todas las reservas o solo algunas o incluso pensar en poner algún filtro? No se jajaja bueno. He vuelto a tocar bastantes cosas porque tenía que arreglar cositas en el back de reservation. De nuevo he vuelto a apuntar algunas cositas para mi, las dejo aquí para que lo penséis también uwu
+
+    TENGO UNA DUDA CON EL TEMA DE LAS RESERVAS Y ES QUE YO AHORA VOY A CAMBIAR EL RESPONSEDTO PERO NO SE SI ESTO VA ROMPER EL FRONT DEL BUILDINGMAP DE GUILLAUME. ADEMÁS HE VISTO QUE ÉL EN EL REPOSITORY PUEDE HACER UN SELECT HACIENDO REFERENCIA AL FLOORID DEL RESOURCE PERO CLARO EL RESOURCE A VECES SERÁ UNA SALA O UN ESCRITORIO Y ESO ME TIENE DANDO VOLTERETAS PORQUE NO SE COMO FUNCIONA YA QUE ES DIFERENTE Y TAL NO SE.
+    ESTOY TENIENDO UN PROBLEMA CON QUITAR EL RESOURCEENTITY DEL RESERVATIONRESPONSEDTO YA QUE NO PUEDO CAMBIARLO POR UN RESOURCERESPONSEDTO PORQUE ESTE ES ABSTRACTO. SUPONGO QUE EL MÉTODO SERÍA PONER EL ID Y SI QUIERO MOSTRAR MÁS CAMPOS QUE PERTENECEN AL RESOURCE PUES PONERLOS DIRECTAMENTE AUNQUE NO SE MUY BIEN COMO SERÍA YA QUE PUEDEN SER MESAS O SALAS Y ADEMÁS ESTARÍA BIEN SABER LA PLANTA.

@@ -11,36 +11,21 @@ public class ReservationUpdateDto {
 
     // Atributos
 
-    private Long id;
     private LocalDate date;
     private ReservationStatus status;
-    private LocalDateTime createdAt;
-    private UserEntity user;
-    private ResourceEntity resource;
+    private Long userId;
 
     // Constructores
 
     public ReservationUpdateDto () {}
 
-    public ReservationUpdateDto (Long id, LocalDate date, ReservationStatus status, LocalDateTime createdAt, UserEntity user, ResourceEntity resource) {
+    public ReservationUpdateDto (LocalDate date, ReservationStatus status, Long userId) {
         this.date = date;
         this.status = status;
-        this.createdAt = createdAt;
-        this.user = user;
-        this.resource = resource;
-        this.id = id;
+        this.userId = userId;
     }
 
     // Getter y Setter
-
-    public Long getId() {
-
-        return this.id;
-    }
-    public void setId (Long id) {
-
-        this.id = id;
-    }
 
     public LocalDate getDate () {
 
@@ -60,30 +45,12 @@ public class ReservationUpdateDto {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt () {
+    public Long getUserId () {
 
-        return this.createdAt;
+        return this.userId;
     }
-    public void setCreateAt (LocalDateTime createAt) {
+    public void setUser (Long userId) {
 
-        this.createdAt = createAt;
-    }
-
-    public UserEntity getUser () {
-
-        return this.user;
-    }
-    public void setUser (UserEntity user) {
-
-        this.user = user;
-    }
-
-    public ResourceEntity getResource () {
-
-        return this.resource;
-    }
-    public void setResource (ResourceEntity resource) {
-
-        this.resource = resource;
+        this.userId = userId;
     }
 }

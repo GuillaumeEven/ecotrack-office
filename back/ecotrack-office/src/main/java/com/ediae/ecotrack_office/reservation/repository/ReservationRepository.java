@@ -13,6 +13,10 @@ import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
 
 
+    // OBTENER TODAS LAS RESERVAS DE UNA ORGANIZACIÓN
+    @Query("SELECT r FROM ReservationEntity r WHERE r.user.organization.id = :organizationId")
+    List <ReservationEntity> findByOrganizationId (Long organizationId);
+    
     @Query("SELECT r FROM ReservationEntity r WHERE r.user.id = :userId")
     List <ReservationEntity> findByUserId (Long userId);
 
