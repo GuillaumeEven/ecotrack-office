@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: '', component: HomeLanding },
   { path: 'login', component: LoginComponent },
 
-  // RUTAS PRIVADAS 
+  // RUTAS PRIVADAS (Toda la sección requiere estar autenticado)
   {
     path: '',
     component: PrivateLayout,
@@ -61,6 +61,6 @@ export const routes: Routes = [
     ],
   },
 
-  // COMODÍN: Redirección por defecto para URLs inexistentes
+  // RUTA POR DEFECTO (Redirección si la URL no existe)
   { path: '**', redirectTo: '' },
 ];
