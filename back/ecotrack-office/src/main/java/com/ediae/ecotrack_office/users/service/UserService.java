@@ -18,7 +18,9 @@ import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
+import com.ediae.ecotrack_office.users.dto.UserStatsDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.mapper.UserMapper;
 import com.ediae.ecotrack_office.users.models.UserModel;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
@@ -83,6 +85,9 @@ public class UserService {
         entity.setPasswordHash(dto.password());
         entity.setIsActive(true);
         entity.setCreatedAt(LocalDateTime.now());
+        
+        // 🆕 Salvaguarda: Forzamos el consentimiento por defecto al crear el usuario
+        entity.setConsentGiven(false);
 
         // Registramos que el admin creó un usuario
         UserEntity saved = userRepository.save(entity);
@@ -122,14 +127,24 @@ public class UserService {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-        // Guardamos el rol anterior para saber si cambió
+        // 🆕 Preservamos los valores no mutables o requeridos que Angular no maneja en el form común
         var previousRole = entity.getRole();
+        var currentConsent = entity.getConsentGiven();
+        var createdAt = entity.getCreatedAt();
 
         // El mapper actualiza los campos comunes
         userMapper.updateEntityFromDto(dto, entity);
 
         // El rol solo lo gestiona el ADMIN desde este método
         entity.setRole(dto.role());
+        
+        // 🆕 Forzamos a mantener los valores previos si el mapper los ha machacado con null
+        if (entity.getConsentGiven() == null) {
+            entity.setConsentGiven(currentConsent != null ? currentConsent : false);
+        }
+        if (entity.getCreatedAt() == null) {
+            entity.setCreatedAt(createdAt);
+        }
 
         UserEntity saved = userRepository.save(entity);
 
@@ -230,5 +245,56 @@ public class UserService {
         UserEntity entity = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + userId));
         return entity.getOrganization().getId();
+    // ─────────────────────────────────────────────
+    // GET — lista paginada con filtros opcionales
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
+    public PageResponseDto<UserResponseDto> getUsersByFilters(
+            Long organizationId,
+            String search,
+            Role role,
+            Boolean isActive,
+            Pageable pageable) {
+
+        // Si search está vacío lo tratamos como null para que el filtro lo ignore
+        String searchParam = (search != null && !search.isBlank()) ? search : null;
+
+        Page<UserEntity> page = userRepository.findByFilters(
+            organizationId, searchParam, role, isActive, pageable
+        );
+
+        List<UserResponseDto> content = page.getContent().stream()
+                .map(entity -> userMapper.toModel(entity).toResponseDto())
+                .toList();
+
+        return new PageResponseDto<>(page, content);
+    }
+
+    // ─────────────────────────────────────────────
+    // GET — estadísticas para las KPI cards
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
+    public UserStatsDto getUserStats(Long organizationId) {
+        long total    = userRepository.countByOrganizationId(organizationId);
+        long active   = userRepository.countByOrganizationIdAndIsActive(organizationId, true);
+        long newThisMonth = userRepository.countNewUsersThisMonth(
+            organizationId,
+            LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0)
+        );
+        return new UserStatsDto(total, active, newThisMonth);
+    }
+
+    // ─────────────────────────────────────────────
+    // PATCH — reactivar usuario
+    // Solo ADMIN (se verifica en el Controller)
+    // ─────────────────────────────────────────────
+    public void reactivateUser(Long id) {
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
+
+        entity.setIsActive(true);
+        userRepository.save(entity);
+
+        auditLogService.log("USER_REACTIVATED", "USER", id, RequestContext.getUserId());
     }
 }

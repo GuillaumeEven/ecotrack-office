@@ -1,3 +1,118 @@
+<!-- Edit Modal -->
+<div
+  *ngIf="showEditModal"
+  class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+  (click)="showEditModal = false"
+>
+  <div
+    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md w-full max-w-md mx-md shadow-xl"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
+      <h3 class="font-headline-md text-headline-md text-on-surface">Edit User</h3>
+      <button (click)="showEditModal = false" class="text-on-surface-variant hover:text-on-surface">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form [formGroup]="editForm" (ngSubmit)="onSaveEdit()" class="space-y-md">
+      <div class="space-y-xs">
+        <label class="text-on-surface font-label-sm text-label-sm block">FIRST NAME</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container outline-none transition-all"
+        />
+      </div>
+      <div class="space-y-xs">
+        <label class="text-on-surface font-label-sm text-label-sm block">LAST NAME</label>
+        <input
+          type="text"
+          formControlName="lastName"
+          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container outline-none transition-all"
+        />
+      </div>
+      <div class="space-y-xs">
+        <label class="text-on-surface font-label-sm text-label-sm block">EMAIL</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container outline-none transition-all"
+        />
+      </div>
+      <div class="space-y-xs">
+        <label class="text-on-surface font-label-sm text-label-sm block">ROLE</label>
+        <select
+          formControlName="role"
+          class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container outline-none transition-all"
+        >
+          <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+        </select>
+      </div>
+      <div class="flex justify-end gap-sm pt-sm">
+        <button
+          type="button"
+          (click)="showEditModal = false"
+          class="px-lg py-sm text-on-surface-variant border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-bold"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="editForm.invalid"
+          class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all font-bold disabled:opacity-50"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div
+  *ngIf="showDeleteModal"
+  class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+  (click)="showDeleteModal = false"
+>
+  <div
+    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md w-full max-w-md mx-md shadow-xl"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
+      <h3 class="font-headline-md text-headline-md text-error">Delete User</h3>
+      <button
+        (click)="showDeleteModal = false"
+        class="text-on-surface-variant hover:text-on-surface"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="flex items-center gap-md p-sm bg-error-container/30 rounded-xl mb-md">
+      <span class="material-symbols-outlined text-error">warning</span>
+      <p class="text-on-surface font-body-md text-body-md">
+        This action will permanently anonymize
+        <strong>{{ selectedUser?.firstName }} {{ selectedUser?.lastName }}</strong
+        >'s data (GDPR). This cannot be undone.
+      </p>
+    </div>
+    <div class="flex justify-end gap-sm">
+      <button
+        (click)="showDeleteModal = false"
+        class="px-lg py-sm text-on-surface-variant border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-bold"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="onConfirmDelete()"
+        class="px-lg py-sm bg-error text-on-error rounded-xl hover:opacity-90 transition-all font-bold"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
 <div class="max-w-container-max mx-auto px-lg py-xl">
   <!-- Page Header -->
   <div class="mb-xl">
@@ -7,10 +122,215 @@
     </p>
   </div>
 
-  <!-- TODO: tabla de usuarios -->
-  <div
-    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex items-center justify-center h-64"
-  >
-    <p class="text-on-surface-variant font-body-lg text-body-lg">Coming soon...</p>
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+      <p class="text-on-surface-variant text-label-sm font-label-sm mb-xs">TOTAL USERS</p>
+      <div
+        *ngIf="isLoadingStats"
+        class="h-8 w-16 bg-surface-container-high rounded-xl animate-pulse"
+      ></div>
+      <p *ngIf="!isLoadingStats" class="font-headline-lg text-headline-lg text-on-surface">
+        {{ stats.totalUsers }}
+      </p>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+      <p class="text-on-surface-variant text-label-sm font-label-sm mb-xs">ACTIVE NOW</p>
+      <div
+        *ngIf="isLoadingStats"
+        class="h-8 w-16 bg-surface-container-high rounded-xl animate-pulse"
+      ></div>
+      <p *ngIf="!isLoadingStats" class="font-headline-lg text-headline-lg text-secondary">
+        {{ stats.activeUsers }}
+      </p>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
+      <p class="text-on-surface-variant text-label-sm font-label-sm mb-xs">NEW THIS MONTH</p>
+      <div
+        *ngIf="isLoadingStats"
+        class="h-8 w-16 bg-surface-container-high rounded-xl animate-pulse"
+      ></div>
+      <p
+        *ngIf="!isLoadingStats"
+        class="font-headline-lg text-headline-lg text-on-tertiary-container"
+      >
+        +{{ stats.newThisMonth }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="flex flex-col md:flex-row gap-md mb-md">
+    <div class="relative flex-1">
+      <span
+        class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant"
+        >search</span
+      >
+      <input
+        type="text"
+        placeholder="Search by name or email..."
+        (input)="onSearchInput($event)"
+        class="w-full pl-xl pr-md py-sm bg-surface border border-outline-variant rounded-xl focus:ring-2 focus:ring-on-tertiary-container outline-none transition-all text-body-md"
+      />
+    </div>
+    <select
+      (change)="onRoleChange($event)"
+      class="bg-surface border border-outline-variant rounded-xl px-md py-sm focus:ring-2 focus:ring-on-tertiary-container outline-none transition-all text-body-md"
+    >
+      <option value="">All roles</option>
+      <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+    </select>
+    <select
+      (change)="onStatusChange($event)"
+      class="bg-surface border border-outline-variant rounded-xl px-md py-sm focus:ring-2 focus:ring-on-tertiary-container outline-none transition-all text-body-md"
+    >
+      <option value="">All statuses</option>
+      <option value="true">Active</option>
+      <option value="false">Inactive</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+    <!-- Loading skeleton -->
+    <div *ngIf="isLoading" class="p-md space-y-sm">
+      <div
+        *ngFor="let i of [1, 2, 3, 4, 5]"
+        class="h-12 bg-surface-container-high rounded-xl animate-pulse"
+      ></div>
+    </div>
+
+    <!-- Table content -->
+    <table *ngIf="!isLoading" class="w-full">
+      <thead class="border-b border-outline-variant">
+        <tr>
+          <th class="text-left px-md py-sm text-on-surface-variant text-label-sm font-label-sm">
+            NAME
+          </th>
+          <th
+            class="text-left px-md py-sm text-on-surface-variant text-label-sm font-label-sm hidden md:table-cell"
+          >
+            EMAIL
+          </th>
+          <th class="text-left px-md py-sm text-on-surface-variant text-label-sm font-label-sm">
+            ROLE
+          </th>
+          <th class="text-left px-md py-sm text-on-surface-variant text-label-sm font-label-sm">
+            STATUS
+          </th>
+          <th class="text-right px-md py-sm text-on-surface-variant text-label-sm font-label-sm">
+            ACTIONS
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let user of users"
+          class="border-b border-outline-variant last:border-0 hover:bg-surface-container-low transition-colors"
+        >
+          <td class="px-md py-sm">
+            <p class="font-body-lg text-body-lg text-on-surface font-medium">
+              {{ user.firstName }} {{ user.lastName }}
+            </p>
+          </td>
+          <td class="px-md py-sm hidden md:table-cell">
+            <p class="text-body-md text-body-md text-on-surface-variant">{{ user.email }}</p>
+          </td>
+          <td class="px-md py-sm">
+            <span
+              class="text-[12px] font-bold px-sm py-[2px] rounded-full"
+              [class.bg-tertiary-container]="user.role === 'ADMIN'"
+              [class.text-on-tertiary-container]="user.role === 'ADMIN'"
+              [class.bg-secondary-container]="user.role !== 'ADMIN'"
+              [class.text-on-secondary-container]="user.role !== 'ADMIN'"
+            >
+              {{ user.role }}
+            </span>
+          </td>
+          <td class="px-md py-sm">
+            <span
+              class="text-[12px] font-bold px-sm py-[2px] rounded-full"
+              [class.bg-secondary-container]="user.isActive"
+              [class.text-secondary]="user.isActive"
+              [class.bg-error-container]="!user.isActive"
+              [class.text-error]="!user.isActive"
+            >
+              {{ user.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="px-md py-sm">
+            <div class="flex items-center justify-end gap-xs">
+              <!-- Edit -->
+              <button
+                (click)="openEditModal(user)"
+                class="p-xs hover:bg-surface-container-high rounded-xl transition-colors text-on-surface-variant hover:text-primary"
+                title="Edit"
+              >
+                <span class="material-symbols-outlined text-[20px]">edit</span>
+              </button>
+              <!-- Activate / Deactivate -->
+              <button
+                (click)="toggleUserStatus(user)"
+                class="p-xs hover:bg-surface-container-high rounded-xl transition-colors"
+                [class.text-error]="user.isActive"
+                [class.text-secondary]="!user.isActive"
+                [title]="user.isActive ? 'Deactivate' : 'Activate'"
+              >
+                <span class="material-symbols-outlined text-[20px]">{{
+                  user.isActive ? 'lock' : 'lock_open'
+                }}</span>
+              </button>
+              <!-- Delete GDPR -->
+              <button
+                (click)="openDeleteModal(user)"
+                class="p-xs hover:bg-error-container rounded-xl transition-colors text-error"
+                title="Delete (GDPR)"
+              >
+                <span class="material-symbols-outlined text-[20px]">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Empty state -->
+        <tr *ngIf="users.length === 0">
+          <td
+            colspan="5"
+            class="px-md py-xl text-center text-on-surface-variant font-body-lg text-body-lg"
+          >
+            No users found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div
+      *ngIf="!isLoading && totalElements > 0"
+      class="flex items-center justify-between px-md py-sm border-t border-outline-variant"
+    >
+      <p class="text-on-surface-variant text-body-md text-body-md">
+        Showing {{ showingFrom }}–{{ showingTo }} of {{ totalElements }}
+      </p>
+      <div class="flex items-center gap-xs">
+        <button
+          (click)="goToPage(currentPage - 1)"
+          [disabled]="currentPage === 0"
+          class="p-xs hover:bg-surface-container-high rounded-xl transition-colors text-on-surface-variant disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <span class="text-body-md text-body-md text-on-surface px-sm">
+          Page {{ currentPage + 1 }} of {{ totalPages }}
+        </span>
+        <button
+          (click)="goToPage(currentPage + 1)"
+          [disabled]="currentPage >= totalPages - 1"
+          class="p-xs hover:bg-surface-container-high rounded-xl transition-colors text-on-surface-variant disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
