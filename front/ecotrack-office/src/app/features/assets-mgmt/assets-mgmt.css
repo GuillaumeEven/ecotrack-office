@@ -105,43 +105,21 @@
   overflow: hidden;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead {
+/* Sobreescritura para assets-mgmt */
+.table-container thead {
   background-color: var(--surface-container-low);
   border-bottom: 1px solid var(--outline-variant);
 }
 
-th {
-  padding: var(--spacing-md);
-  text-align: left;
+.table-container th {
   font: var(--font-title-sm);
-  color: var(--on-surface);
 }
 
-th.text-center {
+.table-container th.text-center {
   text-align: center;
 }
 
-tbody tr {
-  border-bottom: 1px solid var(--outline-variant);
-  transition: background-color var(--transition-fast);
-}
-
-tbody tr:hover {
-  background-color: var(--surface-container-low);
-}
-
-td {
-  padding: var(--spacing-md);
-  font: var(--font-body-md);
-  color: var(--on-surface);
-}
-
-td.muted {
+.table-container td.muted {
   color: var(--on-surface-variant);
 }
 

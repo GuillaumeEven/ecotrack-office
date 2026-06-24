@@ -204,3 +204,36 @@ button:focus-visible {
     'GRAD' 0,
     'opsz' 24;
 }
+
+/* ---------- TABLAS GLOBALES ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+thead {
+  background-color: var(--surface-container);
+}
+
+th {
+  font: var(--font-label-sm);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--on-surface-variant);
+  text-align: left;
+  padding: var(--spacing-md);
+  border-bottom: var(--border-width-1) solid var(--outline-variant);
+}
+
+td {
+  padding: var(--spacing-md);
+  border-bottom: var(--border-width-1) solid var(--outline-variant);
+  font: var(--font-body-md);
+  color: var(--on-surface);
+}
+
+tbody tr:hover {
+  background-color: var(--surface-container-low);
+}
