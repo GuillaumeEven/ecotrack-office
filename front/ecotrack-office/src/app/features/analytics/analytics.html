@@ -6,54 +6,54 @@
         Métricas en tiempo real sobre la reducción de la huella de carbono, eficiencia del espacio de trabajo y optimización de recursos.
       </p>
     </div>
-    <button *ngIf="userRole === 'ADMIN'" (click)="compileMetrics()" class="btn-compile">
+    <button *ngIf="userRole === 'ADMIN'" (click)="compileMetrics()" class="btn btn-primary">
       <span class="material-symbols-outlined">refresh</span>
       Compilar Métricas
     </button>
   </div>
 
-  <div *ngIf="errorMessage" class="alert-error">
+  <div *ngIf="errorMessage" class="alert-error-banner">
     <span class="material-symbols-outlined">close</span>
     <p>{{ errorMessage }}</p>
   </div>
 
   <div class="bento-grid">
     
-    <div class="metric-card card-co2">
+    <div class="card metric-card card-co2">
       <div class="card-top">
         <span class="card-label">AHORRO DE CARBONO</span>
         <span class="material-symbols-outlined icon-co2">eco</span>
       </div>
-      <div class="card-body">
+      <div class="card-body-metric">
         <h2 class="metric-value">{{ metrics?.co2Saved | number:'1.1-1' }} <span class="metric-unit">kg CO₂</span></h2>
-        <p class="card-footer footer-success">✓ Objetivo de huella activo</p>
+        <p class="footer-success">✓ Objetivo de huella activo</p>
       </div>
     </div>
 
-    <div *ngIf="userRole === 'ADMIN'" class="metric-card card-money">
+    <div *ngIf="userRole === 'ADMIN'" class="card metric-card card-money">
       <div class="card-top">
         <span class="card-label">AHORRO ESTIMADO</span>
         <span class="material-symbols-outlined icon-money">payments</span>
       </div>
-      <div class="card-body">
+      <div class="card-body-metric">
         <h2 class="metric-value">€{{ metrics?.financialSaved | number:'1.2-2' }}</h2>
-        <p class="card-footer">Basado en apagado inteligente</p>
+        <p class="card-footer-text">Basado en apagado inteligente</p>
       </div>
     </div>
 
-    <div *ngIf="userRole === 'ADMIN'" class="metric-card card-spots">
+    <div *ngIf="userRole === 'ADMIN'" class="card metric-card card-spots">
       <div class="card-top">
         <span class="card-label">USO DE PUESTOS</span>
         <span class="material-symbols-outlined icon-spots">date_range</span>
       </div>
-      <div class="card-body">
+      <div class="card-body-metric">
         <h2 class="metric-value">{{ metrics?.activeReservationsCount || 0 }} <span class="metric-unit">reservas</span></h2>
-        <p class="card-footer">{{ metrics?.checkInsCount || 0 }} check-ins registrados</p>
+        <p class="card-footer-text">{{ metrics?.checkInsCount || 0 }} check-ins registrados</p>
       </div>
     </div>
 
-    <div *ngIf="userRole === 'ADMIN'" class="history-card">
-      <div class="history-header">
+    <div *ngIf="userRole === 'ADMIN'" class="card history-card">
+      <div class="card-header-dashboard">
         <h3 class="history-title">Historial de Informes Compilados</h3>
         <span class="material-symbols-outlined icon-variant">analytics</span>
       </div>
@@ -69,7 +69,7 @@
       </div>
 
       <div *ngIf="!isLoading && reports.length > 0" class="table-responsive">
-        <table class="data-table">
+        <table>
           <thead>
             <tr>
               <th>ID INFORME</th>
@@ -88,7 +88,7 @@
               <td>{{ report.activeReservationsCount }}</td>
             </tr>
           </tbody>
-          </table>
+        </table>
       </div>
     </div>
 
