@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,8 @@ public class ReservationController {
 
     @Autowired
     private RoleGuard roleGuard;
+
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ReservationController.class);
 
     // --- ENDPOINTS PARA CUALQUIER USUARIO IDENTIFICADO ---
 
@@ -123,10 +126,11 @@ public class ReservationController {
 
     // --- ENDPOINTS SOLO PARA ADMIN Y TECNICOS
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity <List <ReservationResponseDto>> getAllReservationsFromTheOranizationUser (Authentication auth) {
 
         boolean isAdminOrTech = roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN);
+        
         if(isAdminOrTech) {
             Long userId = (Long) auth.getPrincipal();
             UserModel user = userService.getUserById(userId);

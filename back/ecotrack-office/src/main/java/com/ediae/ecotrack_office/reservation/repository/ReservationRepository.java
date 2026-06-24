@@ -14,7 +14,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
 
 
     // OBTENER TODAS LAS RESERVAS DE UNA ORGANIZACIÓN
-    @Query("SELECT r FROM ReservationEntity r WHERE r.user.organization.id =: organizationId")
+    @Query("SELECT r FROM ReservationEntity r WHERE r.user.organization.id = :organizationId")
     List <ReservationEntity> findByOrganizationId (Long organizationId);
     
     @Query("SELECT r FROM ReservationEntity r WHERE r.user.id = :userId")
