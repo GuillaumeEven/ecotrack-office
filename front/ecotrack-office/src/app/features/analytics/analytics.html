@@ -1,115 +1,96 @@
-<div class="max-w-container-max mx-auto px-lg py-xl">
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-xl gap-md">
-    <div>
-      <h1 class="font-headline-lg text-headline-lg text-on-surface">Sostenibilidad y Analítica</h1>
-      <p class="text-on-surface-variant font-body-lg text-body-lg">
+<div class="analytics-container">
+  <div class="page-header">
+    <div class="header-main">
+      <h1 class="page-title">Sostenibilidad y Analítica</h1>
+      <p class="page-subtitle">
         Métricas en tiempo real sobre la reducción de la huella de carbono, eficiencia del espacio de trabajo y optimización de recursos.
       </p>
     </div>
-    <button
-      (click)="onGenerateReport()"
-      class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold flex items-center gap-sm self-start md:self-auto"
-    >
-      <span class="material-symbols-outlined text-[20px]">refresh</span>
+    <button *ngIf="userRole === 'ADMIN'" (click)="compileMetrics()" class="btn-compile">
+      <span class="material-symbols-outlined">refresh</span>
       Compilar Métricas
     </button>
   </div>
 
-  <div *ngIf="errorMessage" class="mb-md p-sm bg-error-container/20 border border-error/30 text-error rounded-xl text-body-md">
-    ✕ {{ errorMessage }}
+  <div *ngIf="errorMessage" class="alert-error">
+    <span class="material-symbols-outlined">close</span>
+    <p>{{ errorMessage }}</p>
   </div>
 
-  <div *ngIf="isLoading" class="grid grid-cols-12 gap-gutter animate-pulse mb-xl">
-    <div class="col-span-12 md:col-span-4 h-32 bg-surface-container-high rounded-xl"></div>
-    <div class="col-span-12 md:col-span-4 h-32 bg-surface-container-high rounded-xl"></div>
-    <div class="col-span-12 md:col-span-4 h-32 bg-surface-container-high rounded-xl"></div>
-  </div>
-
-  <div *ngIf="!isLoading" class="grid grid-cols-12 gap-gutter mb-xl">
-    <div class="col-span-12 md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <span class="text-on-surface-variant text-label-sm font-label-sm tracking-wider uppercase">Ahorro de Carbono</span>
-        <div class="w-10 h-10 bg-secondary-container/20 text-secondary rounded-full flex items-center justify-center">
-          <span class="material-symbols-outlined">eco</span>
-        </div>
+  <div class="bento-grid">
+    
+    <div class="metric-card card-co2">
+      <div class="card-top">
+        <span class="card-label">AHORRO DE CARBONO</span>
+        <span class="material-symbols-outlined icon-co2">eco</span>
       </div>
-      <div class="mt-md">
-        <h2 class="text-[36px] font-bold text-on-surface tracking-tight">
-          {{ (latestReport?.co2SavingsKg ?? 0) | number:'1.1-2' }} <span class="text-body-lg font-normal text-on-surface-variant">kg CO₂</span>
-        </h2>
-        <p class="text-[12px] text-secondary font-medium mt-xs">✓ Objetivo de huella activo</p>
+      <div class="card-body">
+        <h2 class="metric-value">{{ metrics?.co2Saved | number:'1.1-1' }} <span class="metric-unit">kg CO₂</span></h2>
+        <p class="card-footer footer-success">✓ Objetivo de huella activo</p>
       </div>
     </div>
 
-    <div class="col-span-12 md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <span class="text-on-surface-variant text-label-sm font-label-sm tracking-wider uppercase">Ahorro Estimado</span>
-        <div class="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center">
-          <span class="material-symbols-outlined">payments</span>
-        </div>
+    <div *ngIf="userRole === 'ADMIN'" class="metric-card card-money">
+      <div class="card-top">
+        <span class="card-label">AHORRO ESTIMADO</span>
+        <span class="material-symbols-outlined icon-money">payments</span>
       </div>
-      <div class="mt-md">
-        <h2 class="text-[36px] font-bold text-on-surface tracking-tight">
-          {{ (latestReport?.energySavingsEuros ?? 0) | currency:'EUR':'symbol':'1.2-2' }}
-        </h2>
-        <p class="text-[12px] text-on-surface-variant font-normal mt-xs">Basado en apagado inteligente</p>
+      <div class="card-body">
+        <h2 class="metric-value">€{{ metrics?.financialSaved | number:'1.2-2' }}</h2>
+        <p class="card-footer">Basado en apagado inteligente</p>
       </div>
     </div>
 
-    <div class="col-span-12 md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col justify-between">
-      <div class="flex justify-between items-start">
-        <span class="text-on-surface-variant text-label-sm font-label-sm tracking-wider uppercase">Uso de Puestos</span>
-        <div class="w-10 h-10 bg-surface-container-high text-on-surface rounded-full flex items-center justify-center">
-          <span class="material-symbols-outlined">calendar_month</span>
-        </div>
+    <div *ngIf="userRole === 'ADMIN'" class="metric-card card-spots">
+      <div class="card-top">
+        <span class="card-label">USO DE PUESTOS</span>
+        <span class="material-symbols-outlined icon-spots">date_range</span>
       </div>
-      <div class="mt-md">
-        <h2 class="text-[36px] font-bold text-on-surface tracking-tight">
-          {{ latestReport?.totalReservations ?? 0 }} <span class="text-body-lg font-normal text-on-surface-variant">reservas</span>
-        </h2>
-        <p class="text-[12px] text-secondary font-medium mt-xs">
-          {{ latestReport?.confirmedCheckIns ?? 0 }} check-ins registrados
-        </p>
+      <div class="card-body">
+        <h2 class="metric-value">{{ metrics?.activeReservationsCount || 0 }} <span class="metric-unit">reservas</span></h2>
+        <p class="card-footer">{{ metrics?.checkInsCount || 0 }} check-ins registrados</p>
       </div>
     </div>
-  </div>
 
-  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md overflow-hidden">
-    <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
-      <h3 class="font-headline-md text-headline-md text-on-surface">Historial de Informes Compilados</h3>
-      <span class="material-symbols-outlined text-on-surface-variant">analytics</span>
+    <div *ngIf="userRole === 'ADMIN'" class="history-card">
+      <div class="history-header">
+        <h3 class="history-title">Historial de Informes Compilados</h3>
+        <span class="material-symbols-outlined icon-variant">analytics</span>
+      </div>
+
+      <div *ngIf="isLoading" class="skeleton-loader">
+        <div class="skeleton-bar"></div>
+        <div class="skeleton-bar"></div>
+      </div>
+
+      <div *ngIf="!isLoading && reports.length === 0" class="empty-state">
+        <span class="material-symbols-outlined empty-icon">bar_chart</span>
+        <p class="empty-text">No se han encontrado informes. Haz clic en 'Compilar Métricas' para generar datos.</p>
+      </div>
+
+      <div *ngIf="!isLoading && reports.length > 0" class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID INFORME</th>
+              <th>FECHA COMPILACIÓN</th>
+              <th>AHORRO CO₂</th>
+              <th>AHORRO ECONÓMICO</th>
+              <th>RESERVAS TOTALES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let report of reports">
+              <td class="font-medium">#REP-{{ report.id }}</td>
+              <td class="date-cell">{{ report.compiledAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ report.co2Saved }} kg</td>
+              <td class="font-money-table">€{{ report.financialSaved | number:'1.2-2' }}</td>
+              <td>{{ report.activeReservationsCount }}</td>
+            </tr>
+          </tbody>
+          </table>
+      </div>
     </div>
 
-    <div *ngIf="!isLoading && reports.length === 0" class="text-center py-xl space-y-sm">
-      <span class="material-symbols-outlined text-[48px] text-on-surface-variant">bar_chart</span>
-      <p class="text-on-surface-variant font-body-lg text-body-lg">No se han encontrado informes. Haz clic en 'Compilar Métricas' para generar datos.</p>
-    </div>
-
-    <div *ngIf="!isLoading && reports.length > 0" class="overflow-x-auto">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="border-b border-outline-variant text-label-sm font-label-sm text-on-surface-variant">
-            <th class="pb-sm font-semibold">ID REPORTE</th>
-            <th class="pb-sm font-semibold">REDUCCIÓN CO₂</th>
-            <th class="pb-sm font-semibold">AHORRO ECONÓMICO</th>
-            <th class="pb-sm font-semibold text-center">TOTAL RESERVAS</th>
-            <th class="pb-sm font-semibold text-center">ESPACIOS INACTIVOS</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-outline-variant text-body-md text-on-surface">
-          <tr *ngFor="let report of reports" class="hover:bg-surface-container-low transition-colors">
-            <td class="py-md font-medium text-primary">#UR-{{ report.id }}</td>
-            <td class="py-md font-medium text-secondary">{{ report.co2SavingsKg | number:'1.1-2' }} kg</td>
-            <td class="py-md font-medium">{{ report.energySavingsEuros | currency:'EUR':'symbol':'1.2-2' }}</td>
-            <td class="py-md text-center text-on-surface-variant">{{ report.totalReservations }}</td>
-            <td class="py-md text-center">
-              <span [ngClass]="report.emptyRooms > 0 ? 'bg-surface-container-high text-on-surface' : 'bg-secondary-container/10 text-secondary'" class="text-[11px] font-bold px-sm py-[2px] rounded-full">
-                {{ report.emptyRooms }} salas inactivas
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 </div>
