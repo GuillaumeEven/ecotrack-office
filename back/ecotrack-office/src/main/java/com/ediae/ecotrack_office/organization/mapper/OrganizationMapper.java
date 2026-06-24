@@ -64,14 +64,14 @@ public class OrganizationMapper {
     public static OrganizationModel fromUpdateDto (OrganizationUpdateDto updateDto) {
 
         return new OrganizationModel (
-            updateDto.getId(),
+            null,
             updateDto.getName(),
             updateDto.getCif(),
             updateDto.getAddress(),
             updateDto.getEmail(),
-            updateDto.getEndSubscription(),
-            updateDto.getIsActive(),
-            updateDto.getCreatedAt()
+            null,
+            null,
+            null
          );
     }
 
