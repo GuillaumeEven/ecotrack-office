@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { AnalyticsService } from '../../services/analytics'; 
 import { AuthService } from '../../services/auth.service'; // Importo el servicio común de auth
 import { AnalyticsReportResponse } from '../../models/analytics.model';
@@ -17,7 +17,7 @@ interface MappedReport {
 @Component({
   selector: 'app-analytics',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, DecimalPipe],
+  imports: [CommonModule, DecimalPipe],
   templateUrl: './analytics.html',
 })
 export class AnalyticsComponent implements OnInit {

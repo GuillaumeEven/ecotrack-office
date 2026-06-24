@@ -1,187 +1,85 @@
 .incidencias-container {
-  max-width: 1200px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 24px 32px;
+  padding: var(--spacing-md) var(--spacing-gutter);
   box-sizing: border-box;
 }
 
 .page-header {
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-lg);
 }
 
 .page-title {
-  font-size: 28px;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0 0 8px 0;
+  font: var(--font-headline-md);
+  color: var(--on-surface);
+  margin: 0 0 var(--spacing-xs) 0;
 }
 
 .page-subtitle {
-  font-size: 16px;
-  color: #64748b;
+  font: var(--font-body-md);
+  color: var(--on-surface-variant);
   margin: 0;
 }
 
-/* Sistema de rejilla nativo */
+/* Rejilla de la página */
 .incidencias-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: var(--spacing-gutter);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .incidencias-grid {
     grid-template-columns: 4fr 8fr;
   }
 }
 
-.card {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 24px;
-  box-sizing: border-box;
-}
-
 .card-sticky {
   position: sticky;
-  top: 24px;
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-  border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 12px;
-}
-
-.card-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0;
+  top: var(--spacing-md);
 }
 
 .icon-variant {
-  color: #64748b;
-}
-
-.incident-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #475569;
-  letter-spacing: 0.5px;
-}
-
-.form-input, .form-textarea {
-  width: 100%;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 12px;
-  box-sizing: border-box;
-  font-size: 14px;
-  color: #1e293b;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.form-textarea {
-  resize: none;
-}
-
-.form-input:focus, .form-textarea:focus {
-  border-color: #94a3b8;
-  background-color: #ffffff;
-}
-
-.input-error {
-  border-color: #ef4444 !important;
-}
-
-.error-text {
-  font-size: 12px;
-  color: #ef4444;
-  margin: 4px 0 0 0;
+  color: var(--on-primary-container);
 }
 
 .feedback-container {
-  padding-top: 4px;
+  padding-top: var(--spacing-base);
 }
 
 .success-message {
-  font-size: 13px;
-  font-weight: 500;
-  color: #10b981;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--success);
   margin: 0;
 }
 
 .error-message {
-  font-size: 13px;
-  font-weight: 500;
-  color: #ef4444;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--error);
   margin: 0;
 }
 
-.btn-submit {
-  width: 100%;
-  padding: 12px;
-  background-color: #78716c;
-  color: #ffffff;
-  border: none;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-submit:hover:not(:disabled) {
-  opacity: 0.9;
-}
-
-.btn-submit:active:not(:disabled) {
-  transform: scale(0.98);
-}
-
-.btn-submit:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Animación del Skeleton */
+/* Animación del Skeleton Loader alineada al diseño */
 .skeleton-loader {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 12px 0;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
 }
 
 .skeleton-bar {
   height: 44px;
-  background-color: #f1f5f9;
-  border-radius: 12px;
+  background-color: var(--surface-container);
+  border-radius: var(--radius-md);
   width: 100%;
   animation: pulse 1.5s infinite ease-in-out;
 }
 
 .skeleton-header-bar {
   height: 36px;
-  background-color: #e2e8f0;
+  background-color: var(--surface-container-high);
 }
 
 @keyframes pulse {
@@ -190,35 +88,14 @@
   100% { opacity: 0.6; }
 }
 
-/* Tabla nativa */
+/* Utilidades de la Tabla */
 .table-responsive {
   overflow-x: auto;
   width: 100%;
 }
 
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-.data-table th {
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 12px;
-  font-weight: 600;
-  color: #64748b;
-}
-
-.data-table td {
-  padding: 16px 6px;
-  border-bottom: 1px solid #f1f5f9;
-  font-size: 14px;
-  color: #1e293b;
-}
-
 .font-medium {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .cell-truncate {
@@ -229,8 +106,8 @@
 }
 
 .date-cell {
-  color: #64748b;
-  font-size: 13px;
+  color: var(--on-surface-variant);
+  font-size: var(--font-size-sm);
 }
 
 .text-center {
@@ -241,57 +118,44 @@
   text-align: right;
 }
 
+/* Badges de Estado adaptados a la paleta Kinetic */
 .status-badge {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 9999px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: var(--spacing-base) var(--spacing-xs);
+  border-radius: var(--radius-full);
   display: inline-block;
 }
 
 .badge-error {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background-color: var(--error-container);
+  color: var(--on-error-container);
 }
 
 .badge-success {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-}
-
-.btn-resolve {
-  background: none;
-  border: none;
-  color: #2563eb;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
-.btn-resolve:hover {
-  background-color: #f1f5f9;
+  background-color: var(--secondary-fixed);
+  color: var(--on-secondary-fixed-variant);
 }
 
 .solved-text {
-  font-size: 12px;
-  color: #64748b;
+  font-size: var(--font-size-sm);
+  color: var(--on-surface-variant);
   font-style: italic;
 }
 
+/* Estados vacíos */
 .empty-state {
   text-align: center;
-  padding: 40px 0;
+  padding: var(--spacing-xl) 0;
 }
 
 .empty-icon {
   font-size: 48px;
-  color: #94a3b8;
-  margin-bottom: 8px;
+  color: var(--outline-variant);
+  margin-bottom: var(--spacing-xs);
 }
 
 .empty-text {
-  color: #64748b;
+  color: var(--on-surface-variant);
   margin: 0;
 }

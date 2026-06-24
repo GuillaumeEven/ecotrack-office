@@ -7,6 +7,7 @@
   </div>
 
   <div class="incidencias-grid">
+    <!-- COLUMNA IZQUIERDA: Formulario -->
     <div class="form-column">
       <div class="card card-sticky">
         <div class="card-header">
@@ -14,20 +15,20 @@
           <span class="material-symbols-outlined icon-variant">report_problem</span>
         </div>
 
-        <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()" class="incident-form">
+        <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label class="form-label">ID DEL RECURSO / ACTIVO</label>
+            <label class="form-label required">ID DEL RECURSO / ACTIVO</label>
             <input type="text" formControlName="resourceId" placeholder="Ej. 102" class="form-input"
-              [class.input-error]="incidentForm.get('resourceId')?.invalid && incidentForm.get('resourceId')?.touched" />
+              [class.error]="incidentForm.get('resourceId')?.invalid && incidentForm.get('resourceId')?.touched" />
           </div>
 
           <div class="form-group">
-            <label class="form-label">DESCRIPCIÓN</label>
+            <label class="form-label required">DESCRIPCIÓN</label>
             <textarea formControlName="description" rows="4"
               placeholder="Describe el fallo (ej. Pantalla de monitor rota, mobiliario dañado)..." class="form-textarea"
-              [class.input-error]="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched"></textarea>
+              [class.error]="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched"></textarea>
             <p *ngIf="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched"
-              class="error-text">
+              class="form-error">
               Por favor, introduce al menos 10 caracteres descriptivos.
             </p>
           </div>
@@ -38,7 +39,7 @@
           </div>
 
           <div class="form-actions">
-            <button type="submit" [disabled]="incidentForm.invalid || isSaving" class="btn-submit">
+            <button type="submit" [disabled]="incidentForm.invalid || isSaving" class="btn btn-primary btn-block">
               {{ isSaving ? 'Enviando...' : 'Registrar Incidencia' }}
             </button>
           </div>
@@ -46,6 +47,7 @@
       </div>
     </div>
 
+    <!-- COLUMNA DERECHA: Historial (Solo visible para TECH y ADMIN) -->
     <div *ngIf="userRole === 'TECH' || userRole === 'ADMIN'" class="table-column">
       <div class="card">
         <div class="card-header">
@@ -65,7 +67,7 @@
         </div>
 
         <div *ngIf="!isLoading && incidents.length > 0" class="table-responsive">
-          <table class="data-table">
+          <table>
             <thead>
               <tr>
                 <th>ID</th>
@@ -93,7 +95,7 @@
                 </td>
                 <td class="text-right">
                   <button *ngIf="(item.status === 'OPEN') && (userRole === 'TECH' || userRole === 'ADMIN')"
-                    (click)="onResolve(item.id)" class="btn-resolve">
+                    (click)="onResolve(item.id)" class="btn btn-sm btn-outline">
                     Resolver
                   </button>
 
