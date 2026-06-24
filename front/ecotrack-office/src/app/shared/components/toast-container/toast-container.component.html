@@ -1,0 +1,13 @@
+<div class="toast-stack">
+  <div *ngFor="let notification of (notificationService.notifications() | async) as notifications">
+    <div class="toast-notification" [ngClass]="notification.type">
+      <div class="toast-content">
+        <span class="material-symbols-outlined">
+          {{ getIcon(notification.type) }}
+        </span>
+        <p>{{ notification.message }}</p>
+      </div>
+      <button class="toast-close" (click)="notificationService.remove(notification.id)">×</button>
+    </div>
+  </div>
+</div>

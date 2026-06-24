@@ -17,9 +17,7 @@ public class RoleGuard {
     public void requireRole(Authentication auth, Role role) {
         checkAuthenticated(auth);
         if (!hasRole(auth, role)) {
-            throw new ForbiddenException(
-                "Necesitas el rol " + role.name() + " para realizar esta acción."
-            );
+            throw new ForbiddenException("No tienes permisos para realizar esta acción.");
         }
     }
 

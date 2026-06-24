@@ -110,18 +110,7 @@ public class ReservationController {
     @DeleteMapping("/{id}")
     public Boolean deleteReservation (@PathVariable Long id, Authentication auth) {
         Long currentUserId = (Long) auth.getPrincipal();
-        boolean isAdminOrTech = roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN);
-
-        // If not admin/tech, verify it's the user's own reservation
-        if (!isAdminOrTech) {
-            // User can only delete their own reservations
-            ReservationModel reservation = service.getReservationById(id);
-            if (!reservation.getUser().getId().equals(currentUserId)) {
-                throw new com.ediae.ecotrack_office.shared.exception.ForbiddenException("No tienes permisos para realizar esta acción.");
-            }
-        }
-
-        return service.deleteReservationById(id, currentUserId, isAdminOrTech);
+        return service.deleteReservationById(id, currentUserId);
     }
 
     // --- ENDPOINTS SOLO PARA ADMIN Y TECNICOS
