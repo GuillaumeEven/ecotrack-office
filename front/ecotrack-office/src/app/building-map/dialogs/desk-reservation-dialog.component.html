@@ -65,7 +65,7 @@
         {{ isLoading ? 'Reservando...' : 'Reservar ' + getResourceType() }}
       </button>
       <button
-        *ngIf="isMyReservation()"
+        *ngIf="canCancelReservation()"
         class="btn btn-danger"
         (click)="onCancelReservation()"
         [disabled]="isLoading">

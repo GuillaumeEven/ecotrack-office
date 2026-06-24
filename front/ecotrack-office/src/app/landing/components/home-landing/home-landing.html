@@ -1,209 +1,273 @@
-<!-- Top Navigation Bar -->
-<header class="bg-surface border-b border-outline-variant fixed top-0 left-0 right-0 z-50">
-    <div class="flex justify-between items-center w-full px-lg h-20 max-w-container-max mx-auto">
-        <div class="flex items-center gap-xl">
-            <span class="font-headline-md text-headline-md font-bold text-on-surface">EcoTrack - Office</span>
-            <!-- AQUÍ SE PEUDE AÑADIR COSAS COMO ¿QUIENES SOMOS?/¿QUÉ HACEMOS?/¿POR QUÉ ECOTRACK?-->
-        </div>
-        <div class="flex items-center gap-md">
-            <button class="font-body-md text-body-md px-md py-xs text-on-surface-variant hover:bg-surface-container-low transition-all cursor-pointer active:scale-95 duration-150" routerLink="/login">Inicia sesión</button>
-            <a class="font-body-md text-body-md bg-primary text-on-primary px-lg py-sm rounded-xl hover:shadow-lg transition-all active:scale-95 duration-150" href="#registration">Regístrate</a>
+@if (notificacion.visible) {
+  <div class="toast-notification" [ngClass]="notificacion.tipo">
+    <div class="toast-content">
+      <span class="material-symbols-outlined">
+        {{ notificacion.tipo === 'success' ? 'check_circle' : 'error' }}
+      </span>
+      <p>{{ notificacion.mensaje }}</p>
+    </div>
+    <button class="toast-close" (click)="notificacion.visible = false">×</button>
+  </div>
+}
+
+<header class="main-header">
+    <div class="header-container">
+        <div class="header-brand-group">
+            <span class="brand-title">EcoTrack - Office</span>
+            </div>
+        <div class="header-actions">
+            <button class="btn-login" routerLink="/login">Inicia sesión</button>
+            <a class="btn-register-nav" href="#registration">Regístrate</a>
         </div>
     </div>
 </header>
-<main class="pt-20">
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-background py-xl lg:py-[120px]">
-        <div class="max-w-container-max mx-auto px-lg grid lg:grid-cols-2 gap-xl items-center">
-            <div class="z-10">
-                <span class="inline-block px-sm py-xs bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded-full mb-md">REVOLUCIONANDO LA GESTIÓN DE ESPACIOS</span>
-                <h1 class="font-display-lg text-display-lg mb-md leading-tight">Gestiona, <span class="text-secondary">ahorra</span> y soluciona problemas de una manera rápida y sencilla.</h1>
-                <p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-[540px]">Ecotrack - Office proporciona herramientas de nivel empresarial para la reserva de salas, la asignación de escritorios y el tratamiento de incidencias. Gestione su oficina física con la precisión de una plataforma digital.</p>
-                <div class="flex flex-col sm:flex-row gap-sm">
-                    <a class="bg-primary text-on-primary px-xl py-md rounded-xl font-title-md text-title-md hover:shadow-xl transition-all text-center" href="#registration">Empezar ahora</a>
-                    <button class="border border-outline text-on-surface px-xl py-md rounded-xl font-title-md text-title-md hover:bg-surface-container-low transition-all flex items-center justify-center gap-xs">
+
+<main class="main-content">
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-text-block">
+                <span class="hero-badge">REVOLUCIONANDO LA GESTIÓN DE ESPACIOS</span>
+                <h1 class="hero-title">Gestiona, <span class="text-secondary">ahorra</span> y soluciona problemas de una manera rápida y sencilla.</h1>
+                <p class="hero-description">Ecotrack - Office proporciona herramientas de nivel empresarial para la reserva de salas, la asignación de escritorios y el tratamiento de incidencias. Gestione su oficina física con la precisión de una plataforma digital.</p>
+                <div class="hero-actions">
+                    <a class="btn-primary-action" href="#registration">Empezar ahora</a>
+                    <button class="btn-secondary-action">
                         <span class="material-symbols-outlined">play_circle</span>
                         Ver demo (si es que hacemos un video y se puede poner xd)
                     </button>
                 </div>
             </div>
-            <div class="relative hidden lg:block">
-                <div class="absolute -top-12 -right-12 w-64 h-64 bg-surface-container-high rounded-full blur-3xl opacity-50"></div>
-                <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-secondary-container rounded-full blur-3xl opacity-30"></div>
-                <img class="w-full h-auto rounded-xl shadow-2xl relative z-10 border border-outline-variant" alt="Vista inicial de la applicación una vez se ha iniciado sesión." src="images/imagen-app.webp"/>
+            <div class="hero-image-block">
+                <div class="blur-blob blob-top"></div>
+                <div class="blur-blob blob-bottom"></div>
+                <img class="hero-image" alt="Vista inicial de la applicación una vez se ha iniciado sesión." src="images/imagen-app.webp"/>
             </div>
         </div>
     </section>
-    <!-- Bento Grid Features / How it works -->
-    <section class="py-xl bg-surface" id="how-it-works">
-        <div class="max-w-container-max mx-auto px-lg">
-            <!-- <div class="text-center mb-xl">
-                <h2 class="font-headline-lg text-headline-lg mb-sm">Streamlined Employee Onboarding (lo queremos??)</h2>
-                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-[700px] mx-auto">Get your team up and running in minutes, not days. Our intuitive onboarding flow ensures everyone has the space they need to thrive.</p>
-            </div> -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
-                <!-- Feature Card 1 -->
-                <div class="md:col-span-2 glass-card rounded-xl p-lg flex flex-col justify-between">
+
+    <section class="features-section" id="how-it-works">
+        <div class="features-container">
+            <div class="bento-grid">
+                <div class="card-large glass-card">
                     <div>
-                        <div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-primary mb-md">
+                        <div class="card-icon-wrapper">
                             <span class="material-symbols-outlined">domain</span>
                         </div>
-                        <h3 class="font-headline-md text-headline-md mb-xs">Mapas interactivos de reservas organizados por plantas</h3>
-                        <p class="font-body-md text-body-md text-on-surface-variant mb-md">Mapas interactivos sencillos para la reserva de escritorios y salas de reuniones. Estos cuentan con una función de apertura de nuevas salas para el ahorro de energia.</p>
+                        <h3 class="card-title">Mapas interactivos de reservas organizados por plantas</h3>
+                        <p class="card-text">Mapas interactivos sencillos para la reserva de escritorios y salas de reuniones. Estos cuentan con una función de apertura de nuevas salas para el ahorro de energia.</p>
                     </div>
-                    <img class="w-full h-64 object-cover rounded-xl mt-md" alt="Vista de un mapa interactivo de reservas" src="images/imagen-mapa.webp" loading="lazy"/>
+                    <img class="card-image-cover" alt="Vista de un mapa interactivo de reservas" src="images/imagen-mapa.webp" loading="lazy"/>
                 </div>
-                <!-- Feature Card 2 -->
-                <div class="glass-card rounded-xl p-lg bg-tertiary-container text-on-tertiary-container border-none">
-                    <div class="w-12 h-12 bg-on-tertiary-container/10 rounded-xl flex items-center justify-center text-on-tertiary-container mb-md">
+
+                <div class="card-small bento-dark-card">
+                    <div class="card-icon-wrapper icon-dark-variant">
                         <span class="material-symbols-outlined">group_add</span>
                     </div>
-                    <h3 class="font-headline-md text-headline-md mb-xs">Registro de nuevos miembros de forma rápdia</h3>
-                    <p class="font-body-md text-body-md opacity-80 mb-xl">Para empezar de cero unicamente necesitas crear una nueva cuent asociada a una empresa y para añadir empleados estos únicamente tendrán que introducir el CIF de la empresa.</p>
-                    <div class="space-y-sm">
-                        <div class="bg-on-tertiary-container/5 p-sm rounded-xl flex items-center gap-sm">
-                            <span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
-                            <span class="font-body-md">Registro rápido y sencillo</span>
+                    <h3 class="card-title">Registro de nuevos miembros de forma rápdia</h3>
+                    <p class="card-text opacity-80">Para empezar de cero unicamente necesitas crear una nueva cuent asociada a una empresa y para añadir empleados estos únicamente tendrán que introducir el CIF de la empresa.</p>
+                    <div class="card-list">
+                        <div class="list-item">
+                            <span class="material-symbols-outlined icon-success">check_circle</span>
+                            <span class="list-item-text">Registro rápido y sencillo</span>
                         </div>
-                        <div class="bg-on-tertiary-container/5 p-sm rounded-xl flex items-center gap-sm">
-                            <span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
-                            <span class="font-body-md">Seguridad de los datos de empleados y empresas</span>
+                        <div class="list-item">
+                            <span class="material-symbols-outlined icon-success">check_circle</span>
+                            <span class="list-item-text">Seguridad de los datos de empleados y empresas</span>
                         </div>
-                        <div class="bg-on-tertiary-container/5 p-sm rounded-xl flex items-center gap-sm">
-                            <span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
-                            <span class="font-body-md">Reservas intuitivas</span>
+                        <div class="list-item">
+                            <span class="material-symbols-outlined icon-success">check_circle</span>
+                            <span class="list-item-text">Reservas intuitivas</span>
                         </div>
                     </div>
                 </div>
-                <!-- Feature Card 3 -->
-                <div class="glass-card rounded-xl p-lg">
-                    <div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-primary mb-md">
+
+                <div class="card-small glass-card">
+                    <div class="card-icon-wrapper">
                         <span class="material-symbols-outlined">confirmation_number</span>
                     </div>
-                    <h3 class="font-headline-md text-headline-md mb-xs">Gestión de incidencias</h3>
-                    <p class="font-body-md text-body-md text-on-surface-variant">¿Se han identificado problemas? Los empleados pueden crear tickets de incidencias directamente desde sus escritorios, con notificaciones instantáneas para los técnicos de las instalaciones.</p>
+                    <h3 class="card-title">Gestión de incidencias</h3>
+                    <p class="card-text">¿Se han identificado problemas? Los empleados pueden crear tickets de incidencias directamente desde sus escritorios, con notificaciones instantáneas para los técnicos de las instalaciones.</p>
                 </div>
-                <!-- Feature Card 4 -->
-                <div class="md:col-span-2 glass-card rounded-xl p-lg flex items-center gap-lg">
-                    <div class="w-12 h-12 bg-surface-container-highest rounded-xl flex items-center justify-center text-primary mb-md">
-                        <span class="material-symbols-outlined">monitoring</span>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="font-headline-md text-headline-md mb-xs">Informes diarios</h3>
-                        <p class="font-body-md text-body-md text-on-surface-variant">Informes diarios sobre la utilización de los epacios de la oficina, el consumo de energía y las zonas de alto tráfico para optimizar los gastos.</p>
-                    </div>
-                    <div class="hidden sm:block w-1/3">
-                        <img class="w-full h-auto rounded-xl" data-alt="A close-up of a sophisticated data analytics dashboard displaying office occupancy rates. The visualization includes high-contrast minimalist charts and line graphs using a palette of deep navy, white, and vibrant teal accents. The lighting is soft and professional, emphasizing the precision and clarity of the data points." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPYue8v40Kwopdl3-wJw5dqRuAptZe8mJMFp0cxHggraZGtEaZ9iBJnNgPeObdLmRjjc5rpK7m31K7rhMbNUF6Wj8_ugi-8nGJjK5ac9aHOgBkNqpnEfCqI_tL5JQw4Y82xqu9NfrT1g-m4h0F-oOH9EJIqHQagQy-5VX_Xk1-opGahprCGQ8_Rdd0Xlq1r39vTHbgGz2bFb88h_fKBhcSAxi5mai8xNjuVFhBkCGtKPyX_hWsMSif5Mfbr73xH23bZmC2T8KsN8_3"/>
+
+                <div class="card-large glass-card horizontal-feature-card">
+                    <div class="card-text-side">
+                        <div class="card-icon-wrapper">
+                            <span class="material-symbols-outlined">monitoring</span>
+                        </div>
+                        <h3 class="card-title">Informes diarios</h3>
+                        <p class="card-text">Informes diarios sobre la utilización de los epacios de la oficina, el consumo de energía y las zonas de alto tráfico para optimizar los gastos.</p>
+                     </div>
+                    <div class="card-image-side-wrapper-new">
+                        <img class="card-image-side-new" alt="Dashboard analítico" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPYue8v40Kwopdl3-wJw5dqRuAptZe8mJMFp0cxHggraZGtEaZ9iBJnNgPeObdLmRjjc5rpK7m31K7rhMbNUF6Wj8_ugi-8nGJjK5ac9aHOgBkNqpnEfCqI_tL5JQw4Y82xqu9NfrT1g-m4h0F-oOH9EJIqHQagQy-5VX_Xk1-opGahprCGQ8_Rdd0Xlq1r39vTHbgGz2bFb88h_fKBhcSAxi5mai8xNjuVFhBkCGtKPyX_hWsMSif5Mfbr73xH23bZmC2T8KsN8_3"/>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Registration Form Section -->
-    <section class="py-xl bg-surface-container-low" id="registration">
-        <div class="max-w-container-max mx-auto px-lg">
-            <div class="flex flex-col lg:flex-row gap-xl items-start">
-                <div class="lg:w-1/2">
-                    <h2 class="font-display-lg text-display-lg mb-md">Ready to optimize your workspace? (esto queda bonito no?)</h2>
-                    <p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-[480px]">Join 500+ forward-thinking companies already using WorkSpace Pro to create intentional office environments.</p>
-                    <div class="space-y-lg">
-                        <div class="flex gap-md">
-                            <div class="bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">1</div>
+
+    <section class="registration-section" id="registration">
+        <div class="registration-container">
+            <div class="registration-split-layout">
+                <div class="registration-info">
+                    <h2 class="registration-title">¿Listo para optimizar tu espacio de trabajo?</h2>
+                    <p class="registration-subtitle">Únete a Ecotrack - Office de siguiendo unos pasos muy sencillos.</p>
+                    <div class="steps-container">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
                             <div>
-                                <h4 class="font-title-md text-title-md">Register Company</h4>
-                                <p class="font-body-md text-body-md text-on-surface-variant">Fill out the basic administrative details to secure your workspace subdomain.</p>
+                                <h4 class="step-heading">Registro Inicial</h4>
+                                <p class="step-text">Registra un primer usuario como administrar y asocialo a tu empresa.</p>
                             </div>
                         </div>
-                        <div class="flex gap-md opacity-60">
-                            <div class="bg-outline text-on-primary w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">2</div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
                             <div>
-                                <h4 class="font-title-md text-title-md">Configure Floor Plans</h4>
-                                <p class="font-body-md text-body-md text-on-surface-variant">Upload blueprints and define rooms, desks, and communal zones.</p>
+                                <h4 class="step-heading">Configura tus plantas, salas y escritorios de trabajo</h4>
+                                <p class="step-text">Genera, de una manera rápida y sencilla, mapa interactivos de tus plantas con sus escritorios de trabajo y salas de reuniones.</p>
                             </div>
                         </div>
-                        <div class="flex gap-md opacity-60">
-                            <div class="bg-outline text-on-primary w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">3</div>
-                            <div>
-                                <h4 class="font-title-md text-title-md">Onboard Employees</h4>
-                                <p class="font-body-md text-body-md text-on-surface-variant">Launch the invitations and watch your workplace come alive.</p>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4 class="step-heading">Haz que tus empleados se registren</h4>
+                                <p class="step-text">Diles a tus empleados que se registren asociandose a tu empresa y empieza a disfrutar de los beneficios de Ecotrack - Office.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="lg:w-1/2 w-full">
-                    <div class="bg-white p-lg rounded-xl shadow-xl border border-outline-variant">
-                        <h3 class="font-headline-md text-headline-md mb-lg">Formualario de Registro</h3>
-                        <form class="space-y-md" [formGroup]= "registerForm" (ngSubmit) = "register()">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-md">
-                                <div class="space-y-xs">
-                                    <label class="font-label-sm text-label-sm text-on-surface-variant" for = "nombre">NOMBRE</label>
-                                    <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="John" type="text" id = "firstName" formControlName = "firstName"/>
-                                
-                                    @if (registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
-
-                                        <small class = "error-message">El nombre es obligatorio.</small>
-                                    }
-                                </div>
-                                <div class="space-y-xs">
-                                    <label class="font-label-sm text-label-sm text-on-surface-variant" for = "apellidos">APELLIDOS</label>
-                                    <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Doe" type="text" id = "lastName" formControlName = "lastName"/>
-                                
-                                    @if (registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
-
-                                        <small class = "error-message">El apellido es obligatorio.</small>
-                                    }
-                                </div>
-                            </div>
-                            <div class="space-y-xs">
-                                <label class="font-label-sm text-label-sm text-on-surface-variant" for = "correoElectronico">CORREO ELECTRÓNICO</label>
-                                <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="john@company.com" type="email" id = "email" formControlName = "email"/>
+                <div class="registration-form-container">
+                    <div class="form-card">
+                        <h3 class="form-title">
+                            @if (pasoActual === 'USUARIO') { Registro de Usuario }
+                            @else if (pasoActual === 'EMPRESA_NUEVA') { Datos de tu Empresa }
+                            @else if (pasoActual === 'EMPRESA_EXISTENTE') { Vincular Empresa }
+                        </h3>
+                        
+                        <form class="custom-form" [formGroup]="registerForm" (ngSubmit)="submitRegistro()">
                             
-                                @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-
+                            @if (pasoActual === 'USUARIO') {
+                                <div class="form-grid-2col">
+                                    <div class="form-group">
+                                        <label class="form-label" for="firstName">NOMBRE</label>
+                                        <input class="form-input" placeholder="John" type="text" id="firstName" formControlName="firstName"/>
+                                        @if (registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
+                                            <small class="error-message">El nombre es obligatorio.</small>
+                                        }
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="lastName">APELLIDOS</label>
+                                        <input class="form-input" placeholder="Doe" type="text" id="lastName" formControlName="lastName"/>
+                                        @if (registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
+                                            <small class="error-message">El apellido es obligatorio.</small>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="email">CORREO ELECTRÓNICO</label>
+                                    <input class="form-input" placeholder="john@company.com" type="email" id="email" formControlName="email"/>
+                                    @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
                                         @if (registerForm.get('email')?.hasError('required')) {
-                                            <small class = "error-message">El correo electrónico es obligatorio.</small>
+                                            <small class="error-message">El correo electrónico es obligatorio.</small>
                                         }
                                         @if (registerForm.get('email')?.hasError('email')) {
-                                            <small class = "error-message">Por favor, introduce un formato de email valido.</small>
+                                            <small class="error-message">Por favor, introduce un formato de email válido.</small>
                                         }
                                     }
-                            </div>
-                            <div class="space-y-xs">
-                                <label class="font-label-sm text-label-sm text-on-surface-variant" for = "contrasena">CONTRASEÑA</label>
-                                <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Introduce tu contraseña" type="password" id = "passwordHash" formControlName = "passwordHash"/>
-                            
-                                @if (registerForm.get('passwordHash')?.invalid && registerForm.get('passwordHash')?.touched) {
-
-                                    @if (registerForm.get('passwordHash')?.hasError('required')) {
-
-                                        <small class = "error-message">La contraseña es obligatoria.</small>
-
-                                    } 
-                                }
-                            </div>
-                            <div class="space-y-xs">
-                                <label class="font-label-sm text-label-sm text-on-surface-variant" for = "repetirContrasena">REPETIR CONTRASEÑA</label>
-                                <input class="w-full bg-white border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-secondary focus:border-secondary transition-all" placeholder="Repite tu contraseña" type="password" id = "confirmPassword" formControlName = "confirmPassword"/>
-                            
-                                @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('passwordHash')?.touched) {
-
-                                    @if (registerForm.get('confirmPassword')?.hasError('required')) {
-
-                                        <small class = "error-message">Debes confirmar la contraseña.</small>
-
-                                    } 
-                                    @if (registerForm.get('confirmPassword')?.hasError('passwordsNotMatch')) {
-
-                                        <small class = "error-message">Las contraseñas no coinciden.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="passwordHash">CONTRASEÑA</label>
+                                    <input class="form-input" placeholder="Introduce tu contraseña" type="password" id="passwordHash" formControlName="passwordHash"/>
+                                    @if (registerForm.get('passwordHash')?.invalid && registerForm.get('passwordHash')?.touched) {
+                                        <small class="error-message">La contraseña es obligatoria.</small>
                                     }
-                                }
-                            </div>
-                            <button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-md rounded-xl hover:bg-black/90 transition-all shadow-lg active:scale-95 duration-150" type="submit" [disabled]="registerForm.invalid">
-                                Continuar con el registro
-                            </button>
-                            <p class="font-body-md text-body-md text-on-surface-variant text-center">
-                                By registering, you agree to our <a class="text-primary font-bold hover:underline" href="#">Terms of Service</a>.
-                            </p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="confirmPassword">REPETIR CONTRASEÑA</label>
+                                    <input class="form-input" placeholder="Repite tu contraseña" type="password" id="confirmPassword" formControlName="confirmPassword"/>
+                                    @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('passwordHash')?.touched) {
+                                        @if (registerForm.get('confirmPassword')?.hasError('required')) {
+                                            <small class="error-message">Debes confirmar la contraseña.</small>
+                                        } 
+                                        @if (registerForm.get('confirmPassword')?.hasError('passwordsNotMatch')) {
+                                            <small class="error-message">Las contraseñas no coinciden.</small>
+                                        }
+                                    }
+                                </div>
+
+                                <div class="form-actions-stack" style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px;">
+                                    <button type="button" class="btn-submit-form" (click)="irAPaso('EMPRESA_NUEVA')" [disabled]="registerForm.invalid">
+                                        Registrar nueva empresa
+                                    </button>
+                                    <button type="button" class="btn-submit-form btn-secondary-action-form" (click)="irAPaso('EMPRESA_EXISTENTE')" [disabled]="registerForm.invalid">
+                                        Asociarse a una empresa existente
+                                    </button>
+                                </div>
+                            }
+
+                            @else if (pasoActual === 'EMPRESA_NUEVA') {
+                                <div class="form-group">
+                                    <label class="form-label" for="companyName">NOMBRE DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="Mi Empresa S.L." type="text" id="companyName" formControlName="companyName"/>
+                                    @if (registerForm.get('companyName')?.invalid && registerForm.get('companyName')?.touched) {
+                                        <small class="error-message">El nombre de la empresa es obligatorio.</small>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="companyCif">CIF DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="B12345678" type="text" id="companyCif" formControlName="companyCif"/>
+                                    @if (registerForm.get('companyCif')?.invalid && registerForm.get('companyCif')?.touched) {
+                                        <small class="error-message">El CIF es obligatorio para registrar la empresa.</small>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="companyAddress">DIRECCIÓN DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="Calle Ángel Pareja, 5" type="text" id="companyAddress" formControlName="companyAddress"/>
+                                    @if (registerForm.get('companyAddress')?.invalid && registerForm.get('companyAddress')?.touched) {
+                                        <small class="error-message">La dirección es obligatoria para registrar la empresa.</small>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="companyEmail">CORREO ELECTRÓNICO DE LA EMPRESA</label>
+                                    <input class="form-input" placeholder="ecotack@company.com" type="email" id="companyEmail" formControlName="companyEmail"/>
+                                    @if (registerForm.get('companyEmail')?.invalid && registerForm.get('companyEmail')?.touched) {
+                                        @if (registerForm.get('companyEmail')?.hasError('required')) {
+                                            <small class="error-message">El correo electrónico es obligatorio.</small>
+                                        }
+                                        @if (registerForm.get('companyEmail')?.hasError('email')) {
+                                            <small class="error-message">Por favor, introduce un formato de email válido.</small>
+                                        }
+                                    }
+                                </div>
+
+                                <div class="form-actions-inline" style="display: flex; gap: 12px; margin-top: 24px;">
+                                    <button type="button" class="btn-submit-form" style="background-color: #76777d;" (click)="irAPaso('USUARIO')">
+                                        Atrás
+                                    </button>
+                                    <button type="submit" class="btn-submit-form" [disabled]="registerForm.invalid">
+                                        Finalizar registro
+                                    </button>
+                                </div>
+                            }
+
+                            @else if (pasoActual === 'EMPRESA_EXISTENTE') {
+                                <div class="form-group">
+                                    <label class="form-label" for="companyCifAsociate">CIF DE LA EMPRESA REGISTRADA</label>
+                                    <input class="form-input" placeholder="Introduce el CIF de tu empresa" type="text" id="companyCifAsociate" formControlName="companyCifAsociate"/>
+                                    @if (registerForm.get('companyCifAsociate')?.invalid && registerForm.get('companyCifAsociate')?.touched) {
+                                        <small class="error-message">Debes introducir un CIF válido para asociarte.</small>
+                                    }
+                                </div>
+
+                                <div class="form-actions-inline" style="display: flex; gap: 12px; margin-top: 24px;">
+                                    <button type="button" class="btn-submit-form" style="background-color: #76777d;" (click)="irAPaso('USUARIO')">
+                                        Atrás
+                                    </button>
+                                    <button type="submit" class="btn-submit-form" [disabled]="registerForm.invalid">
+                                        Finalizar registro
+                                    </button>
+                                </div>
+                            }
+
                         </form>
                     </div>
                 </div>
@@ -211,51 +275,17 @@
         </div>
     </section>
 </main>
-<!-- Footer -->
-<footer class="bg-tertiary-container text-on-tertiary py-xl">
-    <div class="max-w-container-max mx-auto px-lg">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-xl">
-            <div class="col-span-1 md:col-span-1">
-                <span class="font-headline-md text-headline-md font-bold mb-md block">EcoTrack - Office (esto también está bonito)</span>
-                <p class="font-body-md text-body-md opacity-60">High-performance workplace logistics for intentional organizations.</p>
+
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div class="footer-brand-column">
+                <span class="footer-brand-title">EcoTrack - Office</span>
+                <p class="footer-brand-description">Logística espacial de alto rendimiento para organizaciones conscientes.</p>
             </div>
-            <div>
-                <h5 class="font-title-md text-title-md mb-md">Product</h5>
-                <ul class="space-y-sm font-body-md text-body-md opacity-60">
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Features</a></li>
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Room Booking</a></li>
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Desk Management</a></li>
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Analytics</a></li>
-                </ul>
             </div>
-            <div>
-                <h5 class="font-title-md text-title-md mb-md">Company</h5>
-                <ul class="space-y-sm font-body-md text-body-md opacity-60">
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">About Us</a></li>
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Security</a></li>
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Careers</a></li>
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="font-title-md text-title-md mb-md">Support</h5>
-                <ul class="space-y-sm font-body-md text-body-md opacity-60">
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Help Center</a></li>
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">Documentation</a></li>
-                    <li><a class="hover:text-on-tertiary-container transition-colors" href="#">API Status</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-white/10 mt-xl pt-lg flex flex-col md:row-reverse md:flex-row justify-between items-center gap-md">
-            <div class="flex gap-md">
-                <a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all" href="#">
-                    <span class="material-symbols-outlined text-title-md">public</span>
-                </a>
-                <a class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all" href="#">
-                    <span class="material-symbols-outlined text-title-md">chat</span>
-                </a>
-            </div>
-            <p class="font-body-md text-body-md opacity-40">© 2026 EcoTrack - Office. All rights reserved.</p>
+        <div class="footer-bottom-bar">
+            <p class="footer-copyright">© 2026 EcoTrack - Office. All rights reserved.</p>
         </div>
     </div>
 </footer>

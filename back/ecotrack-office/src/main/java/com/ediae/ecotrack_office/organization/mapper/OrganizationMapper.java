@@ -53,9 +53,9 @@ public class OrganizationMapper {
             createDto.getCif(),
             createDto.getAddress(),
             createDto.getEmail(),
-            createDto.getEndSubscription(),
-            createDto.getIsActive(),
-            createDto.getCreatedAt()
+            null,
+            null,
+            null
          );
     }
 

@@ -4,7 +4,7 @@
     <div class="header">
       <h1 class="font-headline-lg text-headline-lg text-on-surface">Mapa del Edificio</h1>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
-        Explora y reserva plantas, salas y escritorios.
+        Explora y reserva plantas, salas y mesas.
       </p>
     </div>
 
@@ -26,7 +26,7 @@
                 [class.active]="selectedFloorId === floorWithStatus.floor.id"
                 [ngClass]="getFloorStatusClass(floorWithStatus)"
                 class="btn-floor">
-                <strong>Planta {{ floorWithStatus.floor.level }}</strong>
+                <strong>{{ floorWithStatus.floor.name || `Floor ${floorWithStatus.floor.level}` }}</strong>
                 <span class="status-badge" [ngClass]="getFloorStatusClass(floorWithStatus).split('-')[1]" [title]="getStatusText(getFloorStatus(floorWithStatus))"></span>
                 <br>
                 <small class="text-on-surface-variant">{{ floorWithStatus.floor.isActive ? 'Activo' : 'Inactivo' }}</small>
@@ -38,7 +38,7 @@
         <section class="section">
           <h3 class="font-title-md text-title-md text-on-surface">
             <span class="material-symbols-outlined text-primary">filter_list</span>
-            Horario
+            Fecha
           </h3>
 
           <div class="form-group">
@@ -97,7 +97,7 @@
         <!-- Desks Section - Cinema Style -->
         <section class="desks-cinema">
           <div class="cinema-header">
-            <h2 class="text-headline-md text-white">Horario de Escritorios</h2>
+            <h2 class="text-headline-md text-white">Horario de Mesas</h2>
             <p class="text-body-md text-surface-dim" *ngIf="selectedDate">
               Fecha: {{ selectedDate | date: 'EEEE, MMMM d, yyyy' }}
             </p>
@@ -117,8 +117,8 @@
               <span class="legend-text">OTRA RESERVA</span>
             </div>
             <div class="legend-item">
-              <div class="legend-color reserved"></div>
-              <span class="legend-text">RESERVADO</span>
+              <div class="legend-color out-of-service"></div>
+              <span class="legend-text">AVERIADO</span>
             </div>
             <div class="legend-item">
               <div class="legend-color unavailable"></div>
@@ -128,14 +128,14 @@
 
           <div class="desks-grid-wrapper">
             <div *ngIf="!selectedRoomId" class="empty-state">
-              <p>Selecciona una sala para ver escritorios</p>
+              <p>Selecciona una sala para ver mesas</p>
             </div>
 
             <div *ngIf="selectedRoomId && getSelectedFloor()" class="desks-grid">
               <button
                 *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
                 [ngClass]="getDeskStatusClass(deskWithStatus)"
-                [title]="isMyReservation(deskWithStatus) ? 'Tu reserva - Haz clic para cancelar' : isOtherReservation(deskWithStatus) ? 'Reservado por ' + deskWithStatus.reservedBy : ''"
+                [title]="getDeskTooltip(deskWithStatus)"
                 [disabled]="isSelectedRoomUnavailable()"
                 (click)="openDeskDialog(deskWithStatus)"
                 class="desk-btn">
@@ -175,7 +175,7 @@
             <div
               *ngIf="selectedRoomId && getSelectedFloor() && getDesksByRoom(selectedRoomId).length === 0 && !isMeetingRoom(getSelectedRoom()!) && !loading.floors && !errors.floors"
               class="empty-state">
-              <p>No se encontraron escritorios para esta sala.</p>
+              <p>No se encontraron mesas para esta sala.</p>
             </div>
 
             <div *ngIf="loading.floors" class="empty-state">
@@ -211,7 +211,7 @@
           {{ getSelectedFloor()?.rooms?.length || 0 }}
         </div>
         <div class="debug-item" *ngIf="selectedRoomId">
-          <strong>Escritorios en la Sala:</strong>
+          <strong>Mesas en la Sala:</strong>
           {{ getDesksByRoom(selectedRoomId).length }}
         </div>
         <div class="debug-item" *ngIf="selectedRoomId && getRoomById(selectedRoomId)">

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
 import { HomeLanding } from './landing/components/home-landing/home-landing';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
 import { BuildingMapComponent } from './building-map/components/building-map.component';
@@ -9,8 +10,6 @@ import { UserManagementComponent } from './features/admin/user-management/user-m
 import { Reservation } from './reservation/reservation';
 import { Organization } from './organization/organization';
 import { AssetsMgmt } from './features/assets-mgmt/assets-mgmt';
-
-// Nuevos componentes añadidos para la tarea EK-27
 import { IncidenciasComponent } from './features/incidencias/incidencias';
 import { AnalyticsComponent } from './features/analytics/analytics';
 
@@ -19,15 +18,15 @@ export const routes: Routes = [
   { path: '', component: HomeLanding },
   { path: 'login', component: LoginComponent },
 
-  // RUTAS PRIVADAS (Cargan dentro del menú de la aplicación)
+  // RUTAS PRIVADAS 
   {
     path: '',
     component: PrivateLayout,
+    canActivate: [authGuard], // Filtro: Solo usuarios logueados pueden acceder a estas rutas
     children: [
       {
         path: 'profile',
         component: UserProfileComponent,
-        canActivate: [authGuard],
       },
       {
         path: 'home',
@@ -36,7 +35,7 @@ export const routes: Routes = [
       {
         path: 'admin/user-management',
         component: UserManagementComponent,
-        canActivate: [authGuard],
+        canActivate: [adminGuard], // Filtro: Solo admins pueden acceder a esta ruta
       },
       {
         path: 'reservation',
@@ -47,6 +46,7 @@ export const routes: Routes = [
         component: Organization,
       },
       {
+        // TODO: Filtrar solo los admins
         path: 'assets',
         component: AssetsMgmt,
       },
@@ -60,6 +60,7 @@ export const routes: Routes = [
       }
     ],
   },
-  // RUTA POR DEFECTO (Redirección si la URL no existe)
+
+  // COMODÍN: Redirección por defecto para URLs inexistentes
   { path: '**', redirectTo: '' },
 ];

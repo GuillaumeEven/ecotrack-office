@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
+import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.models.UserModel;
 
@@ -27,6 +28,21 @@ public class UserMapper {
         entity.setIsActive(model.getIsActive());
         entity.setConsentGiven(model.getConsentGiven());
         entity.setPreferencesJson(model.getPreferencesJson());
+        entity.setOrganization(organization);
+        return entity;
+    }
+
+    public UserEntity fromCreateDtoEntity(UserCreateRequestDto dto, OrganizationEntity organization) {
+
+        if (dto == null) return null;
+        
+        UserEntity entity = new UserEntity();
+        entity.setEmail(dto.email());
+        entity.setFirstName(dto.firstName());
+        entity.setLastName(dto.lastName());
+        entity.setRole(dto.role());
+        entity.setConsentGiven(true);
+        entity.setPreferencesJson("default");
         entity.setOrganization(organization);
         return entity;
     }

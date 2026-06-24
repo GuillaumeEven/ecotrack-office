@@ -39,9 +39,9 @@ public class RoleGuard {
     // Helpers privados
     // ─────────────────────────────────────────────
     private boolean hasRole(Authentication auth, Role role) {
-        return auth.getAuthorities()
-                .contains(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
+    return auth.getAuthorities()
+            .contains(new SimpleGrantedAuthority("ROLE_" + role.name()));
+}
 
     // ─────────────────────────────────────────────
     // Public helper para verificar roles sin lanzar excepción

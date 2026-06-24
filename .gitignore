@@ -12,3 +12,6 @@ back/**/*.jar
 back/**/*.war
 back/**/*.log
 back/**/spring-shell.log
+
+.env.dev
+.env.prod

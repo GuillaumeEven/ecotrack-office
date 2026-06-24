@@ -134,29 +134,36 @@ Hoy creamos las paginas que nos hacen falta (mi component works !), mañana Rai 
   - [ ] limpiar sidebar y hacer botones operativos (navegacion: home, reservas, incident, empresa(admin)) -> Rai
   - [ ] form de inscripción -> Rai
   - [ ] editar organization -> Rai
+  - [ ] reformar la arquitectura del front (Rai hace una propuesta)
   - [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
+(imprescindible ?)
+- [ ] Vizualizar errores en front
 
-- [ ] Form registro COMO LO HACEMOS:
+- [ ] Form registro dinamico:
   - [ ] un formulario comun de user
-  - [ ] al pulsar registrarse, nuevo formulario con:
-    - [ ] nueva empresa ?
-    - [ ] agregarse a una empresa (con cif)
-    - [ ] al final de la validacion de ese esgundo form se envia la peticion total con rol = employee (en caso de no admin)
+    - [ ] afiliarte a una empresa
+      - [ ] cif
+    - [ ] crear una empresa
+      - [ ] form creacion empres
 
 En nuestros sueños:
-- [ ] pensar la arquitectura del front (Rai hace una propuesta)
+- [ ] gestion de recurso averiado: bloqueado
 - [ ] generacion de codigo empresa para que admin invite a nueavos usuarios
 - [ ] clean code: comentarios, logging, sonarCube...
 - [ ] hash passwords (a JL ?)
-- [ ] Recuperar la estructura de la memoria
-- [ ] harmonizar el css
-- [ ] añadir docstring para swagguer
-- [ ] collection postman
-- [ ] gestion de recurso averiado: bloqueado o no...
+- [ ] harmonizar la gestión de las exceptiones
+- [x] Recuperar la estructura de la memoria
 - [ ] harmonizar los controladores: poner cualquier respuesta como ResponseEntity
-- [ ] harmonizar la gestión de los exceptiones
 - [ ] desiciones de diseño
+- [ ] collection postman
+- [ ] añadir docstring para swagguer
+- [ ] harmonizar el css
 - [ ] docker/deploy
+- [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
+- [ ] enviar un email de invitacion
 - [x] repensar los status de resources: una resource no puede ser reservada o disponible en si misma, depende de las reservas.
 
 Muchas gracias chicos, un placer trabajar con vosotros ! Y esas cosas...
+
+incidentRepository
+@Query("SELECT i FROM IncidentEntity i WHERE i.user.organization.id = :organizationId")

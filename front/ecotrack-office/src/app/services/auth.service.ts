@@ -40,7 +40,7 @@ export class AuthService {
     localStorage.removeItem(this.USER_ID_KEY);
     localStorage.removeItem(this.ROLE_KEY);
     localStorage.removeItem(this.EMAIL_KEY);
-    this.router.navigate(['/login']);
+    this.router.navigate(['']);
   }
 
   // ─── Getters ──────────────────────────────────────────────────────────────
