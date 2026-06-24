@@ -16,6 +16,13 @@ export class ReservationService {
     return this.http.get<ReservationResponse[]>(`${this.API_URL}/user`);
   }
 
+  //TODO: CAMBIAR POR LA LLAMADA REAL
+  
+  getAllReservations() : Observable<ReservationResponse[]> {
+
+    return this.http.get<ReservationResponse[]>(`${this.API_URL}/user`);
+  }
+
   updateReservation(idReservation: number, reservationData: any): Observable<ReservationResponse> {
 
     return this.http.put<ReservationResponse>(`${this.API_URL}/${idReservation}`, reservationData);

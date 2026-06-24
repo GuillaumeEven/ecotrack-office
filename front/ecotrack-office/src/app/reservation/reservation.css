@@ -388,6 +388,123 @@
   opacity: 0.5;
 }
 
+/* Contenedor oscurecido de fondo completo */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Asegura que se monte por encima del Sidebar/Header */
+  backdrop-filter: blur(2px);
+}
+
+/* Caja del cuadro de diálogo */
+.modal-box {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  max-width: 450px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-box__title {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #1a1a1a;
+}
+
+.modal-box__text {
+  margin: 0;
+  color: #555555;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.modal-box__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-box__input {
+  padding: 0.6rem;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Botonera */
+.modal-box__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.modal-box__btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.modal-box__btn--secondary {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+.modal-box__btn--secondary:hover { background: #e5e7eb; }
+
+.modal-box__btn--primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+.modal-box__btn--primary:hover { background: #1d4ed8; }
+.modal-box__btn--primary:disabled { background: #93c5fd; cursor: not-allowed; }
+
+.modal-box__btn--danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+.modal-box__btn--danger:hover { background: #b91c1c; }
+
+.bookings-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: #f3f4f6;
+  padding: 0.25rem;
+  border-radius: 8px;
+}
+
+.bookings-tabs__btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #4b5563;
+  transition: all 0.2s;
+}
+
+/* Estado cuando la pestaña coincide con el flag actual */
+.bookings-tabs__btn--active {
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 /* ==========================================================================
    5. SECCIÓN TABLA HISTORIAL GLOBAL
    ========================================================================== */

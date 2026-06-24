@@ -5,14 +5,24 @@
       <p class="bookings-header__subtitle">Gestiona tus reservas activas y visualiza el historial de reservas.</p>
     </div>
     
-    <!-- ESTE DIV ME LO GUARDO PARA FUTURO GESTIONAR TEMA DE ROLES
-    <div class="bookings-header__tabs-wrapper">
-      <div class="bookings-tabs">
-        <button class="bookings-tabs__btn bookings-tabs__btn--active">My Bookings</button>
-        <button class="bookings-tabs__btn">All Staff</button>
+    @if (role === 'ADMIN' || role === 'TECHNICIAN') {
+      <div class="bookings-header__tabs-wrapper">
+        <div class="bookings-tabs">
+          <button 
+            class="bookings-tabs__btn" 
+            [class.bookings-tabs__btn--active]="currentTab === 'MY_BOOKINGS'"
+            (click)="switchTab('MY_BOOKINGS')">
+            Mis reservas
+          </button>
+          <button 
+            class="bookings-tabs__btn" 
+            [class.bookings-tabs__btn--active]="currentTab === 'ALL_STAFF'"
+            (click)="switchTab('ALL_STAFF')">
+            Todas las reservas
+          </button>
+        </div>
       </div>
-    </div>
-    -->
+    }
   </header>
 
   <!-- EL FILTRO ME LO GUARDO PARA CUANDO LO TENGA TODO LISTO IMPLEMENTAR
@@ -53,123 +63,233 @@
   </div>
   -->
 
-  <section class="active-reservations">
-    <div class="active-reservations__header">
-      <h2 class="active-reservations__title">
-        <span class="active-reservations__indicator-dot"></span>
-        Reservas activas
-      </h2>
-    </div>
+  @if (currentTab === 'ALL_STAFF') {
+    <section class="global-history">
+      <div class="global-history__header">
+        <h2 class="global-history__title">Panel de gestión: Todas las reservas del Staff</h2>
+      </div>
 
-    <div class="active-reservations__grid">
-      @for (reserva of activeReservations; track reserva.id) {
-        <div class="booking-card">
-          <div class="booking-card__image-wrapper">
-            <img class="booking-card__image" [alt]="reserva.resourceName" src="images/imagen-escritorio.webp">
+      <div class="global-history__table-wrapper">
+        <table class="history-table">
+          <thead class="history-table__thead">
+            <tr>
+              <th class="history-table__th">Empleado</th>
+              <th class="history-table__th">Recurso</th>
+              <th class="history-table__th">Equipamiento</th>
+              <th class="history-table__th">Fecha</th>
+              <th class="history-table__th" style="text-align: center;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="history-table__tbody">
             
-            <!--POR SI QUIERO PONER EN LA FOTO HOY/MAÑANA BLABLABLA
-            <div class="booking-card__badge-time">{{ reserva.date }}</div>
-            -->
-          </div>
-          
-          <div class="booking-card__content">
-            <div class="booking-card__header">
-              <div>
-                <h3 class="booking-card__title">{{ reserva.resourceName }}</h3>
-                
-                <p class="booking-card__meta">
-                  Equipamiento: {{ reserva.resourceEquipmentList }}
-                </p>
+            @for (reserva of allStaffReservations; track reserva.id) {
+              <tr class="history-table__tr">
+                <td class="history-table__td">
+                  <div class="employee-cell">
+                    <div class="employee-cell__avatar">👤</div>
+                    <div>
+                      <div class="employee-cell__name">Usuario #{{ reserva.userId }}</div>
+                      <div class="employee-cell__dept">{{ reserva.status }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="history-table__td history-table__td--bold">
+                  {{ reserva.resourceName }}
+                </td>
+                <td class="history-table__td history-table__td--muted">
+                  {{ reserva.resourceEquipmentList }}
+                </td>
+                <td class="history-table__td history-table__td--muted">
+                  {{ reserva.date }}
+                </td>
+                <td class="history-table__td" style="text-align: center;">
+                  <div class="modal-box__actions" style="justify-content: center; margin: 0; gap: 0.5rem;">
+                    <button class="booking-card__btn-edit" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" (click)="openEditModal(reserva)">Editar</button>
+                    <button class="booking-card__btn-cancel" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" (click)="openCancelModal(reserva)">Cancelar</button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="history-table__td" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                  No hay reservas registradas en el sistema.
+                </td>
+              </tr>
+            }
+
+          </tbody>
+        </table>
+        
+        <footer class="history-pagination">
+          <span class="history-pagination__info">Total registros: {{ allStaffReservations.length }}</span>
+        </footer>
+      </div>
+    </section>
+  }
+
+  @if (currentTab === 'MY_BOOKINGS') {
+
+    <section class="active-reservations">
+      <div class="active-reservations__header">
+        <h2 class="active-reservations__title">
+          <span class="active-reservations__indicator-dot"></span>
+          Reservas activas
+        </h2>
+      </div>
+
+      <div class="active-reservations__grid">
+        @for (reserva of activeReservations; track reserva.id) {
+          <div class="booking-card">
+            <div class="booking-card__image-wrapper">
+              <img class="booking-card__image" [alt]="reserva.resourceName" src="images/imagen-escritorio.webp">
+              
+              <!--POR SI QUIERO PONER EN LA FOTO HOY/MAÑANA BLABLABLA
+              <div class="booking-card__badge-time">{{ reserva.date }}</div>
+              -->
+            </div>
+            
+            <div class="booking-card__content">
+              <div class="booking-card__header">
+                <div>
+                  <h3 class="booking-card__title">{{ reserva.resourceName }}</h3>
+                  
+                  <p class="booking-card__meta">
+                    Equipamiento: {{ reserva.resourceEquipmentList }}
+                  </p>
+                </div>
+                <span class="booking-card__status-tag" [class]="reserva.status.toLowerCase()">
+                  {{ reserva.status }}
+                </span>
               </div>
-              <span class="booking-card__status-tag" [class]="reserva.status.toLowerCase()">
-                {{ reserva.status }}
-              </span>
-            </div>
-            
-            <div class="booking-card__schedule">
-              <span class="material-symbols-outlined">calendar_today</span>
-              <span class="booking-card__time">{{ reserva.date }}</span>
-            </div>
-            
-            <div class="booking-card__actions">
-              <button class="booking-card__btn-edit" (click)="editReservation(reserva.id)">Editar</button>
-              <button class="booking-card__btn-cancel" (click)="cancelReservation(reserva.id)">Cancelar</button>
+              
+              <div class="booking-card__schedule">
+                <span class="material-symbols-outlined">calendar_today</span>
+                <span class="booking-card__time">{{ reserva.date }}</span>
+              </div>
+              
+              <div class="booking-card__actions">
+                <button class="booking-card__btn-edit" (click)="openEditModal(reserva)">Editar</button>
+                <button class="booking-card__btn-cancel" (click)="openCancelModal(reserva)">Cancelar</button>
+              </div>
             </div>
           </div>
-        </div>
-      } @empty {
-        <div class="no-reservations-message">
-          <span class="material-symbols-outlined">calendar_today</span>
-          <p>Sin reservas activas</p>
-        </div>
-      }
-    </div>
+        } @empty {
+          <div class="no-reservations-message">
+            <span class="material-symbols-outlined">calendar_today</span>
+            <p>Sin reservas activas</p>
+          </div>
+        }
+      </div>
 
-      <!-- PODRÍA SER GRACIOSO METERLO PERO SI SOBRA TIEMPO
-      <div class="stats-card">
-        <div class="stats-card__background-icon">
-          <span class="material-symbols-outlined">event_available</span>
-        </div>
-        <div class="stats-card__top">
-          <h3 class="stats-card__label">Usage This Month</h3>
-          <div class="stats-card__value">24.5<span class="stats-card__unit">Hrs</span></div>
-        </div>
-        <div class="stats-card__bottom">
-          <div class="stats-card__progress-info">
-            <span>Quota used</span>
-            <span>82%</span>
+        <!-- PODRÍA SER GRACIOSO METERLO PERO SI SOBRA TIEMPO
+        <div class="stats-card">
+          <div class="stats-card__background-icon">
+            <span class="material-symbols-outlined">event_available</span>
           </div>
-          <div class="stats-card__progress-bar">
-            <div class="stats-card__progress-fill" style="width: 82%"></div>
+          <div class="stats-card__top">
+            <h3 class="stats-card__label">Usage This Month</h3>
+            <div class="stats-card__value">24.5<span class="stats-card__unit">Hrs</span></div>
           </div>
-          <p class="stats-card__footer-text">Top resources: Room B, Desk 4</p>
+          <div class="stats-card__bottom">
+            <div class="stats-card__progress-info">
+              <span>Quota used</span>
+              <span>82%</span>
+            </div>
+            <div class="stats-card__progress-bar">
+              <div class="stats-card__progress-fill" style="width: 82%"></div>
+            </div>
+            <p class="stats-card__footer-text">Top resources: Room B, Desk 4</p>
+          </div>
+        </div>
+        -->
+    </section>
+
+    <section class="global-history">
+      <div class="global-history__header">
+        <h2 class="global-history__title">Historial de reservas pasadas</h2>
+      </div>
+
+      <div class="global-history__table-wrapper">
+        <table class="history-table">
+          <thead class="history-table__thead">
+            <tr>
+              <th class="history-table__th">Recurso</th>
+              <th class="history-table__th">Equipamiento</th>
+              <th class="history-table__th">Fecha</th>
+            </tr>
+          </thead>
+          <tbody class="history-table__tbody">
+            
+            @for (reserva of unactiveReservations; track reserva.id) {
+              <tr class="history-table__tr">
+                <td class="history-table__td history-table__td--bold">
+                  {{ reserva.resourceName }}
+                </td>
+                <td class="history-table__td history-table__td--muted">
+                  {{ reserva.resourceEquipmentList }}
+                </td>
+                <td class="history-table__td history-table__td--muted">
+                  {{ reserva.date }}
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="history-table__td" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                  No tienes historial de reservas pasadas.
+                </td>
+              </tr>
+            }
+
+          </tbody>
+        </table>
+
+        <footer class="history-pagination">
+          <span class="history-pagination__info">Total: {{ unactiveReservations.length }} reservas pasadas</span>
+        </footer>
+      </div>
+    </section>
+
+    @if (isEditModalOpen && selectedReservation) {
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <h3 class="modal-box__title">Modificar Fecha de Reserva</h3>
+          <p class="modal-box__text">Cambia la fecha para el recurso: <strong>{{ selectedReservation.resourceName }}</strong></p>
+          
+          <div class="modal-box__field">
+            <label for="editDate">Nueva Fecha:</label>
+            <input 
+              id="editDate" 
+              type="date" 
+              [(ngModel)]="newReservationDate" 
+              [min]="minDate"
+              class="modal-box__input"
+            />
+          </div>
+
+          <div class="modal-box__actions">
+            <button class="modal-box__btn modal-box__btn--secondary" (click)="closeEditModal()">Volver atrás</button>
+            <button class="modal-box__btn modal-box__btn--primary" [disabled]="!newReservationDate" (click)="confirmEdit()">Guardar cambios</button>
+          </div>
         </div>
       </div>
-      -->
-  </section>
+    }
 
-  <section class="global-history">
-    <div class="global-history__header">
-      <h2 class="global-history__title">Historial de reservas pasadas</h2>
-    </div>
+    @if (isCancelModalOpen && selectedReservation) {
+      <div class="modal-overlay">
+        <div class="modal-box modal-box--danger">
+          <h3 class="modal-box__title">Confirmar Cancelación</h3>
+          <p class="modal-box__text">
+            ¿Estás seguro de que quieres cancelar la reserva del recurso 
+            <strong>{{ selectedReservation.resourceName }}</strong> fijada para la fecha 
+            <strong>{{ selectedReservation.date }}</strong>?
+          </p>
 
-    <div class="global-history__table-wrapper">
-      <table class="history-table">
-        <thead class="history-table__thead">
-          <tr>
-            <th class="history-table__th">Recurso</th>
-            <th class="history-table__th">Equipamiento</th>
-            <th class="history-table__th">Fecha</th>
-          </tr>
-        </thead>
-        <tbody class="history-table__tbody">
-          
-          @for (reserva of unactiveReservations; track reserva.id) {
-            <tr class="history-table__tr">
-              <td class="history-table__td history-table__td--bold">
-                {{ reserva.resourceName }}
-              </td>
-              <td class="history-table__td history-table__td--muted">
-                {{ reserva.resourceEquipmentList }}
-              </td>
-              <td class="history-table__td history-table__td--muted">
-                {{ reserva.date }}
-              </td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="4" class="history-table__td" style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                No tienes historial de reservas pasadas.
-              </td>
-            </tr>
-          }
-
-        </tbody>
-      </table>
-
-      <footer class="history-pagination">
-        <span class="history-pagination__info">Total: {{ unactiveReservations.length }} reservas pasadas</span>
-      </footer>
-    </div>
-  </section>
+          <div class="modal-box__actions">
+            <button class="modal-box__btn modal-box__btn--secondary" (click)="closeCancelModal()">No, mantener</button>
+            <button class="modal-box__btn modal-box__btn--danger" (click)="confirmCancel()">Sí, cancelar reserva</button>
+          </div>
+        </div>
+      </div>
+    }
+  }
 </div>
