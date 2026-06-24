@@ -14,9 +14,9 @@ import com.ediae.ecotrack_office.shared.context.RequestContext;
 import com.ediae.ecotrack_office.shared.dto.PageResponseDto;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.dto.ChangePasswordRequestDto;
+import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserMeRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserRequestDto;
-import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserResponseDto;
 import com.ediae.ecotrack_office.users.dto.UserStatsDto;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
@@ -85,7 +85,7 @@ public class UserService {
         entity.setPasswordHash(dto.password());
         entity.setIsActive(true);
         entity.setCreatedAt(LocalDateTime.now());
-        
+
         // 🆕 Salvaguarda: Forzamos el consentimiento por defecto al crear el usuario
         entity.setConsentGiven(false);
 
@@ -137,7 +137,7 @@ public class UserService {
 
         // El rol solo lo gestiona el ADMIN desde este método
         entity.setRole(dto.role());
-        
+
         // 🆕 Forzamos a mantener los valores previos si el mapper los ha machacado con null
         if (entity.getConsentGiven() == null) {
             entity.setConsentGiven(currentConsent != null ? currentConsent : false);
@@ -245,6 +245,8 @@ public class UserService {
         UserEntity entity = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + userId));
         return entity.getOrganization().getId();
+    }
+
     // ─────────────────────────────────────────────
     // GET — lista paginada con filtros opcionales
     // Solo ADMIN (se verifica en el Controller)
