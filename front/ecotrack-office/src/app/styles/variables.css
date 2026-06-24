@@ -180,4 +180,38 @@
   --breakpoint-sm: 640px;
   --breakpoint-md: 1024px;
   --breakpoint-lg: 1280px;
+
+  /* ---------- EQUIVALENCIAS TAILWIND (Comentado en index.html) ---------- */
+  /* Spacing aliases para compatibilidad Tailwind */
+  --spacing-base-name: 4px;   /* Tailwind: base */
+  --spacing-gutter-name: 24px; /* Tailwind: gutter */
+
+  /* BorderRadius aliases - Tailwind config values convertidas */
+  --radius-tailwind-default: 0.125rem;  /* 2px - Tailwind DEFAULT → radius-sm */
+  --radius-tailwind-lg: 0.25rem;        /* 4px - Tailwind lg → radius-md */
+  --radius-tailwind-xl: 0.5rem;         /* 8px - Tailwind xl → radius-lg */
+  --radius-tailwind-full: 0.75rem;      /* 12px - Tailwind full → radius-xl (nota: Tailwind tiene error, debería ser 9999px) */
+
+  /* Tamaños de fuente del sistema Tailwind comentado */
+  --text-display-lg: 48px;              /* Tailwind display-lg */
+  --text-headline-lg: 32px;             /* Tailwind headline-lg */
+  --text-headline-md: 24px;             /* Tailwind headline-md */
+  --text-title-md: 18px;                /* Tailwind title-md */
+  --text-body-lg: 16px;                 /* Tailwind body-lg */
+  --text-body-md: 14px;                 /* Tailwind body-md */
+  --text-label-sm: 12px;                /* Tailwind label-sm */
+
+  /* Familias de fuente Tailwind */
+  --font-family-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ---------- MODO OSCURO (COMENTADO - TODO: Implementar toggle) ---------- */
+@media (prefers-color-scheme: dark) {
+  /* Por ahora solo luz. Descomentar cuando se implemente el toggle */
+  /* :root {
+    --primary: #bec6e0;
+    --surface: #121212;
+    --on-surface: #e1e6ff;
+    ...
+  } */
 }
