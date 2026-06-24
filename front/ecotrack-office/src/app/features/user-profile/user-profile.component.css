@@ -8,10 +8,6 @@
    - Utiliza un grid de 12 columnas para layout bento
    ============================================================================ */
 
-:host {
-  display: block;
-}
-
 .profile-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -255,42 +251,8 @@ form {
 }
 
 label {
-  color: var(--on-surface);
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
-  display: block;
-}
-
-input[type="text"],
-input[type="email"] {
-  width: 100%;
-  background-color: var(--surface);
-  border: var(--border-width-1) solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-sm);
-  font: var(--font-body-md);
-  box-sizing: border-box;
-  transition: all var(--transition-fast);
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus {
-  outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px var(--on-tertiary-container);
-}
-
-input[type="text"].border-error,
-input[type="email"].border-error {
-  border-color: var(--error);
-}
-
-input[type="text"]:disabled,
-input[type="email"]:disabled {
-  background-color: var(--surface-container-low);
-  color: var(--on-surface-variant);
-  cursor: not-allowed;
 }
 
 .error-text {

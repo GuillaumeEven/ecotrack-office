@@ -4,6 +4,11 @@
    Reset, fondations et styles applicables à l'ensemble de l'app.
    ============================================================================ */
 
+/* ---------- Angular Components & Web Components ---------- */
+:host {
+  display: block;
+}
+
 /* ---------- Reset & Boîte Modèle ---------- */
 *,
 *::before,
@@ -150,6 +155,21 @@ select.error {
   border-color: var(--error);
 }
 
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--surface-container-low);
+  color: var(--on-surface-variant);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
 button {
   padding: var(--spacing-sm) var(--spacing-md);
   border: none;
@@ -247,6 +267,81 @@ pre {
 button:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+/* ---------- Messages d'Erreur & Succès ---------- */
+.error,
+.error-message,
+.error-text {
+  color: var(--error);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
+}
+
+.success,
+.success-message {
+  color: var(--success);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
+}
+
+/* ---------- Boutons d'Action ---------- */
+.action-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.action-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.action-btn.danger,
+.action-btn.delete {
+  color: var(--error);
+}
+
+.action-btn.danger:hover,
+.action-btn.delete:hover {
+  background-color: rgba(186, 26, 26, 0.08);
+}
+
+/* ---------- Actions Container ---------- */
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* ---------- Warning & Alert Sections ---------- */
+.warning-section {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background-color: rgba(186, 26, 26, 0.1);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.warning-section span {
+  color: var(--error);
+  flex-shrink: 0;
+}
+
+.warning-section p {
+  margin: 0;
+  font: var(--font-body-md);
+  color: var(--on-surface);
+}
+
+.warning-section strong {
+  font-weight: var(--font-weight-semibold);
 }
 
 /* ---------- Material Symbols Font Variations ---------- */
