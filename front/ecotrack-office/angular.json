@@ -24,7 +24,11 @@
                 "input": "public"
               }
             ],
-            "styles": []
+            "styles": [
+              "src/app/styles/variables.css",
+              "src/app/styles/global.css",
+              "src/app/styles/components.css"
+            ]
           },
           "configurations": {
             "production": {

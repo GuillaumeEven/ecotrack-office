@@ -1,0 +1,151 @@
+/* ============================================================================
+   LOGIN COMPONENT - ESTILOS PERSONALIZADOS
+   ============================================================================
+   Página de autenticación.
+
+   MIGRACIÓN A CSS PURO (Sin Tailwind):
+   - Encapsulación Angular para estilos específicos del componente
+   - Utiliza componentes globales (.form-group, .btn) de ser necesario
+   ============================================================================ */
+
+:host {
+  display: block;
+}
+
+.login-container {
+  min-height: 100vh;
+  background-color: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-md);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 448px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.login-header h1 {
+  font: var(--font-headline-lg);
+  color: var(--on-surface);
+  margin-bottom: var(--spacing-xs);
+}
+
+.login-header p {
+  color: var(--on-surface-variant);
+  font: var(--font-body-lg);
+}
+
+.card {
+  background-color: var(--surface-container-lowest);
+  border: var(--border-width-1) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+label {
+  color: var(--on-surface);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  display: block;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  background-color: var(--surface);
+  border: var(--border-width-1) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm);
+  font: var(--font-body-md);
+  box-sizing: border-box;
+  transition: all var(--transition-fast);
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--on-tertiary-container);
+}
+
+input[type="email"].border-error,
+input[type="password"].border-error {
+  border-color: var(--error);
+}
+
+.error-message {
+  color: var(--error);
+  font-size: var(--font-size-xs);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: var(--spacing-sm);
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.submit-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submit-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.auth-error {
+  color: var(--error);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-md);
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--error);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .login-header h1 {
+    font: var(--font-title-lg);
+  }
+
+  .card {
+    padding: var(--spacing-md);
+  }
+}
