@@ -65,8 +65,11 @@
 
   @if (currentTab === 'ALL_STAFF') {
     <section class="global-history">
-      <div class="global-history__header">
-        <h2 class="global-history__title">Panel de gestión: Todas las reservas del Staff</h2>
+      <div class="active-reservations__header">
+        <h2 class="active-reservations__title">
+          <span class="active-reservations__indicator-dot"></span>
+          Reservas activas totales
+        </h2>
       </div>
 
       <div class="global-history__table-wrapper">
@@ -133,7 +136,7 @@
       <div class="active-reservations__header">
         <h2 class="active-reservations__title">
           <span class="active-reservations__indicator-dot"></span>
-          Reservas activas
+          Reservas activas propias
         </h2>
       </div>
 
@@ -248,8 +251,8 @@
         </footer>
       </div>
     </section>
-
-    @if (isEditModalOpen && selectedReservation) {
+  }
+  @if (isEditModalOpen && selectedReservation) {
       <div class="modal-overlay">
         <div class="modal-box">
           <h3 class="modal-box__title">Modificar Fecha de Reserva</h3>
@@ -291,5 +294,4 @@
         </div>
       </div>
     }
-  }
 </div>

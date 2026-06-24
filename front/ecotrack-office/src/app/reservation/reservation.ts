@@ -115,20 +115,25 @@ export class Reservation implements OnInit{
   confirmEdit(): void {
 
     if(!this.selectedReservation || !this.newReservationDate) return;
-    this.reservationService.updateReservation(this.selectedReservation.id, 
+
+    const idRecurso = this.selectedReservation.id;
+    const newDate = this.newReservationDate;
+    const newStatus = this.selectedReservation.status;
+    const newUserId = this.selectedReservation.userId;
+    this.closeEditModal();
+    this.reservationService.updateReservation(idRecurso, 
       
       {
-        date: this.newReservationDate,
-        status: this.selectedReservation.status,
-        userId: this.selectedReservation.userId
+        date: newDate,
+        status: newStatus,
+        userId: newUserId
 
       }).subscribe({
 
       next: () => {
 
+        this.refreshCurrentTab();
         alert('Reserva actualizada con éxito');
-        this.closeEditModal();
-        this.loadReservations();
       },
       error: (err) => {
 
@@ -153,13 +158,14 @@ export class Reservation implements OnInit{
   confirmCancel(): void {
 
     if(!this.selectedReservation) return;
-    this.reservationService.deleteReservation(this.selectedReservation.id).subscribe({
+    const idRecurso = this.selectedReservation.id;
+    this.closeCancelModal();
+    this.reservationService.deleteReservation(idRecurso).subscribe({
 
       next: () => {
 
+        this.refreshCurrentTab();
         alert('Reserva cancelada con éxito');
-        this.closeCancelModal();
-        this.loadReservations();
       },
       error: (err) => {
 
@@ -167,5 +173,16 @@ export class Reservation implements OnInit{
         alert('No se pudo cancelar la reserva');
       }
     });
+  }
+
+  private refreshCurrentTab(): void {
+
+    if(this.currentTab === 'ALL_STAFF'){
+
+      this.loadAllStaffReservations();
+    } else{
+
+      this.loadReservations();
+    }
   }
 }

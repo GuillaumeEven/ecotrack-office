@@ -17,10 +17,10 @@ export class ReservationService {
   }
 
   //TODO: CAMBIAR POR LA LLAMADA REAL
-  
+
   getAllReservations() : Observable<ReservationResponse[]> {
 
-    return this.http.get<ReservationResponse[]>(`${this.API_URL}/user`);
+    return this.http.get<ReservationResponse[]>(`${this.API_URL}/all`);
   }
 
   updateReservation(idReservation: number, reservationData: any): Observable<ReservationResponse> {
