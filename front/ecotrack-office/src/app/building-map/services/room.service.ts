@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Room } from '../models';
-import { API_CONFIG } from './api.config';
-
+import { environment } from '../../../environments/environment';
 /**
  * Room Service
  * Handles all HTTP operations for Room entities
@@ -13,7 +12,7 @@ import { API_CONFIG } from './api.config';
   providedIn: 'root'
 })
 export class RoomService {
-  private apiUrl = API_CONFIG.baseUrl + API_CONFIG.endpoints.rooms;
+  private readonly BASE_URL = `${environment.apiUrl}/rooms`;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -21,15 +20,14 @@ export class RoomService {
    * Fetch all rooms
    */
   list(): Observable<Room[]> {
-    return this.httpClient.get<Room[]>(this.apiUrl);
+    return this.httpClient.get<Room[]>(this.BASE_URL);
   }
 
   /**
    * Fetch all rooms in a specific floor
    */
   listByFloor(floorId: number): Observable<Room[]> {
-    const url = `${this.apiUrl}/floor/${floorId}`;
-    console.log('📡 RoomService.listByFloor() calling:', url);
+    const url = `${this.BASE_URL}/floor/${floorId}`;
     return this.httpClient.get<Room[]>(url);
   }
 
@@ -37,27 +35,27 @@ export class RoomService {
    * Fetch a single room by ID
    */
   get(id: number): Observable<Room> {
-    return this.httpClient.get<Room>(`${this.apiUrl}/${id}`);
+    return this.httpClient.get<Room>(`${this.BASE_URL}/${id}`);
   }
 
   /**
    * Create a new room
    */
   create(room: Omit<Room, 'id'>): Observable<Room> {
-    return this.httpClient.post<Room>(this.apiUrl, room);
+    return this.httpClient.post<Room>(this.BASE_URL, room);
   }
 
   /**
    * Update an existing room
    */
   update(id: number, room: Partial<Room>): Observable<Room> {
-    return this.httpClient.put<Room>(`${this.apiUrl}/${id}`, room);
+    return this.httpClient.put<Room>(`${this.BASE_URL}/${id}`, room);
   }
 
   /**
    * Delete a room
    */
   delete(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
+    return this.httpClient.delete<void>(`${this.BASE_URL}/${id}`);
   }
 }

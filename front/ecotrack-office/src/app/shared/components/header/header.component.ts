@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
+
+  private authService = inject(AuthService);
+  
   onLogout(): void {
-    console.log('Logout clicked');
-    // TODO: conectar con AuthService del backend
+    
+    this.authService.logout();
   }
 }

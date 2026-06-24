@@ -20,6 +20,9 @@ import com.ediae.ecotrack_office.assets.enums.RoomType;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.FloorRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
+import com.ediae.ecotrack_office.incident.entity.IncidentEntity;
+import com.ediae.ecotrack_office.incident.enums.IncidentStatus;
+import com.ediae.ecotrack_office.incident.repository.IncidentRepository;
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
 import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
@@ -29,7 +32,7 @@ import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
 
-// TODO después en el paquete shared
+// TODO después en el paquete compartido
 @Component
 @Profile("dev")
 public class DataLoader implements CommandLineRunner {
@@ -42,6 +45,7 @@ public class DataLoader implements CommandLineRunner {
     private final RoomRepository roomRepository;
     private final DeskRepository deskRepository;
     private final ReservationRepository reservationRepository;
+    private final IncidentRepository incidentRepository;
     private final JdbcTemplate jdbcTemplate;
 
     public DataLoader(OrganizationRepository organizationRepository,
@@ -50,6 +54,7 @@ public class DataLoader implements CommandLineRunner {
                       RoomRepository roomRepository,
                       DeskRepository deskRepository,
                       ReservationRepository reservationRepository,
+                      IncidentRepository incidentRepository,
                       JdbcTemplate jdbcTemplate) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
@@ -57,6 +62,7 @@ public class DataLoader implements CommandLineRunner {
         this.roomRepository = roomRepository;
         this.deskRepository = deskRepository;
         this.reservationRepository = reservationRepository;
+        this.incidentRepository = incidentRepository;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -75,12 +81,13 @@ public class DataLoader implements CommandLineRunner {
         createRoomsAndDesksIfMissing(org2);
 
         createReservationsIfMissing(org);
+        createIncidentsIfMissing();
     }
 
     /**
-     * Wipes all dev data and resets AUTO_INCREMENT to 1 so seeded IDs are always predictable:
+     * Borra todos los datos de desarrollo y reinicia AUTO_INCREMENT a 1 para que los IDs generados sean siempre predecibles:
      * org=1, admin=1, tech=2, employee=3, floor0=1, floor1=2, roomA=1, roomB=2, desk1-3=1-3.
-     * MySQL TRUNCATE resets AUTO_INCREMENT automatically; FK checks disabled during truncation.
+     * TRUNCATE en MySQL reinicia AUTO_INCREMENT automáticamente; las verificaciones de FK se deshabilitan durante el truncado.
      */
     private void resetDatabase() {
         jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
@@ -94,7 +101,7 @@ public class DataLoader implements CommandLineRunner {
         jdbcTemplate.execute("TRUNCATE TABLE usr_users");
         jdbcTemplate.execute("TRUNCATE TABLE organizations");
         jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
-        log.info("Dev database reset: all tables truncated, AUTO_INCREMENT reset to 1.");
+        log.info("Base de datos de desarrollo reiniciada: todas las tablas truncadas, AUTO_INCREMENT reiniciado a 1.");
     }
 
     private OrganizationEntity createOrgIfMissing() {
@@ -107,13 +114,13 @@ public class DataLoader implements CommandLineRunner {
                     OrganizationEntity o = new OrganizationEntity();
                     o.setName(name);
                     o.setCif("CIF-000000");
-                    o.setAddress("Unknown address");
+                    o.setAddress("Dirección desconocida");
                     o.setEmail("contact@ecotrack.local");
                     o.setEndSubscription(java.sql.Date.valueOf(LocalDate.now().plusYears(1)));
                     o.setIsActive(Boolean.TRUE);
                     o.setCreatedAt(LocalDateTime.now());
                     OrganizationEntity saved = organizationRepository.save(o);
-                    log.info("Seeded organization '{}'", saved.getName());
+                    log.info("Organización sembrada '{}'", saved.getName());
                     return saved;
                 });
     }
@@ -128,13 +135,13 @@ public class DataLoader implements CommandLineRunner {
                     OrganizationEntity o = new OrganizationEntity();
                     o.setName(name);
                     o.setCif("CIF-000001");
-                    o.setAddress("Tech Park, Building B");
+                    o.setAddress("Parque Tecnológico, Edificio B");
                     o.setEmail("contact@greenoffice.local");
                     o.setEndSubscription(java.sql.Date.valueOf(LocalDate.now().plusYears(1)));
                     o.setIsActive(Boolean.TRUE);
                     o.setCreatedAt(LocalDateTime.now());
                     OrganizationEntity saved = organizationRepository.save(o);
-                    log.info("Seeded organization '{}'", saved.getName());
+                    log.info("Organización sembrada '{}'", saved.getName());
                     return saved;
                 });
     }
@@ -142,7 +149,7 @@ public class DataLoader implements CommandLineRunner {
     private void createAdminIfMissing(OrganizationEntity org) {
         final String adminEmail = "admin@ecotrack.local";
         if (userRepository.existsByEmail(adminEmail)) {
-            log.info("Admin user '{}' exists, skipping.", adminEmail);
+            log.info("Usuario administrador '{}' existe, omitiendo.", adminEmail);
             return;
         }
 
@@ -159,7 +166,7 @@ public class DataLoader implements CommandLineRunner {
         admin.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(admin);
-        log.info("Seeded admin user '{}'", adminEmail);
+        log.info("Usuario administrador sembrado '{}'", adminEmail);
     }
 
     private void createTechAndEmployeeIfMissing(OrganizationEntity org) {
@@ -171,7 +178,7 @@ public class DataLoader implements CommandLineRunner {
             tech.setEmail(techEmail);
             tech.setPasswordHash("password");
             tech.setFirstName("Tech");
-            tech.setLastName("User");
+            tech.setLastName("Usuario");
             tech.setRole(Role.TECHNICIAN);
             tech.setOrganization(org);
             tech.setIsActive(Boolean.TRUE);
@@ -179,17 +186,17 @@ public class DataLoader implements CommandLineRunner {
             tech.setPreferencesJson("{}");
             tech.setCreatedAt(LocalDateTime.now());
             userRepository.save(tech);
-            log.info("Seeded technician '{}'", techEmail);
+            log.info("Técnico sembrado '{}'", techEmail);
         } else {
-            log.info("Technician '{}' exists, skipping.", techEmail);
+            log.info("Técnico '{}' existe, omitiendo.", techEmail);
         }
 
         if (!userRepository.existsByEmail(empEmail)) {
             UserEntity emp = new UserEntity();
             emp.setEmail(empEmail);
             emp.setPasswordHash("password");
-            emp.setFirstName("Employee");
-            emp.setLastName("User");
+            emp.setFirstName("Empleado");
+            emp.setLastName("Usuario");
             emp.setRole(Role.EMPLOYEE);
             emp.setOrganization(org);
             emp.setIsActive(Boolean.TRUE);
@@ -197,9 +204,9 @@ public class DataLoader implements CommandLineRunner {
             emp.setPreferencesJson("{}");
             emp.setCreatedAt(LocalDateTime.now());
             userRepository.save(emp);
-            log.info("Seeded employee '{}'", empEmail);
+            log.info("Empleado sembrado '{}'", empEmail);
         } else {
-            log.info("Employee '{}' exists, skipping.", empEmail);
+            log.info("Empleado '{}' existe, omitiendo.", empEmail);
         }
     }
 
@@ -210,7 +217,7 @@ public class DataLoader implements CommandLineRunner {
         if (!hasLevel0) {
             FloorEntity f0 = new FloorEntity(0, true, org);
             floorRepository.save(f0);
-            log.info("Seeded floor level 0 for organization {}", org.getName());
+            log.info("Piso nivel 0 sembrado para la organización {}", org.getName());
         }
 
         boolean hasLevel1 = floorRepository.findByOrganizationId(org.getId())
@@ -219,7 +226,7 @@ public class DataLoader implements CommandLineRunner {
         if (!hasLevel1) {
             FloorEntity f1 = new FloorEntity(1, true, org);
             floorRepository.save(f1);
-            log.info("Seeded floor level 1 for organization {}", org.getName());
+            log.info("Piso nivel 1 sembrado para la organización {}", org.getName());
         }
     }
 
@@ -232,20 +239,20 @@ public class DataLoader implements CommandLineRunner {
                 .orElseGet(() -> floorRepository.findByOrganizationId(org.getId()).stream().findFirst().orElse(null));
 
         if (floor0 == null) {
-            log.warn("No floor found for organization {}, skipping room/desk seeding.", org.getName());
+            log.warn("No se encontró piso para la organización {}, omitiendo siembra de salas/escritorios.", org.getName());
             return;
         }
 
-        // Create desk_area rooms on floor 0
-        createDeskAreaRoomsWithDesks(floor0, "Desk Area A", 50.0);
-        createDeskAreaRoomsWithDesks(floor0, "Desk Area B", 40.0);
-        createDeskAreaRoomsWithDesks(floor0, "Desk Area C", 45.0);
+        // Crear salas de trabajo en piso 0
+        createDeskAreaRoomsWithDesks(floor0, "Sala de Trabajo A", 50.0);
+        createDeskAreaRoomsWithDesks(floor0, "Sala de Trabajo B", 40.0);
+        createDeskAreaRoomsWithDesks(floor0, "Sala de Trabajo C", 45.0);
 
-        // Create meeting rooms on floor 0
-        createMeetingRoom(floor0, "Meeting Room 1", 25.0);
-        createMeetingRoom(floor0, "Meeting Room 2", 30.0);
+        // Crear salas de reunión en piso 0
+        createMeetingRoom(floor0, "Sala de Reunión 1", 25.0);
+        createMeetingRoom(floor0, "Sala de Reunión 2", 30.0);
 
-        // Get floor level 1 and add rooms there if exists
+        // Obtener piso nivel 1 y agregar salas si existe
         FloorEntity floor1 = floorRepository.findByOrganizationId(org.getId())
                 .stream()
                 .filter(f -> Objects.equals(f.getLevel(), 1))
@@ -253,18 +260,18 @@ public class DataLoader implements CommandLineRunner {
                 .orElse(null);
 
         if (floor1 != null) {
-            // Create desk_area rooms on floor 1
-            createDeskAreaRoomsWithDesks(floor1, "Desk Area D", 35.0);
-            createDeskAreaRoomsWithDesks(floor1, "Desk Area E", 38.0);
+            // Crear salas de trabajo en piso 1
+            createDeskAreaRoomsWithDesks(floor1, "Sala de Trabajo D", 35.0);
+            createDeskAreaRoomsWithDesks(floor1, "Sala de Trabajo E", 38.0);
 
-            // Create meeting rooms on floor 1
-            createMeetingRoom(floor1, "Meeting Room 3", 28.0);
-            createMeetingRoom(floor1, "Meeting Room 4", 32.0);
+            // Crear salas de reunión en piso 1
+            createMeetingRoom(floor1, "Sala de Reunión 3", 28.0);
+            createMeetingRoom(floor1, "Sala de Reunión 4", 32.0);
         }
     }
 
     /**
-     * Helper method to create a desk_area room with 10 desks if it doesn't exist
+     * Método auxiliar para crear una sala de trabajo con 10 escritorios si no existe
      */
     private void createDeskAreaRoomsWithDesks(FloorEntity floor, String roomName, Double area) {
         RoomEntity room = roomRepository.findByFloor_Id(floor.getId())
@@ -281,29 +288,29 @@ public class DataLoader implements CommandLineRunner {
                             floor,
                             10
                     );
-                    r.setIsActive(true); // Activate room for dev
+                    r.setIsActive(true); // Activar sala para desarrollo
                     RoomEntity saved = roomRepository.save(r);
-                    log.info("Seeded desk_area room '{}'", saved.getName());
+                    log.info("Sala de trabajo sembrada '{}'", saved.getName());
                     return saved;
                 });
 
-        // Create 10 desks for this desk_area room
+        // Crear 10 escritorios para esta sala de trabajo
         for (int i = 1; i <= 10; i++) {
             final String deskName = "D" + i;
             boolean exists = deskRepository.findByRoom_Id(room.getId())
                     .stream()
                     .anyMatch(d -> deskName.equalsIgnoreCase(d.getName()));
             if (!exists) {
-                DeskEntity desk = new DeskEntity(deskName, ResourceStatus.AVAILABLE, "chair,monitor", room);
-                desk.setIsActive(true); // Activate desk for dev
+                DeskEntity desk = new DeskEntity(deskName, ResourceStatus.AVAILABLE, "silla,monitor", room);
+                desk.setIsActive(true); // Activar escritorio para desarrollo
                 deskRepository.save(desk);
             }
         }
-        log.info("Seeded 10 desks in room '{}'", room.getName());
+        log.info("10 escritorios sembrados en la sala '{}'", room.getName());
     }
 
     /**
-     * Helper method to create a meeting room if it doesn't exist
+     * Método auxiliar para crear una sala de reunión si no existe
      */
     private void createMeetingRoom(FloorEntity floor, String roomName, Double area) {
         boolean exists = roomRepository.findByFloor_Id(floor.getId())
@@ -319,40 +326,40 @@ public class DataLoader implements CommandLineRunner {
                     floor,
                     20
             );
-            r.setIsActive(true); // Activate meeting room for dev
+            r.setIsActive(true); // Activar sala de reunión para desarrollo
             RoomEntity saved = roomRepository.save(r);
-            log.info("Seeded meeting_room '{}'", saved.getName());
+            log.info("Sala de reunión sembrada '{}'", saved.getName());
         }
     }
 
     /**
-     * Helper method to create reservations for specific desks on given dates
+     * Método auxiliar para crear reservaciones para escritorios específicos en fechas dadas
      */
     private void createReservationsIfMissing(OrganizationEntity org) {
-        // Get employee user
+        // Obtener usuario empleado
         UserEntity employee = userRepository.findByEmail("employee@ecotrack.local")
                 .orElse(null);
 
         if (employee == null) {
-            log.warn("Employee user not found, skipping reservation seeding.");
+            log.warn("Usuario empleado no encontrado, omitiendo siembra de reservaciones.");
             return;
         }
 
-        // Create reservations for 14/07/2026: desks 2, 5, 6
+        // Crear reservaciones para 14/07/2026: escritorios 2, 5, 6
         LocalDate date1 = LocalDate.of(2026, 7, 14);
         createReservationForDesks(org, employee, date1, new int[]{2, 5, 6});
 
-        // Create reservations for 15/07/2026: desks 2, 7, 9
+        // Crear reservaciones para 15/07/2026: escritorios 2, 7, 9
         LocalDate date2 = LocalDate.of(2026, 7, 15);
         createReservationForDesks(org, employee, date2, new int[]{2, 7, 9});
     }
 
     /**
-     * Helper method to create reservations for specific desk numbers on a given date
+     * Método auxiliar para crear reservaciones para números de escritorio específicos en una fecha dada
      */
     private void createReservationForDesks(OrganizationEntity org, UserEntity user, LocalDate date, int[] deskNumbers) {
         for (int deskNum : deskNumbers) {
-            // Find the desk by name pattern
+            // Buscar el escritorio por patrón de nombre
             String deskNamePattern = "D" + deskNum;
             DeskEntity desk = deskRepository.findAll()
                     .stream()
@@ -361,7 +368,7 @@ public class DataLoader implements CommandLineRunner {
                     .orElse(null);
 
             if (desk != null) {
-                // Check if reservation already exists
+                // Verificar si la reservación ya existe
                 boolean reservationExists = reservationRepository.findByResourceId(desk.getId())
                         .stream()
                         .anyMatch(r -> r.getDate().equals(date));
@@ -374,18 +381,60 @@ public class DataLoader implements CommandLineRunner {
                             desk
                     );
                     reservationRepository.save(reservation);
-                    log.info("Seeded reservation for desk '{}' on date {}", desk.getName(), date);
+                    log.info("Reservación sembrada para el escritorio '{}' en la fecha {}", desk.getName(), date);
                 } else {
-                    log.info("Reservation for desk '{}' on date {} already exists, skipping.", desk.getName(), date);
+                    log.info("Reservación para el escritorio '{}' en la fecha {} ya existe, omitiendo.", desk.getName(), date);
                 }
             } else {
-                log.warn("Desk with pattern '{}' not found, skipping reservation.", deskNamePattern);
+                log.warn("Escritorio con patrón '{}' no encontrado, omitiendo reservación.", deskNamePattern);
             }
         }
     }
 
     /**
-     * Helper method to create a meeting room if it doesn't exist
+     * Método auxiliar para crear un incidente para el desk ID 3
+     */
+    private void createIncidentsIfMissing() {
+        // Obtener usuario técnico
+        UserEntity tech = userRepository.findByEmail("tech@ecotrack.local")
+                .orElse(null);
+
+        if (tech == null) {
+            log.warn("Usuario técnico no encontrado, omitiendo siembra de incidentes.");
+            return;
+        }
+
+        // Obtener desk con ID 3
+        DeskEntity desk = deskRepository.findById(3L)
+                .orElse(null);
+
+        if (desk == null) {
+            log.warn("Desk con ID 3 no encontrado, omitiendo siembra de incidente.");
+            return;
+        }
+
+        // Verificar si ya existe un incidente para este desk
+        boolean incidentExists = incidentRepository.findByResourceId(desk.getId())
+                .stream()
+                .anyMatch(i -> i.getStatus() == IncidentStatus.IN_PROGRESS);
+
+        if (!incidentExists) {
+            IncidentEntity incident = new IncidentEntity(
+                    "La silla está rota",
+                    IncidentStatus.IN_PROGRESS,
+                    LocalDateTime.now(),
+                    tech,
+                    desk
+            );
+            incidentRepository.save(incident);
+            log.info("Incidente sembrado para el desk '{}' (ID: 3) con descripción: 'La silla está rota'", desk.getName());
+        } else {
+            log.info("Incidente para el desk con ID 3 ya existe, omitiendo.");
+        }
+    }
+
+    /**
+     * Método auxiliar para crear una sala de reunión si no existe
      */
     // private void createMeetingRoom(FloorEntity floor, String roomName, Double area) {
     //     boolean exists = roomRepository.findByFloor_Id(floor.getId())
@@ -395,14 +444,14 @@ public class DataLoader implements CommandLineRunner {
     //         RoomEntity r = new RoomEntity(
     //                 roomName,
     //                 ResourceStatus.AVAILABLE,
-    //                 "video-conference,whiteboard",
+    //                 "videoconferencia,pizarra",
     //                 RoomType.MEETING_ROOM,
     //                 area,
     //                 floor,
     //                 20
     //         );
     //         RoomEntity saved = roomRepository.save(r);
-    //         log.info("Seeded meeting_room '{}'", saved.getName());
+    //         log.info("Sala de reunión sembrada '{}'", saved.getName());
     //     }
     // }
 }

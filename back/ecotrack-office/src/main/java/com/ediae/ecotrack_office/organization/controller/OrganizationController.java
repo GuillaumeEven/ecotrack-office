@@ -1,62 +1,88 @@
 package com.ediae.ecotrack_office.organization.controller;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import com.ediae.ecotrack_office.organization.dto.OrganizationCreateDto;
 import com.ediae.ecotrack_office.organization.dto.OrganizationResponseDto;
 import com.ediae.ecotrack_office.organization.dto.OrganizationUpdateDto;
 import com.ediae.ecotrack_office.organization.mapper.OrganizationMapper;
 import com.ediae.ecotrack_office.organization.service.OrganizationService;
+import com.ediae.ecotrack_office.shared.guard.AdminGuard;
+import com.ediae.ecotrack_office.shared.guard.RoleGuard;
+import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.ediae.ecotrack_office.users.models.UserModel;
+import com.ediae.ecotrack_office.users.service.UserService;
+
+import jakarta.validation.Valid;
 
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = { RequestMethod.GET,
-        RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RequestMapping("/api/v1/organizations")
 public class OrganizationController {
 
     @Autowired
-    private OrganizationService service;
+    private OrganizationService orgService;
 
-    @GetMapping("/{id}")
-    public OrganizationResponseDto getOrganizationById (@PathVariable Long id) {
+    @Autowired
+    private UserService usrService;
 
-        return OrganizationMapper.toResponseDto(service.getOrganizationById(id));
+    @Autowired
+    private AdminGuard adminGuard;
+
+    // --- ENDPOINTS PÚBLICOS ---
+
+    @PostMapping("/public/create")
+    public ResponseEntity<OrganizationResponseDto> createOrganization (@Valid @RequestBody OrganizationCreateDto dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(OrganizationMapper.toResponseDto(orgService.createOrganization(dto)));
     }
 
-    @PostMapping
-    public OrganizationResponseDto createOrganization (@RequestBody OrganizationCreateDto dto) {
+    // --- ENDPOINTS PRIVADOS DE ADMINISTRACIÓN (SOLO ADMIN)
 
-        System.out.println("La dirección recibida es: " + dto.getAddress());
-        return OrganizationMapper.toResponseDto(service.createOrganization(dto));
+    @GetMapping
+    public ResponseEntity<OrganizationResponseDto> getOrganizationById (Authentication auth) {
+
+        adminGuard.requireAdmin(auth);
+        Long userId = (Long) auth.getPrincipal();
+        UserModel user = usrService.getUserById(userId);
+
+        return ResponseEntity.ok(OrganizationMapper.toResponseDto(orgService.getOrganizationById(user.getOrganizationId())));
     }
 
-    @PutMapping("/{id}")
-    public OrganizationResponseDto updateOrganization (@PathVariable Long id, @RequestBody OrganizationUpdateDto dto) {
+    @PutMapping("/update")
+    public ResponseEntity<OrganizationResponseDto> updateOrganization (Authentication auth, @Valid @RequestBody OrganizationUpdateDto dto) {
 
-        return OrganizationMapper.toResponseDto(service.updateOrganizationById(id, dto));
+        adminGuard.requireAdmin(auth);
+        Long userId = (Long) auth.getPrincipal();
+        UserModel user = usrService.getUserById(userId);
+
+        return ResponseEntity.ok(OrganizationMapper.toResponseDto(orgService.updateOrganizationById(user.getOrganizationId(), dto)));
     }
 
-    @PutMapping("/{id}/deactivate")
-    public OrganizationResponseDto deactivateOrganization (@PathVariable Long id) {
+    @PutMapping("/deactivate")
+    public ResponseEntity<OrganizationResponseDto> deactivateOrganization (Authentication auth) {
 
-        return OrganizationMapper.toResponseDto(service.deactivateOrganization(id));
+        adminGuard.requireAdmin(auth);
+        Long userId = (Long) auth.getPrincipal();
+        UserModel user = usrService.getUserById(userId);
+
+        return ResponseEntity.ok(OrganizationMapper.toResponseDto(orgService.deactivateOrganization(user.getOrganizationId())));
     }
 
-    @DeleteMapping("/{id}") //TENER EN CUENTA QUE PARA BORRAR UNA ORGANIZACIÓN PRIMERO HABRÍA QUE BORRAR LOS USUARIO ASOCIADOS A ELLA, Y ESTO GENERA UNA ELIMINACIÓN DE ELEMENTOS EN CADENA.
-    public Boolean deleteOrganization (@PathVariable Long id) {
+    @DeleteMapping("/delete") //TENER EN CUENTA QUE PARA BORRAR UNA ORGANIZACIÓN PRIMERO HABRÍA QUE BORRAR LOS USUARIO ASOCIADOS A ELLA, Y ESTO GENERA UNA ELIMINACIÓN DE ELEMENTOS EN CADENA.
+    public Boolean deleteOrganization (Authentication auth) {
 
-        return service.deleteOrganization(id);
+        adminGuard.requireAdmin(auth);
+        Long userId = (Long) auth.getPrincipal();
+        UserModel user = usrService.getUserById(userId);
+
+        return orgService.deleteOrganization(user.getOrganizationId());
     }
 
 

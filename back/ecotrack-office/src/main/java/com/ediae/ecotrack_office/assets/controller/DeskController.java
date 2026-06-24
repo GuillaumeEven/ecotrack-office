@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,30 +13,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.assets.dto.DeskRequestDto;
 import com.ediae.ecotrack_office.assets.dto.DeskResponseDto;
 import com.ediae.ecotrack_office.assets.mapper.DeskMapper;
 import com.ediae.ecotrack_office.assets.service.DeskService;
+import com.ediae.ecotrack_office.shared.guard.RoleGuard;
+import com.ediae.ecotrack_office.users.enums.Role;
 
 @RestController
 @RequestMapping("api/v1/desks")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
-    RequestMethod.GET,
-    RequestMethod.POST,
-    RequestMethod.PUT,
-    RequestMethod.DELETE,
-    RequestMethod.OPTIONS}
-)
 public class DeskController {
+
+    @Autowired
+    private RoleGuard roleGuard;
 
     @Autowired
     private DeskService deskService;
 
     @Autowired
     private DeskMapper deskMapper;
+
+    @GetMapping
+    public ResponseEntity<List<DeskResponseDto>> getAllDesks() {
+        List<DeskResponseDto> desks = new ArrayList<>();
+        deskService.getDesks().forEach(desk -> desks.add(deskMapper.toResponseDto(desk)));
+        return ResponseEntity.ok(desks);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<DeskResponseDto> getDeskById(@PathVariable Long id) {
@@ -52,13 +56,15 @@ public class DeskController {
     }
 
     @PostMapping("")
-    public ResponseEntity<DeskResponseDto> createDesk(@RequestBody DeskRequestDto deskRequestDTO) {
+    public ResponseEntity<DeskResponseDto> createDesk(@RequestBody DeskRequestDto deskRequestDTO, Authentication auth) {
+        roleGuard.requireAnyRole(auth, Role.ADMIN);
         DeskResponseDto deskResponseDTO = deskMapper.toResponseDto(deskService.createDesk(deskRequestDTO));
         return ResponseEntity.ok(deskResponseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DeskResponseDto> updateDesk(@PathVariable Long id, @RequestBody DeskRequestDto deskRequestDTO) {
+    public ResponseEntity<DeskResponseDto> updateDesk(@PathVariable Long id, @RequestBody DeskRequestDto deskRequestDTO, Authentication auth) {
+        roleGuard.requireAnyRole(auth, Role.ADMIN);
         DeskResponseDto deskResponseDTO = deskMapper.toResponseDto(deskService.updateDesk(id, deskRequestDTO));
         return ResponseEntity.ok(deskResponseDTO);
     }

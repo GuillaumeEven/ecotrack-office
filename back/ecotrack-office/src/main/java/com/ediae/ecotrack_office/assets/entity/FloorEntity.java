@@ -30,6 +30,9 @@ public class FloorEntity {
     @JoinColumn(name = "organization_id", nullable = false)
     private OrganizationEntity organization;
 
+    @Column(name = "name", nullable = true)
+    private String name;
+
     public FloorEntity() {
     }
 
@@ -69,5 +72,13 @@ public class FloorEntity {
 
     public void setOrganization(OrganizationEntity organization) {
         this.organization = organization;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

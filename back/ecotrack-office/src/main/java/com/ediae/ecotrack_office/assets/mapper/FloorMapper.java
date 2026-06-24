@@ -20,7 +20,8 @@ public class FloorMapper {
             entity.getId(),
             entity.getLevel(),
             entity.getIsActive(),
-            organizationId
+            organizationId,
+            entity.getName()
         );
     }
 
@@ -32,6 +33,7 @@ public class FloorMapper {
         entity.setId(model.getId());
         entity.setLevel(model.getLevel());
         entity.setIsActive(model.getIsActive());
+        entity.setName(model.getName());
         if (model.getOrganizationId() != null) {
             OrganizationEntity orgRef = new OrganizationEntity();
             orgRef.setId(model.getOrganizationId());
@@ -48,7 +50,8 @@ public class FloorMapper {
             null,
             requestDto.getLevel(),
             requestDto.getIsActive(),
-            requestDto.getOrganizationId()
+            requestDto.getOrganizationId(),
+            requestDto.getName()
         );
     }
 
@@ -61,6 +64,7 @@ public class FloorMapper {
         responseDto.setLevel(model.getLevel());
         responseDto.setIsActive(model.getIsActive());
         responseDto.setOrganizationId(model.getOrganizationId());
+        responseDto.setName(model.getName());
         return responseDto;
     }
 
@@ -74,6 +78,7 @@ public class FloorMapper {
         responseDto.setLevel(entity.getLevel());
         responseDto.setIsActive(entity.getIsActive());
         responseDto.setOrganizationId(organizationId);
+        responseDto.setName(entity.getName());
         return responseDto;
     }
 

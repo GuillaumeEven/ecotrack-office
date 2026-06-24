@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Floor, FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus } from '../models';
+import { FloorWithStatus, RoomWithStatus, DeskWithStatus, ResourceStatus } from '../models';
 import { FloorService } from '../services';
 import { AuthService } from '../../services/auth.service';
 import { DeskReservationDialogComponent } from '../dialogs/desk-reservation-dialog.component';
@@ -60,7 +60,6 @@ export class BuildingMapComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('🚀 BuildingMapComponent initialized, loading all floors with status...');
     this.loadAllFloorsWithStatus();
   }
 
@@ -72,36 +71,26 @@ export class BuildingMapComponent implements OnInit {
     this.errors.floors = null;
 
     const dateISO = this.formatDateToISO(this.selectedDate);
-    console.log('📍 loadAllFloorsWithStatus() called for date', dateISO);
 
     this.floorService.getFloorsWithStatus(1, dateISO).subscribe({
       next: (data) => {
-        console.log('✅ All floors with status loaded:', data);
         this.allFloorsWithStatus = data;
 
         // Auto-select first floor
         if (this.allFloorsWithStatus.length > 0 && !this.selectedFloorId) {
           this.selectedFloorId = this.allFloorsWithStatus[0].floor.id;
-          console.log('🏢 Auto-selected first floor:', this.selectedFloorId);
 
           // Auto-select first room of the first floor
           const firstFloor = this.allFloorsWithStatus[0];
           if (firstFloor.rooms.length > 0 && !this.selectedRoomId) {
             this.selectedRoomId = firstFloor.rooms[0].room.id;
-            console.log('🪑 Auto-selected first room:', this.selectedRoomId);
           }
-        }
-
-        // If refreshCurrentRoom is true, ensure the current room data is fresh
-        if (refreshCurrentRoom && this.selectedRoomId) {
-          console.log('🔄 Refreshing current room data after reservation:', this.selectedRoomId);
         }
 
         this.loading.floors = false;
         this.cdr.markForCheck();
       },
       error: (err) => {
-        console.error('❌ Error loading floors with status:', err);
         this.errors.floors = `Failed to load floors: ${err.message}`;
         this.loading.floors = false;
         this.cdr.markForCheck();
@@ -114,7 +103,6 @@ export class BuildingMapComponent implements OnInit {
    * Force change detection to show updated meeting room statuses after progressive unlock
    */
   onFloorSelect(floorId: number): void {
-    console.log('🏢 onFloorSelect() called with floorId:', floorId);
     this.selectedFloorId = floorId;
     this.selectedRoomId = null;
     // Force change detection to display updated meeting room statuses
@@ -126,7 +114,6 @@ export class BuildingMapComponent implements OnInit {
    * Force change detection to show updated room statuses
    */
   onRoomSelect(roomId: number): void {
-    console.log('🪑 onRoomSelect() called with roomId:', roomId);
     this.selectedRoomId = roomId;
     // Force change detection when switching rooms to display updated statuses from progressive unlock
     this.cdr.markForCheck();
@@ -137,7 +124,6 @@ export class BuildingMapComponent implements OnInit {
    */
   onDateChange(event: any): void {
     const newDate = new Date(event.target.value);
-    console.log('📅 Date changed to:', newDate);
     this.selectedDate = newDate;
     this.selectedFloorId = null;
     this.selectedRoomId = null;
@@ -233,35 +219,79 @@ export class BuildingMapComponent implements OnInit {
    * Check if desk is available for reservation
    */
   isDeskAvailable(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.AVAILABLE;
-  }
-
-  /**
-   * Check if desk is reserved
-   */
-  isDeskReserved(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.RESERVED;
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.AVAILABLE;
   }
 
   /**
    * Check if desk is unavailable
    */
   isDeskUnavailable(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.UNAVAILABLE;
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.UNAVAILABLE;
+  }
+
+  /**
+   * Check if desk is out of service
+   */
+  isDeskOutOfService(desk: DeskWithStatus): boolean {
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.OUT_OF_SERVICE;
   }
 
   /**
    * Check if the desk is reserved by the current user
    */
   isMyReservation(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.RESERVED && desk.reservedBy === this.currentUserEmail;
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.RESERVED && desk.reservedBy === this.currentUserEmail;
   }
 
   /**
    * Check if the desk is reserved by someone else
    */
   isOtherReservation(desk: DeskWithStatus): boolean {
-    return desk.calculatedStatus === ResourceStatus.RESERVED && desk.reservedBy !== this.currentUserEmail;
+    return this.normalizeStatus(desk.calculatedStatus) === ResourceStatus.RESERVED && desk.reservedBy !== this.currentUserEmail;
+  }
+
+  /**
+   * Normalize backend status values to the frontend enum format
+   */
+  private normalizeStatus(status: ResourceStatus | string | null | undefined): ResourceStatus | string {
+    return String(status ?? '')
+      .trim()
+      .toUpperCase()
+      .replace(/[-\s]+/g, '_');
+  }
+
+  /**
+   * Get tooltip text for desk button
+   */
+  getDeskTooltip(desk: DeskWithStatus): string {
+    if (this.isDeskOutOfService(desk)) {
+      return 'Mesa averiada';
+    }
+    if (this.isDeskUnavailable(desk)) {
+      return 'No disponible';
+    }
+    if (this.isMyReservation(desk)) {
+      return 'Tu reserva - Haz clic para cancelar';
+    }
+    if (this.isOtherReservation(desk)) {
+      const reservedBy = desk.reservedBy ?? 'otro usuario';
+      return `Reservado por ${reservedBy} - Haz clic para cancelar`;
+    }
+    return 'Disponible';
+  }
+
+  /**
+   * Check if user can cancel a reservation
+   * Can cancel if: resource is reserved AND (it's my reservation OR user is ADMIN/TECHNICIAN)
+   */
+  canCancelReservation(desk: DeskWithStatus): boolean {
+    if (this.isMyReservation(desk)) {
+      return true;
+    }
+
+    // Check if user is ADMIN or TECHNICIAN
+    const userRole = this.authService.getRole();
+    return userRole === 'ADMIN' || userRole === 'TECHNICIAN';
   }
 
   /**
@@ -274,11 +304,11 @@ export class BuildingMapComponent implements OnInit {
     if (this.isOtherReservation(desk)) {
       return 'reserved-other';
     }
+    if (this.isDeskOutOfService(desk)) {
+      return 'out-of-service';
+    }
     if (this.isDeskAvailable(desk)) {
       return 'available';
-    }
-    if (this.isDeskReserved(desk)) {
-      return 'reserved';
     }
     return 'unavailable';
   }
@@ -328,6 +358,8 @@ export class BuildingMapComponent implements OnInit {
         return 'Available';
       case ResourceStatus.RESERVED:
         return 'Reserved';
+      case ResourceStatus.OUT_OF_SERVICE:
+        return 'Out of service';
       case ResourceStatus.UNAVAILABLE:
         return 'Unavailable';
       default:
@@ -337,11 +369,17 @@ export class BuildingMapComponent implements OnInit {
 
   /**
    * Open desk reservation dialog
-   * Don't open if desk is reserved by someone else
+   * Don't open if desk is reserved by someone else, out of service, or unavailable
    */
   openDeskDialog(desk: DeskWithStatus): void {
-    if (this.isOtherReservation(desk)) {
-      return; // Don't open dialog for other people's reservations
+    // Can't reserve out-of-service or unavailable desks
+    if (this.isDeskOutOfService(desk) || this.isDeskUnavailable(desk)) {
+      return;
+    }
+
+    const userRole = this.authService.getRole();
+    if (this.isOtherReservation(desk) && userRole !== 'ADMIN' && userRole !== 'TECHNICIAN') {
+      return; // Don't open dialog for other people's reservations unless user is ADMIN or TECHNICIAN
     }
     this.selectedDeskForDialog = desk;
     this.isDialogForMeetingRoom = false;
@@ -362,7 +400,6 @@ export class BuildingMapComponent implements OnInit {
    * This forces the display to refresh after the backend recalculates meeting room statuses
    */
   onReservationSuccess(): void {
-    console.log('🎉 Reservation successful, reloading all floors for progressive unlock...');
     // Reload floors with flag to refresh current room after data arrives
     this.loadAllFloorsWithStatus(true);
   }

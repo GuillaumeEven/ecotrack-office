@@ -24,6 +24,14 @@ public class DeskServiceImpl implements DeskService {
     private DeskMapper deskMapper;
 
     @Override
+    public List<DeskModel> getDesks() {
+        return deskRepository.findAll()
+                .stream()
+                .map(deskMapper::fromEntity)
+                .toList();
+    }
+
+    @Override
     public DeskModel getDeskById(Long deskId) {
         DeskEntity entity = deskRepository.findById(deskId)
                 .orElseThrow(() -> new EntityNotFoundException("Desk not found with id: " + deskId));

@@ -7,6 +7,8 @@ import com.ediae.ecotrack_office.assets.model.DeskModel;
 
 public interface DeskService {
 
+    public List<DeskModel> getDesks();
+
     public DeskModel getDeskById(Long deskId);
 
     public List<DeskModel> getDesksByRoomId(Long roomId);

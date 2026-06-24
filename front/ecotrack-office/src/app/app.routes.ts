@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
 import { HomeLanding } from './landing/components/home-landing/home-landing';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
 import { BuildingMapComponent } from './building-map/components/building-map.component';
@@ -19,15 +20,15 @@ export const routes: Routes = [
   { path: '', component: HomeLanding },
   { path: 'login', component: LoginComponent },
 
-  // RUTAS PRIVADAS (Cargan dentro del menú de la aplicación)
+  // RUTAS PRIVADAS (Toda la sección requiere estar autenticado)
   {
     path: '',
     component: PrivateLayout,
+    canActivate: [authGuard], // 🔒 PADRE BLINDADO: Aplica 'authGuard' a todos los hijos automáticamente
     children: [
       {
         path: 'profile',
         component: UserProfileComponent,
-        canActivate: [authGuard],
       },
       {
         path: 'home',
@@ -36,7 +37,7 @@ export const routes: Routes = [
       {
         path: 'admin/user-management',
         component: UserManagementComponent,
-        canActivate: [authGuard],
+        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
       },
       {
         path: 'reservation',
@@ -47,6 +48,7 @@ export const routes: Routes = [
         component: Organization,
       },
       {
+        // TODO: Filtrar solo los admins
         path: 'assets',
         component: AssetsMgmt,
       },
