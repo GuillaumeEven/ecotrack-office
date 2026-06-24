@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { matchPasswordValidator } from '@validators/match-password.validator';
 import { UserService } from '../../../services/user.service';
-import { Organization } from '../../../services/organization';
+import { OrganizationService } from '../../../services/organization.service';
 import { CreateUserRequest } from '@models/user.model';
 import { CreateOrganizationRequest, OrganizationResponse } from '@models/organization.model';
 import { switchMap, catchError, throwError } from 'rxjs';
@@ -23,7 +23,7 @@ export class HomeLanding implements OnInit {
 
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
-  private organizationService = inject(Organization);
+  private organizationService = inject(OrganizationService);
   private cdr = inject(ChangeDetectorRef);
 
   registerForm!: FormGroup;

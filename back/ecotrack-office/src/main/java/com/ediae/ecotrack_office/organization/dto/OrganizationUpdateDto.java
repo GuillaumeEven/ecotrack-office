@@ -7,38 +7,23 @@ public class OrganizationUpdateDto {
 
     // Atributos
     
-    private Long id;
     private String name;
     private String cif;
     private String address;
     private String email;
-    private Date endSubscription;
-    private Boolean isActive;
-    private LocalDateTime createdAt;
 
     // Constructores
 
     public OrganizationUpdateDto () {}
 
-    public OrganizationUpdateDto (Long id, String name, String cif, String address, String email, Date endSubscription, Boolean isActivate, LocalDateTime createAt) {
-        this.id = id;
+    public OrganizationUpdateDto (String name, String cif, String address, String email) {
         this.name = name;
         this.cif = cif;
         this.address = address;
         this.email = email;
-        this.endSubscription = endSubscription;
-        this.isActive = isActivate;
-        this.createdAt = createAt;
     } 
 
     // Getters y Setters 
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -66,26 +51,5 @@ public class OrganizationUpdateDto {
     }
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Date getEndSubscription() {
-        return endSubscription;
-    }
-    public void setEndSubscription(Date endSubscription) {
-        this.endSubscription = endSubscription;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }
