@@ -11,18 +11,18 @@ export class ReservationService {
   private http = inject(HttpClient);
   private readonly API_URL = 'http://localhost:8080/api/v1/reservations';
 
-  getReservationByUser(idUser: number) : Observable<ReservationResponse[]> {
+  getReservationsByUser() : Observable<ReservationResponse[]> {
 
-    return this.http.get<ReservationResponse[]>(`${this.API_URL}`);
+    return this.http.get<ReservationResponse[]>(`${this.API_URL}/user`);
   }
 
   updateReservation(idReservation: number, reservationData: any): Observable<ReservationResponse> {
 
-    return this.http.put<ReservationResponse>(`${this.API_URL}/update/${idReservation}`, reservationData);
+    return this.http.put<ReservationResponse>(`${this.API_URL}/${idReservation}`, reservationData);
   }
 
   deleteReservation(idReservation: number): Observable<void> {
 
-    return this.http.delete<void>(`${this.API_URL}/delete/${idReservation}`);
+    return this.http.delete<void>(`${this.API_URL}/${idReservation}`);
   }
 }

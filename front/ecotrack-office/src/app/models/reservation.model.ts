@@ -7,5 +7,6 @@ export interface ReservationResponse {
     status: string;
     createdAt: string;
     userId: number;
-    resource: ResourceResponse;
+    resourceName: string;
+    resourceEquipmentList: string;
 }

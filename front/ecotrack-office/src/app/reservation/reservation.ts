@@ -14,9 +14,7 @@ export class Reservation implements OnInit{
   private cdr = inject(ChangeDetectorRef);
 
   activeReservations: ReservationResponse[] = [];
-
-  //ID DE PRUEBA LUEGO TENGO QUE UTILIZAR EL TOKEN
-  private userIdActivo = 1;
+  unactiveReservations: ReservationResponse[] = [];
 
   ngOnInit(): void {
     
@@ -25,11 +23,24 @@ export class Reservation implements OnInit{
 
   private loadReservations(): void {
 
-    this.reservationService.getReservationByUser(this.userIdActivo).subscribe({
+    this.reservationService.getReservationsByUser().subscribe({
 
       next: (data) => {
 
-        this.activeReservations = data;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        this.activeReservations = data.filter(reserva => {
+
+          const fechaReserva = new Date(reserva.date);
+          fechaReserva.setHours(0, 0, 0, 0);
+          return fechaReserva.getTime() >= today.getTime();
+        });
+        this.unactiveReservations = data.filter(reserva => {
+
+          const fechaReserva = new Date(reserva.date);
+          fechaReserva.setHours(0, 0, 0, 0);
+          return fechaReserva.getTime() < today.getTime();
+        });
         this.cdr.detectChanges();
       },
       error: (err) => {

@@ -65,18 +65,20 @@
       @for (reserva of activeReservations; track reserva.id) {
         <div class="booking-card">
           <div class="booking-card__image-wrapper">
-            <img class="booking-card__image" [alt]="reserva.resource.name" src='assets/images/default-resource.png'>
+            <img class="booking-card__image" [alt]="reserva.resourceName" src="images/imagen-escritorio.webp">
             
+            <!--POR SI QUIERO PONER EN LA FOTO HOY/MAÑANA BLABLABLA
             <div class="booking-card__badge-time">{{ reserva.date }}</div>
+            -->
           </div>
           
           <div class="booking-card__content">
             <div class="booking-card__header">
               <div>
-                <h3 class="booking-card__title">{{ reserva.resource.name }}</h3>
+                <h3 class="booking-card__title">{{ reserva.resourceName }}</h3>
                 
                 <p class="booking-card__meta">
-                  Equipamiento: {{ reserva.resource.equipmentList }}
+                  Equipamiento: {{ reserva.resourceEquipmentList }}
                 </p>
               </div>
               <span class="booking-card__status-tag" [class]="reserva.status.toLowerCase()">
@@ -126,95 +128,47 @@
       -->
   </section>
 
-
   <section class="global-history">
     <div class="global-history__header">
-      <h2 class="global-history__title">Historial de reservas</h2>
-      <!-- PARA DESCARGAR EL HISTORIAL IMPLEMENTAR SI SE QUIERE
-      <button class="global-history__btn-export">
-        <span class="material-symbols-outlined">download</span>
-        Export CSV
-      </button>
-      -->
+      <h2 class="global-history__title">Historial de reservas pasadas</h2>
     </div>
 
     <div class="global-history__table-wrapper">
       <table class="history-table">
         <thead class="history-table__thead">
           <tr>
-            <th class="history-table__th">Empleado</th>
             <th class="history-table__th">Recurso</th>
+            <th class="history-table__th">Equipamiento</th>
             <th class="history-table__th">Fecha</th>
-            <!--
-            <th class="history-table__th">Estado</th>
-            -->
-            <th class="history-table__th"></th>
           </tr>
         </thead>
         <tbody class="history-table__tbody">
-          <tr class="history-table__tr">
-            <td class="history-table__td">
-              <div class="employee-cell">
-                <div class="employee-cell__avatar">IMG</div>
-                <div>
-                  <div class="employee-cell__name">Jane Doe</div>
-                  <div class="employee-cell__dept">Rol</div>
-                </div>
-              </div>
-            </td>
-            <td class="history-table__td history-table__td--bold">Sala de conferencias A</td>
-            <td class="history-table__td history-table__td--muted">Oct 24, 2023</td>
-            <!--
-            <td class="history-table__td">
-              <span class="status-pill status-pill--cancelled">PASADA</span>
-            </td>
-            -->
-            <!-- NO TIENE SENTIDO EDITAR RESERVAS PASADAS
-            <td class="history-table__td history-table__td--action">
-              <button class="history-table__btn-more">
-                <span class="material-symbols-outlined">more_vert</span>
-              </button>
-            </td>
-            -->
-          </tr>
-          <tr class="history-table__tr">
-            <td class="history-table__td">
-              <div class="employee-cell">
-                <div class="employee-cell__avatar">IMG</div>
-                <div>
-                  <div class="employee-cell__name">Robert King</div>
-                  <div class="employee-cell__dept">ROL</div>
-                </div>
-              </div>
-            </td>
-            <td class="history-table__td history-table__td--bold">Escritorio 4</td>
-            <td class="history-table__td history-table__td--muted">Oct 23, 2023</td>
-            <!--
-            <td class="history-table__td">
-              <span class="status-pill status-pill--cancelled">PASADA</span>
-            </td>
-            -->
-            <!-- NO TIENE SENTIDO EDITAR RESERVAS PASADAS
-            <td class="history-table__td history-table__td--action">
-              <button class="history-table__btn-more">
-                <span class="material-symbols-outlined">more_vert</span>
-              </button>
-            </td>
-            -->
-          </tr>
+          
+          @for (reserva of unactiveReservations; track reserva.id) {
+            <tr class="history-table__tr">
+              <td class="history-table__td history-table__td--bold">
+                {{ reserva.resourceName }}
+              </td>
+              <td class="history-table__td history-table__td--muted">
+                {{ reserva.resourceEquipmentList }}
+              </td>
+              <td class="history-table__td history-table__td--muted">
+                {{ reserva.date }}
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="history-table__td" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                No tienes historial de reservas pasadas.
+              </td>
+            </tr>
+          }
+
         </tbody>
       </table>
 
       <footer class="history-pagination">
-        <span class="history-pagination__info">Mostrando 3 of 124 reservas</span>
-        <div class="history-pagination__actions">
-          <button class="history-pagination__btn" disabled>
-            <span class="material-symbols-outlined">chevron_left</span>
-          </button>
-          <button class="history-pagination__btn">
-            <span class="material-symbols-outlined">chevron_right</span>
-          </button>
-        </div>
+        <span class="history-pagination__info">Total: {{ unactiveReservations.length }} reservas pasadas</span>
       </footer>
     </div>
   </section>
