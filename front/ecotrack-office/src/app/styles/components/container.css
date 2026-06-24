@@ -1,0 +1,29 @@
+/* ============================================================================
+   SECCIONES Y CONTENEDORES
+   ============================================================================
+   Estilos para las secciones y contenedores generales.
+   ============================================================================ */
+
+.section {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: var(--border-width-1) solid var(--border-color);
+}
+
+.section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  .container {
+    padding: 0 var(--spacing-lg);
+  }
+}

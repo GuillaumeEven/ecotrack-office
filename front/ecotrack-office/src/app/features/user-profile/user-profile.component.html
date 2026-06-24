@@ -1,60 +1,50 @@
 <!-- Change Password Modal -->
 <app-change-password-modal *ngIf="showPasswordModal" (closed)="showPasswordModal = false" />
 
-<div class="max-w-container-max mx-auto px-lg py-xl">
+<div class="profile-container">
   <!-- Page Header -->
-  <div class="mb-xl">
-    <h1 class="font-headline-lg text-headline-lg text-on-surface">User Profile</h1>
-    <p class="text-on-surface-variant font-body-lg text-body-lg">
+  <div class="page-header">
+    <h1>User Profile</h1>
+    <p>
       Manage your personal information and security preferences.
     </p>
   </div>
 
   <!-- Bento Grid -->
-  <div class="grid grid-cols-12 gap-gutter">
+  <div class="bento-grid">
     <!-- LEFT COLUMN: Identity card + Quick nav -->
-    <div class="col-span-12 md:col-span-4 flex flex-col gap-gutter">
+    <div class="left-column">
       <!-- Identity card -->
-      <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md">
-        <div class="flex flex-col items-center text-center">
+      <div class="card">
+        <div class="identity-card">
           <!-- Avatar with upload button -->
-          <div class="relative group cursor-pointer mb-md" (click)="onChangePhoto()">
+          <div class="avatar-wrapper" (click)="onChangePhoto()">
             <img
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnHu9QB7UKbkPpUnc2e48oUrKYZyVqH_Fafdqai4PKK7eO79-an2Uhq9UNwtbNRA9ag9one6kkuqN-VAel9wHbJT5L-ks_oCU2kG0SL244tTKAxYIFs2baTBJdIDLROWy4h0KO9ccsahkXVDSyZyRNHZv-Y3qyPjG4QnSV1R0OhnhyY8l0oQOO86rLLjBF87bPWu6GQhE66cD0EkDBULteYUU-CCdaHM6TPf_CN4n1SIUKupVC6Hccx_4q6L8jj6IKwiDD5jFUYfyf"
               alt="User profile photo"
-              class="w-32 h-32 rounded-full object-cover border-4 border-surface-container-high shadow-lg transition-transform group-hover:scale-105"
             />
-            <div
-              class="absolute bottom-0 right-0 bg-primary text-on-primary p-xs rounded-full shadow-md"
-            >
-              <span class="material-symbols-outlined text-[20px]">photo_camera</span>
+            <div class="camera-btn">
+              <span class="material-symbols-outlined">photo_camera</span>
             </div>
           </div>
 
-          <div
-            *ngIf="isLoading"
-            class="h-8 w-40 bg-surface-container-high rounded-xl animate-pulse mb-xs"
-          ></div>
-          <h2 *ngIf="!isLoading" class="font-headline-md text-headline-md text-on-surface">
+          <div *ngIf="isLoading" class="skeleton name-skeleton"></div>
+          <h2 *ngIf="!isLoading">
             {{ user?.firstName }} {{ user?.lastName }}
           </h2>
-          <p class="text-on-surface-variant font-body-md text-body-md">{{ user?.role }}</p>
+          <p>{{ user?.role }}</p>
 
           <!-- Meta info -->
-          <div class="mt-md w-full pt-md border-t border-outline-variant space-y-sm">
-            <div class="flex justify-between items-center px-sm">
-              <span class="text-on-surface-variant text-label-sm font-label-sm"
-                >ACCOUNT STATUS</span
-              >
-              <span
-                class="bg-secondary-container/20 text-secondary text-[12px] font-bold px-sm py-[2px] rounded-full"
-              >
+          <div class="identity-meta">
+            <div class="meta-item">
+              <span class="meta-label">ACCOUNT STATUS</span>
+              <span class="status-badge">
                 {{ user?.isActive ? 'Active' : 'Inactive' }}
               </span>
             </div>
-            <div class="flex justify-between items-center px-sm">
-              <span class="text-on-surface-variant text-label-sm font-label-sm">SINCE</span>
-              <span class="text-on-surface text-[12px] font-medium">
+            <div class="meta-item">
+              <span class="meta-label">SINCE</span>
+              <span>
                 {{ user?.createdAt | date: 'MMMM yyyy' }}
               </span>
             </div>
@@ -63,150 +53,119 @@
       </div>
 
       <!-- Quick navigation -->
-      <div
-        class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden"
-      >
+      <div class="card quick-nav">
         <button
           (click)="setActiveSection('personal')"
-          [class.text-primary]="activeSection === 'personal'"
-          [class.font-bold]="activeSection === 'personal'"
-          [class.text-on-surface-variant]="activeSection !== 'personal'"
-          class="w-full flex items-center gap-md px-md py-sm hover:bg-surface-container-low transition-colors"
+          [class.active]="activeSection === 'personal'"
         >
           <span class="material-symbols-outlined">person</span>
-          <span class="font-title-md text-title-md">Personal Data</span>
+          <span>Personal Data</span>
         </button>
         <button
           (click)="setActiveSection('security')"
-          [class.text-primary]="activeSection === 'security'"
-          [class.font-bold]="activeSection === 'security'"
-          [class.text-on-surface-variant]="activeSection !== 'security'"
-          class="w-full flex items-center gap-md px-md py-sm hover:bg-surface-container-low transition-colors"
+          [class.active]="activeSection === 'security'"
         >
           <span class="material-symbols-outlined">security</span>
-          <span class="font-title-md text-title-md">Security Settings</span>
+          <span>Security Settings</span>
         </button>
         <button
           (click)="setActiveSection('notifications')"
-          [class.text-primary]="activeSection === 'notifications'"
-          [class.font-bold]="activeSection === 'notifications'"
-          [class.text-on-surface-variant]="activeSection !== 'notifications'"
-          class="w-full flex items-center gap-md px-md py-sm hover:bg-surface-container-low transition-colors"
+          [class.active]="activeSection === 'notifications'"
         >
           <span class="material-symbols-outlined">notifications</span>
-          <span class="font-title-md text-title-md">Notifications</span>
+          <span>Notifications</span>
         </button>
       </div>
     </div>
 
     <!-- RIGHT COLUMN: Forms -->
-    <div class="col-span-12 md:col-span-8 space-y-gutter">
+    <div class="right-column">
       <!-- Personal Information Form -->
-      <div
-        *ngIf="activeSection === 'personal'"
-        class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md"
-      >
-        <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
-          <h3 class="font-headline-md text-headline-md text-on-surface">Personal Information</h3>
-          <span class="material-symbols-outlined text-on-surface-variant">edit</span>
+      <div *ngIf="activeSection === 'personal'" class="card form-section">
+        <div class="section-header">
+          <h3>Personal Information</h3>
+          <span class="material-symbols-outlined">edit</span>
         </div>
 
-        <form
-          [formGroup]="profileForm"
-          (ngSubmit)="onSaveChanges()"
-          class="grid grid-cols-1 md:grid-cols-2 gap-md"
-        >
+        <form [formGroup]="profileForm" (ngSubmit)="onSaveChanges()">
           <!-- First Name -->
-          <div class="space-y-xs">
-            <label class="text-on-surface font-label-sm text-label-sm block">FIRST NAME</label>
+          <div class="form-group">
+            <label>FIRST NAME</label>
             <input
               type="text"
               formControlName="firstName"
-              class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
               [class.border-error]="
                 profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched
               "
             />
-            <p
-              *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
-              class="text-error text-[12px]"
-            >
+            <p *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" class="error-text">
               First name is required.
             </p>
           </div>
 
           <!-- Last Name -->
-          <div class="space-y-xs">
-            <label class="text-on-surface font-label-sm text-label-sm block">LAST NAME</label>
+          <div class="form-group">
+            <label>LAST NAME</label>
             <input
               type="text"
               formControlName="lastName"
-              class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
               [class.border-error]="
                 profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched
               "
             />
-            <p
-              *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched"
-              class="text-error text-[12px]"
-            >
+            <p *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" class="error-text">
               Last name is required.
             </p>
           </div>
 
           <!-- Email -->
-          <div class="space-y-xs">
-            <label class="text-on-surface font-label-sm text-label-sm block">EMAIL ADDRESS</label>
+          <div class="form-group">
+            <label>EMAIL ADDRESS</label>
             <input
               type="email"
               formControlName="email"
-              class="w-full bg-surface border border-outline-variant rounded-xl p-sm focus:ring-2 focus:ring-on-tertiary-container focus:border-transparent transition-all outline-none"
               [class.border-error]="
                 profileForm.get('email')?.invalid && profileForm.get('email')?.touched
               "
             />
-            <p
-              *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
-              class="text-error text-[12px]"
-            >
+            <p *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error-text">
               Please enter a valid email.
             </p>
           </div>
 
-          <!-- Role (solo lectura) -->
-          <div class="space-y-xs">
-            <label class="text-on-surface font-label-sm text-label-sm block">ROLE</label>
+          <!-- Role (read-only) -->
+          <div class="form-group">
+            <label>ROLE</label>
             <input
               type="text"
               [value]="user?.role ?? ''"
               disabled
-              class="w-full bg-surface-container-low border border-outline-variant rounded-xl p-sm text-on-surface-variant outline-none cursor-not-allowed"
             />
           </div>
 
           <!-- Feedback -->
-          <div class="col-span-full">
-            <p *ngIf="successMessage" class="text-secondary text-[13px] font-medium">
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <p *ngIf="successMessage" class="feedback-msg success">
               ✓ {{ successMessage }}
             </p>
-            <p *ngIf="errorMessage" class="text-error text-[13px] font-medium">
+            <p *ngIf="errorMessage" class="feedback-msg error">
               ✕ {{ errorMessage }}
             </p>
           </div>
 
           <!-- Actions -->
-          <div class="col-span-full pt-md flex justify-end gap-sm">
+          <div class="form-actions">
             <button
               type="button"
               (click)="onDiscardChanges()"
-              class="px-lg py-sm text-on-surface-variant border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors font-bold"
+              class="secondary-btn"
             >
               Discard Changes
             </button>
             <button
               type="submit"
               [disabled]="profileForm.invalid"
-              class="px-lg py-sm bg-primary text-on-primary rounded-xl hover:opacity-90 transition-all active:scale-95 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              class="primary-btn"
             >
               Save Changes
             </button>
@@ -215,59 +174,48 @@
       </div>
 
       <!-- Security & Privacy -->
-      <div
-        *ngIf="activeSection === 'security'"
-        class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md"
-      >
-        <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
-          <h3 class="font-headline-md text-headline-md text-on-surface">Security &amp; Privacy</h3>
-          <span class="material-symbols-outlined text-on-surface-variant">lock</span>
+      <div *ngIf="activeSection === 'security'" class="card form-section">
+        <div class="section-header">
+          <h3>Security &amp; Privacy</h3>
+          <span class="material-symbols-outlined">lock</span>
         </div>
 
-        <div class="space-y-md">
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
           <!-- Change Password -->
-          <div
-            class="flex items-center justify-between p-sm border border-outline-variant rounded-xl"
-          >
-            <div class="flex items-center gap-md">
-              <div
-                class="w-10 h-10 bg-surface-container-high rounded-full flex items-center justify-center text-primary"
-              >
+          <div class="security-item">
+            <div class="security-item-info">
+              <div class="icon-box primary">
                 <span class="material-symbols-outlined">password</span>
               </div>
-              <div>
-                <p class="font-title-md text-title-md text-on-surface">Change Password</p>
-                <p class="text-on-surface-variant text-body-md">Last changed 4 months ago</p>
+              <div class="security-item-text">
+                <p>Change Password</p>
+                <p>Last changed 4 months ago</p>
               </div>
             </div>
             <button
               (click)="onChangePassword()"
-              class="text-on-tertiary-container font-bold px-sm py-xs hover:bg-surface-container-high rounded-xl transition-colors"
+              class="primary"
             >
               Update
             </button>
           </div>
 
           <!-- Sign out all -->
-          <div
-            class="flex items-center justify-between p-sm border border-outline-variant rounded-xl"
-          >
-            <div class="flex items-center gap-md">
-              <div
-                class="w-10 h-10 bg-error-container/30 rounded-full flex items-center justify-center text-error"
-              >
+          <div class="security-item">
+            <div class="security-item-info">
+              <div class="icon-box error">
                 <span class="material-symbols-outlined">logout</span>
               </div>
-              <div>
-                <p class="font-title-md text-title-md text-error">Logout from all devices</p>
-                <p class="text-on-surface-variant text-body-md">
+              <div class="security-item-text">
+                <p>Logout from all devices</p>
+                <p>
                   Removes access from 3 active sessions
                 </p>
               </div>
             </div>
             <button
               (click)="onSignOutAll()"
-              class="text-error font-bold px-sm py-xs hover:bg-error-container rounded-xl transition-colors"
+              class="error"
             >
               Sign out all
             </button>
@@ -276,18 +224,14 @@
       </div>
 
       <!-- Notifications -->
-      <div
-        *ngIf="activeSection === 'notifications'"
-        class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md"
-      >
-        <div class="flex items-center justify-between mb-lg border-b border-outline-variant pb-sm">
-          <h3 class="font-headline-md text-headline-md text-on-surface">Notifications</h3>
-          <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+      <div *ngIf="activeSection === 'notifications'" class="card form-section">
+        <div class="section-header">
+          <h3>Notifications</h3>
+          <span class="material-symbols-outlined">notifications</span>
         </div>
-        <p class="text-on-surface-variant font-body-lg text-body-lg">
+        <p>
           Notification preferences coming soon.
         </p>
       </div>
-    </div>
   </div>
 </div>

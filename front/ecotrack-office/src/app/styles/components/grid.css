@@ -1,0 +1,30 @@
+/* ============================================================================
+   CUADRÍCULAS COMUNES
+   ============================================================================
+   Clases utilitarias para los diseños de cuadrícula.
+   ============================================================================ */
+
+.grid {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  .grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+@media (min-width: var(--breakpoint-md)) {
+  .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

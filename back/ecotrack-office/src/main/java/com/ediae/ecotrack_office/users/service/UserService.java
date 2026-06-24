@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ediae.ecotrack_office.audit.service.AuditLogService;
@@ -33,15 +34,18 @@ public class UserService {
     private final UserMapper userMapper;
     private final OrganizationRepository organizationRepository;
     private final AuditLogService auditLogService;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,
                        UserMapper userMapper,
                        OrganizationRepository organizationRepository,
-                       AuditLogService auditLogService) {
+                       AuditLogService auditLogService,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.organizationRepository = organizationRepository;
         this.auditLogService = auditLogService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // ─────────────────────────────────────────────
@@ -82,14 +86,14 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Organización no encontrada con id: " + dto.organizationId()));
 
         UserEntity entity = userMapper.toEntityFromDto(dto, organization);
-        entity.setPasswordHash(dto.password());
+        
+        // 🆕 HASHEAR CONTRASEÑA AQUÍ
+        entity.setPasswordHash(passwordEncoder.encode(dto.password()));
+        
         entity.setIsActive(true);
         entity.setCreatedAt(LocalDateTime.now());
-
-        // 🆕 Salvaguarda: Forzamos el consentimiento por defecto al crear el usuario
         entity.setConsentGiven(false);
 
-        // Registramos que el admin creó un usuario
         UserEntity saved = userRepository.save(entity);
         auditLogService.log("USER_CREATED", "USER", saved.getId(), RequestContext.getUserId());
 
@@ -109,13 +113,14 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Organización no encontrada con CIF: " + dto.cif()));
 
         UserEntity entity = userMapper.fromCreateDtoEntity(dto, organization);
-        entity.setPasswordHash(dto.password());
+        
+        // 🆕 HASHEAR CONTRASEÑA AQUÍ
+        entity.setPasswordHash(passwordEncoder.encode(dto.password()));
+        
         entity.setIsActive(true);
         entity.setCreatedAt(LocalDateTime.now());
 
-        // Registramos que se creó el usuario
         UserEntity saved = userRepository.save(entity);
-
         return userMapper.toModel(saved);
     }
 
@@ -228,14 +233,13 @@ public class UserService {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-        // MVP: comparación directa.
-        // TODO: cuando se añada BCrypt, usar passwordEncoder.matches()
-        if (!entity.getPasswordHash().equals(dto.currentPassword())) {
+        // 🆕 Cambiado de .equals() a passwordEncoder.matches()
+        if (!passwordEncoder.matches(dto.currentPassword(), entity.getPasswordHash())) {
             throw new IllegalArgumentException("La contraseña actual no es correcta");
         }
 
-        // TODO: cuando se añada BCrypt, usar passwordEncoder.encode()
-        entity.setPasswordHash(dto.newPassword());
+        // 🆕 Cambiado a passwordEncoder.encode() para guardar el nuevo hash seguro
+        entity.setPasswordHash(passwordEncoder.encode(dto.newPassword()));
         userRepository.save(entity);
 
         auditLogService.log("PASSWORD_CHANGED", "USER", id, RequestContext.getUserId());

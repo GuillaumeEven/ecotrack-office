@@ -1,0 +1,133 @@
+/* ============================================================================
+   HEADER COMPONENT - ESTILOS PERSONALIZADOS
+   ============================================================================
+   Barra de navegación principal de la aplicación.
+
+   MIGRACIÓN A CSS PURO (Sin Tailwind):
+   - Utiliza clases globales (.flex, .btn) de components.css
+   - Encapsulación Angular para estilos específicos del componente
+   ============================================================================ */
+
+:host {
+  display: block;
+}
+
+header {
+  background-color: var(--surface-high);
+  border-bottom: var(--border-width-1) solid var(--border-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-header);
+}
+
+header > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 var(--spacing-lg);
+  height: 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Logo/Brand */
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.logo-section a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-section span {
+  font: var(--font-headline-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--on-surface);
+}
+
+/* User Actions Section */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.logout-btn {
+  color: var(--primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  background: transparent;
+  transition: transform var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.logout-btn:hover {
+  background-color: rgba(0, 102, 204, 0.08);
+}
+
+.logout-btn:active {
+  transform: scale(0.95);
+}
+
+.logout-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Avatar Link */
+.avatar-link {
+  display: inline-block;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  transition: box-shadow var(--transition-fast);
+}
+
+.avatar-link:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.avatar-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.avatar-link img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  header > div {
+    padding: 0 var(--spacing-md);
+    height: 64px;
+  }
+
+  .logo-section {
+    gap: var(--spacing-md);
+  }
+
+  .logo-section span {
+    font: var(--font-title-md);
+  }
+
+  .user-actions {
+    gap: var(--spacing-sm);
+  }
+
+  .logout-btn {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-xs);
+  }
+}
