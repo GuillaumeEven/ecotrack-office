@@ -80,6 +80,14 @@
   }
 }
 
+/* Responsive table - show EMAIL column on desktop */
+@media (min-width: 1024px) {
+  .users-table th[style*="display: none"],
+  .users-table td[style*="display: none"] {
+    display: table-cell !important;
+  }
+}
+
 /* Tabla usuarios */
 .users-table {
   width: 100%;

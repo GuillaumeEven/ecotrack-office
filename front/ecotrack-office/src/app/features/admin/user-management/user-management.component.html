@@ -140,7 +140,8 @@
       <thead>
         <tr>
           <th>NAME</th>
-          <th style="display: none;" class="@md:table-cell">EMAIL</th>
+          <th style="display: none;">EMAIL</th>
+          <!-- Mobile: hidden, Desktop: table-cell via CSS media query -->
           <th>ROLE</th>
           <th>STATUS</th>
           <th style="text-align: right;">ACTIONS</th>
@@ -153,7 +154,7 @@
               {{ user.firstName }} {{ user.lastName }}
             </p>
           </td>
-          <td style="display: none;" class="@md:table-cell">
+          <td style="display: none;">
             <p style="color: var(--on-surface-variant); margin: 0;">{{ user.email }}</p>
           </td>
           <td>
