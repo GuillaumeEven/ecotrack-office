@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IncidentService } from '../../services/incident'; // Corregida la ruta al archivo real
+import { IncidentService } from '../../services/incident';
+import { AuthService } from '../../services/auth.service'; // Importo el servicio común de auth
 import { IncidentResponse } from '../../models/incident.model';
 
 @Component({
@@ -10,6 +11,7 @@ import { IncidentResponse } from '../../models/incident.model';
   imports: [CommonModule, ReactiveFormsModule, DatePipe],
   templateUrl: './incidencias.html',
 })
+
 export class IncidenciasComponent implements OnInit {
   incidents: IncidentResponse[] = [];
   incidentForm!: FormGroup;
@@ -17,15 +19,27 @@ export class IncidenciasComponent implements OnInit {
   isSaving = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
+  userRole: string = 'USER'; // Rol por defecto
 
   constructor(
     private fb: FormBuilder,
-    private incidentService: IncidentService
-  ) {}
+    private incidentService: IncidentService,
+    private authService: AuthService // Inyecto el control de acceso
+  ) { }
 
   ngOnInit(): void {
+    this.getUserRole();
     this.initForm();
     this.loadIncidents();
+  }
+
+  getUserRole(): void {
+    const roleGuardado = this.authService.getRole();
+    if (roleGuardado !== null) {
+      this.userRole = roleGuardado;
+    } else {
+      this.userRole = 'USER';
+    }
   }
 
   initForm(): void {
@@ -39,7 +53,7 @@ export class IncidenciasComponent implements OnInit {
   loadIncidents(): void {
     this.isLoading = true;
     this.incidentService.getAll().subscribe({
-      next: (data: IncidentResponse[]) => { // Tipado explícito para evitar el error de 'any'
+      next: (data: IncidentResponse[]) => {
         this.incidents = data;
         this.isLoading = false;
       },
