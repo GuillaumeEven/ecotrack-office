@@ -23,7 +23,7 @@ aside {
   width: 256px;
   background-color: var(--surface-container-low);
   border-right: var(--border-width-1) solid var(--border-color);
-  z-index: var(--z-modal);
+  z-index: var(--z-sidebar);
   padding-top: 96px; /* 24 * 4px = 96px, altura del header */
 }
 
