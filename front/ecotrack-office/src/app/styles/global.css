@@ -1,15 +1,15 @@
 /* ============================================================================
-   STYLES GLOBAUX
+   ESTILOS GLOBALES
    ============================================================================
-   Reset, fondations et styles applicables à l'ensemble de l'app.
+   Reset, fundaciones y estilos aplicables a toda la app.
    ============================================================================ */
 
-/* ---------- Angular Components & Web Components ---------- */
+/* ---------- Componentes Angular & Web Components ---------- */
 :host {
   display: block;
 }
 
-/* ---------- Reset & Boîte Modèle ---------- */
+/* ---------- Reset & Modelo de Caja ---------- */
 *,
 *::before,
 *::after {
@@ -23,7 +23,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color-scheme: light; /* Force mode light (même si OS est dark) */
+  color-scheme: light; /* Fuerza modo light (aunque SO sea dark) */
 }
 
 body {
@@ -39,7 +39,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------- Typographies ---------- */
+/* ---------- Tipografías ---------- */
 h1 {
   font: var(--font-headline-lg);
   margin-bottom: var(--spacing-md);
@@ -72,7 +72,7 @@ small {
   font-size: var(--font-size-sm);
 }
 
-/* ---------- Liens ---------- */
+/* ---------- Enlaces ---------- */
 a {
   color: var(--primary);
   text-decoration: none;
@@ -90,7 +90,7 @@ a:focus-visible {
   border-radius: var(--radius-sm);
 }
 
-/* ---------- Listes ---------- */
+/* ---------- Listas ---------- */
 ul, ol {
   margin-bottom: var(--spacing-md);
 }
@@ -99,99 +99,14 @@ li {
   margin-bottom: var(--spacing-sm);
 }
 
-/* ---------- Formulaires ---------- */
-input,
-textarea,
-select,
-button {
-  font-family: inherit;
-  font-size: inherit;
-}
-
-label {
-  display: block;
-  color: var(--on-surface);
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--spacing-xs);
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="date"],
-input[type="time"],
-textarea,
-select {
-  width: 100%;
-  padding: var(--spacing-sm);
-  background-color: var(--surface);
-  border: var(--border-width-1) solid var(--border-color);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-base);
-  color: var(--on-surface);
-  transition: all var(--transition-fast);
-  box-sizing: border-box;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-}
-
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-input.error,
-textarea.error,
-select.error {
-  border-color: var(--error);
-}
-
-input:disabled,
-textarea:disabled,
-select:disabled {
-  background-color: var(--surface-container-low);
-  color: var(--on-surface-variant);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-button {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: var(--font-weight-semibold);
-  transition: all var(--transition-fast);
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ---------- Images ---------- */
+/* ---------- Imágenes ---------- */
 img {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-/* ---------- Code ---------- */
+/* ---------- Código ---------- */
 code,
 pre {
   font-family: var(--font-family-mono);
@@ -210,7 +125,7 @@ pre {
   margin-bottom: var(--spacing-md);
 }
 
-/* ---------- Scrollbars Personnalisées ---------- */
+/* ---------- Barras de Desplazamiento Personalizadas ---------- */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -229,7 +144,7 @@ pre {
   background: #888;
 }
 
-/* ---------- Utilitaires Globaux Minimaux ---------- */
+/* ---------- Utilidades Globales Mínimas ---------- */
 .text-center {
   text-align: center;
 }
@@ -258,18 +173,13 @@ pre {
   border-width: 0;
 }
 
-/* ---------- Focus Visible pour Accessibilité ---------- */
+/* ---------- Focus Visible para Accesibilidad ---------- */
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-button:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-/* ---------- Messages d'Erreur & Succès ---------- */
+/* ---------- Mensajes de Error & Éxito ---------- */
 .error,
 .error-message,
 .error-text {
@@ -285,41 +195,7 @@ button:focus-visible {
   margin-top: var(--spacing-xs);
 }
 
-/* ---------- Boutons d'Action ---------- */
-.action-btn {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: none;
-  background: transparent;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary);
-}
-
-.action-btn:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.action-btn.danger,
-.action-btn.delete {
-  color: var(--error);
-}
-
-.action-btn.danger:hover,
-.action-btn.delete:hover {
-  background-color: rgba(186, 26, 26, 0.08);
-}
-
-/* ---------- Actions Container ---------- */
-.actions {
-  display: flex;
-  gap: var(--spacing-sm);
-}
-
-/* ---------- Warning & Alert Sections ---------- */
+/* ---------- Secciones de Advertencia & Alerta ---------- */
 .warning-section {
   display: flex;
   gap: var(--spacing-md);
@@ -344,7 +220,7 @@ button:focus-visible {
   font-weight: var(--font-weight-semibold);
 }
 
-/* ---------- Material Symbols Font Variations ---------- */
+/* ---------- Font de Material Symbols Variaciones ---------- */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
   font-variation-settings:
@@ -352,37 +228,4 @@ button:focus-visible {
     'wght' 400,
     'GRAD' 0,
     'opsz' 24;
-}
-
-/* ---------- TABLAS GLOBALES ---------- */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-
-thead {
-  background-color: var(--surface-container);
-}
-
-th {
-  font: var(--font-label-sm);
-  letter-spacing: var(--letter-spacing-label);
-  color: var(--on-surface-variant);
-  text-align: left;
-  padding: var(--spacing-md);
-  border-bottom: var(--border-width-1) solid var(--outline-variant);
-}
-
-td {
-  padding: var(--spacing-md);
-  border-bottom: var(--border-width-1) solid var(--outline-variant);
-  font: var(--font-body-md);
-  color: var(--on-surface);
-}
-
-tbody tr:hover {
-  background-color: var(--surface-container-low);
 }

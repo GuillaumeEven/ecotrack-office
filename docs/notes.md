@@ -156,7 +156,7 @@ En nuestros sueños:
 - [ ] añadir docstring para swagguer
 - [ ] harmonizar el css
 - [ ] docker/deploy
-- [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
+- [x] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
 - [ ] enviar un email de invitacion
 - [x] repensar los status de resources: una resource no puede ser reservada o disponible en si misma, depende de las reservas.
 
