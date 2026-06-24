@@ -1,0 +1,18 @@
+/* ============================================================================
+   COMPONENTES REUTILIZABLES - ÍNDICE
+   ============================================================================
+   Punto central de importación de todos los estilos de componentes reutilizables.
+   Cada componente está en su propio archivo bajo la carpeta /components/.
+   ============================================================================ */
+
+@import './components/button.css';
+@import './components/card.css';
+@import './components/form.css';
+@import './components/badge.css';
+@import './components/modal.css';
+@import './components/animation.css';
+@import './components/loader.css';
+@import './components/container.css';
+@import './components/grid.css';
+@import './components/flex.css';
+@import './components/table.css';

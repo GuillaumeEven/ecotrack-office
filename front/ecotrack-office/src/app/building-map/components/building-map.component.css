@@ -1,4 +1,19 @@
-/* Temporary CSS for Assets Management Component - No Tailwind */
+/* ============================================================================
+   BUILDING MAP COMPONENT - ESTILOS PERSONALIZADOS
+   ============================================================================
+   Este componente utiliza la arquitectura CSS global con estilos específicos
+   del componente encapsulados.
+
+   MIGRACIÓN A CSS PURO (Sin Tailwind):
+   - HTML: Se eliminaron todas las clases de utilidad Tailwind
+   - Estilos: Se utilizan variables CSS globales y encapsulación por componente
+   - Componentes globales: .btn, .form-*, .section reutilizados desde components.css
+   - Estilos específicos: Todo lo personalizado en este archivo (desks-cinema, etc.)
+
+   PRINCIPIO DE ENCAPSULACIÓN:
+   Angular ViewEncapsulation.Emulated asegura que los estilos en este archivo
+   se aplican SOLO a este componente, sin afectar a otros.
+   ============================================================================ */
 
 :host {
   display: block;
@@ -226,37 +241,6 @@
   padding-left: 0.75rem;
 }
 
-/* Forms */
-.form-group {
-  margin-bottom: 0.5rem;
-}
-
-.form-label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  margin-bottom: 0.25rem;
-  color: var(--outline, #666);
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  background-color: var(--surface, #fff);
-  border: 1px solid var(--outline-variant, #ccc);
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #1e88e5;
-  box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.1);
-}
-
 /* Cinema-style desks grid */
 .desks-cinema {
   background-color: #0f172a;
@@ -454,11 +438,6 @@
 .loading {
   color: var(--on-surface-variant, #666);
   font-style: italic;
-}
-
-.error {
-  color: #f44336;
-  margin-bottom: 1rem;
 }
 
 /* Debug Info */

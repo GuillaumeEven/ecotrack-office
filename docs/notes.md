@@ -3,7 +3,7 @@
 ## Consideraciones
 
 - Papel de la IA en el proyecto: presentarla desde el inicio podría ser una ventaja.
-
+`
 ## Preguntas
 
 - Presentación del TFM (Trabajo Fin de Máster): es en grupo
@@ -124,20 +124,19 @@ TODO:
 Imprescindible:
 Hoy creamos las paginas que nos hacen falta (mi component works !), mañana Rai configura los botones de nav
 - [ ] paginas:
-  - [ ] gestión edificio: crud floors/recursos para -> gui
-  - [ ] gestion usuarios para el admin -> JL
+  - [x] gestión edificio: crud floors/recursos para -> gui
+  - [x] gestion usuarios para el admin -> JL
+  - [x] editar perfil: operativo -> JL
+  - [x] form de inscripción -> Rai
+  - [x] limpiar header y hacer botones operativos (quitar lo que es navegacion)-> ??
+  - [x] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
+  - [x] Vizualizar errores en front
+  - [x] limpiar sidebar y hacer botones operativos (navegacion: home, reservas, incident, empresa(admin)) -> Rai
+  - [ ] editar organization -> Rai
   - [ ] incidencias (vinculo desde desk/room dialog ?) -> Edu ?
   - [ ] analytics -> Edu
-  - [ ] editar perfil: operativo -> JL
   - [ ] reservas -> Rai
-  - [ ] limpiar header y hacer botones operativos (quitar lo que es navegacion)-> ??
-  - [ ] limpiar sidebar y hacer botones operativos (navegacion: home, reservas, incident, empresa(admin)) -> Rai
-  - [ ] form de inscripción -> Rai
-  - [ ] editar organization -> Rai
   - [ ] reformar la arquitectura del front (Rai hace una propuesta)
-  - [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
-(imprescindible ?)
-- [ ] Vizualizar errores en front
 
 - [ ] Form registro dinamico:
   - [ ] un formulario comun de user
@@ -147,11 +146,9 @@ Hoy creamos las paginas que nos hacen falta (mi component works !), mañana Rai 
       - [ ] form creacion empres
 
 En nuestros sueños:
-- [ ] gestion de recurso averiado: bloqueado
 - [ ] generacion de codigo empresa para que admin invite a nueavos usuarios
 - [ ] clean code: comentarios, logging, sonarCube...
 - [ ] hash passwords (a JL ?)
-- [ ] harmonizar la gestión de las exceptiones
 - [x] Recuperar la estructura de la memoria
 - [ ] harmonizar los controladores: poner cualquier respuesta como ResponseEntity
 - [ ] desiciones de diseño
@@ -159,7 +156,7 @@ En nuestros sueños:
 - [ ] añadir docstring para swagguer
 - [ ] harmonizar el css
 - [ ] docker/deploy
-- [ ] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
+- [x] desactivar desk/meeting en caso de incidencia (con mensaje "a la espera de intervencion" ?) -> gui ?
 - [ ] enviar un email de invitacion
 - [x] repensar los status de resources: una resource no puede ser reservada o disponible en si misma, depende de las reservas.
 

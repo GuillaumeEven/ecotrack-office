@@ -10,6 +10,7 @@ import { UserResponse, Role } from '../../../models/user.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './user-management.component.html',
+  styleUrl: './user-management.component.css',
 })
 export class UserManagementComponent implements OnInit, OnDestroy {
   // ─── Estado ───────────────────────────────────────────────────────────────

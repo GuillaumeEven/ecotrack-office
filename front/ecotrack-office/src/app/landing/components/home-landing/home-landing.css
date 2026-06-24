@@ -32,8 +32,8 @@
 /* ==========================================================================
    2. ESTILOS BASE Y CONFIGURACIONES GLOBALES
    ========================================================================== */
-body { 
-    font-family: 'Inter', sans-serif; 
+body {
+    font-family: 'Inter', sans-serif;
 }
 
 /* Iconos de Google Material */
@@ -154,8 +154,8 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.hero-text-block { 
-    z-index: 10; 
+.hero-text-block {
+    z-index: 10;
 }
 
 .hero-badge {
@@ -359,8 +359,8 @@ body {
     border: none;
 }
 .bento-dark-card .card-text,
-.bento-dark-card .card-title { 
-    color: var(--color-on-tertiary); 
+.bento-dark-card .card-title {
+    color: var(--color-on-tertiary);
 }
 
 .icon-dark-variant {
@@ -398,11 +398,11 @@ body {
     width: 100%;
 }
 
-.card-image-side-new { 
-    width: 100%; 
+.card-image-side-new {
+    width: 100%;
     height: 180px;
-    object-fit: cover; 
-    border-radius: 12px; 
+    object-fit: cover;
+    border-radius: 12px;
 }
 
 /* ==========================================================================
@@ -758,7 +758,7 @@ input.ng-invalid.ng-touched {
 /* Pantallas de Escritorio Estándar (Tablets horizontales y Laptops) */
 @media (min-width: 768px) {
     /* Activación del Bento Grid Asimétrico (3 Columnas) */
-    .bento-grid { 
+    .bento-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .bento-grid > div:nth-child(1) { grid-column: span 2; }
@@ -774,8 +774,8 @@ input.ng-invalid.ng-touched {
         justify-content: space-between;
         gap: var(--spacing-lg);
     }
-    .card-text-side { 
-        flex: 1; 
+    .card-text-side {
+        flex: 1;
     }
     .card-image-side-wrapper-new {
         width: 45%;
