@@ -41,17 +41,6 @@
         </div>
       </div>
 
-      <!-- Error message -->
-      <div *ngIf="errorMessage" class="alert alert-error">
-        {{ errorMessage }}
-      </div>
-
-      <!-- Success message -->
-      <div *ngIf="successMessage" class="alert alert-success">
-        {{ successMessage }}
-      </div>
-    </div>
-
     <!-- Footer -->
     <div class="modal-footer">
       <button class="btn btn-secondary" (click)="onClose()" [disabled]="isLoading">
