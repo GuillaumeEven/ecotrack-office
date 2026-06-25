@@ -6,9 +6,9 @@
    ============================================================================ */
 /* Checked */
 @import './components/container.css';
+@import './components/button.css';
 
 /* to check */
-@import './components/button.css';
 @import './components/card.css';
 @import './components/form.css';
 @import './components/badge.css';
@@ -18,3 +18,4 @@
 @import './components/grid.css';
 @import './components/flex.css';
 @import './components/table.css';
+@import './components/header.css';

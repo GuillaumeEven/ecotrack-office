@@ -138,7 +138,7 @@ Uso:
 ```html
 <!-- Variantes -->
 <button class="btn btn-primary">Primario</button>
-<button class="btn btn">Secundario</button>
+<button class="btn">Secundario</button>
 <button class="btn btn-danger">Peligro</button>
 <button class="btn btn-outline">Contorno</button>
 <button class="btn btn-ghost">Fantasma</button>

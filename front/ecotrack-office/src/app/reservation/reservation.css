@@ -5,7 +5,7 @@
 /* ==========================================================================
    2. CABECERA DE LA PÁGINA (Título y Selector alineados)
    ========================================================================== */
-.bookings-header {
+/* .bookings-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -28,15 +28,15 @@
     margin-top: 8px;
     margin-bottom: 0;
     font-size: 14px;
-}
-
+} */
+/*
 .bookings-tabs {
     display: flex;
     background-color: #e5eeff;
     border-radius: 8px;
     padding: 4px;
-}
-
+} */
+/*
 .bookings-tabs__btn {
     padding: 6px 16px;
     font-size: 14px;
@@ -54,7 +54,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     font-weight: 700;
     color: #000000;
-}
+} */
 
 /* ==========================================================================
    3. BARRA DE FILTROS (Grid en 4 Columnas forzado)

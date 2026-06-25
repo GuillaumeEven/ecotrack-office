@@ -82,6 +82,11 @@
   box-shadow: var(--shadow-md);
 }
 
+.btn--active {
+  background-color: var(--secondary-container);
+  border-color: var(--secondary-container);
+}
+
 /* Variante Contorno */
 /* .btn-outline {
   background-color: transparent;

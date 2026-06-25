@@ -15,25 +15,9 @@
    se aplican SOLO a este componente, sin afectar a otros.
    ============================================================================ */
 
-:host {
-  display: block;
-}
-
 .content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-}
-
-.header {
-  margin-bottom: 1.5rem;
-}
-
-.header h1 {
-  margin-bottom: 0.25rem;
-}
-
-.header p {
-  color: var(--on-surface-variant, #666);
 }
 
 /* Main Grid */

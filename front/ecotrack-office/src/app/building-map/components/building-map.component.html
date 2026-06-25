@@ -1,12 +1,12 @@
 <div class="main-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Mapa del Edificio</h1>
+    <p>
+      Explora y reserva plantas, salas y mesas.
+    </p>
+  </div>
   <div class="content-wrapper">
-    <!-- Header -->
-    <div class="header">
-      <h1>Mapa del Edificio</h1>
-      <p>
-        Explora y reserva plantas, salas y mesas.
-      </p>
-    </div>
 
     <!-- Main Grid: Filters + Desks -->
     <div class="main-grid">
@@ -27,7 +27,11 @@
                 [ngClass]="getFloorStatusClass(floorWithStatus)"
                 class="btn-floor">
                 <strong>{{ floorWithStatus.floor.name || `Floor ${floorWithStatus.floor.level}` }}</strong>
-                <span class="status-badge" [ngClass]="getFloorStatusClass(floorWithStatus).split('-')[1]" [title]="getStatusText(getFloorStatus(floorWithStatus))"></span>
+                <span
+                  class="status-badge"
+                  [ngClass]="getFloorStatusClass(floorWithStatus).split('-')[1]"
+                  [title]="getStatusText(getFloorStatus(floorWithStatus))"
+                ></span>
                 <br>
                 <small>{{ floorWithStatus.floor.isActive ? 'Activo' : 'Inactivo' }}</small>
               </button>
@@ -37,7 +41,7 @@
         <!-- Date & Filters -->
         <section class="section">
           <h3>
-            <span class="material-symbols-outlined text-primary">filter_list</span>
+            <span class="material-symbols-outlined">filter_list</span>
             Fecha
           </h3>
 
@@ -59,7 +63,10 @@
       <div class="rooms-desks-column">
         <!-- Rooms Section -->
         <section class="section">
-          <h3>Salas</h3>
+          <h3>
+            <span class="material-symbols-outlined">meeting_room</span>
+            Salas
+          </h3>
 
           <div *ngIf="!selectedFloorId" class="loading">
             Selecciona una planta para ver las salas
@@ -97,7 +104,7 @@
         <!-- Desks Section - Cinema Style -->
         <section class="desks-cinema">
           <div class="cinema-header">
-            <h2>Horario de Mesas</h2>
+            <h2>Disponibilidad de Mesas</h2>
             <p *ngIf="selectedDate">
               Fecha: {{ selectedDate | date: 'EEEE, MMMM d, yyyy' }}
             </p>
@@ -161,13 +168,13 @@
               <button
                 *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.RESERVED"
                 (click)="openMeetingRoomReservationDialog(getSelectedRoom()!)"
-                class="btn btn">
+                class="btn">
                 Reservado
               </button>
               <button
                 *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.UNAVAILABLE"
                 disabled
-                class="btn btn">
+                class="btn">
                 No Disponible
               </button>
             </div>
