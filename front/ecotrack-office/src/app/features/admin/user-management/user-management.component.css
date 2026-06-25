@@ -3,21 +3,6 @@
    ============================================================================
    Panel de administración de usuarios con modales de edición/eliminación.
    ============================================================================ */
-
-.page-header {
-  margin-bottom: var(--spacing-xl);
-}
-
-.page-header h1 {
-  font: var(--font-headline-lg);
-  color: var(--on-surface);
-}
-
-.page-header p {
-  font: var(--font-body-lg);
-  color: var(--on-surface-variant);
-}
-
 /* KPI Cards */
 .kpi-grid {
   display: grid;
@@ -67,29 +52,3 @@
   }
 }
 
-/* Responsive table - show EMAIL column on desktop */
-@media (min-width: 1024px) {
-  .users-table th[style*="display: none"],
-  .users-table td[style*="display: none"] {
-    display: table-cell !important;
-  }
-}
-
-/* Status badge */
-.status-badge {
-  display: inline-block;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-}
-
-.status-badge.active {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: var(--status-available);
-}
-
-.status-badge.inactive {
-  background-color: rgba(107, 114, 128, 0.1);
-  color: var(--on-surface-variant);
-}

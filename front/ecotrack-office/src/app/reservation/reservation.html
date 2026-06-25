@@ -1,9 +1,7 @@
 <div class="main-container">
-  <header class="bookings-header">
-    <div class="bookings-header__title-block">
-      <h1 class="bookings-header__title">Historial de reservas</h1>
-      <p class="bookings-header__subtitle">Gestiona tus reservas activas y visualiza el historial de reservas.</p>
-    </div>
+  <header class="component-header">
+      <h1>Historial de reservas</h1>
+      <h2>Gestiona tus reservas activas y visualiza el historial de reservas.</h2>
 
     @if (role === 'ADMIN' || role === 'TECHNICIAN') {
       <div class="bookings-header__tabs-wrapper">

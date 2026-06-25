@@ -36,8 +36,46 @@ tbody tr:hover {
   background-color: var(--surface-container-low);
 }
 
+/* Responsive table - show EMAIL column on desktop */
+@media (min-width: 1024px) {
+  th.email-col,
+  td.email-col {
+    display: table-cell !important;
+  }
+}
+
 .actions-cell {
   display: flex;
   justify-content: center;
   gap: var(--spacing-sm);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+  border-top: var(--border-width-1) solid var(--outline-variant);
+}
+
+.pagination p {
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+
+.filter-form {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.search-input-wrapper {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-form select {
+  flex: 0 1 150px;
 }

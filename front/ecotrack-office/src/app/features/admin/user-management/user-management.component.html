@@ -69,9 +69,9 @@
 <!-- Main Content -->
 <div class="main-container">
   <!-- Page Header -->
-  <div class="page-header">
+  <div class="component-header">
     <h1>User Management</h1>
-    <p>Manage all users in your organization.</p>
+    <h2>Manage all users in your organization.</h2>
   </div>
 
   <!-- KPI Cards -->
@@ -100,8 +100,8 @@
   </div>
 
   <!-- Filters -->
-  <div class="form-group" style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-md); flex-direction: row; flex-wrap: wrap;">
-    <div style="flex: 1; min-width: 200px;">
+  <div class="filter-form">
+    <div class="search-input-wrapper">
       <input
         type="text"
         placeholder="Search by name or email..."
@@ -112,7 +112,6 @@
     <select
       (change)="onRoleChange($event)"
       class="form-input"
-      style="flex: 0 1 150px;"
     >
       <option value="">All roles</option>
       <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
@@ -120,7 +119,6 @@
     <select
       (change)="onStatusChange($event)"
       class="form-input"
-      style="flex: 0 1 150px;"
     >
       <option value="">All statuses</option>
       <option value="true">Active</option>
@@ -129,33 +127,33 @@
   </div>
 
   <!-- Table -->
-  <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm);">
+  <!-- <div style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm);"> -->
     <!-- Loading skeleton -->
     <div *ngIf="isLoading" style="padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-sm);">
       <div *ngFor="let i of [1, 2, 3, 4, 5]" class="skeleton"></div>
     </div>
 
     <!-- Table content -->
-    <table *ngIf="!isLoading" class="users-table">
+    <table *ngIf="!isLoading">
       <thead>
         <tr>
           <th>NAME</th>
-          <th style="display: none;">EMAIL</th>
+          <th class="email-col">EMAIL</th>
           <!-- Mobile: hidden, Desktop: table-cell via CSS media query -->
           <th>ROLE</th>
           <th>STATUS</th>
-          <th style="text-align: right;">ACTIONS</th>
+          <th>ACTIONS</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
           <td>
-            <p style="font-weight: var(--font-weight-semibold); margin: 0;">
+            <p>
               {{ user.firstName }} {{ user.lastName }}
             </p>
           </td>
-          <td style="display: none;">
-            <p style="color: var(--on-surface-variant); margin: 0;">{{ user.email }}</p>
+          <td class="email-col">
+            <p>{{ user.email }}</p>
           </td>
           <td>
             <span class="status-badge" [class.active]="user.role === 'ADMIN'" [class.inactive]="user.role !== 'ADMIN'">
@@ -167,8 +165,8 @@
               {{ user.isActive ? 'Active' : 'Inactive' }}
             </span>
           </td>
-          <td style="text-align: right;">
-            <div class="actions">
+          <td>
+            <div class="actions-cell">
               <!-- Edit -->
               <button
                 (click)="openEditModal(user)"
@@ -200,7 +198,7 @@
 
         <!-- Empty state -->
         <tr *ngIf="users.length === 0">
-          <td colspan="5" style="text-align: center; padding: var(--spacing-xl); color: var(--on-surface-variant);">
+          <td colspan="5">
             No users found.
           </td>
         </tr>
@@ -210,9 +208,9 @@
     <!-- Pagination -->
     <div
       *ngIf="!isLoading && totalElements > 0"
-      style="display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-sm); border-top: var(--border-width-1) solid var(--outline-variant);"
+      class="pagination"
     >
-      <p style="color: var(--on-surface-variant); margin: 0;">
+      <p>
         Showing {{ showingFrom }}–{{ showingTo }} of {{ totalElements }}
       </p>
       <div class="actions-cell">
@@ -237,5 +235,5 @@
         </button>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 </div>

@@ -1,18 +1,18 @@
 
-.header {
+.component-header {
   margin-bottom: 1.5rem;
 }
 
-.header h1 {
+.component-header h1 {
   margin-bottom: 0.25rem;
 }
 
-.header p {
-  color: var(--on-surface-variant, #666);
-}
-
-.header__subtitle {
+.component-header h2 {
   color: var(--on-surface-variant, #666);
   font-size: 0.875rem;
   margin-bottom: 1.5rem;
+}
+
+.component-header p {
+  color: var(--on-surface-variant, #666);
 }

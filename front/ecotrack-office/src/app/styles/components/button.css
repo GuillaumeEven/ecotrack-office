@@ -133,7 +133,7 @@
    Estilos para los botones de acción (sin relleno, iconos, etc).
    ============================================================================ */
 
-/* .action-btn {
+.action-btn {
   padding: var(--spacing-xs) var(--spacing-sm);
   border: none;
   background: transparent;
@@ -145,10 +145,10 @@
   justify-content: center;
   color: var(--primary);
 }
-
 .action-btn:hover {
   background-color: rgba(0, 0, 0, 0.04);
-}
+  }
+  /*
 
 .action-btn.danger,
 .action-btn.delete {
