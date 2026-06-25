@@ -143,7 +143,7 @@
           <!-- Mobile: hidden, Desktop: table-cell via CSS media query -->
           <th>Rol</th>
           <th>Estatus</th>
-          <th>Acciones</th>
+        <th class="actions">Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -166,7 +166,7 @@
               {{ user.isActive ? 'Activo' : 'Inactivo' }}
             </span>
           </td>
-          <td>
+        <td class="actions">
             <div class="actions-cell">
               <!-- Edit -->
               <button

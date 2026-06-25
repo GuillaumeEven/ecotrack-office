@@ -79,7 +79,7 @@
                 <th>Recurso</th>
                 <th>Equipamiento</th>
                 <th>Fecha</th>
-                <th>Acciones</th>
+                <th class="actions">Acciones</th>
               </tr>
             </thead>
 
@@ -104,7 +104,7 @@
                   <td>
                     {{ reserva.date }}
                   </td>
-                  <td>
+                  <td class="actions">
                     <div class="btn-group">
                       <button class="action-btn" (click)="openEditModal(reserva)" title="Editar reserva">
                         <span class="material-symbols-outlined">edit</span>
