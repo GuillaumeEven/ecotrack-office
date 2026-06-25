@@ -7,16 +7,16 @@
   <div class="component-wrapper">
     @if (role === 'ADMIN' || role === 'TECHNICIAN') {
       <div class="bookings-header__tabs-wrapper">
-        <div class="btn-group">
+        <div class="tabs-nav">
           <button
-            class="btn"
-            [class.btn--active]="currentTab === 'MY_BOOKINGS'"
+            class="tab-button"
+            [class.active]="currentTab === 'MY_BOOKINGS'"
             (click)="switchTab('MY_BOOKINGS')">
             Mis reservas
           </button>
           <button
-            class="btn"
-            [class.btn--active]="currentTab === 'ALL_STAFF'"
+            class="tab-button"
+            [class.active]="currentTab === 'ALL_STAFF'"
             (click)="switchTab('ALL_STAFF')">
             Todas las reservas
           </button>

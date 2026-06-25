@@ -26,6 +26,7 @@
 }
 
 .tab-button.active {
+  background: var(--secondary-container);
   color: var(--primary);
   border-bottom-color: var(--primary);
 }
