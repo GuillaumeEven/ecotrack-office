@@ -106,9 +106,13 @@
                   {{ reserva.date }}
                 </td>
                 <td class="history-table__td" style="text-align: center;">
-                  <div class="modal-box__actions" style="justify-content: center; margin: 0; gap: 0.5rem;">
-                    <button class="booking-card__btn-edit" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" (click)="openEditModal(reserva)">Editar</button>
-                    <button class="booking-card__btn-cancel" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" (click)="openCancelModal(reserva)">Cancelar</button>
+                  <div class="btn-group">
+                    <button class="action-btn" (click)="openEditModal(reserva)" title="Editar reserva">
+                      <span class="material-symbols-outlined">edit</span>
+                    </button>
+                    <button class="action-btn danger" (click)="openCancelModal(reserva)" title="Cancelar reserva">
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -171,8 +175,12 @@
               </div>
 
               <div class="booking-card__actions">
-                <button class="booking-card__btn-edit" (click)="openEditModal(reserva)">Editar</button>
-                <button class="booking-card__btn-cancel" (click)="openCancelModal(reserva)">Cancelar</button>
+                <button class="action-btn" (click)="openEditModal(reserva)" title="Editar reserva">
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+                <button class="action-btn danger" (click)="openCancelModal(reserva)" title="Cancelar reserva">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
               </div>
             </div>
           </div>
@@ -269,8 +277,8 @@
             />
           </div>
 
-          <div class="modal-box__actions">
-            <button class="btn btn" (click)="closeEditModal()">Volver atrás</button>
+          <div class="btn-group">
+            <button class="btn" (click)="closeEditModal()">Volver atrás</button>
             <button class="btn btn-primary" [disabled]="!newReservationDate" (click)="confirmEdit()">Guardar cambios</button>
           </div>
         </div>
@@ -287,9 +295,9 @@
             <strong>{{ selectedReservation.date }}</strong>?
           </p>
 
-          <div class="modal-box__actions">
-            <button class="btn btn" (click)="closeCancelModal()">No, mantener</button>
-            <button class="btn btn-primary btn btn-primary--danger" (click)="confirmCancel()">Sí, cancelar reserva</button>
+          <div class="btn-group">
+            <button class="btn" (click)="closeCancelModal()">No, mantener</button>
+            <button class="btn btn-danger" (click)="confirmCancel()">Sí, cancelar reserva</button>
           </div>
         </div>
       </div>

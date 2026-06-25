@@ -247,16 +247,16 @@
       </div>
 
       <div class="checkbox-group">
+        <label for="floorActive" class="checkbox-label">Activo</label>
         <input
           type="checkbox"
           formControlName="isActive"
           id="floorActive"
           class="form-input checkbox-input"
         />
-        <label for="floorActive" class="checkbox-label">Activo</label>
       </div>
 
-      <div class="modal-box__actions">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeFloorDialog()"
@@ -359,20 +359,20 @@
       </div>
 
       <div class="checkbox-group">
+        <label for="roomActive" class="checkbox-label">ACTIVO</label>
         <input
           type="checkbox"
           formControlName="isActive"
           id="roomActive"
           class="form-input checkbox-input"
         />
-        <label for="roomActive" class="checkbox-label">ACTIVO</label>
       </div>
 
-      <div class="modal-box__actions">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeRoomDialog()"
-          class="btn btn-cancel"
+          class="btn"
         >
           Cancelar
         </button>
@@ -433,20 +433,20 @@
       </div>
 
       <div class="checkbox-group">
+        <label for="deskActive" class="checkbox-label">ACTIVO</label>
         <input
           type="checkbox"
           formControlName="isActive"
           id="deskActive"
           class="form-input checkbox-input"
         />
-        <label for="deskActive" class="checkbox-label">ACTIVO</label>
       </div>
 
-      <div class="modal-box__actions">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeDeskDialog()"
-          class="btn btn"
+          class="btn"
         >
           Cancelar
         </button>
@@ -477,16 +477,16 @@
       ¿Está seguro de que desea eliminar <strong>{{ deleteItemName }}</strong>? Esta acción no se puede deshacer.
     </p>
 
-    <div class="modal-box__actions">
+    <div class="btn-group">
       <button
         (click)="closeDeleteDialog()"
-        class="btn btn"
+        class="btn"
       >
         Cancelar
       </button>
       <button
         (click)="confirmDelete()"
-        class="btn btn-primary btn btn-primary--danger"
+        class="btn btn-danger"
       >
         Eliminar
       </button>

@@ -158,18 +158,18 @@
           </div>
 
           <!-- Actions -->
-          <div class="form-actions">
+          <div class="btn-group">
             <button
               type="button"
               (click)="onDiscardChanges()"
-              class="secondary-btn"
+              class="btn"
             >
               Discard Changes
             </button>
             <button
               type="submit"
               [disabled]="profileForm.invalid"
-              class="primary-btn"
+              class="btn btn-primary"
             >
               Save Changes
             </button>
@@ -196,12 +196,14 @@
                 <p>Last changed 4 months ago</p>
               </div>
             </div>
-            <button
-              (click)="onChangePassword()"
-              class="primary"
-            >
-              Update
-            </button>
+            <div class="btn-group">
+              <button
+                (click)="showPasswordModal = true"
+                class="btn btn-primary"
+              >
+                Change Password
+              </button>
+            </div>
           </div>
 
           <!-- Sign out all -->
@@ -217,12 +219,14 @@
                 </p>
               </div>
             </div>
-            <button
-              (click)="onSignOutAll()"
-              class="error"
-            >
-              Sign out all
-            </button>
+            <div class="btn-group">
+              <button
+                (click)="onSignOutAll()"
+                class="btn btn-danger"
+              >
+                Sign out all
+              </button>
+            </div>
           </div>
         </div>
       </div>

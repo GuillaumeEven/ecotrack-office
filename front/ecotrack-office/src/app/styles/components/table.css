@@ -35,3 +35,9 @@ td {
 tbody tr:hover {
   background-color: var(--surface-container-low);
 }
+
+.actions-cell {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}

@@ -58,7 +58,7 @@
         <button (click)="showDeleteModal = false" class="btn">
           Cancel
         </button>
-        <button (click)="onConfirmDelete()" class="btn btn-submit" style="background-color: var(--error)">
+        <button (click)="onConfirmDelete()" class="btn btn-danger" style="background-color: var(--error)">
           Delete
         </button>
       </div>
@@ -175,7 +175,7 @@
                 class="action-btn"
                 title="Edit"
               >
-                ✏
+                <span class="material-symbols-outlined">edit</span>
               </button>
               <!-- Activate / Deactivate -->
               <button
@@ -184,7 +184,7 @@
                 [style.color]="user.isActive ? 'var(--error)' : 'var(--secondary)'"
                 [title]="user.isActive ? 'Deactivate' : 'Activate'"
               >
-                {{ user.isActive ? '🔒' : '🔓' }}
+                <span class="material-symbols-outlined">{{ user.isActive ? 'lock' : 'lock_open' }}</span>
               </button>
               <!-- Delete GDPR -->
               <button
@@ -192,7 +192,7 @@
                 class="action-btn delete"
                 title="Delete (GDPR)"
               >
-                🗑
+                <span class="material-symbols-outlined">delete</span>
               </button>
             </div>
           </td>
@@ -215,14 +215,14 @@
       <p style="color: var(--on-surface-variant); margin: 0;">
         Showing {{ showingFrom }}–{{ showingTo }} of {{ totalElements }}
       </p>
-      <div style="display: flex; align-items: center; gap: var(--spacing-xs);">
+      <div class="actions-cell">
         <button
           (click)="goToPage(currentPage - 1)"
           [disabled]="currentPage === 0"
           class="action-btn"
           style="opacity: currentPage === 0 ? 0.3 : 1; cursor: currentPage === 0 ? 'not-allowed' : 'pointer';"
         >
-          ◀
+          <span class="material-symbols-outlined">chevron_left</span>
         </button>
         <span style="padding: 0 var(--spacing-sm); font-size: var(--font-size-base);">
           Page {{ currentPage + 1 }} of {{ totalPages }}
@@ -233,7 +233,7 @@
           class="action-btn"
           style="opacity: currentPage >= totalPages - 1 ? 0.3 : 1; cursor: currentPage >= totalPages - 1 ? 'not-allowed' : 'pointer';"
         >
-          ▶
+          <span class="material-symbols-outlined">chevron_right</span>
         </button>
       </div>
     </div>

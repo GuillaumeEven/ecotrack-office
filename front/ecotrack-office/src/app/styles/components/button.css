@@ -5,23 +5,15 @@
    ============================================================================ */
 
 /* ---------- Estilos HTML Base ---------- */
-/* button {
-  font-family: inherit;
-  font-size: inherit;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: var(--font-weight-semibold);
-  transition: all var(--transition-fast);
+
+.btn-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  align-self: flex-end;
+  justify-content: flex-end;
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-} */
-
-/* ---------- Clases de Componentes ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -65,13 +57,13 @@ button:disabled {
 }
 
 /* Variante Secundaria */
-.btn {
+.btn-secondary {
   background-color: var(--secondary);
   color: white;
   border-color: var(--secondary);
 }
 
-.btn:hover {
+.btn-secondary:hover {
   background-color: var(--secondary-dark);
   border-color: var(--secondary-dark);
   box-shadow: var(--shadow-md);
@@ -79,19 +71,19 @@ button:disabled {
 
 /* Variante Peligro */
 .btn-danger {
-  background-color: var(--danger);
+  background-color: var(--warning);
   color: white;
-  border-color: var(--danger);
+  border-color: var(--warning);
 }
 
 .btn-danger:hover {
-  background-color: var(--danger-dark);
-  border-color: var(--danger-dark);
+  background-color: var(--danger);
+  border-color: var(--danger);
   box-shadow: var(--shadow-md);
 }
 
 /* Variante Contorno */
-.btn-outline {
+/* .btn-outline {
   background-color: transparent;
   color: var(--primary);
   border-color: var(--primary);
@@ -99,10 +91,10 @@ button:disabled {
 
 .btn-outline:hover {
   background-color: var(--primary-light);
-}
+} */
 
 /* Variante Fantasma (sin borde) */
-.btn-ghost {
+/* .btn-ghost {
   background-color: transparent;
   color: var(--primary);
   border: none;
@@ -110,10 +102,10 @@ button:disabled {
 
 .btn-ghost:hover {
   background-color: var(--surface-variant);
-}
+} */
 
 /* Tamaños */
-.btn-sm {
+/* .btn-sm {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-sm);
   min-height: 32px;
@@ -123,12 +115,12 @@ button:disabled {
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-md);
   min-height: 48px;
-}
+} */
 
 /* Variante Bloque (ancho completo) */
-.btn-block {
+/* .btn-block {
   width: 100%;
-}
+} */
 
 /* ============================================================================
    BOTONES DE ACCIÓN
@@ -136,7 +128,7 @@ button:disabled {
    Estilos para los botones de acción (sin relleno, iconos, etc).
    ============================================================================ */
 
-.action-btn {
+/* .action-btn {
   padding: var(--spacing-xs) var(--spacing-sm);
   border: none;
   background: transparent;
@@ -161,13 +153,13 @@ button:disabled {
 .action-btn.danger:hover,
 .action-btn.delete:hover {
   background-color: rgba(186, 26, 26, 0.08);
-}
+} */
 
 /* ---------- Contenedor de Acciones ---------- */
-.actions {
+/* .actions {
   display: flex;
   gap: var(--spacing-sm);
-}
+} */
 
 /* ============================================================================
    BOTONES MODAL BOX

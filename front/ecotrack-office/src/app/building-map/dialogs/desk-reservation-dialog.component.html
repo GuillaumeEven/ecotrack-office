@@ -47,7 +47,7 @@
     </div>
 
     <!-- Actions -->
-    <div class="modal-box__actions">
+    <div class="btn-group">
       <button class="btn" (click)="onClose()" [disabled]="isLoading">
         Cerrar
       </button>
@@ -60,7 +60,7 @@
       </button>
       <button
         *ngIf="canCancelReservation()"
-        class="btn btn-primary--danger"
+        class="btn btn-danger"
         (click)="onCancelReservation()"
         [disabled]="isLoading">
         {{ isLoading ? 'Cancelando...' : 'Cancelar Reserva' }}
