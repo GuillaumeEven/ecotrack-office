@@ -5,7 +5,7 @@
    ============================================================================ */
 
 /* ---------- Estilos HTML Base ---------- */
-button {
+/* button {
   font-family: inherit;
   font-size: inherit;
   padding: var(--spacing-sm) var(--spacing-md);
@@ -19,7 +19,7 @@ button {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
+} */
 
 /* ---------- Clases de Componentes ---------- */
 .btn {
@@ -42,13 +42,13 @@ button:disabled {
 
 /* Variante Primaria */
 .btn-primary {
-  background-color: var(--primary);
+  background-color: var(--on-tertiary-container);
   color: white;
   border-color: var(--primary);
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--on-tertiary-fixed-variant);
   border-color: var(--primary-dark);
   box-shadow: var(--shadow-md);
 }
