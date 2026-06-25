@@ -287,20 +287,12 @@
   (click)="closeFloorDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
-    <div class="modal-header">
-      <h3 class="modal-title">
-        {{ editingFloor ? 'Editar Piso' : 'Nuevo Piso' }}
-      </h3>
-      <button
-        (click)="closeFloorDialog()"
-        class="modal-close"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
+    <h3 class="modal-box__title">
+      {{ editingFloor ? 'Editar Piso' : 'Nuevo Piso' }}
+    </h3>
 
     <form [formGroup]="floorForm" (ngSubmit)="submitFloor()" class="modal-form">
       <div class="form-section">
@@ -335,18 +327,18 @@
         <label for="floorActive" class="checkbox-label">Activo</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="modal-box__actions">
         <button
           type="button"
           (click)="closeFloorDialog()"
-          class="modal-action-btn secondary"
+          class="modal-box__btn modal-box__btn--secondary"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="floorForm.invalid"
-          class="modal-action-btn primary"
+          class="modal-box__btn modal-box__btn--primary"
         >
           {{ editingFloor ? 'Actualizar' : 'Crear' }}
         </button>
@@ -362,20 +354,12 @@
   (click)="closeRoomDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
-    <div class="modal-header">
-      <h3 class="modal-title">
-        {{ editingRoom ? 'Editar Sala' : 'Nueva Sala' }}
-      </h3>
-      <button
-        (click)="closeRoomDialog()"
-        class="modal-close"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
+    <h3 class="modal-box__title">
+      {{ editingRoom ? 'Editar Sala' : 'Nueva Sala' }}
+    </h3>
 
     <form [formGroup]="roomForm" (ngSubmit)="submitRoom()" class="modal-form">
       <div class="form-section">
@@ -457,18 +441,18 @@
         <label for="roomActive" class="checkbox-label">ACTIVO</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="modal-box__actions">
         <button
           type="button"
           (click)="closeRoomDialog()"
-          class="modal-action-btn secondary"
+          class="modal-box__btn modal-box__btn--secondary"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="roomForm.invalid"
-          class="modal-action-btn primary"
+          class="modal-box__btn modal-box__btn--primary"
         >
           {{ editingRoom ? 'Actualizar' : 'Crear' }}
         </button>
@@ -484,20 +468,12 @@
   (click)="closeDeskDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
-    <div class="modal-header">
-      <h3 class="modal-title">
-        {{ editingDesk ? 'Editar Mesa' : 'Nuevo Mesa' }}
-      </h3>
-      <button
-        (click)="closeDeskDialog()"
-        class="modal-close"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
+    <h3 class="modal-box__title">
+      {{ editingDesk ? 'Editar Mesa' : 'Nuevo Mesa' }}
+    </h3>
 
     <form [formGroup]="deskForm" (ngSubmit)="submitDesk()" class="modal-form">
       <div class="form-section">
@@ -542,18 +518,18 @@
         <label for="deskActive" class="checkbox-label">ACTIVO</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="modal-box__actions">
         <button
           type="button"
           (click)="closeDeskDialog()"
-          class="modal-action-btn secondary"
+          class="modal-box__btn modal-box__btn--secondary"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="deskForm.invalid"
-          class="modal-action-btn primary"
+          class="modal-box__btn modal-box__btn--primary"
         >
           {{ editingDesk ? 'Actualizar' : 'Crear' }}
         </button>
@@ -569,29 +545,24 @@
   (click)="closeDeleteDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
-    <div class="delete-dialog-header">
-      <span class="delete-icon material-symbols-outlined">warning</span>
-      <h3 class="modal-title">Eliminar {{ deleteItemType }}</h3>
-    </div>
-
-    <p class="delete-message">
+    <h3 class="modal-box__title">Eliminar {{ deleteItemType }}</h3>
+    <p class="modal-box__text">
       ¿Está seguro de que desea eliminar <strong>{{ deleteItemName }}</strong>? Esta acción no se puede deshacer.
     </p>
 
-    <div class="modal-actions">
+    <div class="modal-box__actions">
       <button
         (click)="closeDeleteDialog()"
-        class="modal-action-btn secondary"
+        class="modal-box__btn modal-box__btn--secondary"
       >
         Cancelar
       </button>
       <button
         (click)="confirmDelete()"
-        class="modal-action-btn primary"
-        style="background-color: var(--error); color: var(--on-error);"
+        class="modal-box__btn modal-box__btn--danger"
       >
         Eliminar
       </button>
