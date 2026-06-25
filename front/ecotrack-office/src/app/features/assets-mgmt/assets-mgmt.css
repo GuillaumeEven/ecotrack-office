@@ -123,11 +123,3 @@
   font: var(--font-body-md);
 }
 
-/* Acciones en tabla */
-.actions-cell {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-sm);
-}
-
-
