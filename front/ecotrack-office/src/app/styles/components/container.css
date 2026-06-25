@@ -5,6 +5,14 @@
    ============================================================================ */
 
 
+.layout-wrapper {
+  display: flex;
+  height: calc(100vh - 80px);
+  margin-top: 80px;
+  width: 100%;
+  position: relative;
+}
+
 
 .main-container {
   background-color: var(--surface, #fafafa);
@@ -31,15 +39,7 @@
   padding-bottom: 0;
 }
 
-.layout-wrapper {
-  display: flex;
-  height: calc(100vh - 80px);
-  margin-top: 80px;
-  width: 100%;
-  position: relative;
-}
-
-.main-content {
+.layout-content {
   flex: 1;
   overflow-y: auto; /* El scroll privado de las vistas (reservas, profile) ocurre AQUÍ */
   overflow-x: hidden;
@@ -50,14 +50,14 @@
 
 /* Desktop: sidebar visible */
 @media (min-width: 1024px) {
-  .main-content {
+  .layout-content {
     margin-left: 256px;
   }
 }
 
 /* Mobile: no sidebar */
 @media (max-width: 1023px) {
-  .main-content {
+  .layout-content {
     margin-left: 0;
     width: 100%;
   }

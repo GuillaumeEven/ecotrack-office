@@ -126,7 +126,7 @@ body {
 .btn-register-nav:active { transform: scale(0.95); }
 
 /* Contenedor del contenido que empuja hacia abajo para no ser tapado por el header fijo */
-.main-content {
+.layout-content {
     padding-top: 80px;
     background-color: var(--color-surface);
     color: var(--color-on-surface);
