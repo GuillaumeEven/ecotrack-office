@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Desk, Floor, ResourceStatus, Room } from '../../building-map/models';
 import { forkJoin } from 'rxjs';
 
@@ -6,8 +6,14 @@ import { FloorService } from '../../building-map/services/floor.service';
 import { RoomService } from '../../building-map/services/room.service';
 import { DeskService } from '../../building-map/services/desk.service';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NotificationService } from '@core/services/notification.service'; // 🆕
 
 @Component({
   selector: 'app-assets-mgmt',
@@ -16,7 +22,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
   templateUrl: './assets-mgmt.html',
   styleUrls: ['./assets-mgmt.css'],
 })
-export class AssetsMgmt {
+export class AssetsMgmt implements OnInit {
   // Raw data from API (unfiltered)
   allFloors: Floor[] = [];
   allRooms: Room[] = [];
@@ -36,7 +42,7 @@ export class AssetsMgmt {
   tabLabels: Record<'floors' | 'rooms' | 'desks', string> = {
     floors: 'Pisos',
     rooms: 'Salas',
-    desks: 'Mesas'
+    desks: 'Mesas',
   };
 
   // Dialog state
@@ -57,7 +63,7 @@ export class AssetsMgmt {
   deleteItemType: string = '';
   deleteItemName: string = '';
   deleteItemId: number | null = null;
-
+  deleteItemSummary: string = ''; // 🆕
 
   // Loading and error state
   isLoading = false;
@@ -68,11 +74,11 @@ export class AssetsMgmt {
     private roomService: RoomService,
     private deskService: DeskService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService, // 🆕
   ) {
     this.initializeForms();
   }
-
 
   ngOnInit(): void {
     // Fetch all data in parallel on init
@@ -90,7 +96,7 @@ export class AssetsMgmt {
       return this.allRooms; // Show all if no floor selected
     }
 
-    const filtered = this.allRooms.filter(room => {
+    const filtered = this.allRooms.filter((room) => {
       return room.floorId === this.selectedFloorId;
     });
     return filtered;
@@ -100,12 +106,12 @@ export class AssetsMgmt {
     if (!this.selectedRoomId) {
       return this.allDesks; // Show all if no room selected
     }
-    return this.allDesks.filter(desk => desk.roomId === this.selectedRoomId);
+    return this.allDesks.filter((desk) => desk.roomId === this.selectedRoomId);
   }
 
   get deskAreas(): Room[] {
     // Only return rooms with roomType DESK_AREA
-    return this.allRooms.filter(room => room.roomType === 'DESK_AREA');
+    return this.allRooms.filter((room) => room.roomType === 'DESK_AREA');
   }
 
   // ========== TAB MANAGEMENT ==========
@@ -119,14 +125,13 @@ export class AssetsMgmt {
     return this.tabLabels[tab];
   }
 
-
   // ========== FORM INITIALIZATION ==========
 
   initializeForms() {
     this.floorForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       level: ['', [Validators.required, Validators.min(0)]],
-      isActive: [true]
+      isActive: [true],
     });
 
     this.roomForm = this.fb.group({
@@ -136,14 +141,14 @@ export class AssetsMgmt {
       capacity: ['', [Validators.required, Validators.min(1)]],
       surfaceArea: ['', [Validators.required, Validators.min(0.01)]],
       equipmentList: [''],
-      isActive: [true]
+      isActive: [true],
     });
 
     this.deskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       roomId: ['', Validators.required],
       equipmentList: [''],
-      isActive: [true]
+      isActive: [true],
     });
   }
 
@@ -158,11 +163,11 @@ export class AssetsMgmt {
       // Update
       this.floorService.update(this.editingFloor.id, floorData).subscribe({
         next: (updated) => {
-          const idx = this.allFloors.findIndex(f => f.id === updated.id);
+          const idx = this.allFloors.findIndex((f) => f.id === updated.id);
           if (idx !== -1) this.allFloors[idx] = updated;
           this.closeFloorDialog();
         },
-        error: (err) => this.errorMessage = 'Error updating floor'
+        error: (err) => (this.errorMessage = 'Error updating floor'),
       });
     } else {
       // Create
@@ -171,7 +176,7 @@ export class AssetsMgmt {
           this.allFloors.push(created);
           this.closeFloorDialog();
         },
-        error: (err) => this.errorMessage = 'Error creating floor'
+        error: (err) => (this.errorMessage = 'Error creating floor'),
       });
     }
   }
@@ -185,7 +190,7 @@ export class AssetsMgmt {
     if (this.editingRoom) {
       this.roomService.update(this.editingRoom.id, roomData).subscribe({
         next: (updated) => {
-          const idx = this.allRooms.findIndex(r => r.id === updated.id);
+          const idx = this.allRooms.findIndex((r) => r.id === updated.id);
           if (idx !== -1) this.allRooms[idx] = updated;
           this.closeRoomDialog();
           this.cdr.markForCheck();
@@ -193,7 +198,7 @@ export class AssetsMgmt {
         error: (err) => {
           this.errorMessage = 'Error updating room';
           this.cdr.markForCheck();
-        }
+        },
       });
     } else {
       this.roomService.create(roomData).subscribe({
@@ -205,7 +210,7 @@ export class AssetsMgmt {
         error: (err) => {
           this.errorMessage = 'Error creating room';
           this.cdr.markForCheck();
-        }
+        },
       });
     }
   }
@@ -219,7 +224,7 @@ export class AssetsMgmt {
     if (this.editingDesk) {
       this.deskService.update(this.editingDesk.id, deskData).subscribe({
         next: (updated) => {
-          const idx = this.allDesks.findIndex(d => d.id === updated.id);
+          const idx = this.allDesks.findIndex((d) => d.id === updated.id);
           if (idx !== -1) this.allDesks[idx] = updated;
           this.closeDeskDialog();
           this.cdr.markForCheck();
@@ -227,7 +232,7 @@ export class AssetsMgmt {
         error: (err) => {
           this.errorMessage = 'Error updating desk';
           this.cdr.markForCheck();
-        }
+        },
       });
     } else {
       this.deskService.create(deskData).subscribe({
@@ -239,12 +244,37 @@ export class AssetsMgmt {
         error: (err) => {
           this.errorMessage = 'Error creating desk';
           this.cdr.markForCheck();
-        }
+        },
       });
     }
   }
 
-  // Methods to confirm deletion
+  // 🆕 Abre el modal de confirmación con resumen de elementos hijos afectados
+  openDeleteDialog(type: 'floor' | 'room' | 'desk', id: number, name?: string) {
+    this.deleteItemType = type;
+    this.deleteItemId = id;
+    this.deleteItemName = name || 'este elemento';
+    this.isDeleteDialogOpen = true;
+
+    if (type === 'floor') {
+      const rooms = this.allRooms.filter((r) => r.floorId === id);
+      const desks = this.allDesks.filter((d) => rooms.some((r) => r.id === d.roomId));
+      this.deleteItemSummary =
+        rooms.length > 0
+          ? `Este piso contiene ${rooms.length} sala(s) y ${desks.length} mesa(s) que también serán eliminadas.`
+          : '';
+    } else if (type === 'room') {
+      const desks = this.allDesks.filter((d) => d.roomId === id);
+      this.deleteItemSummary =
+        desks.length > 0
+          ? `Esta sala contiene ${desks.length} mesa(s) que también serán eliminadas.`
+          : '';
+    } else {
+      this.deleteItemSummary = '';
+    }
+  }
+
+  // 🆕 Confirma el borrado, limpia el estado local y muestra toast
   confirmDelete() {
     if (this.deleteItemId === null) return;
 
@@ -252,48 +282,55 @@ export class AssetsMgmt {
       case 'floor':
         this.floorService.delete(this.deleteItemId).subscribe({
           next: () => {
-            this.allFloors = this.allFloors.filter(f => f.id !== this.deleteItemId);
+            const deletedRoomIds = this.allRooms
+              .filter((r) => r.floorId === this.deleteItemId)
+              .map((r) => r.id);
+            this.allDesks = this.allDesks.filter((d) => !deletedRoomIds.includes(d.roomId));
+            this.allRooms = this.allRooms.filter((r) => r.floorId !== this.deleteItemId);
+            this.allFloors = this.allFloors.filter((f) => f.id !== this.deleteItemId);
+            this.notificationService.success('Piso eliminado correctamente.');
             this.closeDeleteDialog();
             this.cdr.markForCheck();
           },
-          error: (err) => {
-            this.errorMessage = 'Error deleting floor';
+          error: () => {
+            this.notificationService.error('Error al eliminar el piso.');
             this.cdr.markForCheck();
-          }
+          },
         });
         break;
       case 'room':
         this.roomService.delete(this.deleteItemId).subscribe({
           next: () => {
-            this.allRooms = this.allRooms.filter(r => r.id !== this.deleteItemId);
+            this.allDesks = this.allDesks.filter((d) => d.roomId !== this.deleteItemId);
+            this.allRooms = this.allRooms.filter((r) => r.id !== this.deleteItemId);
+            this.notificationService.success('Sala eliminada correctamente.');
             this.closeDeleteDialog();
             this.cdr.markForCheck();
           },
-          error: (err) => {
-            this.errorMessage = 'Error deleting room';
+          error: () => {
+            this.notificationService.error('Error al eliminar la sala.');
             this.cdr.markForCheck();
-          }
+          },
         });
         break;
       case 'desk':
         this.deskService.delete(this.deleteItemId).subscribe({
           next: () => {
-            this.allDesks = this.allDesks.filter(d => d.id !== this.deleteItemId);
+            this.allDesks = this.allDesks.filter((d) => d.id !== this.deleteItemId);
+            this.notificationService.success('Mesa eliminada correctamente.');
             this.closeDeleteDialog();
             this.cdr.markForCheck();
           },
-          error: (err) => {
-            this.errorMessage = 'Error deleting desk';
+          error: () => {
+            this.notificationService.error('Error al eliminar la mesa.');
             this.cdr.markForCheck();
-          }
+          },
         });
         break;
     }
   }
 
-
   // ========== HELPER METHODS FOR MODALS ==========
-
 
   // Handle floor selection change from dropdown
   onFloorChange() {
@@ -314,15 +351,15 @@ export class AssetsMgmt {
 
   // Methods to get selected entities
   getSelectedFloor(): Floor | undefined {
-    return this.allFloors.find(floor => floor.id === this.selectedFloorId);
+    return this.allFloors.find((floor) => floor.id === this.selectedFloorId);
   }
 
   getSelectedRoom(): Room | undefined {
-    return this.allRooms.find(room => room.id === this.selectedRoomId);
+    return this.allRooms.find((room) => room.id === this.selectedRoomId);
   }
 
   getSelectedDesk(): Desk | undefined {
-    return this.allDesks.find(desk => desk.id === this.selectedDeskId);
+    return this.allDesks.find((desk) => desk.id === this.selectedDeskId);
   }
 
   // Methods to open dialogs
@@ -332,13 +369,13 @@ export class AssetsMgmt {
       this.floorForm.patchValue({
         name: floor.name,
         level: floor.level,
-        isActive: floor.isActive
+        isActive: floor.isActive,
       });
     } else {
       this.floorForm.reset({
         name: '',
         level: '',
-        isActive: true
+        isActive: true,
       });
     }
     this.isFloorDialogOpen = true;
@@ -354,7 +391,7 @@ export class AssetsMgmt {
         capacity: room.capacity,
         surfaceArea: room.surfaceArea,
         equipmentList: room.equipmentList || '',
-        isActive: room.isActive
+        isActive: room.isActive,
       });
       // Disable floor selection when editing (floor is immutable)
       this.roomForm.get('floorId')?.disable();
@@ -366,7 +403,7 @@ export class AssetsMgmt {
         capacity: '',
         surfaceArea: '',
         equipmentList: '',
-        isActive: true
+        isActive: true,
       });
       // Enable floor selection when creating new room
       this.roomForm.get('floorId')?.enable();
@@ -381,7 +418,7 @@ export class AssetsMgmt {
         name: desk.name,
         roomId: desk.roomId,
         equipmentList: desk.equipmentList || '',
-        isActive: desk.isActive
+        isActive: desk.isActive,
       });
       // Disable room selection when editing (room is immutable)
       this.deskForm.get('roomId')?.disable();
@@ -390,7 +427,7 @@ export class AssetsMgmt {
         name: '',
         roomId: '',
         equipmentList: '',
-        isActive: true
+        isActive: true,
       });
       // Enable room selection when creating new desk
       this.deskForm.get('roomId')?.enable();
@@ -398,17 +435,12 @@ export class AssetsMgmt {
     this.isDeskDialogOpen = true;
   }
 
-  openDeleteDialog(type: 'floor' | 'room' | 'desk', id: number, name?: string) {
-    this.deleteItemType = type;
-    this.deleteItemId = id;
-    this.deleteItemName = name || 'this item';
-    this.isDeleteDialogOpen = true;
-  }
-
+  // 🆕 closeDeleteDialog limpia también el summary
   closeDeleteDialog() {
     this.deleteItemType = '';
     this.deleteItemId = null;
     this.deleteItemName = '';
+    this.deleteItemSummary = '';
     this.isDeleteDialogOpen = false;
   }
 
@@ -437,20 +469,20 @@ export class AssetsMgmt {
     forkJoin({
       floors: this.floorService.list(),
       rooms: this.roomService.list(),
-      desks: this.deskService.list()
+      desks: this.deskService.list(),
     }).subscribe({
       next: (result) => {
         this.allFloors = result.floors;
 
         // Get valid floor IDs for current organization
-        const validFloorIds = new Set(result.floors.map(f => f.id));
+        const validFloorIds = new Set(result.floors.map((f) => f.id));
 
         // Filter rooms to only include those from current org's floors
-        this.allRooms = result.rooms.filter(room => validFloorIds.has(room.floorId));
+        this.allRooms = result.rooms.filter((room) => validFloorIds.has(room.floorId));
 
         // Filter desks to only include those from current org's rooms
-        const validRoomIds = new Set(this.allRooms.map(r => r.id));
-        this.allDesks = result.desks.filter(desk => validRoomIds.has(desk.roomId));
+        const validRoomIds = new Set(this.allRooms.map((r) => r.id));
+        this.allDesks = result.desks.filter((desk) => validRoomIds.has(desk.roomId));
 
         this.isLoading = false;
         this.cdr.markForCheck();
@@ -464,7 +496,7 @@ export class AssetsMgmt {
         this.errorMessage = 'Error loading data';
         this.isLoading = false;
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 
@@ -488,25 +520,25 @@ export class AssetsMgmt {
 
   // Methods to get names for display
   getFloorName(floorId: number): string {
-    const floor = this.allFloors.find(f => f.id === floorId);
-    return floor ? (floor.name || `Floor ${floor.level}`) : 'Unknown Floor';
+    const floor = this.allFloors.find((f) => f.id === floorId);
+    return floor ? floor.name || `Floor ${floor.level}` : 'Unknown Floor';
   }
 
   getRoomName(roomId: number): string {
-    const room = this.allRooms.find(r => r.id === roomId);
+    const room = this.allRooms.find((r) => r.id === roomId);
     return room ? room.name : 'Unknown Room';
   }
 
   getDeskName(deskId: number): string {
-    const desk = this.allDesks.find(d => d.id === deskId);
+    const desk = this.allDesks.find((d) => d.id === deskId);
     return desk ? desk.name : 'Unknown Desk';
   }
 
   getRoomCount(floorId: number): number {
-    return this.allRooms.filter(r => r.floorId === floorId).length;
+    return this.allRooms.filter((r) => r.floorId === floorId).length;
   }
 
   getDeskCount(roomId: number): number {
-    return this.allDesks.filter(d => d.roomId === roomId).length;
+    return this.allDesks.filter((d) => d.roomId === roomId).length;
   }
 }
