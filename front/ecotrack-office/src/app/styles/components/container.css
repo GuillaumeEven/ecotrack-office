@@ -4,6 +4,21 @@
    Estilos para las secciones y contenedores generales.
    ============================================================================ */
 
+
+
+.main-container {
+  background-color: var(--surface, #fafafa);
+  color: var(--on-surface, #1a1a1a);
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .main-container {
+    padding: 1.5rem;
+  }
+}
+
 .section {
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-lg);
@@ -16,14 +31,48 @@
   padding-bottom: 0;
 }
 
-.container {
+.layout-wrapper {
+  display: flex;
+  height: calc(100vh - 80px);
+  margin-top: 80px;
+  width: 100%;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto; /* El scroll privado de las vistas (reservas, profile) ocurre AQUÍ */
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  margin-left: 0;
+}
+
+/* Desktop: sidebar visible */
+@media (min-width: 1024px) {
+  .main-content {
+    margin-left: 256px;
+  }
+}
+
+/* Mobile: no sidebar */
+@media (max-width: 1023px) {
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+
+
+/* .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--spacing-md);
-}
-
+} */
+/*
 @media (min-width: var(--breakpoint-md)) {
   .container {
     padding: 0 var(--spacing-lg);
   }
-}
+} */

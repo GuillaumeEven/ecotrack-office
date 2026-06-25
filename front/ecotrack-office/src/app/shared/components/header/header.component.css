@@ -8,10 +8,6 @@
    - Encapsulación Angular para estilos específicos del componente
    ============================================================================ */
 
-:host {
-  display: block;
-}
-
 header {
   background-color: var(--surface-high);
   border-bottom: var(--border-width-1) solid var(--border-color);
