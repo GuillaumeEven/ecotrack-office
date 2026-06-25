@@ -157,14 +157,7 @@
   text-transform: uppercase;
 }
 
-.status-badge {
-  background-color: rgba(16, 185, 129, 0.2);
-  color: var(--secondary);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-full);
-}
+
 
 /* Quick Navigation */
 .quick-nav {

@@ -5,6 +5,7 @@ import { forkJoin } from 'rxjs';
 import { FloorService } from '../../building-map/services/floor.service';
 import { RoomService } from '../../building-map/services/room.service';
 import { DeskService } from '../../building-map/services/desk.service';
+import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -73,6 +74,7 @@ export class AssetsMgmt implements OnInit {
     private floorService: FloorService,
     private roomService: RoomService,
     private deskService: DeskService,
+    private userService: UserService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private notificationService: NotificationService, // 🆕
@@ -81,8 +83,17 @@ export class AssetsMgmt implements OnInit {
   }
 
   ngOnInit(): void {
-    // Fetch all data in parallel on init
-    this.loadAllData();
+    // Wait for user authentication before loading data
+    // This ensures FloorService.organizationId is available
+    this.userService.getMe().subscribe({
+      next: () => {
+        this.loadAllData();
+      },
+      error: (err) => {
+        this.errorMessage = 'Error loading user information';
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   // ========== GETTERS FOR FILTERED DATA ==========
