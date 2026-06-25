@@ -260,14 +260,14 @@
         <button
           type="button"
           (click)="closeFloorDialog()"
-          class="modal-box__btn modal-box__btn--secondary"
+          class="btn btn"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="floorForm.invalid"
-          class="modal-box__btn modal-box__btn--primary"
+          class="btn btn-primary"
         >
           {{ editingFloor ? 'Actualizar' : 'Crear' }}
         </button>
@@ -372,14 +372,14 @@
         <button
           type="button"
           (click)="closeRoomDialog()"
-          class="modal-box__btn modal-box__btn--secondary"
+          class="btn btn-cancel"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="roomForm.invalid"
-          class="modal-box__btn modal-box__btn--primary"
+          class="btn btn-primary"
         >
           {{ editingRoom ? 'Actualizar' : 'Crear' }}
         </button>
@@ -446,14 +446,14 @@
         <button
           type="button"
           (click)="closeDeskDialog()"
-          class="modal-box__btn modal-box__btn--secondary"
+          class="btn btn"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="deskForm.invalid"
-          class="modal-box__btn modal-box__btn--primary"
+          class="btn btn-primary"
         >
           {{ editingDesk ? 'Actualizar' : 'Crear' }}
         </button>
@@ -480,13 +480,13 @@
     <div class="modal-box__actions">
       <button
         (click)="closeDeleteDialog()"
-        class="modal-box__btn modal-box__btn--secondary"
+        class="btn btn"
       >
         Cancelar
       </button>
       <button
         (click)="confirmDelete()"
-        class="modal-box__btn modal-box__btn--danger"
+        class="btn btn-primary btn btn-primary--danger"
       >
         Eliminar
       </button>

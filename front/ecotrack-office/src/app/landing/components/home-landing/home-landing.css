@@ -208,7 +208,7 @@ body {
 }
 .btn-primary-action:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
 
-.btn-secondary-action {
+.btn-action {
     border: 1px solid var(--color-outline);
     color: var(--color-on-surface);
     padding: var(--spacing-md) var(--spacing-xl);
@@ -224,7 +224,7 @@ body {
     cursor: pointer;
     transition: all 0.2s;
 }
-.btn-secondary-action:hover { background-color: var(--color-surface-container-low); }
+.btn-action:hover { background-color: var(--color-surface-container-low); }
 
 /* Contenedor y efectos de desenfoque de fondo tras la imagen */
 .hero-image-block {

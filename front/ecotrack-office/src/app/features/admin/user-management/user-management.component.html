@@ -26,10 +26,10 @@
           </select>
         </div>
         <div class="modal-footer">
-          <button type="button" (click)="showEditModal = false" class="btn btn-cancel">
+          <button type="button" (click)="showEditModal = false" class="btn">
             Cancel
           </button>
-          <button type="submit" class="btn btn-submit" [disabled]="editForm.invalid">
+          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
             Save
           </button>
         </div>
@@ -55,7 +55,7 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button (click)="showDeleteModal = false" class="btn btn-cancel">
+        <button (click)="showDeleteModal = false" class="btn">
           Cancel
         </button>
         <button (click)="onConfirmDelete()" class="btn btn-submit" style="background-color: var(--error)">
@@ -67,7 +67,7 @@
 </div>
 
 <!-- Main Content -->
-<div class="management-container">
+<div class="main-container">
   <!-- Page Header -->
   <div class="page-header">
     <h1>User Management</h1>

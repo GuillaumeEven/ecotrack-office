@@ -19,20 +19,6 @@
   display: block;
 }
 
-/* Layout */
-.main-container {
-  background-color: var(--surface, #fafafa);
-  color: var(--on-surface, #1a1a1a);
-  min-height: 100vh;
-  padding: 1rem;
-}
-
-@media (min-width: 1024px) {
-  .main-container {
-    padding: 1.5rem;
-  }
-}
-
 .content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
@@ -541,13 +527,13 @@
   transform: scale(0.98);
 }
 
-.meeting-room-container .btn-secondary {
+.meeting-room-container .btn {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
   cursor: not-allowed;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.meeting-room-container .btn-secondary:disabled {
+.meeting-room-container .btn:disabled {
   opacity: 0.7;
 }

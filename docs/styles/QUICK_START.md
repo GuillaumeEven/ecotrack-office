@@ -22,7 +22,7 @@ src/app/styles/
 ```html
 <!-- Utiliza las clases globales -->
 <button class="btn btn-primary">Hacer clic</button>
-<button class="btn btn-secondary">Secundario</button>
+<button class="btn btn">Secundario</button>
 <button class="btn btn-danger btn-sm">Pequeño Peligro</button>
 <button class="btn btn-outline">Contorno</button>
 ```

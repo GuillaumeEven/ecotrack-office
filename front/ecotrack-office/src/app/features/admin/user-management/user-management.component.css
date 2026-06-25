@@ -4,13 +4,6 @@
    Panel de administración de usuarios con modales de edición/eliminación.
    ============================================================================ */
 
-/* Contenedor principal */
-.management-container {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
-}
-
 .page-header {
   margin-bottom: var(--spacing-xl);
 }

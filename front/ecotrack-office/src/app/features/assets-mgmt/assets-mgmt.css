@@ -1,12 +1,5 @@
 /* Gestión de Recursos - Estilos */
 
-/* Contenedor principal */
-.main-container {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
-}
-
 /* Encabezado de página */
 .page-header {
   margin-bottom: var(--spacing-xl);

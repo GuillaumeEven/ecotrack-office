@@ -65,13 +65,13 @@ button:disabled {
 }
 
 /* Variante Secundaria */
-.btn-secondary {
+.btn {
   background-color: var(--secondary);
   color: white;
   border-color: var(--secondary);
 }
 
-.btn-secondary:hover {
+.btn:hover {
   background-color: var(--secondary-dark);
   border-color: var(--secondary-dark);
   box-shadow: var(--shadow-md);
@@ -168,3 +168,51 @@ button:disabled {
   display: flex;
   gap: var(--spacing-sm);
 }
+
+/* ============================================================================
+   BOTONES MODAL BOX
+   ============================================================================
+   Estilos específicos para los botones dentro de modales.
+   ============================================================================ */
+/*
+.btn btn-primary {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.btn btn-primary--primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.btn btn-primary--primary:hover {
+  background: #1d4ed8;
+}
+
+.btn btn-primary--primary:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.btn btn {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.btn btn:hover {
+  background: #e5e7eb;
+}
+
+.btn btn-primary--danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.btn btn-primary--danger:hover {
+  background: #b91c1c;
+} */

@@ -1,17 +1,6 @@
 /* ==========================================================================
    1. CONTENEDOR PRINCIPAL Y MAQUETACIÓN GLOBAL
    ========================================================================== */
-.bookings-layout {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
-    font-family: 'Inter', sans-serif;
-    box-sizing: border-box;
-}
-
-.bookings-layout *, .bookings-layout *::before, .bookings-layout *::after {
-    box-sizing: border-box;
-}
 
 /* ==========================================================================
    2. CABECERA DE LA PÁGINA (Título y Selector alineados)

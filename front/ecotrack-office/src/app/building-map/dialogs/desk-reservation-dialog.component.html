@@ -48,19 +48,19 @@
 
     <!-- Actions -->
     <div class="modal-box__actions">
-      <button class="modal-box__btn modal-box__btn--secondary" (click)="onClose()" [disabled]="isLoading">
+      <button class="btn" (click)="onClose()" [disabled]="isLoading">
         Cerrar
       </button>
       <button
         *ngIf="isAvailable()"
-        class="modal-box__btn modal-box__btn--primary"
+        class="btn btn-primary"
         (click)="onReserve()"
         [disabled]="isLoading">
         {{ isLoading ? 'Reservando...' : 'Reservar ' + getResourceType() }}
       </button>
       <button
         *ngIf="canCancelReservation()"
-        class="modal-box__btn modal-box__btn--danger"
+        class="btn btn-primary--danger"
         (click)="onCancelReservation()"
         [disabled]="isLoading">
         {{ isLoading ? 'Cancelando...' : 'Cancelar Reserva' }}

@@ -8,12 +8,6 @@
    - Utiliza un grid de 12 columnas para layout bento
    ============================================================================ */
 
-.profile-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg) var(--spacing-xl);
-}
-
 /* Header */
 .page-header {
   margin-bottom: var(--spacing-xl);
