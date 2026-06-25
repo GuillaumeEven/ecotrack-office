@@ -1,0 +1,38 @@
+
+/* Navegación por pestañas */
+.tabs-nav {
+  display: flex;
+  gap: var(--spacing-md);
+  border-bottom: 1px solid var(--outline-variant);
+  margin-bottom: var(--spacing-xl);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-button {
+  padding: var(--spacing-md);
+  font: var(--font-title-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--on-surface-variant);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-normal);
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: var(--primary);
+}
+
+.tab-button.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Secciones de tabs */
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
