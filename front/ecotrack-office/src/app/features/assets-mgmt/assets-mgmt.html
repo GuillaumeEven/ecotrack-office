@@ -159,50 +159,93 @@
       </button>
     </div>
 
-    <!-- Tabla de Mesas -->
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre del Mesa</th>
-            <th>Sala</th>
-            <th>Estado</th>
-            <th class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let desk of filteredDesks">
-            <td style="font-weight: bold">
-              {{ getDeskName(desk.id) }}
-            </td>
-            <td class="muted">
-              {{ getRoomName(desk.roomId) }}
-            </td>
-            <td>
-              <span
-                [class.active]="desk.isActive"
-                [class.inactive]="!desk.isActive"
-                class="status-badge"
-              >
-                {{ desk.isActive ? 'Activo' : 'Inactivo' }}
-              </span>
-            </td>
-            <td>
-              <div class="actions-cell">
-                <button (click)="openDeskDialog(desk)" class="action-btn">
-                  <span class="material-symbols-outlined">edit</span>
-                </button>
-                <button (click)="openDeleteDialog('desk', desk.id)" class="action-btn danger">
-                  <span class="material-symbols-outlined">delete</span>
-                </button>
-              </div>
-            </td>
-          </tr>
-          <tr *ngIf="filteredDesks.length === 0">
-            <td colspan="4" class="empty-state">No se encontraron Mesas.</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- PESTAÑA MesaS -->
+    <div *ngIf="activeTab === 'desks'" class="tab-content">
+      <!-- Filtros y Crear -->
+      <div class="toolbar">
+        <div class="toolbar-filter">
+          <label>Filtrar por Sala:</label>
+          <select
+            [(ngModel)]="selectedRoomId"
+            (change)="onRoomChange()"
+            class="form-select"
+          >
+            <option [ngValue]="null">Todas las Salas</option>
+            <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ getRoomName(room.id) }}</option>
+          </select>
+        </div>
+        <button
+          (click)="openDeskDialog(null)"
+          class="btn btn-primary"
+        >
+          <span class="material-symbols-outlined">add</span>
+          Nueva Mesa
+        </button>
+      </div>
+
+      <!-- Tabla de Mesas -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Nombre de la mesa
+              </th>
+              <th>
+                Sala
+              </th>
+              <th>
+                Estado
+              </th>
+              <th class="text-center">
+                Acciones
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let desk of filteredDesks"
+            >
+              <td style="font-weight: bold;">
+                {{ getDeskName(desk.id) }}
+              </td>
+              <td class="muted">
+                {{ getRoomName(desk.roomId) }}
+              </td>
+              <td>
+                <span
+                  [class.active]="desk.isActive"
+                  [class.inactive]="!desk.isActive"
+                  class="status-badge"
+                >
+                  {{ desk.isActive ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <div class="actions-cell">
+                  <button
+                    (click)="openDeskDialog(desk)"
+                    class="action-btn"
+                  >
+                    <span class="material-symbols-outlined">edit</span>
+                  </button>
+                  <button
+                    (click)="openDeleteDialog('desk', desk.id)"
+                    class="action-btn danger"
+                  >
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="filteredDesks.length === 0">
+              <td colspan="4" class="empty-state">
+                No se encontraron Mesas.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

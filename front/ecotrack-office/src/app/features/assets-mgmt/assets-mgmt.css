@@ -17,7 +17,7 @@
 } */
 
 /* Toolbar de acciones */
-.toolbar {
+/* .toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -50,7 +50,7 @@
 .toolbar-filter select:focus {
   ring: 2px;
   ring-color: var(--primary);
-}
+} */
 
 /* Tabla */
 /* .table-container {

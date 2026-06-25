@@ -8,6 +8,7 @@
 @import './components/container.css';
 @import './components/button.css';
 @import './components/tab-nav.css';
+@import './components/toolbar.css';
 
 /* to check */
 @import './components/card.css';
