@@ -48,7 +48,7 @@ public class DataLoader implements CommandLineRunner {
     private final ReservationRepository reservationRepository;
     private final IncidentRepository incidentRepository;
     private final JdbcTemplate jdbcTemplate;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder; // 🆕
 
     public DataLoader(OrganizationRepository organizationRepository,
                       UserRepository userRepository,
@@ -58,7 +58,7 @@ public class DataLoader implements CommandLineRunner {
                       ReservationRepository reservationRepository,
                       IncidentRepository incidentRepository,
                       JdbcTemplate jdbcTemplate,
-                      PasswordEncoder passwordEncoder) {
+                      PasswordEncoder passwordEncoder) { // 🆕
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.floorRepository = floorRepository;
@@ -67,7 +67,7 @@ public class DataLoader implements CommandLineRunner {
         this.reservationRepository = reservationRepository;
         this.incidentRepository = incidentRepository;
         this.jdbcTemplate = jdbcTemplate;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder = passwordEncoder; // 🆕
     }
 
     @Override
@@ -159,7 +159,7 @@ public class DataLoader implements CommandLineRunner {
 
         UserEntity admin = new UserEntity();
         admin.setEmail(adminEmail);
-        admin.setPasswordHash(passwordEncoder.encode("password"));
+        admin.setPasswordHash(passwordEncoder.encode("password")); // 🆕
         admin.setFirstName("Admin");
         admin.setLastName("Ecotrack");
         admin.setRole(Role.ADMIN);
@@ -180,7 +180,7 @@ public class DataLoader implements CommandLineRunner {
         if (!userRepository.existsByEmail(techEmail)) {
             UserEntity tech = new UserEntity();
             tech.setEmail(techEmail);
-            tech.setPasswordHash(passwordEncoder.encode("password"));
+            tech.setPasswordHash(passwordEncoder.encode("password")); // 🆕
             tech.setFirstName("Tech");
             tech.setLastName("Usuario");
             tech.setRole(Role.TECHNICIAN);
@@ -198,7 +198,7 @@ public class DataLoader implements CommandLineRunner {
         if (!userRepository.existsByEmail(empEmail)) {
             UserEntity emp = new UserEntity();
             emp.setEmail(empEmail);
-            emp.setPasswordHash(passwordEncoder.encode("password"));
+            emp.setPasswordHash(passwordEncoder.encode("password")); // 🆕
             emp.setFirstName("Empleado");
             emp.setLastName("Usuario");
             emp.setRole(Role.EMPLOYEE);
