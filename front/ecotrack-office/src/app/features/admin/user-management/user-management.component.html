@@ -2,35 +2,35 @@
 <div class="modal-overlay" *ngIf="showEditModal" (click)="showEditModal = false">
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h3 class="modal-title">Edit User</h3>
+      <h3 class="modal-title">Editar Usuario</h3>
       <button class="modal-close" (click)="showEditModal = false">✕</button>
     </div>
     <div class="modal-body">
       <form [formGroup]="editForm" (ngSubmit)="onSaveEdit()">
         <div class="form-group">
-          <label>FIRST NAME</label>
+          <label>Nombre</label>
           <input type="text" formControlName="firstName" />
         </div>
         <div class="form-group">
-          <label>LAST NAME</label>
+          <label>Apellido</label>
           <input type="text" formControlName="lastName" />
         </div>
         <div class="form-group">
-          <label>EMAIL</label>
+          <label>Correo Electrónico</label>
           <input type="email" formControlName="email" />
         </div>
         <div class="form-group">
-          <label>ROLE</label>
+          <label>Rol</label>
           <select formControlName="role">
             <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
           </select>
         </div>
         <div class="modal-footer">
           <button type="button" (click)="showEditModal = false" class="btn">
-            Cancel
+            Cancelar
           </button>
           <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
-            Save
+            Guardar
           </button>
         </div>
       </form>
@@ -42,24 +42,24 @@
 <div class="modal-overlay" *ngIf="showDeleteModal" (click)="showDeleteModal = false">
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h3 class="modal-title" style="color: var(--error)">Delete User</h3>
+      <h3 class="modal-title" style="color: var(--error)">Eliminar Usuario</h3>
       <button class="modal-close" (click)="showDeleteModal = false">✕</button>
     </div>
     <div class="modal-body">
       <div class="warning-section">
         <span>⚠</span>
         <p>
-          This action will permanently anonymize
+          Esta acción anonimizará permanentemente
           <strong>{{ selectedUser?.firstName }} {{ selectedUser?.lastName }}</strong
-          >'s data (GDPR). This cannot be undone.
+          >'s data (GDPR). Esto no se puede deshacer.
         </p>
       </div>
       <div class="modal-footer">
         <button (click)="showDeleteModal = false" class="btn">
-          Cancel
+          Cancelar
         </button>
         <button (click)="onConfirmDelete()" class="btn btn-danger">
-          Delete
+          Eliminar
         </button>
       </div>
     </div>
@@ -70,29 +70,29 @@
 <div class="main-container">
   <!-- Page Header -->
   <div class="component-header">
-    <h1>User Management</h1>
-    <h2>Manage all users in your organization.</h2>
+    <h1>Gestión de Usuarios</h1>
+    <h2>Administra todos los usuarios en tu organización.</h2>
   </div>
 
   <div class="component-wrapper">
   <!-- KPI Cards -->
   <div class="kpi-grid">
     <div class="kpi-card">
-      <p class="kpi-label">TOTAL USERS</p>
+      <p class="kpi-label">Total usuarios</p>
       <div *ngIf="isLoadingStats" class="skeleton"></div>
       <p *ngIf="!isLoadingStats" class="kpi-value">
         {{ stats.totalUsers }}
       </p>
     </div>
     <div class="kpi-card">
-      <p class="kpi-label">ACTIVE NOW</p>
+      <p class="kpi-label">Activos Ahora</p>
       <div *ngIf="isLoadingStats" class="skeleton"></div>
       <p *ngIf="!isLoadingStats" class="kpi-value secondary">
         {{ stats.activeUsers }}
       </p>
     </div>
     <div class="kpi-card">
-      <p class="kpi-label">NEW THIS MONTH</p>
+      <p class="kpi-label">Nuevos este mes</p>
       <div *ngIf="isLoadingStats" class="skeleton"></div>
       <p *ngIf="!isLoadingStats" class="kpi-value">
         +{{ stats.newThisMonth }}
@@ -105,7 +105,7 @@
     <div class="search-input-wrapper">
       <input
         type="text"
-        placeholder="Search by name or email..."
+        placeholder="Buscar por nombre o correo..."
         (input)="onSearchInput($event)"
         class="form-input"
       />
@@ -114,16 +114,16 @@
       (change)="onRoleChange($event)"
       class="form-input"
     >
-      <option value="">All roles</option>
+      <option value="">Todos los roles</option>
       <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
     </select>
     <select
       (change)="onStatusChange($event)"
       class="form-input"
     >
-      <option value="">All statuses</option>
-      <option value="true">Active</option>
-      <option value="false">Inactive</option>
+      <option value="">Todo estatus</option>
+      <option value="true">Activo</option>
+      <option value="false">Inactivo</option>
     </select>
   </div>
 
@@ -138,12 +138,12 @@
     <table *ngIf="!isLoading">
       <thead>
         <tr>
-          <th>NAME</th>
-          <th class="email-col">EMAIL</th>
+          <th>Nombre</th>
+          <th class="email-col">Correo</th>
           <!-- Mobile: hidden, Desktop: table-cell via CSS media query -->
-          <th>ROLE</th>
-          <th>STATUS</th>
-          <th>ACTIONS</th>
+          <th>Rol</th>
+          <th>Estatus</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -163,7 +163,7 @@
           </td>
           <td>
             <span class="status-badge" [class.active]="user.isActive" [class.inactive]="!user.isActive">
-              {{ user.isActive ? 'Active' : 'Inactive' }}
+              {{ user.isActive ? 'Activo' : 'Inactivo' }}
             </span>
           </td>
           <td>
@@ -172,7 +172,7 @@
               <button
                 (click)="openEditModal(user)"
                 class="action-btn"
-                title="Edit"
+                title="Editar"
               >
                 <span class="material-symbols-outlined">edit</span>
               </button>
@@ -181,7 +181,7 @@
                 (click)="toggleUserStatus(user)"
                 class="action-btn"
                 [style.color]="user.isActive ? 'var(--error)' : 'var(--secondary)'"
-                [title]="user.isActive ? 'Deactivate' : 'Activate'"
+                [title]="user.isActive ? 'Desactivar' : 'Activar'"
               >
                 <span class="material-symbols-outlined">{{ user.isActive ? 'lock' : 'lock_open' }}</span>
               </button>
@@ -189,7 +189,7 @@
               <button
                 (click)="openDeleteModal(user)"
                 class="action-btn delete"
-                title="Delete (GDPR)"
+                title="Eliminar (GDPR)"
               >
                 <span class="material-symbols-outlined">delete</span>
               </button>
@@ -200,7 +200,7 @@
         <!-- Empty state -->
         <tr *ngIf="users.length === 0">
           <td colspan="5">
-            No users found.
+            No se encontraron usuarios.
           </td>
         </tr>
       </tbody>
@@ -212,7 +212,7 @@
       class="pagination"
     >
       <p>
-        Showing {{ showingFrom }}–{{ showingTo }} of {{ totalElements }}
+        Mostrando {{ showingFrom }}–{{ showingTo }} de {{ totalElements }}
       </p>
       <div class="actions-cell">
         <button
@@ -224,7 +224,7 @@
           <span class="material-symbols-outlined">chevron_left</span>
         </button>
         <span style="padding: 0 var(--spacing-sm); font-size: var(--font-size-base);">
-          Page {{ currentPage + 1 }} of {{ totalPages }}
+          Página {{ currentPage + 1 }} de {{ totalPages }}
         </span>
         <button
           (click)="goToPage(currentPage + 1)"

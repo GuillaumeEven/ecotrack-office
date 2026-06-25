@@ -35,7 +35,7 @@
   --tertiary-container: #001a42;
   --on-tertiary-container: #3980f4;
   --tertiary-fixed: #d8e2ff;
-  --tertiary-fixed-dim: #adc6ff;
+  --tertiary-fixed-dim: #adc6ff; /* Usado: como tertiary surface */
   --on-tertiary-fixed: #001a42;
   --on-tertiary-fixed-variant: #004395;
 

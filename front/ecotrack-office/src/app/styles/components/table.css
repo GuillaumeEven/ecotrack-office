@@ -13,7 +13,7 @@ table {
 }
 
 thead {
-  background-color: var(--surface-container);
+  background-color: var(--tertiary-fixed-dim);
 }
 
 th {
@@ -30,6 +30,13 @@ td {
   border-bottom: var(--border-width-1) solid var(--outline-variant);
   font: var(--font-body-md);
   color: var(--on-surface);
+}
+
+th.actions,
+td.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: var(--spacing-lg);
 }
 
 tbody tr:hover {
