@@ -43,11 +43,11 @@ public class ResourceEntity {
     @Column(name = "equipment_list")
     private String equipmentList;
 
-    @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore // no queremos que se serialice la lista de incidentes al convertir ResourceEntity a JSON, para evitar problemas de recursión infinita
     private List<IncidentEntity> incidents = new ArrayList<>();
 
-    @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private List<ReservationEntity> reservations = new ArrayList<>();
 
