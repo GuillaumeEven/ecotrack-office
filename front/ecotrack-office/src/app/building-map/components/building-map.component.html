@@ -108,7 +108,7 @@
             </p>
           </div>
 
-          <div class="legend">
+          <div *ngIf="selectedRoomId && !isMeetingRoom(getSelectedRoom()!)" class="legend">
             <div class="legend-item">
               <div class="legend-color available"></div>
               <span class="legend-text">DISPONIBLE</span>

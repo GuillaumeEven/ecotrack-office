@@ -18,6 +18,8 @@ import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
 import com.ediae.ecotrack_office.reservation.mapper.ReservationMapper;
 import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.reservation.repository.ReservationRepository;
+import com.ediae.ecotrack_office.shared.exception.ApplicationException;
+import com.ediae.ecotrack_office.shared.exception.ErrorCode;
 import com.ediae.ecotrack_office.shared.exception.ForbiddenException;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
@@ -100,6 +102,14 @@ public class ReservationService {
 
     public ReservationModel createReservation (ReservationCreateDto dto) {
 
+        // 🆕 Validación: no se puede reservar en el pasado
+        if (dto.getDate().isBefore(LocalDate.now())) {
+            throw new ApplicationException(
+                ErrorCode.BUSINESS_RULE_VIOLATION,
+                "No se puede crear una reserva en una fecha pasada."
+            );
+        }
+
         // Load entities from IDs
         var user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + dto.getUserId()));
@@ -116,6 +126,14 @@ public class ReservationService {
 
     
     public ReservationModel updateReservationById (Long id, ReservationUpdateDto dto) {
+
+        // 🆕 Validación: no se puede mover una reserva al pasado
+        if (dto.getDate().isBefore(LocalDate.now())) {
+            throw new ApplicationException(
+                ErrorCode.BUSINESS_RULE_VIOLATION,
+                "No se puede modificar una reserva a una fecha pasada."
+            );
+        }
 
         Optional <ReservationEntity> initialEntity = repository.findById(id);
         if(initialEntity.isEmpty()) {

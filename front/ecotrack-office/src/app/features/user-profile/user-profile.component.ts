@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { UserService } from '../../services/user.service';
 import { UserResponse } from '../../models/user.model';
 import { ChangePasswordModalComponent } from './components/change-password-modal.component';
+import { NotificationService } from '@core/services/notification.service';
 
 export type ProfileSection = 'personal' | 'security' | 'notifications';
 
@@ -20,15 +21,13 @@ export class UserProfileComponent implements OnInit {
   user: UserResponse | null = null;
   isLoading = true;
   isSaving = false;
-  errorMessage: string | null = null;
   successMessage: string | null = null;
   showPasswordModal = false;
-
-  departments = ['Facilities Management', 'Administration', 'Human Resources', 'IT Support'];
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +48,6 @@ export class UserProfileComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
-        this.errorMessage = 'Could not load profile. Please try again.';
         this.isLoading = false;
       },
     });
@@ -63,17 +61,16 @@ export class UserProfileComponent implements OnInit {
     if (this.profileForm.invalid) return;
     this.isSaving = true;
     this.successMessage = null;
-    this.errorMessage = null;
 
     this.userService.updateMe(this.profileForm.value).subscribe({
       next: (updated) => {
         this.user = updated;
         this.isSaving = false;
-        this.successMessage = 'Profile updated successfully.';
+        this.successMessage = 'Perfil actualizado correctamente.';
+        this.notificationService.success(this.successMessage);
       },
       error: () => {
         this.isSaving = false;
-        this.errorMessage = 'Could not save changes. Please try again.';
       },
     });
   }
@@ -86,7 +83,6 @@ export class UserProfileComponent implements OnInit {
       email: this.user.email,
     });
     this.successMessage = null;
-    this.errorMessage = null;
   }
 
   onChangePassword(): void {
