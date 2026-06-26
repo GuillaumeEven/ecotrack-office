@@ -1,111 +1,114 @@
-<div class="incidencias-container">
-  <div class="page-header">
-    <h1 class="page-title">Mantenimiento e Incidencias</h1>
-    <p class="page-subtitle">
+<div class="main-container">
+  <div class="component-header">
+    <h1>Mantenimiento e Incidencias</h1>
+    <h2>
       Reporta problemas en la infraestructura de los recursos y haz el seguimiento de los tickets.
-    </p>
+    </h2>
   </div>
 
-  <div class="incidencias-grid">
-    <!-- COLUMNA IZQUIERDA: Formulario -->
-    <div class="form-column">
-      <div class="card card-sticky">
-        <div class="card-header">
-          <h3 class="card-title">Reportar Incidencia</h3>
-          <span class="material-symbols-outlined icon-variant">report_problem</span>
+  <div class="component-wrapper">
+
+    <div class="incidencias-grid">
+      <!-- COLUMNA IZQUIERDA: Formulario -->
+      <div class="form-column">
+        <div class="card card-sticky">
+          <div class="card-header">
+            <h3 class="card-title">Reportar Incidencia</h3>
+            <span class="material-symbols-outlined icon-variant">report_problem</span>
+          </div>
+
+          <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label class="form-label required">ID DEL RECURSO / ACTIVO</label>
+              <input type="text" formControlName="resourceId" placeholder="Ej. 102" class="form-input"
+                [class.error]="incidentForm.get('resourceId')?.invalid && incidentForm.get('resourceId')?.touched" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label required">DESCRIPCIÓN</label>
+              <textarea formControlName="description" rows="4"
+                placeholder="Describe el fallo (ej. Pantalla de monitor rota, mobiliario dañado)..." class="form-textarea"
+                [class.error]="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched"></textarea>
+              <p *ngIf="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched"
+                class="form-error">
+                Por favor, introduce al menos 10 caracteres descriptivos.
+              </p>
+            </div>
+
+            <div *ngIf="successMessage || errorMessage" class="feedback-container">
+              <p *ngIf="successMessage" class="success-message">✓ {{ successMessage }}</p>
+              <p *ngIf="errorMessage" class="error-message">✕ {{ errorMessage }}</p>
+            </div>
+
+            <div class="btn-group">
+              <button type="submit" [disabled]="incidentForm.invalid || isSaving" class="btn btn-primary">
+                {{ isSaving ? 'Enviando...' : 'Registrar Incidencia' }}
+              </button>
+            </div>
+          </form>
         </div>
-
-        <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label class="form-label required">ID DEL RECURSO / ACTIVO</label>
-            <input type="text" formControlName="resourceId" placeholder="Ej. 102" class="form-input"
-              [class.error]="incidentForm.get('resourceId')?.invalid && incidentForm.get('resourceId')?.touched" />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label required">DESCRIPCIÓN</label>
-            <textarea formControlName="description" rows="4"
-              placeholder="Describe el fallo (ej. Pantalla de monitor rota, mobiliario dañado)..." class="form-textarea"
-              [class.error]="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched"></textarea>
-            <p *ngIf="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched"
-              class="form-error">
-              Por favor, introduce al menos 10 caracteres descriptivos.
-            </p>
-          </div>
-
-          <div *ngIf="successMessage || errorMessage" class="feedback-container">
-            <p *ngIf="successMessage" class="success-message">✓ {{ successMessage }}</p>
-            <p *ngIf="errorMessage" class="error-message">✕ {{ errorMessage }}</p>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" [disabled]="incidentForm.invalid || isSaving" class="btn btn-primary btn-block">
-              {{ isSaving ? 'Enviando...' : 'Registrar Incidencia' }}
-            </button>
-          </div>
-        </form>
       </div>
-    </div>
 
-    <!-- COLUMNA DERECHA: Historial (Solo visible para TECH y ADMIN) -->
-    <div *ngIf="userRole === 'TECH' || userRole === 'ADMIN'" class="table-column">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Historial de Mantenimiento</h3>
-          <span class="material-symbols-outlined icon-variant">build_circle</span>
-        </div>
+      <!-- COLUMNA DERECHA: Historial (Solo visible para TECH y ADMIN) -->
+      <div *ngIf="userRole === 'TECH' || userRole === 'ADMIN'" class="table-column">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Historial de Mantenimiento</h3>
+            <span class="material-symbols-outlined icon-variant">build_circle</span>
+          </div>
 
-        <div *ngIf="isLoading" class="skeleton-loader">
-          <div class="skeleton-bar skeleton-header-bar"></div>
-          <div class="skeleton-bar"></div>
-          <div class="skeleton-bar"></div>
-        </div>
+          <div *ngIf="isLoading" class="skeleton-loader">
+            <div class="skeleton-bar skeleton-header-bar"></div>
+            <div class="skeleton-bar"></div>
+            <div class="skeleton-bar"></div>
+          </div>
 
-        <div *ngIf="!isLoading && incidents.length === 0" class="empty-state">
-          <span class="material-symbols-outlined empty-icon">verified</span>
-          <p class="empty-text">Todos los sistemas operativos. No hay incidencias activas.</p>
-        </div>
+          <div *ngIf="!isLoading && incidents.length === 0" class="empty-state">
+            <span class="material-symbols-outlined empty-icon">verified</span>
+            <p class="empty-text">Todos los sistemas operativos. No hay incidencias activas.</p>
+          </div>
 
-        <div *ngIf="!isLoading && incidents.length > 0" class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>RECURSO</th>
-                <th>DESCRIPCIÓN</th>
-                <th>FECHA REPORTE</th>
-                <th class="text-center">ESTADO</th>
-                <th class="text-right">ACCIÓN</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of incidents">
-                <td class="font-medium">#{{ item.id }}</td>
-                <td>Recurso {{ item.resourceId }}</td>
-                <td class="cell-truncate" [title]="item.description">
-                  {{ item.description }}
-                </td>
-                <td class="date-cell">
-                  {{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}
-                </td>
-                <td class="text-center">
-                  <span [ngClass]="item.status === 'OPEN' ? 'badge-error' : 'badge-success'" class="status-badge">
-                    {{ item.status === 'OPEN' ? 'ABIERTA' : 'RESUELTA' }}
-                  </span>
-                </td>
-                <td class="text-right">
-                  <button *ngIf="(item.status === 'OPEN') && (userRole === 'TECH' || userRole === 'ADMIN')"
-                    (click)="onResolve(item.id)" class="btn btn-sm btn-outline">
-                    Resolver
-                  </button>
+          <div *ngIf="!isLoading && incidents.length > 0" class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>RECURSO</th>
+                  <th>DESCRIPCIÓN</th>
+                  <th>FECHA REPORTE</th>
+                  <th class="text-center">ESTADO</th>
+                  <th class="text-right">ACCIÓN</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of incidents">
+                  <td class="font-medium">#{{ item.id }}</td>
+                  <td>Recurso {{ item.resourceId }}</td>
+                  <td class="cell-truncate" [title]="item.description">
+                    {{ item.description }}
+                  </td>
+                  <td class="date-cell">
+                    {{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                  </td>
+                  <td class="text-center">
+                    <span [ngClass]="item.status === 'OPEN' ? 'badge-error' : 'badge-success'" class="status-badge">
+                      {{ item.status === 'OPEN' ? 'ABIERTA' : 'RESUELTA' }}
+                    </span>
+                  </td>
+                  <td class="text-right">
+                    <button *ngIf="(item.status === 'OPEN') && (userRole === 'TECH' || userRole === 'ADMIN')"
+                      (click)="onResolve(item.id)" class="btn btn-sm btn-outline">
+                      Resolver
+                    </button>
 
-                  <span *ngIf="item.status !== 'OPEN'" class="solved-text">
-                    Solucionado
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    <span *ngIf="item.status !== 'OPEN'" class="solved-text">
+                      Solucionado
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
