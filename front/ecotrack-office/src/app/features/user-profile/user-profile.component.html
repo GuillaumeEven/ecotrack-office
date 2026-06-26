@@ -4,9 +4,9 @@
 <div class="profile-container">
   <!-- Page Header -->
   <div class="page-header">
-    <h1>User Profile</h1>
+    <h1>Perfil de usuario</h1>
     <p>
-      Manage your personal information and security preferences.
+      Configura tu información personal y preferencias de seguridad.
     </p>
   </div>
 
@@ -32,24 +32,35 @@
           <h2 *ngIf="!isLoading">
             {{ user?.firstName }} {{ user?.lastName }}
           </h2>
-          <p>{{ user?.role }}</p>
+          @if(user?.role === 'ADMIN') {
+
+              <p>Administrador</p>
+          }
+          @if(user?.role === 'TECHNICIAN') {
+
+              <p>Técnico</p>
+          } 
+          @if(user?.role === 'EMPLOYEE') {
+
+              <p>Empleado</p>
+          }  
 
           <!-- Meta info -->
           <div class="identity-meta">
             <div class="meta-item">
-              <span class="meta-label">ACCOUNT STATUS</span>
+              <span class="meta-label">ESTADO DE LA CUENTA</span>
               <span
                 [class.active]="user?.isActive"
                 [class.inactive]="!user?.isActive"
                 class="status-badge"
               >
-                {{ user?.isActive ? 'Active' : 'Inactive' }}
+                {{ user?.isActive ? 'Activa' : 'Inactiva' }}
               </span>
             </div>
             <div class="meta-item">
-              <span class="meta-label">SINCE</span>
+              <span class="meta-label">DESDE</span>
               <span>
-                {{ user?.createdAt | date: 'MMMM yyyy' }}
+                {{ user?.createdAt | date: 'MMMM yyyy' | titlecase}}
               </span>
             </div>
           </div>
