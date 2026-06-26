@@ -30,25 +30,10 @@
         <span class="label">{{ getResourceType() }}:</span>
         <span class="value">{{ deskWithStatus?.desk?.name || 'N/A' }}</span>
       </div>
-      <div class="info-row">
-        <span class="label">Fecha:</span>
-        <span class="value">{{ selectedDate | date: 'short' }}</span>
-      </div>
-    </div>
 
-    <!-- Error message -->
-    <div *ngIf="errorMessage" class="alert alert-error">
-      {{ errorMessage }}
-    </div>
-
-    <!-- Success message -->
-    <div *ngIf="successMessage" class="alert alert-success">
-      {{ successMessage }}
-    </div>
-
-    <!-- Actions -->
-    <div class="modal-box__actions">
-      <button class="modal-box__btn modal-box__btn--secondary" (click)="onClose()" [disabled]="isLoading">
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onClose()" [disabled]="isLoading">
         Cerrar
       </button>
       <button

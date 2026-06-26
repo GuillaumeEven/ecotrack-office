@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { DeskWithStatus, ResourceStatus } from '../models';
 import { ReservationService } from '../services';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '@core/services/notification.service';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-desk-reservation-dialog',
@@ -21,15 +23,15 @@ export class DeskReservationDialogComponent implements OnInit {
 
   // UI State
   isLoading = false;
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
 
   ResourceStatus = ResourceStatus;
   private currentUserEmail: string | null = null;
+  private successMessage: string | null = null;
 
   constructor(
     private reservationService: ReservationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -93,18 +95,17 @@ export class DeskReservationDialogComponent implements OnInit {
 
   onReserve(): void {
     if (!this.deskWithStatus?.desk?.id) {
-      this.errorMessage = 'Invalid desk ID';
-      return;
+
+      throw new Error('Id de escritorio inválido')
     }
 
     const userId = this.authService.getUserId();
     if (!userId) {
-      this.errorMessage = 'User not authenticated';
-      return;
+      
+      throw new Error('Usuario no autenticado')
     }
 
     this.isLoading = true;
-    this.errorMessage = null;
     this.successMessage = null;
 
     const dateStr = this.formatDateToISO(this.selectedDate);
@@ -116,7 +117,8 @@ export class DeskReservationDialogComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
-          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" reserved successfully!`;
+          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" se ha reservado con éxtio!`;
+          this.notificationService.success(this.successMessage);
           setTimeout(() => {
             this.onClose();
             this.reserved.emit();
@@ -124,33 +126,27 @@ export class DeskReservationDialogComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          this.errorMessage =
-            error.error?.message ||
-            error.message ||
-            `Failed to reserve desk (HTTP ${error.status}). Please try again.`;
         }
       });
   }
 
   onClose(): void {
     this.isOpen = false;
-    this.errorMessage = null;
     this.successMessage = null;
     this.close.emit();
   }
 
   onCancelReservation(): void {
     if (!this.deskWithStatus?.reservationId) {
-      this.errorMessage = 'Reservation ID not found';
-      return;
+      
+      throw new Error('Id de reserva no encontrado')
     }
 
-    if (!confirm('Are you sure you want to cancel this reservation?')) {
+    if (!confirm('¿Estás seguro de que quieres cancelar esta reserva?')) {
       return;
     }
 
     this.isLoading = true;
-    this.errorMessage = null;
     this.successMessage = null;
 
     this.reservationService
@@ -159,7 +155,8 @@ export class DeskReservationDialogComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
-          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" cancelled successfully!`;
+          this.successMessage = `La reserva de ${resourceType} "${this.deskWithStatus?.desk?.name}" se ha cancelado correctamente!`;
+          this.notificationService.success(this.successMessage);
           setTimeout(() => {
             this.onClose();
             this.reserved.emit(); // Emit event to trigger refresh
@@ -167,10 +164,6 @@ export class DeskReservationDialogComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          this.errorMessage =
-            error.error?.message ||
-            error.message ||
-            `Failed to cancel reservation (HTTP ${error.status}). Please try again.`;
         }
       });
   }
