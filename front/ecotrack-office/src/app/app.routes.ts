@@ -42,15 +42,16 @@ export const routes: Routes = [
       {
         path: 'organization',
         component: Organization,
+        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
       },
       {
-        // TODO: Filtrar solo los admins
         path: 'assets',
         component: AssetsMgmt,
+        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
       },
     ],
   },
 
   // COMODÍN: Redirección por defecto para URLs inexistentes
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'login' },
 ];
