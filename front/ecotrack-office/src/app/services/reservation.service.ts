@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ReservationResponse } from '@models/reservation.model';
+import { ReservationResponse, ReservationResponseWithName } from '@models/reservation.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +18,9 @@ export class ReservationService {
 
   //TODO: CAMBIAR POR LA LLAMADA REAL
 
-  getAllReservations() : Observable<ReservationResponse[]> {
+  getAllReservations() : Observable<ReservationResponseWithName[]> {
 
-    return this.http.get<ReservationResponse[]>(`${this.API_URL}/all`);
+    return this.http.get<ReservationResponseWithName[]>(`${this.API_URL}/all`);
   }
 
   updateReservation(idReservation: number, reservationData: any): Observable<ReservationResponse> {

@@ -10,3 +10,15 @@ export interface ReservationResponse {
     resourceName: string;
     resourceEquipmentList: string;
 }
+
+export interface ReservationResponseWithName {
+
+    id: number;
+    date: string;
+    status: string;
+    createdAt: string;
+    userId: number;
+    userFullName: string;
+    resourceName: string;
+    resourceEquipmentList: string;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReservationResponse } from '@models/reservation.model';
+import { ReservationResponse, ReservationResponseWithName } from '@models/reservation.model';
 import { ReservationService } from '../services/reservation.service';
 import { NotificationService } from '@core/services/notification.service';
 
@@ -20,7 +20,7 @@ export class Reservation implements OnInit{
   activeReservations: ReservationResponse[] = [];
   unactiveReservations: ReservationResponse[] = [];
 
-  allStaffReservations: ReservationResponse[] = [];
+  allStaffReservations: ReservationResponseWithName[] = [];
 
   isEditModalOpen = false;
   isCancelModalOpen = false;
@@ -73,7 +73,14 @@ export class Reservation implements OnInit{
 
       next: (data) => {
 
-        this.allStaffReservations = data;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        this.allStaffReservations = data.filter(reserva => {
+
+          const fechaReserva = new Date(reserva.date);
+          fechaReserva.setHours(0, 0, 0, 0);
+          return fechaReserva.getTime() >= today.getTime();
+        });
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al traer todas las reservas de la empresa: ', err)
