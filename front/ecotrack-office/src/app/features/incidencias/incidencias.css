@@ -1,0 +1,161 @@
+.incidencias-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-gutter);
+  box-sizing: border-box;
+}
+
+.page-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.page-title {
+  font: var(--font-headline-md);
+  color: var(--on-surface);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.page-subtitle {
+  font: var(--font-body-md);
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+
+/* Rejilla de la página */
+.incidencias-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-gutter);
+}
+
+@media (min-width: 1024px) {
+  .incidencias-grid {
+    grid-template-columns: 4fr 8fr;
+  }
+}
+
+.card-sticky {
+  position: sticky;
+  top: var(--spacing-md);
+}
+
+.icon-variant {
+  color: var(--on-primary-container);
+}
+
+.feedback-container {
+  padding-top: var(--spacing-base);
+}
+
+.success-message {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--success);
+  margin: 0;
+}
+
+.error-message {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--error);
+  margin: 0;
+}
+
+/* Animación del Skeleton Loader alineada al diseño */
+.skeleton-loader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+}
+
+.skeleton-bar {
+  height: 44px;
+  background-color: var(--surface-container);
+  border-radius: var(--radius-md);
+  width: 100%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-header-bar {
+  height: 36px;
+  background-color: var(--surface-container-high);
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Utilidades de la Tabla */
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.cell-truncate {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date-cell {
+  color: var(--on-surface-variant);
+  font-size: var(--font-size-sm);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Badges de Estado adaptados a la paleta Kinetic */
+.status-badge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: var(--spacing-base) var(--spacing-xs);
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+
+.badge-error {
+  background-color: var(--error-container);
+  color: var(--on-error-container);
+}
+
+.badge-success {
+  background-color: var(--secondary-fixed);
+  color: var(--on-secondary-fixed-variant);
+}
+
+.solved-text {
+  font-size: var(--font-size-sm);
+  color: var(--on-surface-variant);
+  font-style: italic;
+}
+
+/* Estados vacíos */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: var(--outline-variant);
+  margin-bottom: var(--spacing-xs);
+}
+
+.empty-text {
+  color: var(--on-surface-variant);
+  margin: 0;
+}

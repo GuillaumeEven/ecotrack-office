@@ -10,6 +10,8 @@ import { UserManagementComponent } from './features/admin/user-management/user-m
 import { Reservation } from './reservation/reservation';
 import { Organization } from './organization/organization';
 import { AssetsMgmt } from './features/assets-mgmt/assets-mgmt';
+import { IncidenciasComponent } from './features/incidencias/incidencias';
+import { AnalyticsComponent } from './features/analytics/analytics';
 
 export const routes: Routes = [
   // RUTAS PÚBLICAS
@@ -20,7 +22,7 @@ export const routes: Routes = [
   {
     path: '',
     component: PrivateLayout,
-    canActivate: [authGuard], // 🔒 PADRE BLINDADO: Aplica 'authGuard' a todos los hijos automáticamente
+    canActivate: [authGuard], // Filtro: Solo usuarios logueados pueden acceder a estas rutas
     children: [
       {
         path: 'profile',
@@ -33,7 +35,7 @@ export const routes: Routes = [
       {
         path: 'admin/user-management',
         component: UserManagementComponent,
-        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
+        canActivate: [adminGuard], // Filtro: Solo admins pueden acceder a esta ruta
       },
       {
         path: 'reservation',
@@ -42,15 +44,24 @@ export const routes: Routes = [
       {
         path: 'organization',
         component: Organization,
+        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
       },
       {
-        // TODO: Filtrar solo los admins
         path: 'assets',
         component: AssetsMgmt,
+        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
       },
+      {
+        path: 'incidencias',
+        component: IncidenciasComponent,
+      },
+      {
+        path: 'analytics',
+        component: AnalyticsComponent,
+      }
     ],
   },
 
   // COMODÍN: Redirección por defecto para URLs inexistentes
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'login' },
 ];

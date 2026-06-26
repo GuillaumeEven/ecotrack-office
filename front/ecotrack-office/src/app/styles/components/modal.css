@@ -106,51 +106,9 @@
 }
 
 /* Button group */
-.modal-box__actions {
+/* .modal-box__actions {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: auto;
-}
-
-.modal-box__btn {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: background 0.2s;
-}
-
-.modal-box__btn--secondary {
-  background: #f3f4f6;
-  color: #4b5563;
-}
-
-.modal-box__btn--secondary:hover {
-  background: #e5e7eb;
-}
-
-.modal-box__btn--primary {
-  background: #2563eb;
-  color: #ffffff;
-}
-
-.modal-box__btn--primary:hover {
-  background: #1d4ed8;
-}
-
-.modal-box__btn--primary:disabled {
-  background: #93c5fd;
-  cursor: not-allowed;
-}
-
-.modal-box__btn--danger {
-  background: #dc2626;
-  color: #ffffff;
-}
-
-.modal-box__btn--danger:hover {
-  background: #b91c1c;
-}
+} */

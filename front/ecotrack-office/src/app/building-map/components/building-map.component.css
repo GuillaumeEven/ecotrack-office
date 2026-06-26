@@ -15,39 +15,9 @@
    se aplican SOLO a este componente, sin afectar a otros.
    ============================================================================ */
 
-:host {
-  display: block;
-}
-
-/* Layout */
-.main-container {
-  background-color: var(--surface, #fafafa);
-  color: var(--on-surface, #1a1a1a);
-  min-height: 100vh;
-  padding: 1rem;
-}
-
-@media (min-width: 1024px) {
-  .main-container {
-    padding: 1.5rem;
-  }
-}
-
 .content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-}
-
-.header {
-  margin-bottom: 1.5rem;
-}
-
-.header h1 {
-  margin-bottom: 0.25rem;
-}
-
-.header p {
-  color: var(--on-surface-variant, #666);
 }
 
 /* Main Grid */
@@ -354,6 +324,12 @@
   margin: 0 auto;
 }
 
+.desk-btn.clickable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
 .desk-btn.available {
   border: 1px solid rgba(76, 175, 80, 0.4);
   color: #4caf50;
@@ -541,13 +517,13 @@
   transform: scale(0.98);
 }
 
-.meeting-room-container .btn-secondary {
+.meeting-room-container .btn {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
   cursor: not-allowed;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.meeting-room-container .btn-secondary:disabled {
+.meeting-room-container .btn:disabled {
   opacity: 0.7;
 }

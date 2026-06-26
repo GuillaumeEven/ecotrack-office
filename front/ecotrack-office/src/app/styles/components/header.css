@@ -1,0 +1,18 @@
+
+.component-header {
+  margin-bottom: 1.5rem;
+}
+
+.component-header h1 {
+  margin-bottom: 0.25rem;
+}
+
+.component-header h2 {
+  color: var(--on-surface-variant, #666);
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.component-header p {
+  color: var(--on-surface-variant, #666);
+}

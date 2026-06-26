@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule, Validators, FormGroup, FormBuilder } 
 import { matchPasswordValidator } from '@validators/match-password.validator';
 import { UserService } from '../../../services/user.service';
 import { OrganizationService } from '../../../services/organization.service';
+import { ThemeService } from '../../../services/theme.service';
 import { CreateUserRequest } from '@models/user.model';
 import { CreateOrganizationRequest, OrganizationResponse } from '@models/organization.model';
 import { switchMap, catchError, throwError } from 'rxjs';
@@ -28,8 +29,14 @@ export class HomeLanding implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private notificationService = inject(NotificationService);
   private router = inject(Router);
+  public themeService = inject(ThemeService);
 
   registerForm!: FormGroup;
+
+  /**
+   * Observable del tema actual
+   */
+  currentTheme$ = this.themeService.getTheme$();
 
   // Control de estado del flujo secuencial
   pasoActual: RegistroPaso = 'USUARIO';
@@ -55,6 +62,13 @@ export class HomeLanding implements OnInit {
     }, {
       validators: matchPasswordValidator
     });
+  }
+
+  /**
+   * Alterna el tema entre light y dark
+   */
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 
   // Navegación entre pasos actualizando dinámicamente los validadores requeridos

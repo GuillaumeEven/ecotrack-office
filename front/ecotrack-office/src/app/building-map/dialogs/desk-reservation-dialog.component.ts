@@ -27,6 +27,7 @@ export class DeskReservationDialogComponent implements OnInit {
   ResourceStatus = ResourceStatus;
   private currentUserEmail: string | null = null;
   private successMessage: string | null = null;
+  // private errorMessage: string | null = null;
 
   constructor(
     private reservationService: ReservationService,
@@ -90,19 +91,19 @@ export class DeskReservationDialogComponent implements OnInit {
    * Get resource type text (Desk or Meeting Room)
    */
   getResourceType(): string {
-    return this.isMeetingRoom ? 'Meeting Room' : 'Desk';
+    return this.isMeetingRoom ? 'Sala de reunión' : 'Escritorio';
   }
 
   onReserve(): void {
     if (!this.deskWithStatus?.desk?.id) {
-
-      throw new Error('Id de escritorio inválido')
+      // this.errorMessage = 'ID de escritorio inválido';
+      return;
     }
 
     const userId = this.authService.getUserId();
     if (!userId) {
-      
-      throw new Error('Usuario no autenticado')
+      // this.errorMessage = 'Usuario no autenticado';
+      return;
     }
 
     this.isLoading = true;
@@ -138,11 +139,11 @@ export class DeskReservationDialogComponent implements OnInit {
 
   onCancelReservation(): void {
     if (!this.deskWithStatus?.reservationId) {
-      
-      throw new Error('Id de reserva no encontrado')
+      // this.errorMessage = 'ID de reserva no encontrado';
+      return;
     }
 
-    if (!confirm('¿Estás seguro de que quieres cancelar esta reserva?')) {
+    if (!confirm('¿Está seguro de que desea cancelar esta reserva?')) {
       return;
     }
 
@@ -164,6 +165,10 @@ export class DeskReservationDialogComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
+          // this.errorMessage =
+          //   error.error?.message ||
+          //   error.message ||
+          //   `Error al cancelar la ${this.isMeetingRoom ? 'sala de reunión' : 'escritorio'} (HTTP ${error.status}). Por favor, inténtelo de nuevo.`;
         }
       });
   }

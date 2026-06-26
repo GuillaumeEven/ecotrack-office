@@ -1,7 +1,7 @@
 <!-- Change Password Modal -->
 <app-change-password-modal *ngIf="showPasswordModal" (closed)="showPasswordModal = false" />
 
-<div class="profile-container">
+<div class="main-container">
   <!-- Page Header -->
   <div class="page-header">
     <h1>Perfil de usuario</h1>
@@ -178,18 +178,18 @@
           </div>
 
           <!-- Actions -->
-          <div class="form-actions">
+          <div class="btn-group">
             <button
               type="button"
               (click)="onDiscardChanges()"
-              class="secondary-btn"
+              class="btn"
             >
               Descartar cambios
             </button>
             <button
               type="submit"
               [disabled]="profileForm.invalid"
-              class="primary-btn"
+              class="btn btn-primary"
             >
               Guardar cambios
             </button>
@@ -215,12 +215,14 @@
                 <p>Cambiar contraseña</p>
               </div>
             </div>
-            <button
-              (click)="onChangePassword()"
-              class="primary"
-            >
-              Actualizar
-            </button>
+            <div class="btn-group">
+              <button
+                (click)="showPasswordModal = true"
+                class="btn btn-primary"
+              >
+                Change Password
+              </button>
+            </div>
           </div>
 
           <!-- Sign out all -->
@@ -236,12 +238,14 @@
                 </p>
               </div>
             </div>
-            <button
-              (click)="onSignOutAll()"
-              class="error"
-            >
-              Cerrar sesiones
-            </button>
+            <div class="btn-group">
+              <button
+                (click)="onSignOutAll()"
+                class="btn btn-danger"
+              >
+                Sign out all
+              </button>
+            </div>
           </div>
         </div>
       </div>

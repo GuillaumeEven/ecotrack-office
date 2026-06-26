@@ -8,12 +8,6 @@
    - Utiliza un grid de 12 columnas para layout bento
    ============================================================================ */
 
-.profile-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg) var(--spacing-xl);
-}
-
 /* Header */
 .page-header {
   margin-bottom: var(--spacing-xl);
@@ -199,7 +193,7 @@
 }
 
 /* Form Sections */
-.form-section {
+/* .form-section {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -218,10 +212,10 @@
   font: var(--font-headline-md);
   color: var(--on-surface);
   margin: 0;
-}
+} */
 
 /* Form Grid */
-form {
+/* form {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: var(--spacing-md);
@@ -271,10 +265,10 @@ label {
   color: var(--error);
   background-color: rgba(239, 68, 68, 0.1);
   border-left: 3px solid var(--error);
-}
+} */
 
 /* Form Actions */
-.form-actions {
+/* .form-actions {
   grid-column: 1 / -1;
   padding-top: var(--spacing-md);
   display: flex;
@@ -319,7 +313,7 @@ button.primary-btn:active:not(:disabled) {
 button.primary-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
+} */
 
 /* Security Section */
 .security-item {
@@ -417,11 +411,11 @@ button.primary-btn:disabled {
 }
 
 /* Responsive */
-@media (max-width: 640px) {
-  .profile-container {
+/* @media (max-width: 640px) { */
+  /* .profile-container {
     padding: 0 var(--spacing-md) var(--spacing-lg);
-  }
-
+  } */
+/*
   .page-header h1 {
     font: var(--font-title-lg);
   }
@@ -450,4 +444,4 @@ button.primary-btn:disabled {
   .security-item button {
     width: 100%;
   }
-}
+} */

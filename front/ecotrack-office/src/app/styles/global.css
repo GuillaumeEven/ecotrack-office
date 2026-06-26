@@ -23,7 +23,11 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color-scheme: light; /* Fuerza modo light (aunque SO sea dark) */
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -80,7 +84,7 @@ a {
 }
 
 a:hover {
-  color: var(--primary-dark);
+  color: var(--secondary);
   text-decoration: underline;
 }
 
@@ -126,7 +130,7 @@ pre {
 }
 
 /* ---------- Barras de Desplazamiento Personalizadas ---------- */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
@@ -142,10 +146,10 @@ pre {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #888;
-}
+} */
 
 /* ---------- Utilidades Globales Mínimas ---------- */
-.text-center {
+/* .text-center {
   text-align: center;
 }
 
@@ -171,7 +175,7 @@ pre {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
-}
+} */
 
 /* ---------- Focus Visible para Accesibilidad ---------- */
 :focus-visible {
@@ -221,11 +225,11 @@ pre {
 }
 
 /* ---------- Font de Material Symbols Variaciones ---------- */
-.material-symbols-outlined {
+/* .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
   font-variation-settings:
     'FILL' 0,
     'wght' 400,
     'GRAD' 0,
     'opsz' 24;
-}
+} */

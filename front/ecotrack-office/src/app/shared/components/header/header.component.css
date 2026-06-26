@@ -8,10 +8,6 @@
    - Encapsulación Angular para estilos específicos del componente
    ============================================================================ */
 
-:host {
-  display: block;
-}
-
 header {
   background-color: var(--surface-high);
   border-bottom: var(--border-width-1) solid var(--border-color);
@@ -81,6 +77,40 @@ header > div {
 .logout-btn:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+/* Botón de Toggle del Tema */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--border-color);
+  background-color: var(--surface);
+  color: var(--on-surface);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 40px;
+  height: 40px;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--surface-container);
+  border-color: var(--outline);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle-btn span {
+  font-size: 20px;
 }
 
 /* Avatar Link */
