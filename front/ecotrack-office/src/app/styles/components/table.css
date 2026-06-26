@@ -39,6 +39,10 @@ td.actions {
   padding-right: var(--spacing-lg);
 }
 
+tbody tr {
+  background-color: var(--surface-container-lowest);
+}
+
 tbody tr:hover {
   background-color: var(--surface-container-low);
 }

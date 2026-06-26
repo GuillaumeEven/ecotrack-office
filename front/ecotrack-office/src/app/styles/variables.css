@@ -49,7 +49,7 @@
   --surface: #f8f9ff; /* Usado: Fondo principal de la aplicación */
   --surface-dim: #cbdbf5;
   --surface-bright: #f8f9ff;
-  --surface-container-lowest: #ffffff;
+  --surface-container-lowest: #ffffff; /* Usado: Fondo de tarjetas y contenedores */
   --surface-container-low: #eff4ff;
   --surface-container: #e5eeff;
   --surface-container-high: #dce9ff;
@@ -180,16 +180,78 @@
   --breakpoint-sm: 640px;
   --breakpoint-md: 1024px;
   --breakpoint-lg: 1280px;
-
 }
 
-/* ---------- MODO OSCURO (COMENTADO - TODO: Implementar toggle) ---------- */
-@media (prefers-color-scheme: dark) {
-  /* Por ahora solo luz. Descomentar cuando se implemente el toggle */
-  /* :root {
-    --primary: #bec6e0;
-    --surface: #121212;
-    --on-surface: #e1e6ff;
-    ...
-  } */
+/* ---------- MODO OSCURO ---------- */
+html.dark {
+  /* Colores Primarios */
+  --primary: #bec6e0;
+  --on-primary: #131b2e;
+  --primary-container: #3f465c;
+  --on-primary-container: #bec6e0;
+  --inverse-primary: #565e74;
+  --primary-fixed: #dae2fd;
+  --primary-fixed-dim: #bec6e0;
+  --on-primary-fixed: #131b2e;
+  --on-primary-fixed-variant: #3f465c;
+
+  /* Colores Secundarios (Energetic Teal) */
+  --secondary: #6bd8cb;
+  --on-secondary: #003a35;
+  --secondary-container: #005049;
+  --on-secondary-container: #89f5e7;
+  --secondary-fixed: #89f5e7;
+  --secondary-fixed-dim: #6bd8cb;
+  --on-secondary-fixed: #00201d;
+  --on-secondary-fixed-variant: #005049;
+
+  /* Colores Terciarios */
+  --tertiary: #adc6ff;
+  --on-tertiary: #001a42;
+  --tertiary-container: #004395;
+  --on-tertiary-container: #001a42;
+  --tertiary-fixed: #d8e2ff;
+  --tertiary-fixed-dim: #001a42;
+  /* --tertiary-fixed-dim: #adc6ff; */
+  --on-tertiary-fixed: #001a42;
+  --on-tertiary-fixed-variant: #004395;
+
+  /* Colores de Error (Rojo) */
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  /* Superficies y Fondos */
+  --surface: #0f1419;
+  --surface-dim: #0f1419;
+  --surface-bright: #3a4146;
+  --surface-container-lowest: #0a0e13;
+  --surface-container-low: #171c22;
+  --surface-container: #1b2127;
+  --surface-container-high: #25292f;
+  --surface-container-highest: #303639;
+  --surface-high: #25292f;
+  --inverse-surface: #e1e6ff;
+  --inverse-on-surface: #213145;
+  --surface-variant: #47484e;
+  --on-surface: #e1e6ff;
+  --on-surface-variant: #c6c6cd;
+
+  /* Bordes y Outlines */
+  --outline: #90909a;
+  --outline-variant: #47484e;
+  --border-color: #47484e;
+  --surface-tint: #bec6e0;
+
+  /* Background */
+  --background: #0f1419;
+  --on-background: #e1e6ff;
+
+  /* Estados y Funcionales */
+  --status-available: #6ee7b7;
+  --status-occupied: #fbbf24;
+  --status-reserved: #f87171;
+  --status-unavailable: #737373;
+  --status-selected: #60a5fa;
 }
