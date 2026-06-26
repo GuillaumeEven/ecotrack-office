@@ -1,0 +1,564 @@
+/* ==========================================================================
+   1. CONTENEDOR PRINCIPAL Y MAQUETACIÓN GLOBAL
+   ========================================================================== */
+
+/* ==========================================================================
+   2. CABECERA DE LA PÁGINA (Título y Selector alineados)
+   ========================================================================== */
+/* .bookings-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 32px;
+    gap: 16px;
+}
+
+.bookings-header__title {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    color: #0b1c30;
+    margin: 0;
+}
+
+.bookings-header__subtitle {
+    color: #45464d;
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 14px;
+} */
+/*
+.bookings-tabs {
+    display: flex;
+    background-color: #e5eeff;
+    border-radius: 8px;
+    padding: 4px;
+} */
+/*
+.bookings-tabs__btn {
+    padding: 6px 16px;
+    font-size: 14px;
+    line-height: 20px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: #45464d;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.bookings-tabs__btn--active {
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-weight: 700;
+    color: #000000;
+} */
+
+/* ==========================================================================
+   3. BARRA DE FILTROS (Grid en 4 Columnas forzado)
+   ========================================================================== */
+.bookings-filters {
+    background-color: #ffffff;
+    border: 1px solid #c6c6cd;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.bookings-filters__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    align-items: flex-end;
+}
+
+.bookings-filters__group {
+    display: flex;
+    flex-direction: column;
+}
+
+.bookings-filters__label {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: #45464d;
+    margin-bottom: 8px;
+}
+
+.bookings-filters__select,
+.bookings-filters__input {
+    width: 100%;
+    height: 40px;
+    background-color: #ffffff;
+    border: 1px solid #c6c6cd;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    outline: none;
+    color: #0b1c30;
+}
+
+.bookings-filters__input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.bookings-filters__icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #76777d;
+    font-size: 18px !important;
+}
+
+.bookings-filters__input {
+    padding-left: 40px;
+}
+
+.bookings-filters__btn-apply {
+    width: 100%;
+    height: 40px;
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.bookings-filters__btn-apply:hover { opacity: 0.9; }
+
+/* ==========================================================================
+   4. REJILLA BENTO (Reservas + Estadísticas alineadas en 3 columnas)
+   ========================================================================== */
+.active-reservations {
+    margin-bottom: 48px;
+}
+
+.active-reservations__header {
+    margin-bottom: 24px;
+}
+
+/* .active-reservations__title {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #0b1c30;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+} */
+
+.active-reservations__indicator-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #006a61;
+    border-radius: 50%;
+}
+
+/* Forzar que se pinten las 3 columnas una al lado de la otra */
+.active-reservations__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+/* Tarjetas individuales de reserva */
+.booking-card {
+    background-color: #ffffff;
+    border: 1px solid #c6c6cd;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.booking-card__image-wrapper {
+    position: relative;
+    height: 140px;
+    width: 100%;
+}
+
+.booking-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.booking-card__badge-time {
+    position: absolute;
+    top: 12px; left: 12px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #000000;
+}
+
+.booking-card__content {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.booking-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.booking-card__title {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #0b1c30;
+    margin: 0;
+}
+
+.booking-card__meta {
+    font-size: 12px;
+    color: #45464d;
+    margin: 4px 0 0 0;
+}
+
+.booking-card__status-tag {
+    background-color: rgba(0, 106, 97, 0.1);
+    color: #006a61;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.booking-card__schedule {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #45464d;
+    margin-bottom: 24px;
+}
+
+.booking-card__schedule span.material-symbols-outlined {
+    font-size: 20px;
+}
+
+.booking-card__time {
+    font-size: 14px;
+}
+
+.booking-card__actions {
+    display: flex;
+    gap: 16px;
+    border-top: 1px solid #c6c6cd;
+    padding-top: 16px;
+    margin-top: auto;
+}
+
+.booking-card__btn-edit,
+.booking-card__btn-cancel {
+    flex: 1;
+    padding: 10px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s;
+}
+
+.booking-card__btn-edit {
+    border: 1px solid #c6c6cd;
+    color: #0b1c30;
+}
+.booking-card__btn-edit:hover { background-color: #eff4ff; }
+
+.booking-card__btn-cancel {
+    border: 1px solid rgba(186, 26, 26, 0.2);
+    color: #ba1a1a;
+}
+.booking-card__btn-cancel:hover { background-color: rgba(186, 26, 26, 0.05); }
+
+/* Tarjeta de Estadísticas de Uso */
+.stats-card {
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-card__background-icon {
+    position: absolute;
+    right: -20px; bottom: -20px;
+    opacity: 0.15;
+}
+.stats-card__background-icon span { font-size: 140px !important; }
+
+.stats-card__label {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.stats-card__value {
+    font-size: 48px;
+    line-height: 56px;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.stats-card__unit {
+    font-size: 20px;
+    font-weight: 400;
+    margin-left: 6px;
+}
+
+.stats-card__progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.stats-card__progress-bar {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    height: 8px;
+    border-radius: 4px;
+}
+
+.stats-card__progress-fill {
+    background-color: #86f2e4;
+    height: 100%;
+    border-radius: 4px;
+}
+
+.stats-card__footer-text {
+    font-size: 11px;
+    margin: 8px 0 0 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.no-reservations-message {
+  grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #a0aec0; /* Un gris elegante */
+  text-align: center;
+  gap: 8px;
+}
+
+.no-reservations-message span {
+  font-size: 48px; /* Icono grande desvanecido */
+  opacity: 0.5;
+}
+
+/* Contenedor oscurecido de fondo completo */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Asegura que se monte por encima del Sidebar/Header */
+  backdrop-filter: blur(2px);
+}
+
+/* Caja del cuadro de diálogo */
+
+
+.bookings-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: #f3f4f6;
+  padding: 0.25rem;
+  border-radius: 8px;
+}
+
+.bookings-tabs__btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #4b5563;
+  transition: all 0.2s;
+}
+
+/* Estado cuando la pestaña coincide con el flag actual */
+.bookings-tabs__btn--active {
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   5. SECCIÓN TABLA HISTORIAL GLOBAL
+   ========================================================================== */
+.global-history__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.global-history__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0b1c30;
+    margin: 0;
+}
+
+.global-history__btn-export {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #006a61;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.global-history__table-wrapper {
+    background-color: #ffffff;
+    border: 1px solid #c6c6cd;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.history-table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.history-table__thead {
+    background-color: #eff4ff;
+    border-bottom: 1px solid #c6c6cd;
+}
+
+.history-table__th {
+    padding: 16px 24px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #45464d;
+    text-transform: uppercase;
+}
+
+.history-table__tr {
+    border-bottom: 1px solid rgba(198, 198, 205, 0.4);
+}
+
+.history-table__td {
+    padding: 16px 24px;
+    font-size: 14px;
+    color: #0b1c30;
+}
+
+.history-table__td--bold { font-weight: 600; }
+.history-table__td--muted { color: #45464d; }
+
+.employee-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.employee-cell__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e5eeff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: #000000;
+}
+
+.employee-cell__name { font-weight: 600; }
+.employee-cell__dept { font-size: 12px; color: #45464d; }
+
+.status-pill {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+}
+.status-pill--completed { background-color: rgba(0, 106, 97, 0.1); color: #006a61; }
+.status-pill--cancelled { background-color: rgba(186, 26, 26, 0.1); color: #ba1a1a; }
+
+.history-table__td--action { text-align: right; }
+.history-table__btn-more {
+    border: none; background: transparent; cursor: pointer; color: #76777d;
+}
+
+.history-pagination {
+    background-color: var(--surface-container-lowest);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.history-pagination__info { font-size: 14px; color: #45464d; }
+.history-pagination__actions { display: flex; gap: 8px; }
+.history-pagination__btn {
+    padding: 6px; border: 1px solid #c6c6cd; border-radius: 8px; background-color: #ffffff; cursor: pointer;
+}
+.history-pagination__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ==========================================================================
+   6. RESPONSIVIDAD (Media queries para pantallas pequeñas)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .bookings-filters__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .active-reservations__grid {
+        grid-template-cols: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .bookings-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .bookings-filters__grid,
+    .active-reservations__grid {
+        grid-template-columns: 1fr;
+    }
+}

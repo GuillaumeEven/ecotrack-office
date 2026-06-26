@@ -1,15 +1,3 @@
-@if (notificacion.visible) {
-  <div class="toast-notification" [ngClass]="notificacion.tipo">
-    <div class="toast-content">
-      <span class="material-symbols-outlined">
-        {{ notificacion.tipo === 'success' ? 'check_circle' : 'error' }}
-      </span>
-      <p>{{ notificacion.mensaje }}</p>
-    </div>
-    <button class="toast-close" (click)="notificacion.visible = false">×</button>
-  </div>
-}
-
 <header class="main-header">
     <div class="header-container">
         <div class="header-brand-group">
@@ -18,11 +6,23 @@
         <div class="header-actions">
             <button class="btn-login" routerLink="/login">Inicia sesión</button>
             <a class="btn-register-nav" href="#registration">Regístrate</a>
+            <!-- Botón de Toggle Tema -->
+            <button
+                (click)="toggleTheme()"
+                class="theme-toggle-btn"
+                [attr.aria-label]="(currentTheme$ | async) === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+                type="button">
+                @if ((currentTheme$ | async) === 'dark') {
+                    <span class="material-symbols-outlined">light_mode</span>
+                } @else {
+                    <span class="material-symbols-outlined">dark_mode</span>
+                }
+            </button>
         </div>
     </div>
 </header>
 
-<main class="main-content">
+<main class="layout-content">
     <section class="hero-section">
         <div class="hero-container">
             <div class="hero-text-block">
@@ -31,7 +31,7 @@
                 <p class="hero-description">Ecotrack - Office proporciona herramientas de nivel empresarial para la reserva de salas, la asignación de escritorios y el tratamiento de incidencias. Gestione su oficina física con la precisión de una plataforma digital.</p>
                 <div class="hero-actions">
                     <a class="btn-primary-action" href="#registration">Empezar ahora</a>
-                    <button class="btn-secondary-action">
+                    <button class="btn-action">
                         <span class="material-symbols-outlined">play_circle</span>
                         Ver demo (si es que hacemos un video y se puede poner xd)
                     </button>
@@ -142,9 +142,9 @@
                             @else if (pasoActual === 'EMPRESA_NUEVA') { Datos de tu Empresa }
                             @else if (pasoActual === 'EMPRESA_EXISTENTE') { Vincular Empresa }
                         </h3>
-                        
+
                         <form class="custom-form" [formGroup]="registerForm" (ngSubmit)="submitRegistro()">
-                            
+
                             @if (pasoActual === 'USUARIO') {
                                 <div class="form-grid-2col">
                                     <div class="form-group">
@@ -187,7 +187,7 @@
                                     @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('passwordHash')?.touched) {
                                         @if (registerForm.get('confirmPassword')?.hasError('required')) {
                                             <small class="error-message">Debes confirmar la contraseña.</small>
-                                        } 
+                                        }
                                         @if (registerForm.get('confirmPassword')?.hasError('passwordsNotMatch')) {
                                             <small class="error-message">Las contraseñas no coinciden.</small>
                                         }
@@ -198,7 +198,7 @@
                                     <button type="button" class="btn-submit-form" (click)="irAPaso('EMPRESA_NUEVA')" [disabled]="registerForm.invalid">
                                         Registrar nueva empresa
                                     </button>
-                                    <button type="button" class="btn-submit-form btn-secondary-action-form" (click)="irAPaso('EMPRESA_EXISTENTE')" [disabled]="registerForm.invalid">
+                                    <button type="button" class="btn-submit-form btn-action-form" (click)="irAPaso('EMPRESA_EXISTENTE')" [disabled]="registerForm.invalid">
                                         Asociarse a una empresa existente
                                     </button>
                                 </div>

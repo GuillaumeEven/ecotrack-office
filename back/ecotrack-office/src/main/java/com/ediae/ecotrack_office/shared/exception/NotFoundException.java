@@ -1,13 +1,15 @@
 package com.ediae.ecotrack_office.shared.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+/**
+ * Excepción lanzada cuando un recurso no es encontrado.
+ */
+public class NotFoundException extends ApplicationException {
 
-// Spring devuelve 404 automáticamente cuando se lanza esta excepción
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class NotFoundException extends RuntimeException {
+    public NotFoundException() {
+        super(ErrorCode.NOT_FOUND, "Recurso no encontrado");
+    }
 
     public NotFoundException(String message) {
-        super(message);
+        super(ErrorCode.NOT_FOUND, message);
     }
 }

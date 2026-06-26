@@ -1,1 +1,305 @@
-<p>reservation works!</p>
+<div class="main-container">
+  <header class="component-header">
+      <h1>Historial de reservas</h1>
+      <h2>Gestiona tus reservas activas y visualiza el historial de reservas.</h2>
+  </header>
+
+  <div class="component-wrapper">
+    @if (role === 'ADMIN' || role === 'TECHNICIAN') {
+      <div class="bookings-header__tabs-wrapper">
+        <div class="tabs-nav">
+          <button
+            class="tab-button"
+            [class.active]="currentTab === 'MY_BOOKINGS'"
+            (click)="switchTab('MY_BOOKINGS')">
+            Mis reservas
+          </button>
+          <button
+            class="tab-button"
+            [class.active]="currentTab === 'ALL_STAFF'"
+            (click)="switchTab('ALL_STAFF')">
+            Todas las reservas
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- EL FILTRO ME LO GUARDO PARA CUANDO LO TENGA TODO LISTO IMPLEMENTAR
+    <div class="bookings-filters">
+      <div class="bookings-filters__grid">
+        <div class="bookings-filters__group">
+          <label class="bookings-filters__label">STATUS</label>
+          <select class="bookings-filters__select">
+            <option>All Statuses</option>
+            <option>Confirmed</option>
+            <option>Pending</option>
+            <option>Cancelled</option>
+          </select>
+        </div>
+
+        <div class="bookings-filters__group">
+          <label class="bookings-filters__label">DATE</label>
+          <div class="bookings-filters__input-wrapper">
+            <span class="material-symbols-outlined bookings-filters__icon">calendar_today</span>
+            <input class="bookings-filters__input" type="date"/>
+          </div>
+        </div>
+
+        <div class="bookings-filters__group">
+          <label class="bookings-filters__label">RESOURCE TYPE</label>
+          <select class="bookings-filters__select">
+            <option>All Rooms</option>
+            <option>Conference Rooms</option>
+            <option>Hot Desks</option>
+            <option>Quiet Zones</option>
+          </select>
+        </div>
+
+        <div class="bookings-filters__group bookings-filters__group--actions">
+          <button class="bookings-filters__btn-apply">Apply Filters</button>
+        </div>
+      </div>
+    </div>
+    -->
+
+    @if (currentTab === 'ALL_STAFF') {
+      <section class="global-history">
+        <div class="active-reservations__header">
+          <h3 class="active-reservations__title">
+            <span class="active-reservations__indicator-dot"></span>
+            Reservas activas totales
+          </h3>
+        </div>
+
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Empleado</th>
+                <th>Recurso</th>
+                <th>Equipamiento</th>
+                <th>Fecha</th>
+                <th class="actions">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (reserva of allStaffReservations; track reserva.id) {
+                <tr>
+                  <td>
+                    <div class="employee-cell">
+                      <div class="employee-cell__avatar">👤</div>
+                      <div>
+                        <div class="employee-cell__name">Usuario #{{ reserva.userId }}</div>
+                        <div class="employee-cell__dept">{{ reserva.status }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    {{ reserva.resourceName }}
+                  </td>
+                  <td>
+                    {{ reserva.resourceEquipmentList }}
+                  </td>
+                  <td>
+                    {{ reserva.date }}
+                  </td>
+                  <td class="actions">
+                    <div class="btn-group">
+                      <button class="action-btn" (click)="openEditModal(reserva)" title="Editar reserva">
+                        <span class="material-symbols-outlined">edit</span>
+                      </button>
+                      <button class="action-btn danger" (click)="openCancelModal(reserva)" title="Cancelar reserva">
+                        <span class="material-symbols-outlined">delete</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5">
+                    No hay reservas registradas en el sistema.
+                  </td>
+                </tr>
+              }
+
+            </tbody>
+          </table>
+
+          <footer class="history-pagination">
+            <span class="history-pagination__info">Total registros: {{ allStaffReservations.length }}</span>
+          </footer>
+        </div>
+      </section>
+    }
+
+    @if (currentTab === 'MY_BOOKINGS') {
+
+      <section class="active-reservations">
+        <div class="active-reservations__header">
+          <h3 class="active-reservations__title">
+            <span class="active-reservations__indicator-dot"></span>
+            Reservas activas propias
+          </h3>
+        </div>
+
+        <div class="active-reservations__grid">
+          @for (reserva of activeReservations; track reserva.id) {
+            <div class="booking-card">
+              <div class="booking-card__image-wrapper">
+                <img class="booking-card__image" [alt]="reserva.resourceName" src="images/imagen-escritorio.webp">
+
+                <!--POR SI QUIERO PONER EN LA FOTO HOY/MAÑANA BLABLABLA
+                <div class="booking-card__badge-time">{{ reserva.date }}</div>
+                -->
+              </div>
+
+              <div class="booking-card__content">
+                <div class="booking-card__header">
+                  <div>
+                    <h3 class="booking-card__title">{{ reserva.resourceName }}</h3>
+
+                    <p class="booking-card__meta">
+                      Equipamiento: {{ reserva.resourceEquipmentList }}
+                    </p>
+                  </div>
+                  <span class="booking-card__status-tag" [class]="reserva.status.toLowerCase()">
+                    {{ reserva.status }}
+                  </span>
+                </div>
+
+                <div class="booking-card__schedule">
+                  <span class="material-symbols-outlined">calendar_today</span>
+                  <span class="booking-card__time">{{ reserva.date }}</span>
+                </div>
+
+                <div class="booking-card__actions">
+                  <button class="action-btn" (click)="openEditModal(reserva)" title="Editar reserva">
+                    <span class="material-symbols-outlined">edit</span>
+                  </button>
+                  <button class="action-btn danger" (click)="openCancelModal(reserva)" title="Cancelar reserva">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          } @empty {
+            <div class="no-reservations-message">
+              <span class="material-symbols-outlined">calendar_today</span>
+              <p>Sin reservas activas</p>
+            </div>
+          }
+        </div>
+
+          <!-- PODRÍA SER GRACIOSO METERLO PERO SI SOBRA TIEMPO
+          <div class="stats-card">
+            <div class="stats-card__background-icon">
+              <span class="material-symbols-outlined">event_available</span>
+            </div>
+            <div class="stats-card__top">
+              <h3 class="stats-card__label">Usage This Month</h3>
+              <div class="stats-card__value">24.5<span class="stats-card__unit">Hrs</span></div>
+            </div>
+            <div class="stats-card__bottom">
+              <div class="stats-card__progress-info">
+                <span>Quota used</span>
+                <span>82%</span>
+              </div>
+              <div class="stats-card__progress-bar">
+                <div class="stats-card__progress-fill" style="width: 82%"></div>
+              </div>
+              <p class="stats-card__footer-text">Top resources: Room B, Desk 4</p>
+            </div>
+          </div>
+          -->
+      </section>
+
+      <section class="global-history">
+        <div>
+          <h2>Historial de reservas pasadas</h2>
+        </div>
+
+        <div class="gtable-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Recurso</th>
+                <th>Equipamiento</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              @for (reserva of unactiveReservations; track reserva.id) {
+                <tr>
+                  <td>
+                    {{ reserva.resourceName }}
+                  </td>
+                  <td>
+                    {{ reserva.resourceEquipmentList }}
+                  </td>
+                  <td>
+                    {{ reserva.date }}
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td>
+                    No tienes historial de reservas pasadas.
+                  </td>
+                </tr>
+              }
+
+            </tbody>
+          </table>
+
+          <footer class="history-pagination">
+            <span class="history-pagination__info">Total: {{ unactiveReservations.length }} reservas pasadas</span>
+          </footer>
+        </div>
+      </section>
+    }
+    @if (isEditModalOpen && selectedReservation) {
+        <div class="modal-overlay">
+          <div class="modal-box">
+            <h3 class="modal-box__title">Modificar Fecha de Reserva</h3>
+            <p class="modal-box__text">Cambia la fecha para el recurso: <strong>{{ selectedReservation.resourceName }}</strong></p>
+
+            <div class="modal-box__field">
+              <label for="editDate">Nueva Fecha:</label>
+              <input
+                id="editDate"
+                type="date"
+                [(ngModel)]="newReservationDate"
+                [min]="minDate"
+                class="modal-box__input"
+              />
+            </div>
+
+            <div class="btn-group">
+              <button class="btn" (click)="closeEditModal()">Volver atrás</button>
+              <button class="btn btn-primary" [disabled]="!newReservationDate" (click)="confirmEdit()">Guardar cambios</button>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (isCancelModalOpen && selectedReservation) {
+        <div class="modal-overlay">
+          <div class="modal-box modal-box--danger">
+            <h3 class="modal-box__title">Confirmar Cancelación</h3>
+            <p class="modal-box__text">
+              ¿Estás seguro de que quieres cancelar la reserva del recurso
+              <strong>{{ selectedReservation.resourceName }}</strong> fijada para la fecha
+              <strong>{{ selectedReservation.date }}</strong>?
+            </p>
+
+            <div class="btn-group">
+              <button class="btn" (click)="closeCancelModal()">No, mantener</button>
+              <button class="btn btn-danger" (click)="confirmCancel()">Sí, cancelar reserva</button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+</div>

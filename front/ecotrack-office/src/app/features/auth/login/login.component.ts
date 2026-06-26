@@ -28,7 +28,7 @@ export class LoginComponent {
 
     // Si ya está autenticado, redirigir al perfil
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/profile']);
+      this.router.navigate(['/home']);
     }
   }
 
@@ -40,7 +40,7 @@ export class LoginComponent {
     this.authService.login(this.form.value).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/home']);
       },
       error: () => {
         this.isLoading = false;

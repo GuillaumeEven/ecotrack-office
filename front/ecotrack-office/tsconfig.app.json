@@ -5,6 +5,8 @@
     "rootDir": "src",
     "types": [],
     "paths": {
+      "@core/*": ["./src/app/core/*"],
+      "@shared/*": ["./src/app/shared/*"],
       "@models/*": ["./src/app/models/*"],
       "@validators/*": ["./src/app/shared/validators/*"]
     }

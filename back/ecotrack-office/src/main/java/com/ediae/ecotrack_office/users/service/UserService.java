@@ -210,9 +210,14 @@ public class UserService {
     public UserModel updateMe(Long id, UserMeRequestDto dto) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
+        if(userRepository.findByEmail(dto.email()).isPresent()){
 
+            throw new IllegalArgumentException("Este email ya está en uso.");
+        }        
+        
         entity.setFirstName(dto.firstName().trim());
         entity.setLastName(dto.lastName().trim());
+        entity.setEmail(dto.email().trim());
 
         if (dto.consentGiven() != null) {
             entity.setConsentGiven(dto.consentGiven());
@@ -242,7 +247,7 @@ public class UserService {
         entity.setPasswordHash(passwordEncoder.encode(dto.newPassword()));
         userRepository.save(entity);
 
-        auditLogService.log("PASSWORD_CHANGED", "USER", id, RequestContext.getUserId());
+        auditLogService.log("PASSWORD_CHANGED", "USER", id, id);
     }
 
     public Long getOrganizationIdByUserId(Long userId) {

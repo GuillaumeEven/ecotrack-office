@@ -17,3 +17,11 @@ export interface OrganizationResponse {
     isActive: boolean,
     createdAt: string
 }
+
+export interface UpdateOrganizationRequest {
+
+    name: string,
+    cif: string,
+    address: string,
+    email: string
+}

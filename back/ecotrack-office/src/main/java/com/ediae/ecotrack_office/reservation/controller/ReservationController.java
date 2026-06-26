@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +24,10 @@ import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.reservation.service.ReservationService;
 import com.ediae.ecotrack_office.shared.guard.RoleGuard;
 import com.ediae.ecotrack_office.users.enums.Role;
+import com.ediae.ecotrack_office.users.models.UserModel;
+import com.ediae.ecotrack_office.users.service.UserService;
 
 @RestController
-// @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {
-//     RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS
-// })
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
 
@@ -35,19 +35,29 @@ public class ReservationController {
     private ReservationService service;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private RoleGuard roleGuard;
 
-    @GetMapping("/user/{id}")
-    public List <ReservationResponseDto> getReservationsByUserId (@PathVariable Long id) {
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ReservationController.class);
 
-        List <ReservationModel> models = service.getReservationsByUserId(id);
+    // --- ENDPOINTS PARA CUALQUIER USUARIO IDENTIFICADO ---
+
+    @GetMapping("/user")
+    public ResponseEntity <List <ReservationResponseDto>> getReservationsByUserId (Authentication auth) {
+
+        Long userId = (Long) auth.getPrincipal();
+        List <ReservationModel> models = service.getReservationsByUserId(userId);
         List <ReservationResponseDto> dtos = new ArrayList <>();
         for (ReservationModel model : models) {
 
             dtos.add(ReservationMapper.toResponseDto(model));
         }
-        return dtos;
+        return ResponseEntity.ok(dtos);
     }
+
+    //TODO: ¿POR QUÉ AQUÍ NO TENEMOS AUTH??
 
     @GetMapping("/floor/{id}/date/{date}")
     public ResponseEntity <List <ReservationResponseDto>> getReservationsByFloorIdAndDate (@PathVariable Long id, @PathVariable String date) {
@@ -60,25 +70,14 @@ public class ReservationController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping
-    public List <ReservationResponseDto> getAllReservations () {
-
-        List <ReservationModel> models = service.getAllReservations();
-        List <ReservationResponseDto> dtos = new ArrayList <>();
-        for (ReservationModel model : models) {
-
-            dtos.add(ReservationMapper.toResponseDto(model));
-        }
-        return dtos;
-    }
-
     @GetMapping("/{id}")
-    public ReservationResponseDto getReservationById (@PathVariable Long id) {
+    public ResponseEntity <ReservationResponseDto> getReservationById (Authentication auth, @PathVariable Long id) {
 
         ReservationModel model = service.getReservationById(id);
-        return ReservationMapper.toResponseDto(model);
+        return ResponseEntity.ok(ReservationMapper.toResponseDto(model));
     }
 
+    //TODO: ¿AQUÍ TAMBIÉN HARÍA FALTA AUTH NO?
     @PostMapping
     public ReservationResponseDto createReservation (@RequestBody ReservationCreateDto dto) {
 
@@ -88,32 +87,52 @@ public class ReservationController {
         System.out.println("ResourceId: " + dto.getResourceId());
         System.out.println("Status: " + dto.getStatus());
 
-
-
-
         return ReservationMapper.toResponseDto(service.createReservation(dto));
     }
 
     @PutMapping("/{id}")
-    public ReservationResponseDto updateReservation (@PathVariable Long id, @RequestBody ReservationUpdateDto dto) {
+    public ResponseEntity <ReservationResponseDto> updateReservation (Authentication auth, @PathVariable Long id, @RequestBody ReservationUpdateDto dto) {
 
-        return ReservationMapper.toResponseDto(service.updateReservationById(id, dto));
+        boolean isAdminOrTech = roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN);
+        Long userId = (Long) auth.getPrincipal();
+        if(!isAdminOrTech) {
+
+            ReservationModel reservation = service.getReservationById(id);
+            if(!reservation.getUser().getId().equals(userId)) {
+
+                throw new com.ediae.ecotrack_office.shared.exception.ForbiddenException("No tienes permisos para realizar esta acción.");
+            }
+        }
+        
+        return ResponseEntity.ok(ReservationMapper.toResponseDto(service.updateReservationById(id, dto)));
     }
 
     @DeleteMapping("/{id}")
     public Boolean deleteReservation (@PathVariable Long id, Authentication auth) {
         Long currentUserId = (Long) auth.getPrincipal();
+        return service.deleteReservationById(id, currentUserId);
+    }
+
+    // --- ENDPOINTS SOLO PARA ADMIN Y TECNICOS
+
+    @GetMapping("/all")
+    public ResponseEntity <List <ReservationResponseDto>> getAllReservationsFromTheOranizationUser (Authentication auth) {
+
         boolean isAdminOrTech = roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN);
+        
+        if(isAdminOrTech) {
+            Long userId = (Long) auth.getPrincipal();
+            UserModel user = userService.getUserById(userId);
+            List <ReservationModel> models = service.getAllReservationsByOrganizationId(user.getOrganizationId());
+            List <ReservationResponseDto> dtos = new ArrayList <>();
+            for (ReservationModel model : models) {
 
-        // If not admin/tech, verify it's the user's own reservation
-        if (!isAdminOrTech) {
-            // User can only delete their own reservations
-            ReservationModel reservation = service.getReservationById(id);
-            if (!reservation.getUser().getId().equals(currentUserId)) {
-                throw new com.ediae.ecotrack_office.shared.exception.ForbiddenException("No tienes permisos para realizar esta acción.");
+                dtos.add(ReservationMapper.toResponseDto(model));
             }
-        }
+            return ResponseEntity.ok(dtos);
+        } else {
 
-        return service.deleteReservationById(id, currentUserId, isAdminOrTech);
+            throw new com.ediae.ecotrack_office.shared.exception.ForbiddenException("No tienes permisos para realizar esta acción.");
+        }
     }
 }

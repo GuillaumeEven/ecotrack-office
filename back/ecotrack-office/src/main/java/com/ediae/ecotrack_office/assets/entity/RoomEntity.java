@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
+
 
 @Entity
 @Table(name = "ast_rooms")
@@ -32,8 +34,8 @@ public class RoomEntity extends ResourceEntity {
     @Column(name = "capacity", nullable = false)
     private Integer capacity;
 
-    @OneToMany(mappedBy = "room")
-    private List<DeskEntity> desks;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE, orphanRemoval = true)
+private List<DeskEntity> desks;
 
     public RoomEntity() {
     }

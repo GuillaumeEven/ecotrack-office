@@ -82,12 +82,6 @@ public class FloorServiceImpl implements FloorService {
             throw new RuntimeException("Floor not found with id: " + id);
         }
 
-        // Check if floor has any rooms
-        Long roomCount = roomRepository.countByFloor_Id(id);
-        if (roomCount > 0) {
-            throw new ConstraintViolationException("Cannot delete floor with id: " + id + ". It still has " + roomCount + " room(s). Please delete all rooms first.");
-        }
-
-        floorRepository.deleteById(id);
+           floorRepository.deleteById(id);
     }
 }

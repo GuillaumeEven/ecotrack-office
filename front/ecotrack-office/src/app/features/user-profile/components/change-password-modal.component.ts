@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
+import { NotificationService } from '@core/services/notification.service';
 
 @Component({
   selector: 'app-change-password-modal',
@@ -15,12 +16,12 @@ export class ChangePasswordModalComponent {
 
   form: FormGroup;
   isLoading = false;
-  errorMessage: string | null = null;
   successMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private notificationService: NotificationService
   ) {
     this.form = this.fb.group(
       {
@@ -42,8 +43,8 @@ export class ChangePasswordModalComponent {
   onSubmit(): void {
     if (this.form.invalid) return;
     this.isLoading = true;
-    this.errorMessage = null;
     this.successMessage = null;
+    console.log('contraseña actual:',this.form.value.currentPassword,'contraseña nueva:',this.form.value.newPassword);
 
     this.userService
       .changePassword({
@@ -53,16 +54,13 @@ export class ChangePasswordModalComponent {
       .subscribe({
         next: () => {
           this.isLoading = false;
-          this.successMessage = 'Password changed successfully.';
+          this.successMessage = 'Contraseña cambiada correctamente.';
+          this.notificationService.success(this.successMessage);
           // Cerramos el modal tras 1.5 segundos para que el usuario vea el mensaje
           setTimeout(() => this.closed.emit(), 1500);
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage =
-            err.status === 400
-              ? 'Current password is incorrect.'
-              : 'Could not change password. Please try again.';
         },
       });
   }

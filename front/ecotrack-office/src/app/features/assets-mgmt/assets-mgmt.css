@@ -1,14 +1,7 @@
 /* Gestión de Recursos - Estilos */
 
-/* Contenedor principal */
-.main-container {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
-}
-
 /* Encabezado de página */
-.page-header {
+/* .page-header {
   margin-bottom: var(--spacing-xl);
 }
 
@@ -21,48 +14,10 @@
 .page-header p {
   font: var(--font-body-lg);
   color: var(--on-surface-variant);
-}
-
-/* Navegación por pestañas */
-.tabs-nav {
-  display: flex;
-  gap: var(--spacing-md);
-  border-bottom: 1px solid var(--outline-variant);
-  margin-bottom: var(--spacing-xl);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.tab-button {
-  padding: var(--spacing-md);
-  font: var(--font-title-md);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--on-surface-variant);
-  border-bottom: 2px solid transparent;
-  transition: all var(--transition-normal);
-  white-space: nowrap;
-}
-
-.tab-button:hover {
-  color: var(--primary);
-}
-
-.tab-button.active {
-  color: var(--primary);
-  border-bottom-color: var(--primary);
-}
-
-/* Secciones de tabs */
-.tab-content {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-}
+} */
 
 /* Toolbar de acciones */
-.toolbar {
+/* .toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -95,18 +50,18 @@
 .toolbar-filter select:focus {
   ring: 2px;
   ring-color: var(--primary);
-}
+} */
 
 /* Tabla */
-.table-container {
+/* .table-container {
   background-color: var(--surface-container-lowest);
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-lg);
   overflow: hidden;
-}
+} */
 
 /* Sobreescritura para assets-mgmt */
-.table-container thead {
+/* .table-container thead {
   background-color: var(--surface-container-low);
   border-bottom: 1px solid var(--outline-variant);
 }
@@ -121,7 +76,7 @@
 
 .table-container td.muted {
   color: var(--on-surface-variant);
-}
+} */
 
 .empty-state {
   text-align: center;
@@ -130,29 +85,3 @@
   font: var(--font-body-md);
 }
 
-/* Acciones en tabla */
-.actions-cell {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-sm);
-}
-
-/* Badges de estado */
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: 999px;
-  font: var(--font-label-sm);
-  font-weight: bold;
-}
-
-.status-badge.active {
-  background-color: var(--secondary-container);
-  color: var(--secondary);
-}
-
-.status-badge.inactive {
-  background-color: rgba(186, 26, 26, 0.2);
-  color: var(--error);
-}

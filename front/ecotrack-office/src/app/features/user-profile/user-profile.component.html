@@ -1,12 +1,12 @@
 <!-- Change Password Modal -->
 <app-change-password-modal *ngIf="showPasswordModal" (closed)="showPasswordModal = false" />
 
-<div class="profile-container">
+<div class="main-container">
   <!-- Page Header -->
   <div class="page-header">
-    <h1>User Profile</h1>
+    <h1>Perfil de usuario</h1>
     <p>
-      Manage your personal information and security preferences.
+      Configura tu información personal y preferencias de seguridad.
     </p>
   </div>
 
@@ -32,20 +32,35 @@
           <h2 *ngIf="!isLoading">
             {{ user?.firstName }} {{ user?.lastName }}
           </h2>
-          <p>{{ user?.role }}</p>
+          @if(user?.role === 'ADMIN') {
+
+              <p>Administrador</p>
+          }
+          @if(user?.role === 'TECHNICIAN') {
+
+              <p>Técnico</p>
+          } 
+          @if(user?.role === 'EMPLOYEE') {
+
+              <p>Empleado</p>
+          }  
 
           <!-- Meta info -->
           <div class="identity-meta">
             <div class="meta-item">
-              <span class="meta-label">ACCOUNT STATUS</span>
-              <span class="status-badge">
-                {{ user?.isActive ? 'Active' : 'Inactive' }}
+              <span class="meta-label">ESTADO DE LA CUENTA</span>
+              <span
+                [class.active]="user?.isActive"
+                [class.inactive]="!user?.isActive"
+                class="status-badge"
+              >
+                {{ user?.isActive ? 'Activa' : 'Inactiva' }}
               </span>
             </div>
             <div class="meta-item">
-              <span class="meta-label">SINCE</span>
+              <span class="meta-label">DESDE</span>
               <span>
-                {{ user?.createdAt | date: 'MMMM yyyy' }}
+                {{ user?.createdAt | date: 'MMMM yyyy' | titlecase}}
               </span>
             </div>
           </div>
@@ -59,21 +74,21 @@
           [class.active]="activeSection === 'personal'"
         >
           <span class="material-symbols-outlined">person</span>
-          <span>Personal Data</span>
+          <span>Datos personales</span>
         </button>
         <button
           (click)="setActiveSection('security')"
           [class.active]="activeSection === 'security'"
         >
           <span class="material-symbols-outlined">security</span>
-          <span>Security Settings</span>
+          <span>Ajustes de seguridad</span>
         </button>
         <button
           (click)="setActiveSection('notifications')"
           [class.active]="activeSection === 'notifications'"
         >
           <span class="material-symbols-outlined">notifications</span>
-          <span>Notifications</span>
+          <span>Notificaciones</span>
         </button>
       </div>
     </div>
@@ -83,14 +98,14 @@
       <!-- Personal Information Form -->
       <div *ngIf="activeSection === 'personal'" class="card form-section">
         <div class="section-header">
-          <h3>Personal Information</h3>
+          <h3>Informaciónn personal</h3>
           <span class="material-symbols-outlined">edit</span>
         </div>
 
         <form [formGroup]="profileForm" (ngSubmit)="onSaveChanges()">
           <!-- First Name -->
           <div class="form-group">
-            <label>FIRST NAME</label>
+            <label>NOMBRE</label>
             <input
               type="text"
               formControlName="firstName"
@@ -99,13 +114,13 @@
               "
             />
             <p *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" class="error-text">
-              First name is required.
+              El nombre es obligatorio.
             </p>
           </div>
 
           <!-- Last Name -->
           <div class="form-group">
-            <label>LAST NAME</label>
+            <label>APELLIDOS</label>
             <input
               type="text"
               formControlName="lastName"
@@ -114,13 +129,13 @@
               "
             />
             <p *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" class="error-text">
-              Last name is required.
+              Los apellidos son obligatorios.
             </p>
           </div>
 
           <!-- Email -->
           <div class="form-group">
-            <label>EMAIL ADDRESS</label>
+            <label>CORREO ELECTRÓNICO</label>
             <input
               type="email"
               formControlName="email"
@@ -129,45 +144,54 @@
               "
             />
             <p *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error-text">
-              Please enter a valid email.
+              Por favor, introduce una dirección de correo válida.
             </p>
           </div>
 
           <!-- Role (read-only) -->
           <div class="form-group">
-            <label>ROLE</label>
-            <input
-              type="text"
-              [value]="user?.role ?? ''"
-              disabled
-            />
-          </div>
+            <label>ROL</label>
+            @if(user?.role === 'ADMIN') {
 
-          <!-- Feedback -->
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <p *ngIf="successMessage" class="feedback-msg success">
-              ✓ {{ successMessage }}
-            </p>
-            <p *ngIf="errorMessage" class="feedback-msg error">
-              ✕ {{ errorMessage }}
-            </p>
+              <input
+                type="text"
+                value="Administrador"
+                disabled
+              />
+            }
+            @if(user?.role === 'TECHNICIAN') {
+
+              <input
+                type="text"
+                value="Técnico"
+                disabled
+              />
+            } 
+            @if(user?.role === 'EMPLOYEE') {
+
+              <input
+                type="text"
+                value="Empleado"
+                disabled
+              />
+            }
           </div>
 
           <!-- Actions -->
-          <div class="form-actions">
+          <div class="btn-group">
             <button
               type="button"
               (click)="onDiscardChanges()"
-              class="secondary-btn"
+              class="btn"
             >
-              Discard Changes
+              Descartar cambios
             </button>
             <button
               type="submit"
               [disabled]="profileForm.invalid"
-              class="primary-btn"
+              class="btn btn-primary"
             >
-              Save Changes
+              Guardar cambios
             </button>
           </div>
         </form>
@@ -176,7 +200,7 @@
       <!-- Security & Privacy -->
       <div *ngIf="activeSection === 'security'" class="card form-section">
         <div class="section-header">
-          <h3>Security &amp; Privacy</h3>
+          <h3>Seguridad y privacidad</h3>
           <span class="material-symbols-outlined">lock</span>
         </div>
 
@@ -188,16 +212,17 @@
                 <span class="material-symbols-outlined">password</span>
               </div>
               <div class="security-item-text">
-                <p>Change Password</p>
-                <p>Last changed 4 months ago</p>
+                <p>Cambiar contraseña</p>
               </div>
             </div>
-            <button
-              (click)="onChangePassword()"
-              class="primary"
-            >
-              Update
-            </button>
+            <div class="btn-group">
+              <button
+                (click)="showPasswordModal = true"
+                class="btn btn-primary"
+              >
+                Change Password
+              </button>
+            </div>
           </div>
 
           <!-- Sign out all -->
@@ -207,18 +232,20 @@
                 <span class="material-symbols-outlined">logout</span>
               </div>
               <div class="security-item-text">
-                <p>Logout from all devices</p>
+                <p>Cerrar sesión de todos los dispositivos</p>
                 <p>
-                  Removes access from 3 active sessions
+                  Cerrar el acceso de 3 sesiones activas
                 </p>
               </div>
             </div>
-            <button
-              (click)="onSignOutAll()"
-              class="error"
-            >
-              Sign out all
-            </button>
+            <div class="btn-group">
+              <button
+                (click)="onSignOutAll()"
+                class="btn btn-danger"
+              >
+                Sign out all
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -230,7 +257,7 @@
           <span class="material-symbols-outlined">notifications</span>
         </div>
         <p>
-          Notification preferences coming soon.
+          Sección de notificaciones en desarrollo.
         </p>
       </div>
   </div>

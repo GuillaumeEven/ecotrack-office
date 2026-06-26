@@ -1,15 +1,10 @@
 <div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
-  <div class="modal" (click)="$event.stopPropagation()">
-    <!-- Header -->
-    <div class="modal-header">
-      <h2 class="modal-title">{{ deskWithStatus?.desk?.name || 'Escritorio' }}</h2>
-      <button class="modal-close" (click)="onClose()" [disabled]="isLoading">✕</button>
-    </div>
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <!-- Title -->
+    <h3 class="modal-box__title">{{ deskWithStatus?.desk?.name || 'Escritorio' }}</h3>
 
-    <!-- Content -->
-    <div class="modal-body">
-      <!-- Status indicator -->
-      <div class="status-section">
+    <!-- Status indicator -->
+    <div class="status-section">
         <!-- Available status -->
         <div *ngIf="isAvailable()" class="status-available">
           <div class="status-badge available"></div>
@@ -27,34 +22,33 @@
           <div class="status-badge unavailable"></div>
           <span>Este {{ getResourceType().toLowerCase() }} no está disponible</span>
         </div>
-      </div>
+    </div>
 
-      <!-- Desk/Room info -->
-      <div class="desk-info">
-        <div class="info-row">
-          <span class="label">{{ getResourceType() }}:</span>
-          <span class="value">{{ deskWithStatus?.desk?.name || 'N/A' }}</span>
-        </div>
-        <div class="info-row">
-          <span class="label">Fecha:</span>
-          <span class="value">{{ selectedDate | date: 'short' }}</span>
-        </div>
+    <!-- Desk/Room info -->
+    <div class="desk-info">
+      <div class="info-row">
+        <span class="label">{{ getResourceType() }}:</span>
+        <span class="value">{{ deskWithStatus?.desk?.name || 'N/A' }}</span>
       </div>
-
-      <!-- Error message -->
-      <div *ngIf="errorMessage" class="alert alert-error">
-        {{ errorMessage }}
-      </div>
-
-      <!-- Success message -->
-      <div *ngIf="successMessage" class="alert alert-success">
-        {{ successMessage }}
+      <div class="info-row">
+        <span class="label">Fecha:</span>
+        <span class="value">{{ selectedDate | date: 'short' }}</span>
       </div>
     </div>
 
-    <!-- Footer -->
-    <div class="modal-footer">
-      <button class="btn btn-secondary" (click)="onClose()" [disabled]="isLoading">
+    <!-- Error message -->
+    <!-- <div *ngIf="errorMessage" class="alert alert-error">
+      {{ errorMessage }}
+    </div> -->
+
+    <!-- Success message -->
+    <!-- <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div> -->
+
+    <!-- Actions -->
+    <div class="btn-group">
+      <button class="btn" (click)="onClose()" [disabled]="isLoading">
         Cerrar
       </button>
       <button

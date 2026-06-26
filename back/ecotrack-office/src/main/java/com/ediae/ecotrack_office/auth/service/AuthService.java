@@ -28,6 +28,7 @@ public class AuthService {
     // ─────────────────────────────────────────────
     public LoginResponseDto login(LoginRequestDto dto) {
 
+
         // 1. Buscamos el usuario por email
         UserEntity user = userRepository.findByEmail(dto.email())
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));

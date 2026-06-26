@@ -4,7 +4,7 @@
    Clases utilitarias para los diseños flexbox.
    ============================================================================ */
 
-.flex {
+/* .flex {
   display: flex;
 }
 
@@ -28,4 +28,4 @@
 
 .gap-lg {
   gap: var(--spacing-lg);
-}
+} */

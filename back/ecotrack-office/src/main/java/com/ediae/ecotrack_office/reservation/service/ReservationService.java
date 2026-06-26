@@ -18,7 +18,10 @@ import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
 import com.ediae.ecotrack_office.reservation.mapper.ReservationMapper;
 import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.reservation.repository.ReservationRepository;
+import com.ediae.ecotrack_office.shared.exception.ApplicationException;
+import com.ediae.ecotrack_office.shared.exception.ErrorCode;
 import com.ediae.ecotrack_office.shared.exception.ForbiddenException;
+import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
@@ -76,9 +79,9 @@ public class ReservationService {
         return models;
     }
 
-    public List <ReservationModel> getAllReservations () {
+    public List <ReservationModel> getAllReservationsByOrganizationId (Long organizationId) {
 
-        List <ReservationEntity> entities = repository.findAll();
+        List <ReservationEntity> entities = repository.findByOrganizationId(organizationId);
         List <ReservationModel> models = new ArrayList <>();
         for (ReservationEntity entity : entities) {
 
@@ -99,12 +102,20 @@ public class ReservationService {
 
     public ReservationModel createReservation (ReservationCreateDto dto) {
 
+        // 🆕 Validación: no se puede reservar en el pasado
+        if (dto.getDate().isBefore(LocalDate.now())) {
+            throw new ApplicationException(
+                ErrorCode.BUSINESS_RULE_VIOLATION,
+                "No se puede crear una reserva en una fecha pasada."
+            );
+        }
+
         // Load entities from IDs
         var user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + dto.getUserId()));
 
         var resource = resourceRepository.findById(dto.getResourceId())
-                .orElseThrow(() -> new RuntimeException("Recurso no encontrado con id: " + dto.getResourceId()));
+                .orElseThrow(() -> new NotFoundException("Recurso no encontrado con id: " + dto.getResourceId()));
 
         // Create entity directly
         ReservationEntity entity = new ReservationEntity(dto.getDate(), dto.getStatus(), user, resource);
@@ -113,31 +124,38 @@ public class ReservationService {
         return ReservationMapper.fromEntity(savedEntity);
     }
 
+    
     public ReservationModel updateReservationById (Long id, ReservationUpdateDto dto) {
+
+        // 🆕 Validación: no se puede mover una reserva al pasado
+        if (dto.getDate().isBefore(LocalDate.now())) {
+            throw new ApplicationException(
+                ErrorCode.BUSINESS_RULE_VIOLATION,
+                "No se puede modificar una reserva a una fecha pasada."
+            );
+        }
 
         Optional <ReservationEntity> initialEntity = repository.findById(id);
         if(initialEntity.isEmpty()) {
 
             throw new RuntimeException("No se ha econtrado una reserva con id: " + id);
         }
-        ReservationModel model = ReservationMapper.fromUpdateDto(dto);
-        ReservationEntity savedEntity = repository.save(ReservationMapper.toEntity(model));
+        ReservationEntity entity = initialEntity.get();
+        entity.setDate(dto.getDate());
+        ReservationEntity savedEntity = repository.save(entity);
         return ReservationMapper.fromEntity(savedEntity);
     }
 
-    public Boolean deleteReservationById (Long id, Long currentUserId, boolean isAdminOrTech) {
+    public Boolean deleteReservationById (Long id, Long currentUserId) {
 
         Optional <ReservationEntity> entity = repository.findById(id);
         if (entity.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado una reserva con id: " + id);
+            throw new NotFoundException("No se ha encontrado una reserva con id: " + id);
         }
-
         ReservationEntity reservation = entity.get();
 
-        // Authorization:
-        // - ADMIN and TECHNICIAN can always delete
-        // - Others can only delete their own reservation
-        if (!isAdminOrTech && !reservation.getUser().getId().equals(currentUserId)) {
+        // Authorization check should be in controller using RoleGuard
+        if (!reservation.getUser().getId().equals(currentUserId)) {
             throw new ForbiddenException("No tienes permisos para eliminar esta reserva.");
         }
 

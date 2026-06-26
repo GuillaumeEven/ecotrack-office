@@ -265,7 +265,7 @@ export class BuildingMapComponent implements OnInit {
    */
   getDeskTooltip(desk: DeskWithStatus): string {
     if (this.isDeskOutOfService(desk)) {
-      return 'Mesa averiada';
+      return 'Escritorio averiado';
     }
     if (this.isDeskUnavailable(desk)) {
       return 'No disponible';
