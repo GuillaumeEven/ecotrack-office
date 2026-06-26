@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,16 +58,16 @@ public class ReservationController {
 
     //TODO: ¿POR QUÉ AQUÍ NO TENEMOS AUTH??
 
-    @GetMapping("/floor/{id}/date/{date}")
-    public ResponseEntity <List <ReservationResponseDto>> getReservationsByFloorIdAndDate (@PathVariable Long id, @PathVariable String date) {
+    // @GetMapping("/floor/{id}/date/{date}")
+    // public ResponseEntity <List <ReservationResponseDto>> getReservationsByFloorIdAndDate (@PathVariable Long id, @PathVariable String date) {
 
-        List <ReservationModel> models = service.getReservationsByFloorIdAndDate(id, date);
-        List <ReservationResponseDto> dtos = new ArrayList <>();
-        for (ReservationModel model : models) {
-            dtos.add(ReservationMapper.toResponseDto(model));
-        }
-        return ResponseEntity.ok(dtos);
-    }
+    //     List <ReservationModel> models = service.getReservationsByFloorIdAndDate(id, date);
+    //     List <ReservationResponseDto> dtos = new ArrayList <>();
+    //     for (ReservationModel model : models) {
+    //         dtos.add(ReservationMapper.toResponseDto(model));
+    //     }
+    //     return ResponseEntity.ok(dtos);
+    // }
 
     @GetMapping("/{id}")
     public ResponseEntity <ReservationResponseDto> getReservationById (Authentication auth, @PathVariable Long id) {
@@ -103,7 +102,7 @@ public class ReservationController {
                 throw new com.ediae.ecotrack_office.shared.exception.ForbiddenException("No tienes permisos para realizar esta acción.");
             }
         }
-        
+
         return ResponseEntity.ok(ReservationMapper.toResponseDto(service.updateReservationById(id, dto)));
     }
 
@@ -119,7 +118,7 @@ public class ReservationController {
     public ResponseEntity <List <ReservationResponseDto>> getAllReservationsFromTheOranizationUser (Authentication auth) {
 
         boolean isAdminOrTech = roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN);
-        
+
         if(isAdminOrTech) {
             Long userId = (Long) auth.getPrincipal();
             UserModel user = userService.getUserById(userId);

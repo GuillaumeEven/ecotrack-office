@@ -22,10 +22,10 @@ export class ReservationService {
    * @param floorId - The floor ID
    * @param date - The date in ISO format (YYYY-MM-DD)
    */
-  getByFloorAndDate(floorId: number, date: string): Observable<Reservation[]> {
-    const url = `${this.BASE_URL}/floor/${floorId}/date/${date}`;
-    return this.httpClient.get<Reservation[]>(url);
-  }
+  // getByFloorAndDate(floorId: number, date: string): Observable<Reservation[]> {
+  //   const url = `${this.BASE_URL}/floor/${floorId}/date/${date}`;
+  //   return this.httpClient.get<Reservation[]>(url);
+  // }
 
   /**
    * Fetch all reservations for a room on a specific date
