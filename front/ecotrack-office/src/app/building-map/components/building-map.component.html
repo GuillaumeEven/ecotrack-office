@@ -143,7 +143,7 @@
                 [title]="getDeskTooltip(deskWithStatus)"
                 [disabled]="isSelectedRoomUnavailable()"
                 (click)="openDeskDialog(deskWithStatus)"
-                class="desk-btn">
+                class="desk-btn {{ canCancelReservation(deskWithStatus) ? 'clickable' : '' }}">
                 {{ deskWithStatus.desk.name }}
               </button>
             </div>
