@@ -14,6 +14,8 @@ import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.FloorRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
 import com.ediae.ecotrack_office.assets.service.RoomService;
+import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
+import com.ediae.ecotrack_office.incident.model.IncidentModel;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -51,6 +53,15 @@ public class RoomServiceImpl implements RoomService {
         List<RoomEntity> entities = roomRepository.findByFloor_Id(floorId);
         return entities.stream()
                 .map(roomMapper::fromEntity)
+                .toList();
+    }
+
+    @Override
+    public List<IncidentModel> getIncidentsByRoomId(Long roomId) {
+        RoomEntity roomEntity = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
+        return roomEntity.getIncidents().stream()
+                .map(incidentEntity -> IncidentMapper.toModel(incidentEntity))
                 .toList();
     }
 

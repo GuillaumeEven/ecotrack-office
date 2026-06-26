@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ediae.ecotrack_office.assets.dto.RoomRequestDto;
 import com.ediae.ecotrack_office.assets.model.RoomModel;
+import com.ediae.ecotrack_office.incident.model.IncidentModel;
 
 public interface RoomService {
 
@@ -18,5 +19,7 @@ public interface RoomService {
     public RoomModel updateRoom(Long roomId, RoomRequestDto roomRequestDTO);
 
     public void deleteRoomById(Long roomId);
+
+    public List<IncidentModel> getIncidentsByRoomId(Long roomId);
 
 }

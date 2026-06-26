@@ -39,6 +39,13 @@ export class RoomService {
   }
 
   /**
+   * Fetch all incidents associated with a specific room
+   */
+  getIncidentsByRoomId(roomId: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.BASE_URL}/${roomId}/incidents`);
+  }
+
+  /**
    * Create a new room
    */
   create(room: Omit<Room, 'id'>): Observable<Room> {

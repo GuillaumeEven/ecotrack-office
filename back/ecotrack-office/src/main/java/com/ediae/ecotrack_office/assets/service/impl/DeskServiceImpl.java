@@ -11,6 +11,9 @@ import com.ediae.ecotrack_office.assets.mapper.DeskMapper;
 import com.ediae.ecotrack_office.assets.model.DeskModel;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.service.DeskService;
+import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
+import com.ediae.ecotrack_office.incident.model.IncidentModel;
+import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -37,6 +40,16 @@ public class DeskServiceImpl implements DeskService {
                 .orElseThrow(() -> new EntityNotFoundException("Desk not found with id: " + deskId));
         DeskModel deskModel = deskMapper.fromEntity(entity);
         return deskModel;
+    }
+
+    @Override
+    public List<IncidentModel> getIncidentsByDeskId(Long deskId) {
+        DeskEntity entity = deskRepository.findById(deskId)
+                .orElseThrow(() -> new NotFoundException("Desk not found with id: " + deskId));
+        return entity.getIncidents()
+                .stream()
+                .map(IncidentMapper::toModel)
+                .toList();
     }
 
     @Override

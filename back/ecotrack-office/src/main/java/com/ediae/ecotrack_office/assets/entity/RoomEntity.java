@@ -1,10 +1,12 @@
 package com.ediae.ecotrack_office.assets.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
 import com.ediae.ecotrack_office.assets.enums.RoomType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.CascadeType;
 
 
 @Entity
@@ -35,7 +36,7 @@ public class RoomEntity extends ResourceEntity {
     private Integer capacity;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE, orphanRemoval = true)
-private List<DeskEntity> desks;
+    private List<DeskEntity> desks = new ArrayList<>();
 
     public RoomEntity() {
     }

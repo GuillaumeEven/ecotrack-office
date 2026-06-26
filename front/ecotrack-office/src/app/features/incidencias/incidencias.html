@@ -91,17 +91,17 @@
                     {{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}
                   </td>
                   <td class="text-center">
-                    <span [ngClass]="item.status === 'OPEN' ? 'badge-error' : 'badge-success'" class="status-badge">
-                      {{ item.status === 'OPEN' ? 'ABIERTA' : 'RESUELTA' }}
+                    <span [ngClass]="item.status === 'IN_PROGRESS' ? 'badge-error' : 'badge-success'" class="status-badge">
+                      {{ item.status === 'IN_PROGRESS' ? 'ABIERTA' : 'RESUELTA' }}
                     </span>
                   </td>
                   <td class="text-right">
-                    <button *ngIf="(item.status === 'OPEN') && (userRole === 'TECH' || userRole === 'ADMIN')"
+                    <button *ngIf="(item.status === 'IN_PROGRESS') && (userRole === 'TECH' || userRole === 'ADMIN')"
                       (click)="onResolve(item.id)" class="btn btn-sm btn-outline">
                       Resolver
                     </button>
 
-                    <span *ngIf="item.status !== 'OPEN'" class="solved-text">
+                    <span *ngIf="item.status !== 'IN_PROGRESS'" class="solved-text">
                       Solucionado
                     </span>
                   </td>

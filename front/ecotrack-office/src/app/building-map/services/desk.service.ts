@@ -38,6 +38,14 @@ export class DeskService {
   }
 
   /**
+   * Fetch all incidents associated with a specific desk
+   */
+  getIncidentsByDeskId(deskId: number): Observable<any[]> {
+    console.log(`Fetching incidents for desk ID: ${deskId}`);
+    return this.httpClient.get<any[]>(`${this.BASE_URL}/${deskId}/incidents`);
+  }
+
+  /**
    * Create a new desk
    */
   create(desk: Omit<Desk, 'id'>): Observable<Desk> {
