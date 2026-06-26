@@ -1,8 +1,9 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReservationResponse } from '@models/reservation.model';
+import { ReservationResponse, ReservationResponseWithName } from '@models/reservation.model';
 import { ReservationService } from '../services/reservation.service';
+import { NotificationService } from '@core/services/notification.service';
 
 @Component({
   selector: 'app-reservation',
@@ -13,12 +14,13 @@ import { ReservationService } from '../services/reservation.service';
 export class Reservation implements OnInit{
 
   private reservationService = inject(ReservationService);
+  private notificationService = inject(NotificationService);
   private cdr = inject(ChangeDetectorRef);
 
   activeReservations: ReservationResponse[] = [];
   unactiveReservations: ReservationResponse[] = [];
 
-  allStaffReservations: ReservationResponse[] = [];
+  allStaffReservations: ReservationResponseWithName[] = [];
 
   isEditModalOpen = false;
   isCancelModalOpen = false;
@@ -71,7 +73,14 @@ export class Reservation implements OnInit{
 
       next: (data) => {
 
-        this.allStaffReservations = data;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        this.allStaffReservations = data.filter(reserva => {
+
+          const fechaReserva = new Date(reserva.date);
+          fechaReserva.setHours(0, 0, 0, 0);
+          return fechaReserva.getTime() >= today.getTime();
+        });
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al traer todas las reservas de la empresa: ', err)
@@ -133,12 +142,11 @@ export class Reservation implements OnInit{
       next: () => {
 
         this.refreshCurrentTab();
-        alert('Reserva actualizada con éxito');
+        this.notificationService.success('¡Reserva editada con éxito!')
       },
       error: (err) => {
 
         console.error('Error al actualizar la reserva: ', err);
-        alert('No se pudo actualizar la reserva');
       }
     });
   }
@@ -165,12 +173,11 @@ export class Reservation implements OnInit{
       next: () => {
 
         this.refreshCurrentTab();
-        alert('Reserva cancelada con éxito');
+        this.notificationService.success('!Éxito al cancelar la reserva¡');
       },
       error: (err) => {
 
         console.error('Error al cancelar: ', err);
-        alert('No se pudo cancelar la reserva');
       }
     });
   }

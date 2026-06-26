@@ -1,12 +1,13 @@
-    package com.ediae.ecotrack_office.reservation.mapper;
+package com.ediae.ecotrack_office.reservation.mapper;
 
-    import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-    import com.ediae.ecotrack_office.reservation.dto.ReservationResponseDto;
-    import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
-    import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
-    import com.ediae.ecotrack_office.reservation.model.ReservationModel;
+import com.ediae.ecotrack_office.reservation.dto.ReservationResponseDto;
+import com.ediae.ecotrack_office.reservation.dto.ReservationResponseWithNameDto;
+import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
+import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
+import com.ediae.ecotrack_office.reservation.model.ReservationModel;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.service.UserService;
 
@@ -47,6 +48,22 @@ import com.ediae.ecotrack_office.users.service.UserService;
             response.setUserId(model.getUser().getId());
             response.setResourceName(model.getResource().getName());
             response.setResourceEquipmentList(model.getResource().getEquipmentList());
+            return response;
+        }
+
+        public static ReservationResponseWithNameDto toResponseWithNameDto (ReservationModel model) {
+
+            String fullName = model.getUser().getFirstName()+" "+model.getUser().getLastName();
+            ReservationResponseWithNameDto response = new ReservationResponseWithNameDto(
+                model.getId(),
+                model.getDate(),
+                model.getStatus(),
+                model.getCreatedAt(),
+                model.getUser().getId(),
+                fullName,
+                model.getResource().getName(),
+                model.getResource().getEquipmentList()
+            );
             return response;
         }
     }
