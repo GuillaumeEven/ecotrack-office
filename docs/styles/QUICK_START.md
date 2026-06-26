@@ -22,7 +22,7 @@ src/app/styles/
 ```html
 <!-- Utiliza las clases globales -->
 <button class="btn btn-primary">Hacer clic</button>
-<button class="btn btn-secondary">Secundario</button>
+<button class="btn">Secundario</button>
 <button class="btn btn-danger btn-sm">Pequeño Peligro</button>
 <button class="btn btn-outline">Contorno</button>
 ```
@@ -85,14 +85,14 @@ export class MiFeatureComponent {}
 
 ```css
 /* mi-feature.component.css */
-.mesas-cine {
+.escritorios-cine {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   gap: var(--spacing-md);
 }
 
 @media (max-width: 640px) {
-  .mesas-cine {
+  .escritorios-cine {
     grid-template-columns: repeat(4, 1fr);
   }
 }

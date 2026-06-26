@@ -10,7 +10,7 @@
 - Cadencia de reuniones: ¿semanal?
 - Notificaciones en tiempo real: ¿usar SSE (Server-Sent Events)? La IA sugirió que es la opción más sencilla.
 - ¿La app es interna para una empresa o es un SaaS? Es un Saas
-- ¿Es posible reservar mesas de forma permanente? No, maximo una semana de antelación
+- ¿Es posible reservar escritorios de forma permanente? No, maximo una semana de antelación
 - ¿Es posible reservar salas completas? no
 - ¿Con qué antelación se puede reservar? Una semana
 
@@ -45,7 +45,7 @@ Las dos tecnologías que no hemos tratado en clase son:
   - Empezamos a esbozar páginas (ver entregables de Rai y la lista de pantallas esbozadas).
   Preguntas y decisiones:
   1. ¿La app se entregará A) a clientes para uso interno, o B) será un SaaS donde nuevos usuarios pueden registrarse, pagar y usar el servicio sin nuestra intervención? Elegimos la opción B y empezamos a diseñar las páginas de aterrizaje/home.
-  2. ¿Cómo limitar reservas de mesas para que un usuario malintencionado no reserve la misma mesa durante seis meses?
+  2. ¿Cómo limitar reservas de escritorios para que un usuario malintencionado no reserve la misma escritorio durante seis meses?
   3. ¿Es posible reservar una sala completa?
   4. ¿Quién resuelve los conflictos de reserva? De momento decidimos permitir que el técnico modifique las reservas desde su cuenta para resolver conflictos.
 
@@ -61,11 +61,11 @@ Las dos tecnologías que no hemos tratado en clase son:
     - Tipos de sala:
       - Puestos de trabajo
       - Reunión
-    - Elementos por sala: sillas, mesas, TV, etc.
+    - Elementos por sala: sillas, escritorios, TV, etc.
     - Precisión de reservas: turno (mañana/tarde). * edit del 2 de junio: las reservas se hacen por día;
-    - Interfaz de reserva (mapa): vista con rectángulos que representan plantas y salas; se seleccionan solo las disponibles. Al clicar una sala se muestra el plano con mesas disponibles/reservadas; tooltip para reservar según turno. Incidencias bloquean la mesa/sala. El técnico puede abrir/cerrar salas.
+    - Interfaz de reserva (mapa): vista con rectángulos que representan plantas y salas; se seleccionan solo las disponibles. Al clicar una sala se muestra el plano con escritorios disponibles/reservadas; tooltip para reservar según turno. Incidencias bloquean la escritorio/sala. El técnico puede abrir/cerrar salas.
     - Estimación del ahorro: requiere que el cliente defina su estructura (plantas, m2 por sala). La estimación se calcula por sala cerrada, usando m2 y 365 días al año.
-    - Vistas administrativas: el administrador puede crear plantas, salas y mesas; implementar vistas "Crear plantas/salas/mesas" en la cuenta admin.
+    - Vistas administrativas: el administrador puede crear plantas, salas y escritorios; implementar vistas "Crear plantas/salas/escritorios" en la cuenta admin.
     - Teletrabajo: añadir un indicador de teletrabajo para valorar ahorro de CO₂.
     - Cancelaciones: gestionadas por técnico — cuestión abierta (notificación al usuario, ¿cambio o cancelación?). Por ahora, no implementado.
 
@@ -79,7 +79,7 @@ Las dos tecnologías que no hemos tratado en clase son:
       - Rai: CRUD Reservas
       - Jose Luis: CRUD Usuarios
       - Edu: CRUD Incidencias/analytics
-      - Guillaume: CRUD assets (plantas, salas, mesas...)
+      - Guillaume: CRUD assets (plantas, salas, escritorios...)
     - el código debe ser escrito en inglés, y la documentación, el front y los comentarios en el código en español.
 
 
@@ -112,7 +112,7 @@ Las dos tecnologías que no hemos tratado en clase son:
 
   - La entidad "piso" sustituye a lo que antes llamábamos "salas". Al seleccionar un piso en el mapa se mostrarán las salas pertenecientes a ese piso.
   - Si se selecciona una sala de reuniones: se abre un popup para reservar la sala completa.
-  - Si se selecciona una sala de trabajo: el mapa cambia para mostrar las mesas. Al clicar una mesa se abre un popup para reservarla.
+  - Si se selecciona una sala de trabajo: el mapa cambia para mostrar las escritorios. Al clicar una escritorio se abre un popup para reservarla.
 
   Decisión provisional:
 

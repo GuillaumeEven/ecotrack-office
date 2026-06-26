@@ -16,7 +16,6 @@ label {
   display: block;
   color: var(--on-surface);
   font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--spacing-xs);
 }
 
 input[type="text"],
@@ -35,7 +34,6 @@ select {
   font-size: var(--font-size-base);
   color: var(--on-surface);
   transition: all var(--transition-fast);
-  box-sizing: border-box;
 }
 
 input:focus,
@@ -143,4 +141,10 @@ form {
   font-size: var(--font-size-sm);
   color: var(--error);
   margin-top: var(--spacing-xs);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }

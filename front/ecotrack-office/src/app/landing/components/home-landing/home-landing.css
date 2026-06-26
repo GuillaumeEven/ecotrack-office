@@ -29,11 +29,36 @@
   --container-max: 1440px;
 }
 
+/* Modo Oscuro */
+html.dark :host {
+  /* Paleta de Colores - Dark Mode */
+  --color-surface: #0f1419;
+  --color-on-surface: #e1e6ff;
+  --color-on-surface-variant: #c6c6cd;
+  --color-primary: #bec6e0;
+  --color-on-primary: #131b2e;
+  --color-secondary: #6bd8cb;
+  --color-secondary-container: #005049;
+  --color-on-secondary-container: #89f5e7;
+  --color-surface-container-low: #171c22;
+  --color-surface-container-high: #25292f;
+  --color-surface-container-highest: #303639;
+  --color-tertiary-container: #004395;
+  --color-on-tertiary: #d8e2ff;
+  --color-outline: #90909a;
+  --color-outline-variant: #47484e;
+  --color-secondary-fixed: #89f5e7;
+}
+
 /* ==========================================================================
    2. ESTILOS BASE Y CONFIGURACIONES GLOBALES
    ========================================================================== */
 body {
     font-family: 'Inter', sans-serif;
+}
+
+.layout-content {
+    margin: 0 auto;
 }
 
 /* Iconos de Google Material */
@@ -125,8 +150,35 @@ body {
 .btn-register-nav:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
 .btn-register-nav:active { transform: scale(0.95); }
 
+/* Botón de Toggle del Tema */
+.theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xs);
+    border: 1px solid var(--color-outline-variant);
+    background-color: var(--color-surface-container-low);
+    color: var(--color-on-surface);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    width: 40px;
+    height: 40px;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--color-surface-container-high);
+    border-color: var(--color-outline);
+}
+
+.theme-toggle-btn:active { transform: scale(0.95); }
+
+.theme-toggle-btn span {
+    font-size: 20px;
+}
+
 /* Contenedor del contenido que empuja hacia abajo para no ser tapado por el header fijo */
-.main-content {
+.layout-content {
     padding-top: 80px;
     background-color: var(--color-surface);
     color: var(--color-on-surface);
@@ -208,7 +260,7 @@ body {
 }
 .btn-primary-action:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
 
-.btn-secondary-action {
+.btn-action {
     border: 1px solid var(--color-outline);
     color: var(--color-on-surface);
     padding: var(--spacing-md) var(--spacing-xl);
@@ -224,7 +276,7 @@ body {
     cursor: pointer;
     transition: all 0.2s;
 }
-.btn-secondary-action:hover { background-color: var(--color-surface-container-low); }
+.btn-action:hover { background-color: var(--color-surface-container-low); }
 
 /* Contenedor y efectos de desenfoque de fondo tras la imagen */
 .hero-image-block {

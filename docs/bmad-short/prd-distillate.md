@@ -50,7 +50,7 @@ parts: 1
 - FR8: OrgAdmin CRUD de plantas; vistas administrativas dedicadas Crear Planta / Crear Sala / Crear Puesto
 - FR9: OrgAdmin CRUD de salas por planta; tipos: área de puestos o sala de reuniones; cada una tiene bandera de gestión energética + superficie en m² (requerido para el cálculo de ahorros)
 - FR9b: política de apertura al 80% de capacidad — una nueva sala/planta se abre solo cuando la capacidad activa actual alcanza el 80% (umbral configurable); el Técnico puede abrir/cerrar manualmente cualquier sala en cualquier momento
-- FR10: OrgAdmin CRUD de puestos con atributos de equipamiento (sillas, mesas, TV, etc.) + posición en el plano de planta
+- FR10: OrgAdmin CRUD de puestos con atributos de equipamiento (sillas, escritorios, TV, etc.) + posición en el plano de planta
 - FR11: El mapa de planta para cada planta se renderiza dinámicamente en el frontend a partir de los datos almacenados de estructura planta/sala/puesto; posiciones derivadas del orden de creación; no hay carga de archivos SVG ni almacenamiento de SVG en el backend
 
 ## FR — Mapa de Planta Interactivo

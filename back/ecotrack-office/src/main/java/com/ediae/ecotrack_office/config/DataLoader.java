@@ -220,6 +220,7 @@ public class DataLoader implements CommandLineRunner {
                 .anyMatch(f -> Objects.equals(f.getLevel(), 0));
         if (!hasLevel0) {
             FloorEntity f0 = new FloorEntity(0, true, org);
+            f0.setName("Planta 1");
             floorRepository.save(f0);
             log.info("Piso nivel 0 sembrado para la organización {}", org.getName());
         }
@@ -229,6 +230,7 @@ public class DataLoader implements CommandLineRunner {
                 .anyMatch(f -> Objects.equals(f.getLevel(), 1));
         if (!hasLevel1) {
             FloorEntity f1 = new FloorEntity(1, true, org);
+            f1.setName("Planta 2");
             floorRepository.save(f1);
             log.info("Piso nivel 1 sembrado para la organización {}", org.getName());
         }
@@ -356,7 +358,36 @@ public class DataLoader implements CommandLineRunner {
         // Crear reservaciones para 15/07/2026: escritorios 2, 7, 9
         LocalDate date2 = LocalDate.of(2026, 7, 15);
         createReservationForDesks(org, employee, date2, new int[]{2, 7, 9});
-    }
+        // Créer 5 réservations pour desk id=4, user id=1, du 1er au 5 mai 2026
+        UserEntity user1 = userRepository.findById(1L).orElse(null);
+        if (user1 != null) {
+            DeskEntity desk4 = deskRepository.findById(4L).orElse(null);
+            if (desk4 != null) {
+                for (int day = 1; day <= 5; day++) {
+                    LocalDate dateForDesk4 = LocalDate.of(2026, 5, day);
+                    boolean reservationExists = reservationRepository.findByResourceId(desk4.getId())
+                            .stream()
+                            .anyMatch(r -> r.getDate().equals(dateForDesk4));
+
+                    if (!reservationExists) {
+                        ReservationEntity reservation = new ReservationEntity(
+                                dateForDesk4,
+                                ReservationStatus.CONFIRMED,
+                                user1,
+                                desk4
+                        );
+                        reservationRepository.save(reservation);
+                        log.info("Reservación sembrada para el desk '{}' (ID: 4) en la fecha {}", desk4.getName(), dateForDesk4);
+                    } else {
+                        log.info("Reservación para el desk '{}' (ID: 4) en la fecha {} ya existe, omitiendo.", desk4.getName(), dateForDesk4);
+                    }
+                }
+            } else {
+                log.warn("Desk con ID 4 no encontrado, omitiendo siembra de reservaciones.");
+            }
+        } else {
+            log.warn("Usuario con ID 1 no encontrado, omitiendo siembra de reservaciones.");
+        }    }
 
     /**
      * Método auxiliar para crear reservaciones para números de escritorio específicos en una fecha dada
