@@ -51,14 +51,14 @@ public class DataLoader implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder; // 🆕
 
     public DataLoader(OrganizationRepository organizationRepository,
-                      UserRepository userRepository,
-                      FloorRepository floorRepository,
-                      RoomRepository roomRepository,
-                      DeskRepository deskRepository,
-                      ReservationRepository reservationRepository,
-                      IncidentRepository incidentRepository,
-                      JdbcTemplate jdbcTemplate,
-                      PasswordEncoder passwordEncoder) { // 🆕
+            UserRepository userRepository,
+            FloorRepository floorRepository,
+            RoomRepository roomRepository,
+            DeskRepository deskRepository,
+            ReservationRepository reservationRepository,
+            IncidentRepository incidentRepository,
+            JdbcTemplate jdbcTemplate,
+            PasswordEncoder passwordEncoder) { // 🆕
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.floorRepository = floorRepository;
@@ -89,12 +89,15 @@ public class DataLoader implements CommandLineRunner {
     }
 
     /**
-     * Borra todos los datos de desarrollo y reinicia AUTO_INCREMENT a 1 para que los IDs generados sean siempre predecibles:
-     * org=1, admin=1, tech=2, employee=3, floor0=1, floor1=2, roomA=1, roomB=2, desk1-3=1-3.
-     * TRUNCATE en MySQL reinicia AUTO_INCREMENT automáticamente; las verificaciones de FK se deshabilitan durante el truncado.
+     * Borra todos los datos de desarrollo y reinicia los contadores para que los
+     * IDs generados sean siempre predecibles.
+     * Diseñado específicamente para el entorno local corriendo sobre MySQL 8.0.
      */
     private void resetDatabase() {
+        // En MySQL desactivamos las restricciones de clave foránea con
+        // FOREIGN_KEY_CHECKS
         jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
+
         jdbcTemplate.execute("TRUNCATE TABLE analitics_report");
         jdbcTemplate.execute("TRUNCATE TABLE incidents");
         jdbcTemplate.execute("TRUNCATE TABLE reservation");
@@ -104,8 +107,11 @@ public class DataLoader implements CommandLineRunner {
         jdbcTemplate.execute("TRUNCATE TABLE ast_floors");
         jdbcTemplate.execute("TRUNCATE TABLE usr_users");
         jdbcTemplate.execute("TRUNCATE TABLE organizations");
+
+        // Volvemos a activar las restricciones tras el vaciado
         jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
-        log.info("Base de datos de desarrollo reiniciada: todas las tablas truncadas, AUTO_INCREMENT reiniciado a 1.");
+
+        log.info("Base de datos MySQL de desarrollo reiniciada: todas las tablas truncadas con éxito.");
     }
 
     private OrganizationEntity createOrgIfMissing() {
@@ -245,7 +251,8 @@ public class DataLoader implements CommandLineRunner {
                 .orElseGet(() -> floorRepository.findByOrganizationId(org.getId()).stream().findFirst().orElse(null));
 
         if (floor0 == null) {
-            log.warn("No se encontró piso para la organización {}, omitiendo siembra de salas/escritorios.", org.getName());
+            log.warn("No se encontró piso para la organización {}, omitiendo siembra de salas/escritorios.",
+                    org.getName());
             return;
         }
 
@@ -277,7 +284,8 @@ public class DataLoader implements CommandLineRunner {
     }
 
     /**
-     * Método auxiliar para crear una sala de trabajo con 10 escritorios si no existe
+     * Método auxiliar para crear una sala de trabajo con 10 escritorios si no
+     * existe
      */
     private void createDeskAreaRoomsWithDesks(FloorEntity floor, String roomName, Double area) {
         RoomEntity room = roomRepository.findByFloor_Id(floor.getId())
@@ -292,8 +300,7 @@ public class DataLoader implements CommandLineRunner {
                             RoomType.DESK_AREA,
                             area,
                             floor,
-                            10
-                    );
+                            10);
                     r.setIsActive(true); // Activar sala para desarrollo
                     RoomEntity saved = roomRepository.save(r);
                     log.info("Sala de trabajo sembrada '{}'", saved.getName());
@@ -330,8 +337,7 @@ public class DataLoader implements CommandLineRunner {
                     RoomType.MEETING_ROOM,
                     area,
                     floor,
-                    20
-            );
+                    20);
             r.setIsActive(true); // Activar sala de reunión para desarrollo
             RoomEntity saved = roomRepository.save(r);
             log.info("Sala de reunión sembrada '{}'", saved.getName());
@@ -339,7 +345,8 @@ public class DataLoader implements CommandLineRunner {
     }
 
     /**
-     * Método auxiliar para crear reservaciones para escritorios específicos en fechas dadas
+     * Método auxiliar para crear reservaciones para escritorios específicos en
+     * fechas dadas
      */
     private void createReservationsIfMissing(OrganizationEntity org) {
         // Obtener usuario empleado
@@ -353,11 +360,11 @@ public class DataLoader implements CommandLineRunner {
 
         // Crear reservaciones para 14/07/2026: escritorios 2, 5, 6
         LocalDate date1 = LocalDate.of(2026, 7, 14);
-        createReservationForDesks(org, employee, date1, new int[]{2, 5, 6});
+        createReservationForDesks(org, employee, date1, new int[] { 2, 5, 6 });
 
         // Crear reservaciones para 15/07/2026: escritorios 2, 7, 9
         LocalDate date2 = LocalDate.of(2026, 7, 15);
-        createReservationForDesks(org, employee, date2, new int[]{2, 7, 9});
+        createReservationForDesks(org, employee, date2, new int[] { 2, 7, 9 });
         // Créer 5 réservations pour desk id=4, user id=1, du 1er au 5 mai 2026
         UserEntity user1 = userRepository.findById(1L).orElse(null);
         if (user1 != null) {
@@ -374,12 +381,13 @@ public class DataLoader implements CommandLineRunner {
                                 dateForDesk4,
                                 ReservationStatus.CONFIRMED,
                                 user1,
-                                desk4
-                        );
+                                desk4);
                         reservationRepository.save(reservation);
-                        log.info("Reservación sembrada para el desk '{}' (ID: 4) en la fecha {}", desk4.getName(), dateForDesk4);
+                        log.info("Reservación sembrada para el desk '{}' (ID: 4) en la fecha {}", desk4.getName(),
+                                dateForDesk4);
                     } else {
-                        log.info("Reservación para el desk '{}' (ID: 4) en la fecha {} ya existe, omitiendo.", desk4.getName(), dateForDesk4);
+                        log.info("Reservación para el desk '{}' (ID: 4) en la fecha {} ya existe, omitiendo.",
+                                desk4.getName(), dateForDesk4);
                     }
                 }
             } else {
@@ -387,10 +395,12 @@ public class DataLoader implements CommandLineRunner {
             }
         } else {
             log.warn("Usuario con ID 1 no encontrado, omitiendo siembra de reservaciones.");
-        }    }
+        }
+    }
 
     /**
-     * Método auxiliar para crear reservaciones para números de escritorio específicos en una fecha dada
+     * Método auxiliar para crear reservaciones para números de escritorio
+     * específicos en una fecha dada
      */
     private void createReservationForDesks(OrganizationEntity org, UserEntity user, LocalDate date, int[] deskNumbers) {
         for (int deskNum : deskNumbers) {
@@ -413,12 +423,12 @@ public class DataLoader implements CommandLineRunner {
                             date,
                             ReservationStatus.CONFIRMED,
                             user,
-                            desk
-                    );
+                            desk);
                     reservationRepository.save(reservation);
                     log.info("Reservación sembrada para el escritorio '{}' en la fecha {}", desk.getName(), date);
                 } else {
-                    log.info("Reservación para el escritorio '{}' en la fecha {} ya existe, omitiendo.", desk.getName(), date);
+                    log.info("Reservación para el escritorio '{}' en la fecha {} ya existe, omitiendo.", desk.getName(),
+                            date);
                 }
             } else {
                 log.warn("Escritorio con patrón '{}' no encontrado, omitiendo reservación.", deskNamePattern);
@@ -459,10 +469,10 @@ public class DataLoader implements CommandLineRunner {
                     IncidentStatus.IN_PROGRESS,
                     LocalDateTime.now(),
                     tech,
-                    desk
-            );
+                    desk);
             incidentRepository.save(incident);
-            log.info("Incidente sembrado para el desk '{}' (ID: 3) con descripción: 'La silla está rota'", desk.getName());
+            log.info("Incidente sembrado para el desk '{}' (ID: 3) con descripción: 'La silla está rota'",
+                    desk.getName());
         } else {
             log.info("Incidente para el desk con ID 3 ya existe, omitiendo.");
         }
@@ -471,22 +481,23 @@ public class DataLoader implements CommandLineRunner {
     /**
      * Método auxiliar para crear una sala de reunión si no existe
      */
-    // private void createMeetingRoom(FloorEntity floor, String roomName, Double area) {
-    //     boolean exists = roomRepository.findByFloor_Id(floor.getId())
-    //             .stream()
-    //             .anyMatch(r -> roomName.equalsIgnoreCase(r.getName()));
-    //     if (!exists) {
-    //         RoomEntity r = new RoomEntity(
-    //                 roomName,
-    //                 ResourceStatus.AVAILABLE,
-    //                 "videoconferencia,pizarra",
-    //                 RoomType.MEETING_ROOM,
-    //                 area,
-    //                 floor,
-    //                 20
-    //         );
-    //         RoomEntity saved = roomRepository.save(r);
-    //         log.info("Sala de reunión sembrada '{}'", saved.getName());
-    //     }
+    // private void createMeetingRoom(FloorEntity floor, String roomName, Double
+    // area) {
+    // boolean exists = roomRepository.findByFloor_Id(floor.getId())
+    // .stream()
+    // .anyMatch(r -> roomName.equalsIgnoreCase(r.getName()));
+    // if (!exists) {
+    // RoomEntity r = new RoomEntity(
+    // roomName,
+    // ResourceStatus.AVAILABLE,
+    // "videoconferencia,pizarra",
+    // RoomType.MEETING_ROOM,
+    // area,
+    // floor,
+    // 20
+    // );
+    // RoomEntity saved = roomRepository.save(r);
+    // log.info("Sala de reunión sembrada '{}'", saved.getName());
+    // }
     // }
 }
