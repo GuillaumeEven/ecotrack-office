@@ -220,6 +220,7 @@ public class DataLoader implements CommandLineRunner {
                 .anyMatch(f -> Objects.equals(f.getLevel(), 0));
         if (!hasLevel0) {
             FloorEntity f0 = new FloorEntity(0, true, org);
+            f0.setName("Planta 1");
             floorRepository.save(f0);
             log.info("Piso nivel 0 sembrado para la organización {}", org.getName());
         }
@@ -229,6 +230,7 @@ public class DataLoader implements CommandLineRunner {
                 .anyMatch(f -> Objects.equals(f.getLevel(), 1));
         if (!hasLevel1) {
             FloorEntity f1 = new FloorEntity(1, true, org);
+            f1.setName("Planta 2");
             floorRepository.save(f1);
             log.info("Piso nivel 1 sembrado para la organización {}", org.getName());
         }

@@ -85,14 +85,14 @@ export class MiFeatureComponent {}
 
 ```css
 /* mi-feature.component.css */
-.mesas-cine {
+.escritorios-cine {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   gap: var(--spacing-md);
 }
 
 @media (max-width: 640px) {
-  .mesas-cine {
+  .escritorios-cine {
     grid-template-columns: repeat(4, 1fr);
   }
 }

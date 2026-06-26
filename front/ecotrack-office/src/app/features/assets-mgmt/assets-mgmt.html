@@ -3,7 +3,7 @@
   <div class="component-header">
     <h1>Gestión de Recursos</h1>
     <p>
-      Gestione la infraestructura de su edificio: pisos, Salas y Mesas.
+      Gestione la infraestructura de su edificio: pisos, Salas y Escritorios.
     </p>
   </div>
 
@@ -143,7 +143,7 @@
                 Tipo
               </th>
               <th>
-                Mesas
+                Escritorios
               </th>
               <th class="text-center">
                 Acciones
@@ -193,7 +193,7 @@
       </div>
     </div>
 
-    <!-- PESTAÑA MesaS -->
+    <!-- PESTAÑA EscritorioS -->
     <div *ngIf="activeTab === 'desks'" class="tab-content">
       <!-- Filtros y Crear -->
       <div class="toolbar">
@@ -213,17 +213,17 @@
           class="btn btn-primary"
         >
           <span class="material-symbols-outlined">add</span>
-          Nuevo Mesa
+          Nuevo Escritorio
         </button>
       </div>
 
-      <!-- Tabla de Mesas -->
+      <!-- Tabla de Escritorios -->
       <div class="table-container">
         <table>
           <thead>
             <tr>
               <th>
-                Nombre del Mesa
+                Nombre del Escritorio
               </th>
               <th>
                 Sala
@@ -274,7 +274,7 @@
             </tr>
             <tr *ngIf="filteredDesks.length === 0">
               <td colspan="4" class="empty-state">
-                No se encontraron Mesas.
+                No se encontraron Escritorios.
               </td>
             </tr>
           </tbody>
@@ -414,7 +414,7 @@
         >
           <option value="">Seleccione el tipo</option>
           <option value="MEETING_ROOM">Sala de Reuniones</option>
-          <option value="DESK_AREA">Área de Mesas</option>
+          <option value="DESK_AREA">Área de Escritorios</option>
         </select>
       </div>
 
@@ -483,7 +483,7 @@
   </div>
 </div>
 
-<!-- Diálogo de Mesa -->
+<!-- Diálogo de Escritorio -->
 <div
   *ngIf="isDeskDialogOpen"
   class="modal-overlay"
@@ -495,7 +495,7 @@
   >
     <div class="modal-header">
       <h3 class="modal-title">
-        {{ editingDesk ? 'Editar Mesa' : 'Nuevo Mesa' }}
+        {{ editingDesk ? 'Editar Escritorio' : 'Nuevo Escritorio' }}
       </h3>
       <button
         (click)="closeDeskDialog()"
@@ -522,7 +522,7 @@
         <input
           type="text"
           formControlName="name"
-          placeholder="p. ej., Mesa A-01, Mesa B-02"
+          placeholder="p. ej., Escritorio A-01, Escritorio B-02"
           class="form-input"
           [class.error]="deskForm.get('name')?.invalid && deskForm.get('name')?.touched"
         />

@@ -88,18 +88,18 @@ export class DeskReservationDialogComponent implements OnInit {
    * Get resource type text (Desk or Meeting Room)
    */
   getResourceType(): string {
-    return this.isMeetingRoom ? 'Meeting Room' : 'Desk';
+    return this.isMeetingRoom ? 'Sala de reunión' : 'Escritorio';
   }
 
   onReserve(): void {
     if (!this.deskWithStatus?.desk?.id) {
-      this.errorMessage = 'Invalid desk ID';
+      this.errorMessage = 'ID de escritorio inválido';
       return;
     }
 
     const userId = this.authService.getUserId();
     if (!userId) {
-      this.errorMessage = 'User not authenticated';
+      this.errorMessage = 'Usuario no autenticado';
       return;
     }
 
@@ -115,8 +115,8 @@ export class DeskReservationDialogComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.isLoading = false;
-          const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
-          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" reserved successfully!`;
+          const resourceType = this.isMeetingRoom ? 'Sala de reunión' : 'Escritorio';
+          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" reservada con éxito!`;
           setTimeout(() => {
             this.onClose();
             this.reserved.emit();
@@ -127,7 +127,7 @@ export class DeskReservationDialogComponent implements OnInit {
           this.errorMessage =
             error.error?.message ||
             error.message ||
-            `Failed to reserve desk (HTTP ${error.status}). Please try again.`;
+            `Error al reservar la ${this.isMeetingRoom ? 'sala de reunión' : 'escritorio'} (HTTP ${error.status}). Por favor, inténtelo de nuevo.`;
         }
       });
   }
@@ -141,11 +141,11 @@ export class DeskReservationDialogComponent implements OnInit {
 
   onCancelReservation(): void {
     if (!this.deskWithStatus?.reservationId) {
-      this.errorMessage = 'Reservation ID not found';
+      this.errorMessage = 'ID de reserva no encontrado';
       return;
     }
 
-    if (!confirm('Are you sure you want to cancel this reservation?')) {
+    if (!confirm('¿Está seguro de que desea cancelar esta reserva?')) {
       return;
     }
 
@@ -158,8 +158,8 @@ export class DeskReservationDialogComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.isLoading = false;
-          const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
-          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" cancelled successfully!`;
+          const resourceType = this.isMeetingRoom ? 'Sala de reunión' : 'Escritorio';
+          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" cancelada con éxito!`;
           setTimeout(() => {
             this.onClose();
             this.reserved.emit(); // Emit event to trigger refresh
@@ -170,7 +170,7 @@ export class DeskReservationDialogComponent implements OnInit {
           this.errorMessage =
             error.error?.message ||
             error.message ||
-            `Failed to cancel reservation (HTTP ${error.status}). Please try again.`;
+            `Error al cancelar la ${this.isMeetingRoom ? 'sala de reunión' : 'escritorio'} (HTTP ${error.status}). Por favor, inténtelo de nuevo.`;
         }
       });
   }

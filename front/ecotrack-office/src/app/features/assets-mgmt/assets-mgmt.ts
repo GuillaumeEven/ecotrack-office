@@ -43,7 +43,7 @@ export class AssetsMgmt implements OnInit {
   tabLabels: Record<'floors' | 'rooms' | 'desks', string> = {
     floors: 'Pisos',
     rooms: 'Salas',
-    desks: 'Mesas',
+    desks: 'Escritorios',
   };
 
   // Dialog state
@@ -272,13 +272,13 @@ export class AssetsMgmt implements OnInit {
       const desks = this.allDesks.filter((d) => rooms.some((r) => r.id === d.roomId));
       this.deleteItemSummary =
         rooms.length > 0
-          ? `Este piso contiene ${rooms.length} sala(s) y ${desks.length} mesa(s) que también serán eliminadas.`
+          ? `Este piso contiene ${rooms.length} sala(s) y ${desks.length} escritorio(s) que también serán eliminadas.`
           : '';
     } else if (type === 'room') {
       const desks = this.allDesks.filter((d) => d.roomId === id);
       this.deleteItemSummary =
         desks.length > 0
-          ? `Esta sala contiene ${desks.length} mesa(s) que también serán eliminadas.`
+          ? `Esta sala contiene ${desks.length} escritorio(s) que también serán eliminadas.`
           : '';
     } else {
       this.deleteItemSummary = '';
@@ -328,12 +328,12 @@ export class AssetsMgmt implements OnInit {
         this.deskService.delete(this.deleteItemId).subscribe({
           next: () => {
             this.allDesks = this.allDesks.filter((d) => d.id !== this.deleteItemId);
-            this.notificationService.success('Mesa eliminada correctamente.');
+            this.notificationService.success('Escritorio eliminada correctamente.');
             this.closeDeleteDialog();
             this.cdr.markForCheck();
           },
           error: () => {
-            this.notificationService.error('Error al eliminar la mesa.');
+            this.notificationService.error('Error al eliminar la escritorio.');
             this.cdr.markForCheck();
           },
         });
