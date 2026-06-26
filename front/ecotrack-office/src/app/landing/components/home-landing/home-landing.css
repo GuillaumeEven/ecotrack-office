@@ -73,7 +73,7 @@ body {
 
 /* Estilos de Tarjetas Efecto Cristal (Bento Base) */
 .glass-card {
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--surface-container-lowest);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(226, 232, 240, 0.5);
 }
@@ -534,7 +534,7 @@ body {
 
 /* Estilos internos de la caja del Formulario */
 .form-card {
-    background-color: #ffffff;
+    background: var(--surface-container-lowest);
     padding: var(--spacing-lg);
     border-radius: 12px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
