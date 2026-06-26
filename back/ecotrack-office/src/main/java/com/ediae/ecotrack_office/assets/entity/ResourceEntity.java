@@ -1,7 +1,14 @@
 package com.ediae.ecotrack_office.assets.entity;
 
-import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.ediae.ecotrack_office.assets.enums.ResourceStatus;
+import com.ediae.ecotrack_office.incident.entity.IncidentEntity;
+import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,6 +42,14 @@ public class ResourceEntity {
 
     @Column(name = "equipment_list")
     private String equipmentList;
+
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore // no queremos que se serialice la lista de incidentes al convertir ResourceEntity a JSON, para evitar problemas de recursión infinita
+    private List<IncidentEntity> incidents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<ReservationEntity> reservations = new ArrayList<>();
 
     public ResourceEntity() {
     }

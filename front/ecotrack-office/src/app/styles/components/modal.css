@@ -65,3 +65,92 @@
   gap: var(--spacing-md);
   justify-content: flex-end;
 }
+
+/* Modal Box Styles */
+.modal-box {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  max-width: 450px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.modal-box__title {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #1a1a1a;
+}
+
+.modal-box__text {
+  margin: 0;
+  color: #555555;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.modal-box__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-box__input {
+  padding: 0.6rem;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Button group */
+.modal-box__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.modal-box__btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.modal-box__btn--secondary {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.modal-box__btn--secondary:hover {
+  background: #e5e7eb;
+}
+
+.modal-box__btn--primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.modal-box__btn--primary:hover {
+  background: #1d4ed8;
+}
+
+.modal-box__btn--primary:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.modal-box__btn--danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.modal-box__btn--danger:hover {
+  background: #b91c1c;
+}

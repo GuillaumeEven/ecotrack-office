@@ -10,6 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ast_floors")
@@ -32,6 +36,9 @@ public class FloorEntity {
 
     @Column(name = "name", nullable = true)
     private String name;
+
+    @OneToMany(mappedBy = "floor", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<RoomEntity> rooms = new ArrayList<>();
 
     public FloorEntity() {
     }

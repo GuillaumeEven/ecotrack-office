@@ -2,9 +2,7 @@
   <!-- Encabezado de la página -->
   <div class="page-header">
     <h1>Gestión de Recursos</h1>
-    <p>
-      Gestione la infraestructura de su edificio: pisos, Salas y Mesas.
-    </p>
+    <p>Gestione la infraestructura de su edificio: pisos, Salas y Mesas.</p>
   </div>
 
   <!-- Navegación por pestañas -->
@@ -23,10 +21,7 @@
   <div *ngIf="activeTab === 'floors'" class="tab-content">
     <!-- Botón Crear -->
     <div class="justify-end">
-      <button
-        (click)="openFloorDialog(null)"
-        class="btn btn-primary"
-      >
+      <button (click)="openFloorDialog(null)" class="btn btn-primary">
         <span class="material-symbols-outlined">add</span>
         Nuevo Piso
       </button>
@@ -37,30 +32,18 @@
       <table>
         <thead>
           <tr>
-            <th>
-              Nombre del Piso
-            </th>
-            <th>
-              Salas
-            </th>
-            <th>
-              Estado
-            </th>
-            <th class="text-center">
-              Acciones
-            </th>
+            <th>Nombre del Piso</th>
+            <th>Salas</th>
+            <th>Estado</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let floor of floors"
-          >
+          <tr *ngFor="let floor of floors">
             <td>
               {{ getFloorName(floor.id) }}
             </td>
-            <td class="muted">
-              {{ getRoomCount(floor.id) || 0 }} Sala(es)
-            </td>
+            <td class="muted">{{ getRoomCount(floor.id) || 0 }} Sala(es)</td>
             <td>
               <span
                 [class.active]="floor.isActive"
@@ -72,11 +55,7 @@
             </td>
             <td>
               <div class="actions-cell">
-                <button
-                  (click)="openFloorDialog(floor)"
-                  class="action-btn"
-                  title="Editar piso"
-                >
+                <button (click)="openFloorDialog(floor)" class="action-btn" title="Editar piso">
                   <span class="material-symbols-outlined">edit</span>
                 </button>
                 <button
@@ -90,9 +69,7 @@
             </td>
           </tr>
           <tr *ngIf="floors.length === 0">
-            <td colspan="4" class="empty-state">
-              Sin pisos aún. Cree uno para comenzar.
-            </td>
+            <td colspan="4" class="empty-state">Sin pisos aún. Cree uno para comenzar.</td>
           </tr>
         </tbody>
       </table>
@@ -105,19 +82,14 @@
     <div class="toolbar">
       <div class="toolbar-filter">
         <label>Filtrar por Piso:</label>
-        <select
-          [(ngModel)]="selectedFloorId"
-          (change)="onFloorChange()"
-          class="form-select"
-        >
+        <select [(ngModel)]="selectedFloorId" (change)="onFloorChange()" class="form-select">
           <option [ngValue]="null">Todos los Pisos</option>
-          <option *ngFor="let floor of floors" [ngValue]="floor.id">{{ getFloorName(floor.id) }}</option>
+          <option *ngFor="let floor of floors" [ngValue]="floor.id">
+            {{ getFloorName(floor.id) }}
+          </option>
         </select>
       </div>
-      <button
-        (click)="openRoomDialog(null)"
-        class="btn btn-primary"
-      >
+      <button (click)="openRoomDialog(null)" class="btn btn-primary">
         <span class="material-symbols-outlined">add</span>
         Nueva Sala
       </button>
@@ -128,27 +100,15 @@
       <table>
         <thead>
           <tr>
-            <th>
-              Nombre de la Sala
-            </th>
-            <th>
-              Piso
-            </th>
-            <th>
-              Tipo
-            </th>
-            <th>
-              Mesas
-            </th>
-            <th class="text-center">
-              Acciones
-            </th>
+            <th>Nombre de la Sala</th>
+            <th>Piso</th>
+            <th>Tipo</th>
+            <th>Mesas</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let room of filteredRooms"
-          >
+          <tr *ngFor="let room of filteredRooms">
             <td>
               {{ getRoomName(room.id) }}
             </td>
@@ -163,25 +123,17 @@
             </td>
             <td>
               <div class="actions-cell">
-                <button
-                  (click)="openRoomDialog(room)"
-                  class="action-btn"
-                >
+                <button (click)="openRoomDialog(room)" class="action-btn">
                   <span class="material-symbols-outlined">edit</span>
                 </button>
-                <button
-                  (click)="openDeleteDialog('room', room.id)"
-                  class="action-btn danger"
-                >
+                <button (click)="openDeleteDialog('room', room.id)" class="action-btn danger">
                   <span class="material-symbols-outlined">delete</span>
                 </button>
               </div>
             </td>
           </tr>
           <tr *ngIf="filteredRooms.length === 0">
-            <td colspan="5" class="empty-state">
-              No se encontraron Salas.
-            </td>
+            <td colspan="5" class="empty-state">No se encontraron Salas.</td>
           </tr>
         </tbody>
       </table>
@@ -194,19 +146,14 @@
     <div class="toolbar">
       <div class="toolbar-filter">
         <label>Filtrar por Sala:</label>
-        <select
-          [(ngModel)]="selectedRoomId"
-          (change)="onRoomChange()"
-          class="form-select"
-        >
+        <select [(ngModel)]="selectedRoomId" (change)="onRoomChange()" class="form-select">
           <option [ngValue]="null">Todas las Salas</option>
-          <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ getRoomName(room.id) }}</option>
+          <option *ngFor="let room of deskAreas" [ngValue]="room.id">
+            {{ getRoomName(room.id) }}
+          </option>
         </select>
       </div>
-      <button
-        (click)="openDeskDialog(null)"
-        class="btn btn-primary"
-      >
+      <button (click)="openDeskDialog(null)" class="btn btn-primary">
         <span class="material-symbols-outlined">add</span>
         Nuevo Mesa
       </button>
@@ -217,25 +164,15 @@
       <table>
         <thead>
           <tr>
-            <th>
-              Nombre del Mesa
-            </th>
-            <th>
-              Sala
-            </th>
-            <th>
-              Estado
-            </th>
-            <th class="text-center">
-              Acciones
-            </th>
+            <th>Nombre del Mesa</th>
+            <th>Sala</th>
+            <th>Estado</th>
+            <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let desk of filteredDesks"
-          >
-            <td style="font-weight: bold;">
+          <tr *ngFor="let desk of filteredDesks">
+            <td style="font-weight: bold">
               {{ getDeskName(desk.id) }}
             </td>
             <td class="muted">
@@ -252,25 +189,17 @@
             </td>
             <td>
               <div class="actions-cell">
-                <button
-                  (click)="openDeskDialog(desk)"
-                  class="action-btn"
-                >
+                <button (click)="openDeskDialog(desk)" class="action-btn">
                   <span class="material-symbols-outlined">edit</span>
                 </button>
-                <button
-                  (click)="openDeleteDialog('desk', desk.id)"
-                  class="action-btn danger"
-                >
+                <button (click)="openDeleteDialog('desk', desk.id)" class="action-btn danger">
                   <span class="material-symbols-outlined">delete</span>
                 </button>
               </div>
             </td>
           </tr>
           <tr *ngIf="filteredDesks.length === 0">
-            <td colspan="4" class="empty-state">
-              No se encontraron Mesas.
-            </td>
+            <td colspan="4" class="empty-state">No se encontraron Mesas.</td>
           </tr>
         </tbody>
       </table>
@@ -287,20 +216,12 @@
   (click)="closeFloorDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
-    <div class="modal-header">
-      <h3 class="modal-title">
-        {{ editingFloor ? 'Editar Piso' : 'Nuevo Piso' }}
-      </h3>
-      <button
-        (click)="closeFloorDialog()"
-        class="modal-close"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
+    <h3 class="modal-box__title">
+      {{ editingFloor ? 'Editar Piso' : 'Nuevo Piso' }}
+    </h3>
 
     <form [formGroup]="floorForm" (ngSubmit)="submitFloor()" class="modal-form">
       <div class="form-section">
@@ -335,18 +256,18 @@
         <label for="floorActive" class="checkbox-label">Activo</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="modal-box__actions">
         <button
           type="button"
           (click)="closeFloorDialog()"
-          class="modal-action-btn secondary"
+          class="modal-box__btn modal-box__btn--secondary"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="floorForm.invalid"
-          class="modal-action-btn primary"
+          class="modal-box__btn modal-box__btn--primary"
         >
           {{ editingFloor ? 'Actualizar' : 'Crear' }}
         </button>
@@ -362,30 +283,21 @@
   (click)="closeRoomDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
-    <div class="modal-header">
-      <h3 class="modal-title">
-        {{ editingRoom ? 'Editar Sala' : 'Nueva Sala' }}
-      </h3>
-      <button
-        (click)="closeRoomDialog()"
-        class="modal-close"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
+    <h3 class="modal-box__title">
+      {{ editingRoom ? 'Editar Sala' : 'Nueva Sala' }}
+    </h3>
 
     <form [formGroup]="roomForm" (ngSubmit)="submitRoom()" class="modal-form">
       <div class="form-section">
         <label class="form-label">PISO *</label>
-        <select
-          formControlName="floorId"
-          class="form-select"
-        >
+        <select formControlName="floorId" class="form-select">
           <option [ngValue]="">Seleccione un piso</option>
-          <option *ngFor="let floor of floors" [ngValue]="floor.id">{{ getFloorName(floor.id) }}</option>
+          <option *ngFor="let floor of floors" [ngValue]="floor.id">
+            {{ getFloorName(floor.id) }}
+          </option>
         </select>
       </div>
 
@@ -402,10 +314,7 @@
 
       <div class="form-section">
         <label class="form-label">TIPO DE SALA *</label>
-        <select
-          formControlName="roomType"
-          class="form-select"
-        >
+        <select formControlName="roomType" class="form-select">
           <option value="">Seleccione el tipo</option>
           <option value="MEETING_ROOM">Sala de Reuniones</option>
           <option value="DESK_AREA">Área de Mesas</option>
@@ -433,7 +342,9 @@
           min="0.01"
           step="0.01"
           class="form-input"
-          [class.error]="roomForm.get('surfaceArea')?.invalid && roomForm.get('surfaceArea')?.touched"
+          [class.error]="
+            roomForm.get('surfaceArea')?.invalid && roomForm.get('surfaceArea')?.touched
+          "
         />
       </div>
 
@@ -457,18 +368,18 @@
         <label for="roomActive" class="checkbox-label">ACTIVO</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="modal-box__actions">
         <button
           type="button"
           (click)="closeRoomDialog()"
-          class="modal-action-btn secondary"
+          class="modal-box__btn modal-box__btn--secondary"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="roomForm.invalid"
-          class="modal-action-btn primary"
+          class="modal-box__btn modal-box__btn--primary"
         >
           {{ editingRoom ? 'Actualizar' : 'Crear' }}
         </button>
@@ -484,28 +395,17 @@
   (click)="closeDeskDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
-    <div class="modal-header">
-      <h3 class="modal-title">
-        {{ editingDesk ? 'Editar Mesa' : 'Nuevo Mesa' }}
-      </h3>
-      <button
-        (click)="closeDeskDialog()"
-        class="modal-close"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
+    <h3 class="modal-box__title">
+      {{ editingDesk ? 'Editar Mesa' : 'Nuevo Mesa' }}
+    </h3>
 
     <form [formGroup]="deskForm" (ngSubmit)="submitDesk()" class="modal-form">
       <div class="form-section">
         <label class="form-label">SALA *</label>
-        <select
-          formControlName="roomId"
-          class="form-select"
-        >
+        <select formControlName="roomId" class="form-select">
           <option [ngValue]="">Seleccione una Sala</option>
           <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ room.name }}</option>
         </select>
@@ -542,18 +442,18 @@
         <label for="deskActive" class="checkbox-label">ACTIVO</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="modal-box__actions">
         <button
           type="button"
           (click)="closeDeskDialog()"
-          class="modal-action-btn secondary"
+          class="modal-box__btn modal-box__btn--secondary"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="deskForm.invalid"
-          class="modal-action-btn primary"
+          class="modal-box__btn modal-box__btn--primary"
         >
           {{ editingDesk ? 'Actualizar' : 'Crear' }}
         </button>
@@ -569,29 +469,24 @@
   (click)="closeDeleteDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
-    <div class="delete-dialog-header">
-      <span class="delete-icon material-symbols-outlined">warning</span>
-      <h3 class="modal-title">Eliminar {{ deleteItemType }}</h3>
-    </div>
-
-    <p class="delete-message">
+    <h3 class="modal-box__title">Eliminar {{ deleteItemType }}</h3>
+    <p class="modal-box__text">
       ¿Está seguro de que desea eliminar <strong>{{ deleteItemName }}</strong>? Esta acción no se puede deshacer.
     </p>
 
-    <div class="modal-actions">
+    <div class="modal-box__actions">
       <button
         (click)="closeDeleteDialog()"
-        class="modal-action-btn secondary"
+        class="modal-box__btn modal-box__btn--secondary"
       >
         Cancelar
       </button>
       <button
         (click)="confirmDelete()"
-        class="modal-action-btn primary"
-        style="background-color: var(--error); color: var(--on-error);"
+        class="modal-box__btn modal-box__btn--danger"
       >
         Eliminar
       </button>

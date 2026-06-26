@@ -38,7 +38,11 @@
           <div class="identity-meta">
             <div class="meta-item">
               <span class="meta-label">ACCOUNT STATUS</span>
-              <span class="status-badge">
+              <span
+                [class.active]="user?.isActive"
+                [class.inactive]="!user?.isActive"
+                class="status-badge"
+              >
                 {{ user?.isActive ? 'Active' : 'Inactive' }}
               </span>
             </div>
