@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; 
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IncidentService } from '../../services/incident';
-import { AuthService } from '../../services/auth.service'; 
+import { AuthService } from '../../services/auth.service';
 import { IncidentResponse } from '../../models/incident.model';
+import { ResourceService } from '../../services/resource.service';
 
 @Component({
   selector: 'app-incidencias',
@@ -18,14 +19,16 @@ export class IncidenciasComponent implements OnInit {
   isSaving = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
-  userRole: string = 'USER'; 
+  userRole: string = 'USER';
+  resourceNames: Map<number, string> = new Map();
   protected readonly String = String;
 
   constructor(
     private fb: FormBuilder,
     private incidentService: IncidentService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef 
+    private resourceService: ResourceService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -45,9 +48,9 @@ export class IncidenciasComponent implements OnInit {
 
   initForm(): void {
     this.incidentForm = this.fb.group({
-      description: ['', [Validators.required, Validators.minLength(10)]], 
-      resourceId: ['', [Validators.required, Validators.pattern('^[0-9]+$')]], 
-      userId: ['1', [Validators.required]] 
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      resourceId: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      userId: ['1', [Validators.required]]
     });
   }
 
@@ -56,44 +59,37 @@ export class IncidenciasComponent implements OnInit {
    * Traduce los IDs incrementales de MySQL en los nombres normativos del MVP.
    */
   getResourceName(id: number): string {
-    // PLANTA 1
-    if (id === 1) return 'Sala de Trabajo A';
-    if (id >= 2 && id <= 11) return `Escritorio D${id - 1} (Planta 1 - Sala A)`;
+    return this.resourceNames.get(id) || `Cargando...`;
+  }
 
-    if (id === 12) return 'Sala de Trabajo B';
-    if (id >= 13 && id <= 22) return `Escritorio D${id - 12} (Planta 1 - Sala B)`;
+  private loadResourceName(id: number): void {
+    if (this.resourceNames.has(id)) return;
 
-    if (id === 23) return 'Sala de Trabajo C';
-    if (id >= 24 && id <= 33) return `Escritorio D${id - 23} (Planta 1 - Sala C)`;
-
-    if (id === 34) return 'Sala de Reunión 1 (Planta 1)';
-    if (id === 35) return 'Sala de Reunión 2 (Planta 1)';
-
-    // PLANTA 2
-    if (id === 36) return 'Sala de Trabajo D';
-    if (id >= 37 && id <= 46) return `Escritorio D${id - 36} (Planta 2 - Sala D)`;
-
-    if (id === 47) return 'Sala de Trabajo E';
-    if (id >= 48 && id <= 57) return `Escritorio D${id - 47} (Planta 2 - Sala E)`;
-
-    if (id === 58) return 'Sala de Reunión 3 (Planta 2)';
-    if (id === 59) return 'Sala de Reunión 4 (Planta 2)';
-
-    return `Recurso Externo #${id}`;
+    this.resourceService.getResourceById(id).subscribe({
+      next: (data) => {
+        this.resourceNames.set(id, data.name);
+        this.cdr.markForCheck();  // ← Force Angular à redessiner
+      },
+      error: () => {
+        this.resourceNames.set(id, `Recurso Externo #${id}`);
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   loadIncidents(): void {
     this.isLoading = true;
     this.incidentService.getAll().subscribe({
-      next: (data: IncidentResponse[]) => {
+      next: (data) => {
         this.incidents = data;
+        data.forEach(incident => this.loadResourceName(incident.resourceId));
         this.isLoading = false;
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
       },
       error: () => {
         this.errorMessage = 'No se pudieron cargar las incidencias desde el servidor.';
         this.isLoading = false;
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
       }
     });
   }
@@ -117,7 +113,7 @@ export class IncidenciasComponent implements OnInit {
         this.incidentForm.patchValue({ description: '', resourceId: '' });
         this.incidentForm.get('description')?.markAsUntouched();
         this.incidentForm.get('resourceId')?.markAsUntouched();
-        this.loadIncidents(); 
+        this.loadIncidents();
       },
       error: () => {
         this.isSaving = false;
@@ -144,7 +140,7 @@ export class IncidenciasComponent implements OnInit {
       this.incidentService.delete(id).subscribe({
         next: () => {
           this.successMessage = 'Incidencia eliminada correctamente.';
-          this.loadIncidents(); 
+          this.loadIncidents();
         },
         error: () => {
           this.errorMessage = 'No se pudo eliminar la incidencia.';
