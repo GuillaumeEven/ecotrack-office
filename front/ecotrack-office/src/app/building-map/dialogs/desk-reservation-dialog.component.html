@@ -1,7 +1,7 @@
 <div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
   <div class="modal-box" (click)="$event.stopPropagation()">
     <!-- Title -->
-    <h3 class="modal-box__title">{{ deskWithStatus?.desk?.name || 'Escritorio' }}</h3>
+    <h3 class="modal-title">{{ deskWithStatus?.desk?.name || 'Escritorio' }}</h3>
 
     <!-- Status indicator -->
     <div class="status-section">

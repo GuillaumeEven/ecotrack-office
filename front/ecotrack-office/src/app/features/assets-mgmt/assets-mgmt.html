@@ -284,16 +284,16 @@
   </div>
 </div>
 
-<!-- DIÁLOGOS -->
+<!-- MODALES -->
 
-<!-- Diálogo de Piso -->
+<!-- Modal de Piso -->
 <div
   *ngIf="isFloorDialogOpen"
   class="modal-overlay"
   (click)="closeFloorDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
     <div class="modal-header">
@@ -332,27 +332,27 @@
       </div>
 
       <div class="checkbox-group">
+        <label for="floorActive" class="checkbox-label">Activo</label>
         <input
           type="checkbox"
           formControlName="isActive"
           id="floorActive"
           class="form-input checkbox-input"
         />
-        <label for="floorActive" class="checkbox-label">Activo</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeFloorDialog()"
-          class="modal-action-btn secondary"
+          class="btn"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="floorForm.invalid"
-          class="modal-action-btn primary"
+          class="btn btn-primary"
         >
           {{ editingFloor ? 'Actualizar' : 'Crear' }}
         </button>
@@ -368,7 +368,7 @@
   (click)="closeRoomDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
     <div class="modal-header">
@@ -463,18 +463,18 @@
         <label for="roomActive" class="checkbox-label">ACTIVO</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeRoomDialog()"
-          class="modal-action-btn secondary"
+          class="btn"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="roomForm.invalid"
-          class="modal-action-btn primary"
+          class="btn btn-primary"
         >
           {{ editingRoom ? 'Actualizar' : 'Crear' }}
         </button>
@@ -490,7 +490,7 @@
   (click)="closeDeskDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
     <div class="modal-header">
@@ -548,18 +548,18 @@
         <label for="deskActive" class="checkbox-label">ACTIVO</label>
       </div>
 
-      <div class="modal-actions">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeDeskDialog()"
-          class="modal-action-btn secondary"
+          class="btn"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="deskForm.invalid"
-          class="modal-action-btn primary"
+          class="btn btn-primary"
         >
           {{ editingDesk ? 'Actualizar' : 'Crear' }}
         </button>
@@ -575,7 +575,7 @@
   (click)="closeDeleteDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
     <div class="delete-dialog-header">
@@ -587,16 +587,16 @@
       ¿Está seguro de que desea eliminar <strong>{{ deleteItemName }}</strong>? Esta acción no se puede deshacer.
     </p>
 
-    <div class="modal-actions">
+    <div class="btn-group">
       <button
         (click)="closeDeleteDialog()"
-        class="modal-action-btn secondary"
+        class="btn"
       >
         Cancelar
       </button>
       <button
         (click)="confirmDelete()"
-        class="modal-action-btn primary"
+        class="btn btn-primary"
         style="background-color: var(--error); color: var(--on-error);"
       >
         Eliminar

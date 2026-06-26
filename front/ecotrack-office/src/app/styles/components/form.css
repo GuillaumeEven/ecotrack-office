@@ -146,5 +146,11 @@ form {
 .checkbox-group {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-md);
+}
+
+input[type="checkbox"] {
+  width: auto;
+  height: auto;
+  margin: 0;
 }

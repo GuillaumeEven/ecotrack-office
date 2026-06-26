@@ -533,7 +533,7 @@
     justify-content: space-between;
 }
 
-.history-pagination__info { font-size: 14px; color: #45464d; }
+.history-pagination__info { font-size: 14px; color: var(--primary); }
 .history-pagination__actions { display: flex; gap: 8px; }
 .history-pagination__btn {
     padding: 6px; border: 1px solid #c6c6cd; border-radius: 8px; background-color: #ffffff; cursor: pointer;
