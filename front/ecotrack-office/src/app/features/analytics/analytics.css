@@ -1,0 +1,219 @@
+.analytics-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-gutter);
+  box-sizing: border-box;
+}
+
+/* Encabezado */
+.page-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (min-width: 1024px) {
+  .page-header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.header-main {
+  flex: 1;
+}
+
+.page-title {
+  font: var(--font-headline-md);
+  color: var(--on-surface);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.page-subtitle {
+  font: var(--font-body-md);
+  color: var(--on-surface-variant);
+  margin: 0;
+  line-height: var(--line-height-normal);
+}
+
+/* Banner de Alerta adaptado a la paleta de colores del sistema */
+.alert-error-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background-color: var(--error-container);
+  border: var(--border-width-1) solid var(--error);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--on-error-container);
+  margin-bottom: var(--spacing-md);
+}
+
+.alert-error-banner p {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Rejilla sincronizada con Breakpoints del Sistema */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-gutter);
+}
+
+@media (min-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tarjetas de Métricas - Extendiendo .card de forma limpia */
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-label {
+  font: var(--font-label-sm);
+  letter-spacing: var(--letter-spacing-label);
+  color: var(--on-surface-variant);
+}
+
+.card-body-metric {
+  margin-top: var(--spacing-sm);
+}
+
+.metric-value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--on-surface);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.metric-unit {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--on-surface-variant);
+}
+
+.card-footer-text {
+  font-size: var(--font-size-sm);
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+
+.footer-success {
+  font-size: var(--font-size-sm);
+  color: var(--success);
+  font-weight: var(--font-weight-medium);
+  margin: 0;
+}
+
+/* Estados funcionales de los iconos */
+.icon-co2 { color: var(--status-available); }
+.icon-money { color: var(--on-surface); }
+.icon-spots { color: var(--status-selected); }
+
+/* Extensión de la tarjeta de historial */
+.card-header-dashboard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  border-bottom: var(--border-width-1) solid var(--outline-variant);
+  padding-bottom: var(--spacing-xs);
+}
+
+.history-title {
+  font: var(--font-title-lg);
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.icon-variant {
+  color: var(--on-primary-container);
+}
+
+@media (min-width: 1024px) {
+  .history-card {
+    grid-column: span 3;
+  }
+}
+
+/* Modificadores específicos de la tabla en analítica */
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.font-medium { 
+  font-weight: var(--font-weight-medium); 
+}
+
+.font-money-table { 
+  font-weight: var(--font-weight-semibold); 
+  color: var(--on-surface); 
+}
+
+.date-cell {
+  color: var(--on-surface-variant);
+  font-size: var(--font-size-sm);
+}
+
+/* Animaciones de Carga */
+.skeleton-loader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) 0;
+}
+
+.skeleton-bar {
+  height: 48px;
+  background-color: var(--surface-container);
+  border-radius: var(--radius-md);
+  width: 100%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Estados Vacíos */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: var(--outline-variant);
+  margin-bottom: var(--spacing-xs);
+}
+
+.empty-text {
+  color: var(--on-surface-variant);
+  font-size: var(--font-size-base);
+  margin: 0;
+}

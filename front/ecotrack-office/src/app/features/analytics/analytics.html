@@ -1,0 +1,96 @@
+<div class="analytics-container">
+  <div class="page-header">
+    <div class="header-main">
+      <h1 class="page-title">Sostenibilidad y Analítica</h1>
+      <p class="page-subtitle">
+        Métricas en tiempo real sobre la reducción de la huella de carbono, eficiencia del espacio de trabajo y optimización de recursos.
+      </p>
+    </div>
+    <button *ngIf="userRole === 'ADMIN'" (click)="compileMetrics()" class="btn btn-primary">
+      <span class="material-symbols-outlined">refresh</span>
+      Compilar Métricas
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert-error-banner">
+    <span class="material-symbols-outlined">close</span>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div class="bento-grid">
+    
+    <div class="card metric-card card-co2">
+      <div class="card-top">
+        <span class="card-label">AHORRO DE CARBONO</span>
+        <span class="material-symbols-outlined icon-co2">eco</span>
+      </div>
+      <div class="card-body-metric">
+        <h2 class="metric-value">{{ metrics?.co2Saved | number:'1.1-1' }} <span class="metric-unit">kg CO₂</span></h2>
+        <p class="footer-success">✓ Objetivo de huella activo</p>
+      </div>
+    </div>
+
+    <div *ngIf="userRole === 'ADMIN'" class="card metric-card card-money">
+      <div class="card-top">
+        <span class="card-label">AHORRO ESTIMADO</span>
+        <span class="material-symbols-outlined icon-money">payments</span>
+      </div>
+      <div class="card-body-metric">
+        <h2 class="metric-value">€{{ metrics?.financialSaved | number:'1.2-2' }}</h2>
+        <p class="card-footer-text">Basado en apagado inteligente</p>
+      </div>
+    </div>
+
+    <div *ngIf="userRole === 'ADMIN'" class="card metric-card card-spots">
+      <div class="card-top">
+        <span class="card-label">USO DE PUESTOS</span>
+        <span class="material-symbols-outlined icon-spots">date_range</span>
+      </div>
+      <div class="card-body-metric">
+        <h2 class="metric-value">{{ metrics?.activeReservationsCount || 0 }} <span class="metric-unit">reservas</span></h2>
+        <p class="card-footer-text">{{ metrics?.checkInsCount || 0 }} check-ins registrados</p>
+      </div>
+    </div>
+
+    <div *ngIf="userRole === 'ADMIN'" class="card history-card">
+      <div class="card-header-dashboard">
+        <h3 class="history-title">Historial de Informes Compilados</h3>
+        <span class="material-symbols-outlined icon-variant">analytics</span>
+      </div>
+
+      <div *ngIf="isLoading" class="skeleton-loader">
+        <div class="skeleton-bar"></div>
+        <div class="skeleton-bar"></div>
+      </div>
+
+      <div *ngIf="!isLoading && reports.length === 0" class="empty-state">
+        <span class="material-symbols-outlined empty-icon">bar_chart</span>
+        <p class="empty-text">No se han encontrado informes. Haz clic en 'Compilar Métricas' para generar datos.</p>
+      </div>
+
+      <div *ngIf="!isLoading && reports.length > 0" class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ID INFORME</th>
+              <th>FECHA COMPILACIÓN</th>
+              <th>AHORRO CO₂</th>
+              <th>AHORRO ECONÓMICO</th>
+              <th>RESERVAS TOTALES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let report of reports">
+              <td class="font-medium">#REP-{{ report.id }}</td>
+              <td class="date-cell">{{ report.compiledAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ report.co2Saved }} kg</td>
+              <td class="font-money-table">€{{ report.financialSaved | number:'1.2-2' }}</td>
+              <td>{{ report.activeReservationsCount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
