@@ -9,7 +9,7 @@
    ============================================================================ */
 
 header {
-  background-color: var(--surface-high);
+  background-color: var(--card-bg);
   border-bottom: var(--border-width-1) solid var(--border-color);
   position: fixed;
   top: 0;

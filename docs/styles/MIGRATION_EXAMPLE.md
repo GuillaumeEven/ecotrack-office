@@ -90,7 +90,7 @@ Archivo: src/app/features/reservation/components/reservation-list.component.css
 /* Contenedor principal */
 .reservation-container {
   padding: var(--spacing-lg) var(--spacing-md);
-  background-color: var(--surface-high);
+  background-color: var(--card-bg);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
@@ -119,7 +119,7 @@ PASO 1: Reemplazar las clases Tailwind por clases orientadas al negocio
 PASO 2: Crear una clase CSS para este contenedor en .component.css
   .reservation-container {
     padding: var(--spacing-lg) var(--spacing-md);
-    background-color: var(--surface-high);
+    background-color: var(--card-bg);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
   }
@@ -174,7 +174,7 @@ CSS: reservation-list.component.css
 
 .reservation-card {
   padding: var(--spacing-lg);
-  background: var(--surface-high);
+  background: var(--card-bg);
   border: var(--border-width-1) solid var(--border-color);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-md);
@@ -215,7 +215,7 @@ CSS: reservation-list.component.css
 
 .reservation-item {
   padding: var(--spacing-md);
-  background: var(--surface-high);
+  background: var(--card-bg);
   border: var(--border-width-1) solid var(--border-color);
   border-radius: var(--radius-md);
   transition: box-shadow var(--transition-fast);

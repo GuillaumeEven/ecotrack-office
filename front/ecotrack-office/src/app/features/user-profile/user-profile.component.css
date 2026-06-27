@@ -9,7 +9,7 @@
    ============================================================================ */
 
 /* Header */
-.page-header {
+/* .page-header {
   margin-bottom: var(--spacing-xl);
 }
 
@@ -22,7 +22,7 @@
 .page-header p {
   color: var(--on-surface-variant);
   font: var(--font-body-lg);
-}
+} */
 
 /* Bento Grid */
 .bento-grid {
@@ -64,12 +64,12 @@
 }
 
 /* Card */
-.card {
+/* .card {
   background-color: var(--surface-container-lowest);
   border: var(--border-width-1) solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
-}
+} */
 
 /* Identity Card */
 .identity-card {

@@ -22,6 +22,8 @@
   --delete-button-hover: #93000a; /* Usado: Hover del botón de eliminar */
   --warning-section: #ba1a1a1a; /* Usado: Fondo de secciones de advertencia */
   --info-section: #dae2fd; /* Usado: Fondo de secciones de información */
+  --card-bg: #dce9ff;  /* Usado: Fondo de tarjetas y contenedores */
+  --hover: #dce9ff;
 
   /* Colores Primarios */
   --on-primary: #ffffff;
@@ -63,7 +65,6 @@
   --surface-container: #e5eeff;
   --surface-container-high: #dce9ff;
   --surface-container-highest: #d3e4fe;
-  --surface-high: #ffffff;  /* Alias para compatibilidad */
   --inverse-surface: #213145;
   --inverse-on-surface: #eaf1ff;
   --on-surface-variant: #45464d;
@@ -204,6 +205,7 @@ html.dark {
   --on-surface: #e1e6ff;
   --modal-background: #1b2127;
   --info-section: #0f172a;
+  --hover: #25292f;
 
 
   /* Colores Primarios */
@@ -253,7 +255,7 @@ html.dark {
   --surface-container: #1b2127;
   --surface-container-high: #25292f;
   --surface-container-highest: #303639;
-  --surface-high: #25292f;
+  --card-bg: #25292f;
   --inverse-surface: #e1e6ff;
   --inverse-on-surface: #213145;
   --surface-variant: #47484e;

@@ -79,21 +79,21 @@
   <div class="component-body">
   <!-- KPI Cards -->
   <div class="kpi-grid">
-    <div class="kpi-card">
+    <div class="card">
       <p class="kpi-label">Total usuarios</p>
       <div *ngIf="isLoadingStats" class="skeleton"></div>
       <p *ngIf="!isLoadingStats" class="kpi-value">
         {{ stats.totalUsers }}
       </p>
     </div>
-    <div class="kpi-card">
+    <div class="card">
       <p class="kpi-label">Activos Ahora</p>
       <div *ngIf="isLoadingStats" class="skeleton"></div>
       <p *ngIf="!isLoadingStats" class="kpi-value secondary">
         {{ stats.activeUsers }}
       </p>
     </div>
-    <div class="kpi-card">
+    <div class="card">
       <p class="kpi-label">Nuevos este mes</p>
       <div *ngIf="isLoadingStats" class="skeleton"></div>
       <p *ngIf="!isLoadingStats" class="kpi-value">

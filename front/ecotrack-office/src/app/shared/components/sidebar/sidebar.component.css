@@ -53,7 +53,7 @@ nav a {
 }
 
 nav a:hover {
-  background-color: var(--surface-container-high);
+  background-color: var(--hover);
 }
 
 nav a:focus-visible {
@@ -101,7 +101,7 @@ nav a span:last-child {
 }
 
 .bottom-nav a:hover {
-  background-color: var(--surface-container-high);
+  background-color: var(--hover);
 }
 
 .bottom-nav a:focus-visible {
