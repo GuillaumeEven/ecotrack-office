@@ -1,6 +1,8 @@
 package com.ediae.ecotrack_office.analiticsreport.entity;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 
 import jakarta.persistence.Column;
@@ -37,7 +39,8 @@ public class AnaliticsReportEntity {
     @Column(name = "empty_rooms", nullable = false)
     private Integer emptyRooms;
 
-    @Column(name = "generated_at", nullable = false)
+    @CreationTimestamp
+    @Column(name = "generated_at", nullable = false, updatable = false)
     private LocalDateTime generatedAt;
 
     @ManyToOne(optional = false)
@@ -54,7 +57,7 @@ public class AnaliticsReportEntity {
         this.totalReservations = totalReservations;
         this.confirmedCheckIns = confirmedCheckIns;
         this.emptyRooms = emptyRooms;
-        this.generatedAt = generatedAt;
+        this.generatedAt = LocalDateTime.now(); // Se asigna la fecha y hora actual al crear la entidad
         this.organization = organization;
     }
 
