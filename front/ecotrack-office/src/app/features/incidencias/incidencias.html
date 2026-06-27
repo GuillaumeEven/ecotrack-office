@@ -100,21 +100,22 @@
                       {{ String(item.status) === 'IN_PROGRESS' ? 'EN REVISIÓN' : 'RESUELTA' }}
                     </span>
                   </td>
-                  <td class="text-center" style="padding-right: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;">
-                      <button *ngIf="(String(item.status) === 'IN_PROGRESS') && (userRole === 'TECH' || userRole === 'ADMIN')"
-                        (click)="onResolve(item.id)" class="btn btn-sm btn-outline"
-                        style="border: 1px solid #d97706; color: #d97706; padding: 0.2rem 0.4rem; border-radius: 0.25rem; background: transparent; cursor: pointer; font-size: 0.75rem;">
-                        Resolver
+                  <td class="actions">
+                    <div class="actions-cell">
+                      <button
+                        *ngIf="String(item.status) === 'IN_PROGRESS' && (userRole === 'TECH' || userRole === 'ADMIN')"
+                        (click)="onResolve(item.id)"
+                        class="action-btn"
+                        title="Marcar como resuelto"
+                      >
+                        <span class="material-symbols-outlined">task_alt</span>
                       </button>
-
-                      <span *ngIf="String(item.status) !== 'IN_PROGRESS'" class="solved-text" style="color: #6b7280; font-size: 0.813rem;">
-                        Solucionado
-                      </span>
-
-                      <button (click)="onDelete(item.id)" class="btn-delete" title="Eliminar"
-                              style="background: transparent; border: none; color: #ef4444; cursor: pointer; padding: 0.25rem; display: inline-flex; align-items: center;">
-                        <span class="material-symbols-outlined" style="font-size: 1.15rem;">delete</span>
+                      <button
+                        (click)="onDelete(item.id)"
+                        class="action-btn danger"
+                        title="Eliminar"
+                      >
+                        <span class="material-symbols-outlined">delete</span>
                       </button>
                     </div>
                   </td>
