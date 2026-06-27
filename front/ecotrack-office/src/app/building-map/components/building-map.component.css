@@ -516,11 +516,10 @@
 .meeting-room-container .btn-primary:active {
   transform: scale(0.98);
 }
-/*
+/**
 .meeting-room-container .btn {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
-  /* cursor: not-allowed; */
   border: 1px solid rgba(255, 255, 255, 0.3);
 } */
 
