@@ -12,8 +12,8 @@
       <div class="form-column">
         <div class="card card-sticky">
           <div class="card-header">
-            <h3 class="card-title">Reportar Incidencia</h3>
             <span class="material-symbols-outlined icon-variant">report_problem</span>
+            <h3 class="card-title">Reportar Incidencia</h3>
           </div>
 
           <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
@@ -54,8 +54,8 @@
       <div *ngIf="userRole === 'TECH' || userRole === 'ADMIN'" class="table-column">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Historial de Mantenimiento</h3>
             <span class="material-symbols-outlined icon-variant">build_circle</span>
+            <h3 class="card-title">Historial de Mantenimiento</h3>
           </div>
 
           <div *ngIf="isLoading" class="skeleton-loader">

@@ -98,9 +98,9 @@
       <div class="right-column">
         <!-- Personal Information Form -->
         <div *ngIf="activeSection === 'personal'" class="card form-section">
-          <div class="section-header">
-            <h3>Informaciónn personal</h3>
+          <div class="card-header">
             <span class="material-symbols-outlined">edit</span>
+            <h3>Informaciónn personal</h3>
           </div>
 
           <form [formGroup]="profileForm" (ngSubmit)="onSaveChanges()">
@@ -200,9 +200,9 @@
 
         <!-- Security & Privacy -->
         <div *ngIf="activeSection === 'security'" class="card form-section">
-          <div class="section-header">
-            <h3>Seguridad y privacidad</h3>
+          <div class="card-header">
             <span class="material-symbols-outlined">lock</span>
+            <h3>Seguridad y privacidad</h3>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
@@ -253,9 +253,9 @@
 
         <!-- Notifications -->
         <div *ngIf="activeSection === 'notifications'" class="card form-section">
-          <div class="section-header">
-            <h3>Notifications</h3>
+          <div class="card-header">
             <span class="material-symbols-outlined">notifications</span>
+            <h3>Notifications</h3>
           </div>
           <p>
             Sección de notificaciones en desarrollo.
