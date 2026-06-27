@@ -72,6 +72,14 @@ form {
   gap: var(--spacing-md);
 }
 
+.form-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
 .form-group label {
   display: block;
   font: var(--font-label-sm);

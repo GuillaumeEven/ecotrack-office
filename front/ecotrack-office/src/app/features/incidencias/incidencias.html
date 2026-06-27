@@ -17,13 +17,34 @@
           </div>
 
           <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
+            <!-- Floor Selection -->
             <div class="form-group">
-              <label class="form-label required">ID DEL RECURSO / ACTIVO</label>
-              <input type="text" formControlName="resourceId" placeholder="Ej. 2" class="form-input"
-                [class.error]="incidentForm.get('resourceId')?.invalid && incidentForm.get('resourceId')?.touched" />
-              <p class="form-helper-text">
-                ℹ️ Introduce el número de ID único del activo fijo según el inventario del mapa de la oficina.
-              </p>
+              <label class="form-label required">PISO</label>
+              <select #floorSelect (change)="selectFloor(floorSelect.value)"
+                [value]="selectedFloorId || ''" class="form-input">
+                <option value="">Selecciona un piso</option>
+                <option *ngFor="let floor of floors" [value]="floor.id">{{ floor.name }}</option>
+              </select>
+            </div>
+
+            <!-- Room Selection -->
+            <div class="form-group">
+              <label class="form-label required">SALA</label>
+              <select #roomSelect (change)="selectRoom(roomSelect.value)"
+                [value]="selectedRoomId || ''" [disabled]="rooms.length === 0" class="form-input">
+                <option value="">Selecciona una sala</option>
+                <option *ngFor="let room of rooms" [value]="room.id">{{ room.name }}</option>
+              </select>
+            </div>
+
+            <!-- Desk Selection (only for desk areas) -->
+            <div class="form-group" *ngIf="desks.length > 0">
+              <label class="form-label required">ESCRITORIO</label>
+              <select #deskSelect (change)="selectDesk(deskSelect.value)"
+                [value]="selectedDeskId || ''" class="form-input">
+                <option value="">Sala entera</option>
+                <option *ngFor="let desk of desks" [value]="desk.id">{{ desk.name }}</option>
+              </select>
             </div>
 
             <div class="form-group">
@@ -37,13 +58,8 @@
               </p>
             </div>
 
-            <div *ngIf="successMessage || errorMessage" class="feedback-container">
-              <p *ngIf="successMessage" class="success-message">✓ {{ successMessage }}</p>
-              <p *ngIf="errorMessage" class="error-message">✕ {{ errorMessage }}</p>
-            </div>
-
             <div class="btn-group">
-              <button type="submit" [disabled]="incidentForm.invalid || isSaving" class="btn btn-primary">
+              <button type="submit" [disabled]="incidentForm.invalid || selectedResourceId === null || isSaving" class="btn btn-primary">
                 {{ isSaving ? 'Enviando...' : 'Registrar Incidencia' }}
               </button>
             </div>
