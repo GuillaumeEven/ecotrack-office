@@ -204,8 +204,8 @@ public class ResourceStatusCalculatorService {
                             meetingRoomDto.getReservationId()
                     );
                 }
-            } else if (previousMeetingRoom != null && previousMeetingRoom.getRoomStatus() == ResourceStatus.RESERVED) {
-                // If previous MEETING_ROOM is RESERVED, this one becomes AVAILABLE (if not reserved itself)
+            } else if (previousMeetingRoom != null && (previousMeetingRoom.getRoomStatus() == ResourceStatus.RESERVED || previousMeetingRoom.getRoomStatus() == ResourceStatus.OUT_OF_SERVICE)) {
+                // If previous MEETING_ROOM is RESERVED or OUT_OF_SERVICE, this one becomes AVAILABLE (if not reserved itself)
                 if (currentStatus != ResourceStatus.RESERVED) {
                     meetingRoomDto = new RoomWithStatusDto(
                             meetingRoomDto.getRoom(),
