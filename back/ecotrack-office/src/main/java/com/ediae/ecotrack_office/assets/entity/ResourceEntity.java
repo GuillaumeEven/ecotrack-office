@@ -105,4 +105,8 @@ public class ResourceEntity {
         this.equipmentList = equipmentList;
     }
 
+    public List<IncidentEntity> getIncidents() {
+        return incidents;
+    }
+
 }

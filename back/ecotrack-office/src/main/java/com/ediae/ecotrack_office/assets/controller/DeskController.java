@@ -19,6 +19,8 @@ import com.ediae.ecotrack_office.assets.dto.DeskRequestDto;
 import com.ediae.ecotrack_office.assets.dto.DeskResponseDto;
 import com.ediae.ecotrack_office.assets.mapper.DeskMapper;
 import com.ediae.ecotrack_office.assets.service.DeskService;
+import com.ediae.ecotrack_office.incident.dto.IncidentResponseDto;
+import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
 import com.ediae.ecotrack_office.shared.guard.RoleGuard;
 import com.ediae.ecotrack_office.users.enums.Role;
 
@@ -55,6 +57,13 @@ public class DeskController {
         return ResponseEntity.ok(desks);
     }
 
+    @GetMapping("/{id}/incidents")
+    public ResponseEntity<List<IncidentResponseDto>> getIncidentsByDeskId(@PathVariable Long id) {
+        List<IncidentResponseDto> incidents = new ArrayList<>();
+        deskService.getIncidentsByDeskId(id).forEach(incident -> incidents.add(IncidentMapper.toResponseDto(incident)));
+        return ResponseEntity.ok(incidents);
+    }
+
     @PostMapping("")
     public ResponseEntity<DeskResponseDto> createDesk(@RequestBody DeskRequestDto deskRequestDTO, Authentication auth) {
         roleGuard.requireAnyRole(auth, Role.ADMIN);
@@ -70,7 +79,8 @@ public class DeskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDesk(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDesk(@PathVariable Long id, Authentication auth) {
+        roleGuard.requireAnyRole(auth, Role.ADMIN);
         deskService.deleteDeskById(id);
         return ResponseEntity.noContent().build();
     }

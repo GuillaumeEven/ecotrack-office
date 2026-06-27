@@ -19,6 +19,8 @@ import com.ediae.ecotrack_office.assets.dto.RoomRequestDto;
 import com.ediae.ecotrack_office.assets.dto.RoomResponseDto;
 import com.ediae.ecotrack_office.assets.mapper.RoomMapper;
 import com.ediae.ecotrack_office.assets.service.RoomService;
+import com.ediae.ecotrack_office.incident.dto.IncidentResponseDto;
+import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
 import com.ediae.ecotrack_office.shared.exception.ErrorResponse;
 import com.ediae.ecotrack_office.shared.guard.RoleGuard;
 import com.ediae.ecotrack_office.users.enums.Role;
@@ -70,6 +72,14 @@ public class RoomController {
     public ResponseEntity<RoomResponseDto> getRoomById(@PathVariable Long id) {
         RoomResponseDto roomResponseDTO = roomMapper.toResponseDto(roomService.getRoomById(id));
         return ResponseEntity.ok(roomResponseDTO);
+    }
+
+    @GetMapping("/{id}/incidents")
+    @Operation(summary = "Obtener incidentes por sala", description = "Recuperar todos los incidentes asociados a una sala específica")
+    public ResponseEntity<List<IncidentResponseDto>> getIncidentsByRoomId(@PathVariable Long id) {
+        List<IncidentResponseDto> incidents = new ArrayList<>();
+        roomService.getIncidentsByRoomId(id).forEach(incident -> incidents.add(IncidentMapper.toResponseDto(incident)));
+        return ResponseEntity.ok(incidents);
     }
 
     @GetMapping("/floor/{floorId}")

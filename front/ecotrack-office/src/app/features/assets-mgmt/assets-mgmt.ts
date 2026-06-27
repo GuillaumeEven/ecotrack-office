@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Desk, Floor, ResourceStatus, Room } from '../../building-map/models';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { FloorService } from '../../building-map/services/floor.service';
 import { RoomService } from '../../building-map/services/room.service';
@@ -70,6 +71,13 @@ export class AssetsMgmt implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
 
+  // Incidents cache (loaded once at init)
+  incidentsByDeskId: Map<number, any[]> = new Map();
+  incidentsByRoomId: Map<number, any[]> = new Map();
+
+  // Current user's organization ID
+  organizationId: number | null = null;
+
   constructor(
     private floorService: FloorService,
     private roomService: RoomService,
@@ -77,16 +85,17 @@ export class AssetsMgmt implements OnInit {
     private userService: UserService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private notificationService: NotificationService, // 🆕
+    private notificationService: NotificationService // 🆕
   ) {
     this.initializeForms();
   }
 
   ngOnInit(): void {
     // Wait for user authentication before loading data
-    // This ensures FloorService.organizationId is available
+    // This ensures we have organizationId before making API calls
     this.userService.getMe().subscribe({
-      next: () => {
+      next: (user) => {
+        this.organizationId = user.organizationId;
         this.loadAllData();
       },
       error: (err) => {
@@ -475,10 +484,16 @@ export class AssetsMgmt implements OnInit {
 
   // Load all data at component init (parallel calls)
   loadAllData() {
+    if (!this.organizationId) {
+      this.errorMessage = 'Organization ID not available';
+      this.cdr.markForCheck();
+      return;
+    }
+
     this.isLoading = true;
 
     forkJoin({
-      floors: this.floorService.list(),
+      floors: this.floorService.list(this.organizationId),
       rooms: this.roomService.list(),
       desks: this.deskService.list(),
     }).subscribe({
@@ -495,6 +510,9 @@ export class AssetsMgmt implements OnInit {
         const validRoomIds = new Set(this.allRooms.map((r) => r.id));
         this.allDesks = result.desks.filter((desk) => validRoomIds.has(desk.roomId));
 
+        // Load incidents for all desks (parallel calls)
+        this.loadIncidentsForAllDesks();
+
         this.isLoading = false;
         this.cdr.markForCheck();
 
@@ -509,6 +527,71 @@ export class AssetsMgmt implements OnInit {
         this.cdr.markForCheck();
       },
     });
+  }
+
+  // Load incidents for each desk (run once at init)
+  private loadIncidentsForAllDesks() {
+    if (this.allDesks.length === 0) {
+      return; // No desks to load incidents for
+    }
+
+    // Build forkJoin with incidents calls for all desks
+    const incidentsRequests: Record<string, any> = {};
+    this.allDesks.forEach((desk) => {
+      incidentsRequests[`desk_${desk.id}`] = this.deskService
+        .getIncidentsByDeskId(desk.id)
+        .pipe(
+          catchError(() => of([])) // Silently handle errors, default to empty array
+        );
+    });
+
+    forkJoin(incidentsRequests).subscribe({
+      next: (results) => {
+        // Map incidents back to desks
+        Object.entries(results).forEach(([key, incidents]) => {
+          const deskId = parseInt(key.split('_')[1], 10);
+          this.incidentsByDeskId.set(deskId, incidents as any[]);
+        });
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        // If bulk load fails, incidents won't be available but app still works
+        console.warn('Failed to load incidents for desks');
+      },
+    });
+  }
+
+  // Load incidents for all rooms (used for room availability check)
+  private loadIncidentsForAllRooms() {
+    if (this.allRooms.length === 0) {
+      return; // No rooms to load incidents for
+    }
+
+    // Build forkJoin with incidents calls for all rooms
+    const incidentsRequests: Record<string, any> = {};
+    this.allRooms.forEach((room) => {
+      incidentsRequests[`room_${room.id}`] = this.roomService
+        .getIncidentsByRoomId(room.id)
+        .pipe(
+          catchError(() => of([])) // Silently handle errors, default to empty array
+        );
+    });
+
+    forkJoin(incidentsRequests).subscribe({
+      next: (results) => {
+        // Map incidents back to rooms
+        Object.entries(results).forEach(([key, incidents]) => {
+          const roomId = parseInt(key.split('_')[1], 10);
+          this.incidentsByDeskId.set(roomId, incidents as any[]);
+        });
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        // If bulk load fails, incidents won't be available but app still works
+        console.warn('Failed to load incidents for rooms');
+      },
+    });
+
   }
 
   // Methods to switch tabs
@@ -551,5 +634,16 @@ export class AssetsMgmt implements OnInit {
 
   getDeskCount(roomId: number): number {
     return this.allDesks.filter((d) => d.roomId === roomId).length;
+  }
+
+  getDeskAvailability(deskId: number): boolean {
+    const incidents = this.incidentsByDeskId.get(deskId) || [];
+    console.log(`Desk ID: ${deskId}, Incidents: ${incidents.length}`);
+    return incidents.length === 0; // If there are no incidents, desk is available
+  }
+
+  getRoomAvailability(roomId: number): boolean {
+    const incidents = this.incidentsByRoomId.get(roomId) || [];
+    return incidents.length === 0; // If there are no incidents, room is available
   }
 }

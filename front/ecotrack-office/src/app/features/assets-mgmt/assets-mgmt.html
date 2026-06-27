@@ -49,7 +49,7 @@
                 Salas
               </th>
               <th>
-                Estado
+                Es activo
               </th>
               <th class="text-center">
                 Acciones
@@ -143,6 +143,9 @@
                 Tipo
               </th>
               <th>
+                Estado
+              </th>
+              <th>
                 Escritorios
               </th>
               <th class="text-center">
@@ -161,7 +164,16 @@
                 {{ getFloorName(room.floorId) }}
               </td>
               <td class="muted">
-                {{ room.roomType }}
+                {{ room.roomType === 'MEETING_ROOM' ? 'Sala de Reuniones' : 'Área de Escritorios' }}
+              </td>
+              <td>
+                <span
+                  [class.active]="getRoomAvailability(room.id)"
+                  [class.inactive]="!getRoomAvailability(room.id)"
+                  class="status-badge"
+                >
+                  {{ getRoomAvailability(room.id) ? 'Disponible' : 'Averiada' }}
+                </span>
               </td>
               <td class="muted">
                 {{ getDeskCount(room.id) || 0 }}
@@ -229,6 +241,9 @@
                 Sala
               </th>
               <th>
+                Activado
+              </th>
+              <th>
                 Estado
               </th>
               <th class="text-center">
@@ -253,6 +268,15 @@
                   class="status-badge"
                 >
                   {{ desk.isActive ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <span
+                  [class.active]="getDeskAvailability(desk.id)"
+                  [class.inactive]="!getDeskAvailability(desk.id)"
+                  class="status-badge"
+                >
+                  {{ getDeskAvailability(desk.id) ? 'Disponible' : 'Averiado' }}
                 </span>
               </td>
               <td>
