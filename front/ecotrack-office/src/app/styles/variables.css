@@ -130,7 +130,7 @@
   --font-body-md: 400 var(--font-size-base) / 20px var(--font-family-base);
   --font-body-sm: 400 var(--font-size-sm) / 16px var(--font-family-base);
 
-  --font-label-sm: 600 var(--font-size-sm) / 16px var(--font-family-base);
+  --font-label-sm: 600 var(--font-size-md) / 16px var(--font-family-base);
   --letter-spacing-label: 0.05em;
 
   /* ---------- ESPACIADOS - 8px SOFT GRID ---------- */
