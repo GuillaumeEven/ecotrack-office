@@ -33,7 +33,10 @@ import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
 
-// TODO después en el paquete compartido
+// Imports para la gestión de analíticas históricas
+import com.ediae.ecotrack_office.analiticsreport.entity.AnaliticsReportEntity;
+import com.ediae.ecotrack_office.analiticsreport.repository.AnaliticsReportRepository;
+
 @Component
 @Profile("dev")
 public class DataLoader implements CommandLineRunner {
@@ -47,8 +50,9 @@ public class DataLoader implements CommandLineRunner {
     private final DeskRepository deskRepository;
     private final ReservationRepository reservationRepository;
     private final IncidentRepository incidentRepository;
+    private final AnaliticsReportRepository analiticsReportRepository; // Atributo añadido
     private final JdbcTemplate jdbcTemplate;
-    private final PasswordEncoder passwordEncoder; // 🆕
+    private final PasswordEncoder passwordEncoder;
 
     public DataLoader(OrganizationRepository organizationRepository,
             UserRepository userRepository,
@@ -57,8 +61,9 @@ public class DataLoader implements CommandLineRunner {
             DeskRepository deskRepository,
             ReservationRepository reservationRepository,
             IncidentRepository incidentRepository,
+            AnaliticsReportRepository analiticsReportRepository, // Repositorio inyectado
             JdbcTemplate jdbcTemplate,
-            PasswordEncoder passwordEncoder) { // 🆕
+            PasswordEncoder passwordEncoder) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.floorRepository = floorRepository;
@@ -66,8 +71,9 @@ public class DataLoader implements CommandLineRunner {
         this.deskRepository = deskRepository;
         this.reservationRepository = reservationRepository;
         this.incidentRepository = incidentRepository;
+        this.analiticsReportRepository = analiticsReportRepository; // Asignación
         this.jdbcTemplate = jdbcTemplate;
-        this.passwordEncoder = passwordEncoder; // 🆕
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -86,16 +92,16 @@ public class DataLoader implements CommandLineRunner {
 
         createReservationsIfMissing(org);
         createIncidentsIfMissing();
+        createHistoricalAnalyticsIfMissing(org); // Llamada al método
     }
 
     /**
      * Borra todos los datos de desarrollo y reinicia los contadores para que los
      * IDs generados sean siempre predecibles.
-     * Diseñado específicamente para el entorno local corriendo sobre MySQL 8.0.
+     * Lo he hecho así para que los datos de desarrollo sean consistentes y
+     * predecibles en cada ejecución.
      */
     private void resetDatabase() {
-        // En MySQL desactivamos las restricciones de clave foránea con
-        // FOREIGN_KEY_CHECKS
         jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
 
         jdbcTemplate.execute("TRUNCATE TABLE analitics_report");
@@ -108,7 +114,6 @@ public class DataLoader implements CommandLineRunner {
         jdbcTemplate.execute("TRUNCATE TABLE usr_users");
         jdbcTemplate.execute("TRUNCATE TABLE organizations");
 
-        // Volvemos a activar las restricciones tras el vaciado
         jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 1");
 
         log.info("Base de datos MySQL de desarrollo reiniciada: todas las tablas truncadas con éxito.");
@@ -165,7 +170,7 @@ public class DataLoader implements CommandLineRunner {
 
         UserEntity admin = new UserEntity();
         admin.setEmail(adminEmail);
-        admin.setPasswordHash(passwordEncoder.encode("password")); // 🆕
+        admin.setPasswordHash(passwordEncoder.encode("password"));
         admin.setFirstName("Admin");
         admin.setLastName("Ecotrack");
         admin.setRole(Role.ADMIN);
@@ -186,7 +191,7 @@ public class DataLoader implements CommandLineRunner {
         if (!userRepository.existsByEmail(techEmail)) {
             UserEntity tech = new UserEntity();
             tech.setEmail(techEmail);
-            tech.setPasswordHash(passwordEncoder.encode("password")); // 🆕
+            tech.setPasswordHash(passwordEncoder.encode("password"));
             tech.setFirstName("Tech");
             tech.setLastName("Usuario");
             tech.setRole(Role.TECHNICIAN);
@@ -204,7 +209,7 @@ public class DataLoader implements CommandLineRunner {
         if (!userRepository.existsByEmail(empEmail)) {
             UserEntity emp = new UserEntity();
             emp.setEmail(empEmail);
-            emp.setPasswordHash(passwordEncoder.encode("password")); // 🆕
+            emp.setPasswordHash(passwordEncoder.encode("password"));
             emp.setFirstName("Empleado");
             emp.setLastName("Usuario");
             emp.setRole(Role.EMPLOYEE);
@@ -243,7 +248,6 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createRoomsAndDesksIfMissing(OrganizationEntity org) {
-        // pick floor 0 (preferentially) to attach rooms
         FloorEntity floor0 = floorRepository.findByOrganizationId(org.getId())
                 .stream()
                 .filter(f -> Objects.equals(f.getLevel(), 0))
@@ -256,16 +260,13 @@ public class DataLoader implements CommandLineRunner {
             return;
         }
 
-        // Crear salas de trabajo en piso 0
         createDeskAreaRoomsWithDesks(floor0, "Sala de Trabajo A", 50.0);
         createDeskAreaRoomsWithDesks(floor0, "Sala de Trabajo B", 40.0);
         createDeskAreaRoomsWithDesks(floor0, "Sala de Trabajo C", 45.0);
 
-        // Crear salas de reunión en piso 0
         createMeetingRoom(floor0, "Sala de Reunión 1", 25.0);
         createMeetingRoom(floor0, "Sala de Reunión 2", 30.0);
 
-        // Obtener piso nivel 1 y agregar salas si existe
         FloorEntity floor1 = floorRepository.findByOrganizationId(org.getId())
                 .stream()
                 .filter(f -> Objects.equals(f.getLevel(), 1))
@@ -273,20 +274,14 @@ public class DataLoader implements CommandLineRunner {
                 .orElse(null);
 
         if (floor1 != null) {
-            // Crear salas de trabajo en piso 1
             createDeskAreaRoomsWithDesks(floor1, "Sala de Trabajo D", 35.0);
             createDeskAreaRoomsWithDesks(floor1, "Sala de Trabajo E", 38.0);
 
-            // Crear salas de reunión en piso 1
             createMeetingRoom(floor1, "Sala de Reunión 3", 28.0);
             createMeetingRoom(floor1, "Sala de Reunión 4", 32.0);
         }
     }
 
-    /**
-     * Método auxiliar para crear una sala de trabajo con 10 escritorios si no
-     * existe
-     */
     private void createDeskAreaRoomsWithDesks(FloorEntity floor, String roomName, Double area) {
         RoomEntity room = roomRepository.findByFloor_Id(floor.getId())
                 .stream()
@@ -301,13 +296,12 @@ public class DataLoader implements CommandLineRunner {
                             area,
                             floor,
                             10);
-                    r.setIsActive(true); // Activar sala para desarrollo
+                    r.setIsActive(true);
                     RoomEntity saved = roomRepository.save(r);
                     log.info("Sala de trabajo sembrada '{}'", saved.getName());
                     return saved;
                 });
 
-        // Crear 10 escritorios para esta sala de trabajo
         for (int i = 1; i <= 10; i++) {
             final String deskName = "D" + i;
             boolean exists = deskRepository.findByRoom_Id(room.getId())
@@ -315,16 +309,13 @@ public class DataLoader implements CommandLineRunner {
                     .anyMatch(d -> deskName.equalsIgnoreCase(d.getName()));
             if (!exists) {
                 DeskEntity desk = new DeskEntity(deskName, ResourceStatus.AVAILABLE, "silla,monitor", room);
-                desk.setIsActive(true); // Activar escritorio para desarrollo
+                desk.setIsActive(true);
                 deskRepository.save(desk);
             }
         }
         log.info("10 escritorios sembrados en la sala '{}'", room.getName());
     }
 
-    /**
-     * Método auxiliar para crear una sala de reunión si no existe
-     */
     private void createMeetingRoom(FloorEntity floor, String roomName, Double area) {
         boolean exists = roomRepository.findByFloor_Id(floor.getId())
                 .stream()
@@ -338,18 +329,13 @@ public class DataLoader implements CommandLineRunner {
                     area,
                     floor,
                     20);
-            r.setIsActive(true); // Activar sala de reunión para desarrollo
+            r.setIsActive(true);
             RoomEntity saved = roomRepository.save(r);
             log.info("Sala de reunión sembrada '{}'", saved.getName());
         }
     }
 
-    /**
-     * Método auxiliar para crear reservaciones para escritorios específicos en
-     * fechas dadas
-     */
     private void createReservationsIfMissing(OrganizationEntity org) {
-        // Obtener usuario empleado
         UserEntity employee = userRepository.findByEmail("employee@ecotrack.local")
                 .orElse(null);
 
@@ -358,14 +344,12 @@ public class DataLoader implements CommandLineRunner {
             return;
         }
 
-        // Crear reservaciones para 14/07/2026: escritorios 2, 5, 6
         LocalDate date1 = LocalDate.of(2026, 7, 14);
         createReservationForDesks(org, employee, date1, new int[] { 2, 5, 6 });
 
-        // Crear reservaciones para 15/07/2026: escritorios 2, 7, 9
         LocalDate date2 = LocalDate.of(2026, 7, 15);
         createReservationForDesks(org, employee, date2, new int[] { 2, 7, 9 });
-        // Créer 5 réservations pour desk id=4, user id=1, du 1er au 5 mai 2026
+
         UserEntity user1 = userRepository.findById(1L).orElse(null);
         if (user1 != null) {
             DeskEntity desk4 = deskRepository.findById(4L).orElse(null);
@@ -398,13 +382,8 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
-    /**
-     * Método auxiliar para crear reservaciones para números de escritorio
-     * específicos en una fecha dada
-     */
     private void createReservationForDesks(OrganizationEntity org, UserEntity user, LocalDate date, int[] deskNumbers) {
         for (int deskNum : deskNumbers) {
-            // Buscar el escritorio por patrón de nombre
             String deskNamePattern = "D" + deskNum;
             DeskEntity desk = deskRepository.findAll()
                     .stream()
@@ -413,7 +392,6 @@ public class DataLoader implements CommandLineRunner {
                     .orElse(null);
 
             if (desk != null) {
-                // Verificar si la reservación ya existe
                 boolean reservationExists = reservationRepository.findByResourceId(desk.getId())
                         .stream()
                         .anyMatch(r -> r.getDate().equals(date));
@@ -436,11 +414,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
 
-    /**
-     * Método auxiliar para crear un incidente para el desk ID 3
-     */
     private void createIncidentsIfMissing() {
-        // Obtener usuario técnico
         UserEntity tech = userRepository.findByEmail("tech@ecotrack.local")
                 .orElse(null);
 
@@ -449,7 +423,6 @@ public class DataLoader implements CommandLineRunner {
             return;
         }
 
-        // Obtener desk con ID 3
         DeskEntity desk = deskRepository.findById(3L)
                 .orElse(null);
 
@@ -458,7 +431,6 @@ public class DataLoader implements CommandLineRunner {
             return;
         }
 
-        // Verificar si ya existe un incidente para este desk
         boolean incidentExists = incidentRepository.findByResourceId(desk.getId())
                 .stream()
                 .anyMatch(i -> i.getStatus() == IncidentStatus.IN_PROGRESS);
@@ -479,25 +451,59 @@ public class DataLoader implements CommandLineRunner {
     }
 
     /**
-     * Método auxiliar para crear una sala de reunión si no existe
+     * Generador automático de historial analítico (Escenario B).
+     * Inyecta en MySQL los últimos 60 días correlativos con datos realistas
+     * basados en la capacidad real del mapa de plantas y salas de la oficina.
+     * Esto permite que el frontend tenga datos consistentes para mostrar en las
+     * tarjetas de métricas y en la tabla de historial.
      */
-    // private void createMeetingRoom(FloorEntity floor, String roomName, Double
-    // area) {
-    // boolean exists = roomRepository.findByFloor_Id(floor.getId())
-    // .stream()
-    // .anyMatch(r -> roomName.equalsIgnoreCase(r.getName()));
-    // if (!exists) {
-    // RoomEntity r = new RoomEntity(
-    // roomName,
-    // ResourceStatus.AVAILABLE,
-    // "videoconferencia,pizarra",
-    // RoomType.MEETING_ROOM,
-    // area,
-    // floor,
-    // 20
-    // );
-    // RoomEntity saved = roomRepository.save(r);
-    // log.info("Sala de reunión sembrada '{}'", saved.getName());
-    // }
-    // }
+    private void createHistoricalAnalyticsIfMissing(OrganizationEntity org) {
+        java.util.Random random = new java.util.Random();
+
+        log.info("Generando 60 días de historial analítico en la base de datos...");
+
+        for (int i = 60; i >= 1; i--) {
+            // Resto 'i' días a la fecha actual del sistema para ir hacia atrás en el
+            // tiempo
+            LocalDateTime reportDate = LocalDateTime.now().minusDays(i);
+
+            // 1. Simulación del algoritmo: salas vacías de 1 a 3 (eliminamos el 0 para la
+            // demo)
+            int emptyRooms = random.nextInt(3) + 1; // Genera 1, 2 o 3
+
+            // 2. Escala de costes fijos según el tipo de sala cerrada
+            double co2 = 0.0;
+            double energy = 0.0;
+
+            if (emptyRooms == 1) {
+                co2 = 1.50;
+                energy = 5.00;
+            } else if (emptyRooms == 2) {
+                co2 = 2.30; // 1 sala trabajo + 1 reunión
+                energy = 8.00;
+            } else if (emptyRooms == 3) {
+                co2 = 3.80; // 2 salas trabajo + 1 reunión
+                energy = 13.00;
+            }
+
+            // 3. Ocupación de la oficina (escala de 50 puestos basada en la capacidad real
+            // de las salas de trabajo y reuniones)
+            int reservations = random.nextInt(9) + 28; // Entre 28 y 36 reservas diarias (64% media, media realista)
+            int checkins = random.nextInt(7) + 24; // Entre 24 y 30 check-ins confirmados
+
+            // 4. Guardo el registro diario en la entidad
+            AnaliticsReportEntity dailyReport = new AnaliticsReportEntity(
+                    co2,
+                    energy,
+                    reservations,
+                    checkins,
+                    emptyRooms,
+                    reportDate,
+                    org);
+
+            analiticsReportRepository.save(dailyReport);
+        }
+
+        log.info("¡Historial de 60 días inyectado con éxito en MySQL!");
+    }
 }

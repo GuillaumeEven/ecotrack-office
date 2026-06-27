@@ -2,17 +2,36 @@
   <div class="component-header">
       <h1>Sostenibilidad y Analítica</h1>
       <h2>
-        Métricas en tiempo real sobre la reducción de la huella de carbono, eficiencia del espacio de trabajo y optimización de recursos.
+        Métricas dinámicas sobre la reducción de la huella de carbono, eficiencia del espacio de trabajo y optimización de recursos.
       </h2>
   </div>
   <div class="component-body">
-    <div class="toolbar">
+    <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+      
+      <div class="tab-container" style="display: flex; gap: 0.5rem;">
+        <button (click)="applyFilter('all')" [style.background-color]="activeFilter === 'all' ? '#10b981' : '#1e293b'" style="color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-weight: 500;">Historial Completo</button>
+        <button (click)="applyFilter('month')" [style.background-color]="activeFilter === 'month' ? '#10b981' : '#1e293b'" style="color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-weight: 500;">Último Mes (30d)</button>
+        <button (click)="applyFilter('week')" [style.background-color]="activeFilter === 'week' ? '#10b981' : '#1e293b'" style="color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-weight: 500;">Última Semana (7d)</button>
+        <button (click)="applyFilter('day')" [style.background-color]="activeFilter === 'day' ? '#10b981' : '#1e293b'" style="color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-weight: 500;">Último Día</button>
+      </div>
 
       <button *ngIf="userRole === 'ADMIN'" (click)="compileMetrics()" class="btn btn-primary">
         <span class="material-symbols-outlined">refresh</span>
-        Compilar Métricas
+        Compilar Métricas (Simular Día)
       </button>
     </div>
+
+    <div *ngIf="!isLoading && displayedReports.length > 0" class="card" style="background-color: #064e3b; color: #a7f3d0; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+      <span class="material-symbols-outlined" style="font-size: 2.5rem;">nature_people</span>
+      <div>
+        <h4 style="margin: 0; font-weight: bold; color: white;">Impacto Ecológico en el Rango Seleccionado</h4>
+        <p style="margin: 0.25rem 0 0 0; font-size: 0.95rem;">
+          El ahorro conseguido en este periodo equivale al impacto de haber plantado <strong>{{ equivalences.treesPlanted }} árboles</strong> absorbentes. 
+          Además, la optimización financiera equivale a haber mantenido la oficina **totalmente cerrada y apagada durante {{ equivalences.officeShutdownDays }} días**.
+        </p>
+      </div>
+    </div>
+
     <div class="bento-grid">
 
       <div class="card metric-card card-co2">
@@ -21,36 +40,36 @@
           <span class="material-symbols-outlined icon-co2">eco</span>
         </div>
         <div class="card-body-metric">
-          <h2 class="metric-value">{{ metrics?.co2Saved | number:'1.1-1' }} <span class="metric-unit">kg CO₂</span></h2>
-          <p class="footer-success">✓ Objetivo de huella activo</p>
+          <h2 class="metric-value">{{ accumulatedTotals.co2Saved | number:'1.2-2' }} <span class="metric-unit">kg CO₂</span></h2>
+          <p class="footer-success">✓ Basado en el filtro seleccionado</p>
         </div>
       </div>
 
       <div *ngIf="userRole === 'ADMIN'" class="card metric-card card-money">
         <div class="card-top">
-          <span class="card-label">AHORRO ESTIMADO</span>
+          <span class="card-label">AHORRO ECONÓMICO</span>
           <span class="material-symbols-outlined icon-money">payments</span>
         </div>
         <div class="card-body-metric">
-          <h2 class="metric-value">€{{ metrics?.financialSaved | number:'1.2-2' }}</h2>
-          <p class="card-footer-text">Basado en apagado inteligente</p>
+          <h2 class="metric-value">€{{ accumulatedTotals.financialSaved | number:'1.2-2' }}</h2>
+          <p class="card-footer-text">Optimización de recursos del periodo</p>
         </div>
       </div>
 
       <div *ngIf="userRole === 'ADMIN'" class="card metric-card card-spots">
         <div class="card-top">
-          <span class="card-label">USO DE PUESTOS</span>
+          <span class="card-label">RESERVAS EN EL PERIODO</span>
           <span class="material-symbols-outlined icon-spots">date_range</span>
         </div>
         <div class="card-body-metric">
-          <h2 class="metric-value">{{ metrics?.activeReservationsCount || 0 }} <span class="metric-unit">reservas</span></h2>
-          <p class="card-footer-text">{{ metrics?.checkInsCount || 0 }} check-ins registrados</p>
+          <h2 class="metric-value">{{ accumulatedTotals.activeReservationsCount }} <span class="metric-unit">reservas</span></h2>
+          <p class="card-footer-text">{{ accumulatedTotals.checkInsCount }} check-ins completados</p>
         </div>
       </div>
 
       <div *ngIf="userRole === 'ADMIN'" class="card history-card">
         <div class="card-header-dashboard">
-          <h3 class="history-title">Historial de Informes Compilados</h3>
+          <h3 class="history-title">Historial de Informes Compilados (Filtrado)</h3>
           <span class="material-symbols-outlined icon-variant">analytics</span>
         </div>
 
@@ -59,12 +78,12 @@
           <div class="skeleton-bar"></div>
         </div>
 
-        <div *ngIf="!isLoading && reports.length === 0" class="empty-state">
+        <div *ngIf="!isLoading && displayedReports.length === 0" class="empty-state">
           <span class="material-symbols-outlined empty-icon">bar_chart</span>
-          <p class="empty-text">No se han encontrado informes. Haz clic en 'Compilar Métricas' para generar datos.</p>
+          <p class="empty-text">No se han encontrado informes para el rango seleccionado.</p>
         </div>
 
-        <div *ngIf="!isLoading && reports.length > 0" class="table-responsive">
+        <div *ngIf="!isLoading && displayedReports.length > 0" class="table-responsive">
           <table>
             <thead>
               <tr>
@@ -76,10 +95,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let report of reports">
+              <tr *ngFor="let report of displayedReports">
                 <td class="font-medium">#REP-{{ report.id }}</td>
                 <td class="date-cell">{{ report.compiledAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-                <td>{{ report.co2Saved }} kg</td>
+                <td>{{ report.co2Saved | number:'1.2-2' }} kg</td>
                 <td class="font-money-table">€{{ report.financialSaved | number:'1.2-2' }}</td>
                 <td>{{ report.activeReservationsCount }}</td>
               </tr>

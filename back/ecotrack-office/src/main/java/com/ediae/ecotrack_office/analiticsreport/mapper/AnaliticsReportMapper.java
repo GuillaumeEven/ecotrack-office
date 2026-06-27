@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class AnaliticsReportMapper {
 
     // 1. De Entidad a Modelo (Para la lógica interna de la aplicación)
+    // Ahora sí se copian todas las métricas reales para que viajen al frontend
     public AnaliticsReportModel toModel(AnaliticsReportEntity entity) {
         if (entity == null) {
             return null;
@@ -17,7 +18,16 @@ public class AnaliticsReportMapper {
         AnaliticsReportModel model = new AnaliticsReportModel();
         model.setId(entity.getId());
         model.setOrganizationId(entity.getOrganization().getId());
-        model.setCreatedAt(entity.getGeneratedAt()); // ¡CORREGIDO CON TU MÉTODO REAL!
+        model.setCreatedAt(entity.getGeneratedAt()); 
+        
+        // Métricas inyectadas al modelo (para que el frontend las reciba correctamente)
+        model.setCo2Saved(entity.getCo2SavingsKg()); // Lo añado para que el modelo tenga la métrica de CO2 en kg
+        model.setCo2SavingsKg(entity.getCo2SavingsKg());
+        model.setEnergySavingsEuros(entity.getEnergySavingsEuros());
+        model.setTotalReservations(entity.getTotalReservations());
+        model.setConfirmedCheckIns(entity.getConfirmedCheckIns());
+        model.setEmptyRooms(entity.getEmptyRooms());
+        
         return model;
     }
 
@@ -32,7 +42,6 @@ public class AnaliticsReportMapper {
         entity.setTotalReservations(dto.totalReservations());
         entity.setConfirmedCheckIns(dto.confirmedCheckIns());
         entity.setEmptyRooms(dto.emptyRooms());
-        // La fecha de generación se establece automáticamente al momento de crear la entidad
         entity.setGeneratedAt(java.time.LocalDateTime.now()); 
         return entity;
     }

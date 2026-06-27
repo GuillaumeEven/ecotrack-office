@@ -6,12 +6,19 @@ public class AnaliticsReportModel {
     private Long id;
     private Double co2Saved;
     private LocalDateTime createdAt;
-    private Long organizationId; // ID plano 
+    private Long organizationId; 
+
+    // Campos añadidos para completar el modelo con las métricas de analítica para el frontend
+    private Double co2SavingsKg;
+    private Double energySavingsEuros;
+    private Integer totalReservations;
+    private Integer confirmedCheckIns;
+    private Integer emptyRooms;
 
     // Constructor vacío
     public AnaliticsReportModel() {}
 
-    // Getters y Setters
+    // Getters y Setters existentes
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -23,4 +30,20 @@ public class AnaliticsReportModel {
 
     public Long getOrganizationId() { return organizationId; }
     public void setOrganizationId(Long organizationId) { this.organizationId = organizationId; }
+
+    // Nuevos Getters y Setters para las métricas de analítica
+    public Double getCo2SavingsKg() { return co2SavingsKg; }
+    public void setCo2SavingsKg(Double co2SavingsKg) { this.co2SavingsKg = co2SavingsKg; }
+
+    public Double getEnergySavingsEuros() { return energySavingsEuros; }
+    public void setEnergySavingsEuros(Double energySavingsEuros) { this.energySavingsEuros = energySavingsEuros; }
+
+    public Integer getTotalReservations() { return totalReservations; }
+    public void setTotalReservations(Integer totalReservations) { this.totalReservations = totalReservations; }
+
+    public Integer getConfirmedCheckIns() { return confirmedCheckIns; }
+    public void setConfirmedCheckIns(Integer confirmedCheckIns) { this.confirmedCheckIns = confirmedCheckIns; }
+
+    public Integer getEmptyRooms() { return emptyRooms; }
+    public void setEmptyRooms(Integer emptyRooms) { this.emptyRooms = emptyRooms; }
 }
