@@ -104,14 +104,12 @@
                     {{ reserva.date }}
                   </td>
                   <td class="actions">
-                    <div class="btn-group">
-                      <button class="action-btn" (click)="openEditModal(reserva)" title="Editar reserva">
-                        <span class="material-symbols-outlined">edit</span>
-                      </button>
-                      <button class="action-btn danger" (click)="openCancelModal(reserva)" title="Cancelar reserva">
-                        <span class="material-symbols-outlined">delete</span>
-                      </button>
-                    </div>
+                    <button class="action-btn" (click)="openEditModal(reserva)" title="Editar reserva">
+                      <span class="material-symbols-outlined">edit</span>
+                    </button>
+                    <button class="action-btn danger" (click)="openCancelModal(reserva)" title="Cancelar reserva">
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
                   </td>
                 </tr>
               } @empty {

@@ -92,16 +92,18 @@
                     {{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}
                   </td>
                   <td class="text-center">
-                    <span [ngClass]="String(item.status) === 'IN_PROGRESS' ? 'badge-warn' : 'badge-success'" class="status-badge" 
-                          [style.background-color]="String(item.status) === 'IN_PROGRESS' ? '#b45309' : '#047857'" 
-                          style="color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: bold; display: inline-block;">
+                    <span
+                      [class.active]="String(item.status) !== 'IN_PROGRESS'"
+                      [class.inactive]="String(item.status) === 'IN_PROGRESS'"
+                      class="status-badge"
+                    >
                       {{ String(item.status) === 'IN_PROGRESS' ? 'EN REVISIÓN' : 'RESUELTA' }}
                     </span>
                   </td>
                   <td class="text-center" style="padding-right: 1rem;">
                     <div style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;">
                       <button *ngIf="(String(item.status) === 'IN_PROGRESS') && (userRole === 'TECH' || userRole === 'ADMIN')"
-                        (click)="onResolve(item.id)" class="btn btn-sm btn-outline" 
+                        (click)="onResolve(item.id)" class="btn btn-sm btn-outline"
                         style="border: 1px solid #d97706; color: #d97706; padding: 0.2rem 0.4rem; border-radius: 0.25rem; background: transparent; cursor: pointer; font-size: 0.75rem;">
                         Resolver
                       </button>
@@ -110,7 +112,7 @@
                         Solucionado
                       </span>
 
-                      <button (click)="onDelete(item.id)" class="btn-delete" title="Eliminar" 
+                      <button (click)="onDelete(item.id)" class="btn-delete" title="Eliminar"
                               style="background: transparent; border: none; color: #ef4444; cursor: pointer; padding: 0.25rem; display: inline-flex; align-items: center;">
                         <span class="material-symbols-outlined" style="font-size: 1.15rem;">delete</span>
                       </button>
