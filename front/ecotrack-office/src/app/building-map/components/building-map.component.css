@@ -149,7 +149,7 @@
   box-shadow: 0 0 8px rgba(244, 67, 54, 0.6);
 }
 
-.status-badge.out-of-service {
+.status-badge.out {
   background-color: #9c27b0;
   box-shadow: 0 0 8px rgba(156, 39, 176, 0.6);
 }
