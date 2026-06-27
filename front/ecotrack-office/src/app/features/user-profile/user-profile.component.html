@@ -3,262 +3,264 @@
 
 <div class="main-container">
   <!-- Page Header -->
-  <div class="page-header">
+  <div class="component-header">
     <h1>Perfil de usuario</h1>
     <p>
       Configura tu información personal y preferencias de seguridad.
     </p>
   </div>
+  <div class="component-body">
 
   <!-- Bento Grid -->
-  <div class="bento-grid">
-    <!-- LEFT COLUMN: Identity card + Quick nav -->
-    <div class="left-column">
-      <!-- Identity card -->
-      <div class="card">
-        <div class="identity-card">
-          <!-- Avatar with upload button -->
-          <div class="avatar-wrapper" (click)="onChangePhoto()">
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnHu9QB7UKbkPpUnc2e48oUrKYZyVqH_Fafdqai4PKK7eO79-an2Uhq9UNwtbNRA9ag9one6kkuqN-VAel9wHbJT5L-ks_oCU2kG0SL244tTKAxYIFs2baTBJdIDLROWy4h0KO9ccsahkXVDSyZyRNHZv-Y3qyPjG4QnSV1R0OhnhyY8l0oQOO86rLLjBF87bPWu6GQhE66cD0EkDBULteYUU-CCdaHM6TPf_CN4n1SIUKupVC6Hccx_4q6L8jj6IKwiDD5jFUYfyf"
-              alt="User profile photo"
-            />
-            <div class="camera-btn">
-              <span class="material-symbols-outlined">photo_camera</span>
+    <div class="bento-grid">
+      <!-- LEFT COLUMN: Identity card + Quick nav -->
+      <div class="left-column">
+        <!-- Identity card -->
+        <div class="card">
+          <div class="identity-card">
+            <!-- Avatar with upload button -->
+            <div class="avatar-wrapper" (click)="onChangePhoto()">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnHu9QB7UKbkPpUnc2e48oUrKYZyVqH_Fafdqai4PKK7eO79-an2Uhq9UNwtbNRA9ag9one6kkuqN-VAel9wHbJT5L-ks_oCU2kG0SL244tTKAxYIFs2baTBJdIDLROWy4h0KO9ccsahkXVDSyZyRNHZv-Y3qyPjG4QnSV1R0OhnhyY8l0oQOO86rLLjBF87bPWu6GQhE66cD0EkDBULteYUU-CCdaHM6TPf_CN4n1SIUKupVC6Hccx_4q6L8jj6IKwiDD5jFUYfyf"
+                alt="User profile photo"
+              />
+              <div class="camera-btn">
+                <span class="material-symbols-outlined">photo_camera</span>
+              </div>
             </div>
-          </div>
 
-          <div *ngIf="isLoading" class="skeleton name-skeleton"></div>
-          <h2 *ngIf="!isLoading">
-            {{ user?.firstName }} {{ user?.lastName }}
-          </h2>
-          @if(user?.role === 'ADMIN') {
-
-              <p>Administrador</p>
-          }
-          @if(user?.role === 'TECHNICIAN') {
-
-              <p>Técnico</p>
-          } 
-          @if(user?.role === 'EMPLOYEE') {
-
-              <p>Empleado</p>
-          }  
-
-          <!-- Meta info -->
-          <div class="identity-meta">
-            <div class="meta-item">
-              <span class="meta-label">ESTADO DE LA CUENTA</span>
-              <span
-                [class.active]="user?.isActive"
-                [class.inactive]="!user?.isActive"
-                class="status-badge"
-              >
-                {{ user?.isActive ? 'Activa' : 'Inactiva' }}
-              </span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">DESDE</span>
-              <span>
-                {{ user?.createdAt | date: 'MMMM yyyy' | titlecase}}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick navigation -->
-      <div class="card quick-nav">
-        <button
-          (click)="setActiveSection('personal')"
-          [class.active]="activeSection === 'personal'"
-        >
-          <span class="material-symbols-outlined">person</span>
-          <span>Datos personales</span>
-        </button>
-        <button
-          (click)="setActiveSection('security')"
-          [class.active]="activeSection === 'security'"
-        >
-          <span class="material-symbols-outlined">security</span>
-          <span>Ajustes de seguridad</span>
-        </button>
-        <button
-          (click)="setActiveSection('notifications')"
-          [class.active]="activeSection === 'notifications'"
-        >
-          <span class="material-symbols-outlined">notifications</span>
-          <span>Notificaciones</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- RIGHT COLUMN: Forms -->
-    <div class="right-column">
-      <!-- Personal Information Form -->
-      <div *ngIf="activeSection === 'personal'" class="card form-section">
-        <div class="section-header">
-          <h3>Informaciónn personal</h3>
-          <span class="material-symbols-outlined">edit</span>
-        </div>
-
-        <form [formGroup]="profileForm" (ngSubmit)="onSaveChanges()">
-          <!-- First Name -->
-          <div class="form-group">
-            <label>NOMBRE</label>
-            <input
-              type="text"
-              formControlName="firstName"
-              [class.border-error]="
-                profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched
-              "
-            />
-            <p *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" class="error-text">
-              El nombre es obligatorio.
-            </p>
-          </div>
-
-          <!-- Last Name -->
-          <div class="form-group">
-            <label>APELLIDOS</label>
-            <input
-              type="text"
-              formControlName="lastName"
-              [class.border-error]="
-                profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched
-              "
-            />
-            <p *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" class="error-text">
-              Los apellidos son obligatorios.
-            </p>
-          </div>
-
-          <!-- Email -->
-          <div class="form-group">
-            <label>CORREO ELECTRÓNICO</label>
-            <input
-              type="email"
-              formControlName="email"
-              [class.border-error]="
-                profileForm.get('email')?.invalid && profileForm.get('email')?.touched
-              "
-            />
-            <p *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error-text">
-              Por favor, introduce una dirección de correo válida.
-            </p>
-          </div>
-
-          <!-- Role (read-only) -->
-          <div class="form-group">
-            <label>ROL</label>
+            <div *ngIf="isLoading" class="skeleton name-skeleton"></div>
+            <h2 *ngIf="!isLoading">
+              {{ user?.firstName }} {{ user?.lastName }}
+            </h2>
             @if(user?.role === 'ADMIN') {
 
-              <input
-                type="text"
-                value="Administrador"
-                disabled
-              />
+                <p>Administrador</p>
             }
             @if(user?.role === 'TECHNICIAN') {
 
-              <input
-                type="text"
-                value="Técnico"
-                disabled
-              />
-            } 
+                <p>Técnico</p>
+            }
             @if(user?.role === 'EMPLOYEE') {
 
+                <p>Empleado</p>
+            }
+
+            <!-- Meta info -->
+            <div class="identity-meta">
+              <div class="meta-item">
+                <span class="meta-label">ESTADO DE LA CUENTA</span>
+                <span
+                  [class.active]="user?.isActive"
+                  [class.inactive]="!user?.isActive"
+                  class="status-badge"
+                >
+                  {{ user?.isActive ? 'Activa' : 'Inactiva' }}
+                </span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">DESDE</span>
+                <span>
+                  {{ user?.createdAt | date: 'MMMM yyyy' | titlecase}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick navigation -->
+        <div class="card quick-nav">
+          <button
+            (click)="setActiveSection('personal')"
+            [class.active]="activeSection === 'personal'"
+          >
+            <span class="material-symbols-outlined">person</span>
+            <span>Datos personales</span>
+          </button>
+          <button
+            (click)="setActiveSection('security')"
+            [class.active]="activeSection === 'security'"
+          >
+            <span class="material-symbols-outlined">security</span>
+            <span>Ajustes de seguridad</span>
+          </button>
+          <button
+            (click)="setActiveSection('notifications')"
+            [class.active]="activeSection === 'notifications'"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+            <span>Notificaciones</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Forms -->
+      <div class="right-column">
+        <!-- Personal Information Form -->
+        <div *ngIf="activeSection === 'personal'" class="card form-section">
+          <div class="section-header">
+            <h3>Informaciónn personal</h3>
+            <span class="material-symbols-outlined">edit</span>
+          </div>
+
+          <form [formGroup]="profileForm" (ngSubmit)="onSaveChanges()">
+            <!-- First Name -->
+            <div class="form-group">
+              <label class="form-label">Nombre</label>
               <input
                 type="text"
-                value="Empleado"
-                disabled
+                formControlName="firstName"
+                [class.border-error]="
+                  profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched
+                "
               />
-            }
-          </div>
-
-          <!-- Actions -->
-          <div class="btn-group">
-            <button
-              type="button"
-              (click)="onDiscardChanges()"
-              class="btn"
-            >
-              Descartar cambios
-            </button>
-            <button
-              type="submit"
-              [disabled]="profileForm.invalid"
-              class="btn btn-primary"
-            >
-              Guardar cambios
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Security & Privacy -->
-      <div *ngIf="activeSection === 'security'" class="card form-section">
-        <div class="section-header">
-          <h3>Seguridad y privacidad</h3>
-          <span class="material-symbols-outlined">lock</span>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
-          <!-- Change Password -->
-          <div class="security-item">
-            <div class="security-item-info">
-              <div class="icon-box primary">
-                <span class="material-symbols-outlined">password</span>
-              </div>
-              <div class="security-item-text">
-                <p>Cambiar contraseña</p>
-              </div>
+              <p *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" class="error-text">
+                El nombre es obligatorio.
+              </p>
             </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+              <label class="form-label">Apellidos</label>
+              <input
+                type="text"
+                formControlName="lastName"
+                [class.border-error]="
+                  profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched
+                "
+              />
+              <p *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" class="error-text">
+                Los apellidos son obligatorios.
+              </p>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                formControlName="email"
+                [class.border-error]="
+                  profileForm.get('email')?.invalid && profileForm.get('email')?.touched
+                "
+              />
+              <p *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error-text">
+                Por favor, introduce una dirección de correo válida.
+              </p>
+            </div>
+
+            <!-- Role (read-only) -->
+            <div class="form-group">
+              <label class="form-label">Rol</label>
+              @if(user?.role === 'ADMIN') {
+
+                <input
+                  type="text"
+                  value="Administrador"
+                  disabled
+                />
+              }
+              @if(user?.role === 'TECHNICIAN') {
+
+                <input
+                  type="text"
+                  value="Técnico"
+                  disabled
+                />
+              }
+              @if(user?.role === 'EMPLOYEE') {
+
+                <input
+                  type="text"
+                  value="Empleado"
+                  disabled
+                />
+              }
+            </div>
+
+            <!-- Actions -->
             <div class="btn-group">
               <button
-                (click)="showPasswordModal = true"
+                type="button"
+                (click)="onDiscardChanges()"
+                class="btn"
+              >
+                Descartar cambios
+              </button>
+              <button
+                type="submit"
+                [disabled]="profileForm.invalid"
                 class="btn btn-primary"
               >
-                Change Password
+                Guardar cambios
               </button>
             </div>
+          </form>
+        </div>
+
+        <!-- Security & Privacy -->
+        <div *ngIf="activeSection === 'security'" class="card form-section">
+          <div class="section-header">
+            <h3>Seguridad y privacidad</h3>
+            <span class="material-symbols-outlined">lock</span>
           </div>
 
-          <!-- Sign out all -->
-          <div class="security-item">
-            <div class="security-item-info">
-              <div class="icon-box error">
-                <span class="material-symbols-outlined">logout</span>
+          <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+            <!-- Change Password -->
+            <div class="security-item">
+              <div class="security-item-info">
+                <div class="icon-box primary">
+                  <span class="material-symbols-outlined">password</span>
+                </div>
+                <div class="security-item-text">
+                  <p>Cambiar contraseña</p>
+                </div>
               </div>
-              <div class="security-item-text">
-                <p>Cerrar sesión de todos los dispositivos</p>
-                <p>
-                  Cerrar el acceso de 3 sesiones activas
-                </p>
+              <div class="btn-group">
+                <button
+                  (click)="showPasswordModal = true"
+                  class="btn btn-primary"
+                >
+                  Change Password
+                </button>
               </div>
             </div>
-            <div class="btn-group">
-              <button
-                (click)="onSignOutAll()"
-                class="btn btn-danger"
-              >
-                Sign out all
-              </button>
+
+            <!-- Sign out all -->
+            <div class="security-item">
+              <div class="security-item-info">
+                <div class="icon-box error">
+                  <span class="material-symbols-outlined">logout</span>
+                </div>
+                <div class="security-item-text">
+                  <p>Cerrar sesión de todos los dispositivos</p>
+                  <p>
+                    Cerrar el acceso de 3 sesiones activas
+                  </p>
+                </div>
+              </div>
+              <div class="btn-group">
+                <button
+                  (click)="onSignOutAll()"
+                  class="btn btn-danger"
+                >
+                  Sign out all
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Notifications -->
-      <div *ngIf="activeSection === 'notifications'" class="card form-section">
-        <div class="section-header">
-          <h3>Notifications</h3>
-          <span class="material-symbols-outlined">notifications</span>
+        <!-- Notifications -->
+        <div *ngIf="activeSection === 'notifications'" class="card form-section">
+          <div class="section-header">
+            <h3>Notifications</h3>
+            <span class="material-symbols-outlined">notifications</span>
+          </div>
+          <p>
+            Sección de notificaciones en desarrollo.
+          </p>
         </div>
-        <p>
-          Sección de notificaciones en desarrollo.
-        </p>
-      </div>
+    </div>
   </div>
 </div>
