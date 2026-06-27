@@ -365,7 +365,7 @@ button.primary-btn:disabled {
   font: var(--font-body-md);
   color: var(--on-surface-variant);
 }
-
+/*
 .security-item button {
   padding: var(--spacing-xs) var(--spacing-sm);
   border: none;
@@ -386,7 +386,7 @@ button.primary-btn:disabled {
 
 .security-item button:hover {
   background-color: var(--surface-container-high);
-}
+} */
 
 /* Skeleton Loading */
 .skeleton {
