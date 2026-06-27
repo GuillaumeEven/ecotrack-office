@@ -339,7 +339,14 @@ public class ResourceStatusCalculatorService {
         boolean hasReleasedReservation = roomReservations.stream()
                 .anyMatch(r -> r.getDate().equals(date) && r.getStatus() == ReservationStatus.RELEASED);
         if (hasReleasedReservation) {
-            return ResourceStatus.UNAVAILABLE;
+            return ResourceStatus.RESERVED;
+        }
+
+        // check for incidents that make the room unavailable
+        boolean hasIncident = incidentRepository.findByResourceId(room.getId()).stream()
+                .anyMatch(i -> i.getStatus() == IncidentStatus.IN_PROGRESS);
+        if (hasIncident) {
+            return ResourceStatus.OUT_OF_SERVICE;
         }
 
         // Check for CONFIRMED reservations (reserved)
