@@ -69,6 +69,18 @@
   box-shadow: var(--shadow-md);
 }
 
+.btn-delete {
+  background-color: var(--delete-button);
+  color: white;
+  border-color: var(--delete-button);
+}
+
+.btn-delete:hover {
+  background-color: var(--delete-button-hover);
+  border-color: var(--delete-button-hover);
+  box-shadow: var(--shadow-md);
+}
+
 /* Variante Peligro */
 .btn-danger {
   background-color: var(--warning);

@@ -37,6 +37,7 @@ aside {
 /* Main Navigation */
 nav {
   flex: 1;
+  overflow-y: scroll;
 }
 
 nav a {

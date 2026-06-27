@@ -18,6 +18,10 @@
   --surface-variant: #d3e4fe; /* Usado: code blocks */
   --on-surface: #0b1c30; /* Usado: Texto principal y elementos interactivos */
   --modal-background: #f8f9ff; /* Usado: Fondo de modales y overlays */
+  --delete-button: #ffb4ab; /* Usado: Botón de eliminar y acciones destructivas */
+  --delete-button-hover: #93000a; /* Usado: Hover del botón de eliminar */
+  --warning-section: #ba1a1a1a; /* Usado: Fondo de secciones de advertencia */
+  --info-section: #dae2fd; /* Usado: Fondo de secciones de información */
 
   /* Colores Primarios */
   --on-primary: #ffffff;
@@ -199,6 +203,7 @@ html.dark {
   --surface-variant: #47484e;
   --on-surface: #e1e6ff;
   --modal-background: #1b2127;
+  --info-section: #0f172a;
 
 
   /* Colores Primarios */
