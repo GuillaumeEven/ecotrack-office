@@ -20,27 +20,27 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md);
+  /* padding: var(--spacing-md); */
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-semibold);
 }
 
 .status-available {
-  background-color: rgba(16, 185, 129, 0.1);
+  /* background-color: rgba(16, 185, 129, 0.1); */
   color: var(--status-available);
-  border-left: var(--border-width-2) solid var(--status-available);
+  /* border-left: var(--border-width-2) solid var(--status-available); */
 }
 
 .status-reserved {
-  background-color: rgba(245, 158, 11, 0.1);
+  /* background-color: rgba(245, 158, 11, 0.1); */
   color: var(--status-reserved);
-  border-left: var(--border-width-2) solid var(--status-reserved);
+  /* border-left: var(--border-width-2) solid var(--status-reserved); */
 }
 
 .status-unavailable {
-  background-color: rgba(239, 68, 68, 0.1);
+  /* background-color: rgba(239, 68, 68, 0.1); */
   color: var(--status-unavailable);
-  border-left: var(--border-width-2) solid var(--status-unavailable);
+  /* border-left: var(--border-width-2) solid var(--status-unavailable); */
 }
 
 /* Badge de estado */
@@ -69,16 +69,17 @@
 
 /* Información del escritorio */
 .desk-info {
-  background-color: var(--surface-container);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  width: 50%;
+  margin: 0 auto;
+  /* background-color: var(--surface-container); */
+  /* padding: var(--spacing-md); */
+  /* margin-bottom: var(--spacing-lg); */
 }
 
 .info-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--spacing-sm);
+  /* margin-bottom: var(--spacing-sm); */
   font-size: var(--font-size-sm);
 }
 

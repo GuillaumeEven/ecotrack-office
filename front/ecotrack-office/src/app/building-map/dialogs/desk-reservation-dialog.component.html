@@ -1,10 +1,13 @@
 <div class="modal-overlay" *ngIf="isOpen" (click)="onClose()">
   <div class="modal-box" (click)="$event.stopPropagation()">
-    <!-- Title -->
-    <h3 class="modal-box__title">{{ deskWithStatus?.desk?.name || 'Escritorio' }}</h3>
-
+    <!-- Header -->
+     <div class="modal-header">
+        <h3 class="modal-title">{{ deskWithStatus?.desk?.name || 'Escritorio' }}</h3>
+        <button class="modal-close" (click)="onClose()">✕</button>
+     </div>
     <!-- Status indicator -->
-    <div class="status-section">
+    <div class="modal-content">
+      <div class="info-section">
         <!-- Available status -->
         <div *ngIf="isAvailable()" class="status-available">
           <div class="status-badge available"></div>
@@ -22,17 +25,20 @@
           <div class="status-badge unavailable"></div>
           <span>Este {{ getResourceType().toLowerCase() }} no está disponible</span>
         </div>
-    </div>
-
-    <!-- Desk/Room info -->
-    <div class="desk-info">
-      <div class="info-row">
-        <span class="label">{{ getResourceType() }}:</span>
-        <span class="value">{{ deskWithStatus?.desk?.name || 'N/A' }}</span>
       </div>
-      <div class="info-row">
-        <span class="label">Fecha:</span>
-        <span class="value">{{ selectedDate | date: 'short' }}</span>
+
+      <div class="info-section">
+        <!-- Desk/Room info -->
+        <div class="desk-info">
+          <div class="info-row">
+            <span class="label">{{ getResourceType() }}:</span>
+            <span class="value">{{ deskWithStatus?.desk?.name || 'N/A' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Fecha:</span>
+            <span class="value">{{ selectedDate | date: 'short' }}</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -47,24 +53,26 @@
     </div> -->
 
     <!-- Actions -->
-    <div class="btn-group">
-      <button class="btn" (click)="onClose()" [disabled]="isLoading">
-        Cerrar
-      </button>
-      <button
-        *ngIf="isAvailable()"
-        class="btn btn-primary"
-        (click)="onReserve()"
-        [disabled]="isLoading">
-        {{ isLoading ? 'Reservando...' : 'Reservar ' + getResourceType() }}
-      </button>
-      <button
-        *ngIf="canCancelReservation()"
-        class="btn btn-danger"
-        (click)="onCancelReservation()"
-        [disabled]="isLoading">
-        {{ isLoading ? 'Cancelando...' : 'Cancelar Reserva' }}
-      </button>
+    <div class="modal-footer">
+      <div class="btn-group">
+        <button class="btn" (click)="onClose()" [disabled]="isLoading">
+          Cerrar
+        </button>
+        <button
+          *ngIf="isAvailable()"
+          class="btn btn-primary"
+          (click)="onReserve()"
+          [disabled]="isLoading">
+          {{ isLoading ? 'Reservando...' : 'Reservar ' + getResourceType() }}
+        </button>
+        <button
+          *ngIf="canCancelReservation()"
+          class="btn btn-danger"
+          (click)="onCancelReservation()"
+          [disabled]="isLoading">
+          {{ isLoading ? 'Cancelando...' : 'Cancelar Reserva' }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

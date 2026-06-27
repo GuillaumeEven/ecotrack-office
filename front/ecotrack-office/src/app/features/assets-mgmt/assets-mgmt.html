@@ -308,16 +308,16 @@
   </div>
 </div>
 
-<!-- DIÁLOGOS -->
+<!-- MODALES -->
 
-<!-- Diálogo de Piso -->
+<!-- Modal de Piso -->
 <div
   *ngIf="isFloorDialogOpen"
   class="modal-overlay"
   (click)="closeFloorDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
     <div class="modal-header">
@@ -332,56 +332,61 @@
       </button>
     </div>
 
-    <form [formGroup]="floorForm" (ngSubmit)="submitFloor()" class="modal-form">
-      <div class="form-section">
-        <label class="form-label">NOMBRE DEL PISO *</label>
-        <input
-          type="text"
-          formControlName="name"
-          placeholder="p. ej., Planta Baja, Nivel 1"
-          class="form-input"
-          [class.error]="floorForm.get('name')?.invalid && floorForm.get('name')?.touched"
-        />
-      </div>
+    <div class="modal-content">
 
-      <div class="form-section">
-        <label class="form-label">NIVEL DEL PISO *</label>
-        <input
-          type="number"
-          formControlName="level"
-          placeholder="p. ej., 0, 1, 2"
-          class="form-input"
-          [class.error]="floorForm.get('level')?.invalid && floorForm.get('level')?.touched"
-        />
-      </div>
+      <form [formGroup]="floorForm" (ngSubmit)="submitFloor()" class="modal-form">
+        <div class="form-section">
+          <label class="form-label">Nombre del Piso *</label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="p. ej., Planta Baja, Nivel 1"
+            class="form-input"
+            [class.error]="floorForm.get('name')?.invalid && floorForm.get('name')?.touched"
+          />
+        </div>
 
-      <div class="checkbox-group">
-        <input
-          type="checkbox"
-          formControlName="isActive"
-          id="floorActive"
-          class="form-input checkbox-input"
-        />
-        <label for="floorActive" class="checkbox-label">Activo</label>
-      </div>
+        <div class="form-section">
+          <label class="form-label">Nivel del Piso *</label>
+          <input
+            type="number"
+            formControlName="level"
+            placeholder="p. ej., 0, 1, 2"
+            class="form-input"
+            [class.error]="floorForm.get('level')?.invalid && floorForm.get('level')?.touched"
+          />
+        </div>
 
-      <div class="modal-actions">
+        <div class="checkbox-group">
+          <label for="floorActive" class="checkbox-label">Activo</label>
+          <input
+            type="checkbox"
+            formControlName="isActive"
+            id="floorActive"
+            class="form-input checkbox-input"
+          />
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeFloorDialog()"
-          class="modal-action-btn secondary"
+          class="btn"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="floorForm.invalid"
-          class="modal-action-btn primary"
+          class="btn btn-primary"
         >
           {{ editingFloor ? 'Actualizar' : 'Crear' }}
         </button>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 
@@ -392,7 +397,7 @@
   (click)="closeRoomDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
     <div class="modal-header">
@@ -407,9 +412,10 @@
       </button>
     </div>
 
+  <div class="modal-content">
     <form [formGroup]="roomForm" (ngSubmit)="submitRoom()" class="modal-form">
       <div class="form-section">
-        <label class="form-label">PISO *</label>
+        <label class="form-label">Piso *</label>
         <select
           formControlName="floorId"
           class="form-select"
@@ -420,7 +426,7 @@
       </div>
 
       <div class="form-section">
-        <label class="form-label">NOMBRE DE LA SALA *</label>
+        <label class="form-label">Nombre de la Sala *</label>
         <input
           type="text"
           formControlName="name"
@@ -431,7 +437,7 @@
       </div>
 
       <div class="form-section">
-        <label class="form-label">TIPO DE SALA *</label>
+        <label class="form-label">Tipo de Sala *</label>
         <select
           formControlName="roomType"
           class="form-select"
@@ -443,7 +449,7 @@
       </div>
 
       <div class="form-section">
-        <label class="form-label">CAPACIDAD *</label>
+        <label class="form-label">Capacidad *</label>
         <input
           type="number"
           formControlName="capacity"
@@ -455,7 +461,7 @@
       </div>
 
       <div class="form-section">
-        <label class="form-label">ÁREA DE SUPERFICIE (m²) *</label>
+        <label class="form-label">Área de Superficie (m²) *</label>
         <input
           type="number"
           formControlName="surfaceArea"
@@ -468,7 +474,7 @@
       </div>
 
       <div class="form-section">
-        <label class="form-label">LISTA DE EQUIPOS</label>
+        <label class="form-label">Lista de Equipos</label>
         <input
           type="text"
           formControlName="equipmentList"
@@ -486,24 +492,26 @@
         />
         <label for="roomActive" class="checkbox-label">ACTIVO</label>
       </div>
-
-      <div class="modal-actions">
+    </form>
+  </div>
+  <div class="modal-footer">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeRoomDialog()"
-          class="modal-action-btn secondary"
+          class="btn"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="roomForm.invalid"
-          class="modal-action-btn primary"
+          class="btn btn-primary"
         >
           {{ editingRoom ? 'Actualizar' : 'Crear' }}
         </button>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 
@@ -514,7 +522,7 @@
   (click)="closeDeskDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box"
     (click)="$event.stopPropagation()"
   >
     <div class="modal-header">
@@ -529,66 +537,69 @@
       </button>
     </div>
 
-    <form [formGroup]="deskForm" (ngSubmit)="submitDesk()" class="modal-form">
-      <div class="form-section">
-        <label class="form-label">SALA *</label>
-        <select
-          formControlName="roomId"
-          class="form-select"
-        >
-          <option [ngValue]="">Seleccione una Sala</option>
-          <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ room.name }}</option>
-        </select>
-      </div>
+    <div class="modal-content">
+      <form [formGroup]="deskForm" (ngSubmit)="submitDesk()" class="modal-form">
+        <div class="form-section">
+          <label class="form-label">Sala *</label>
+          <select
+            formControlName="roomId"
+            class="form-select"
+          >
+            <option [ngValue]="">Seleccione una Sala</option>
+            <option *ngFor="let room of deskAreas" [ngValue]="room.id">{{ room.name }}</option>
+          </select>
+        </div>
 
-      <div class="form-section">
-        <label class="form-label">NOMBRE DEL MESA *</label>
-        <input
-          type="text"
-          formControlName="name"
-          placeholder="p. ej., Escritorio A-01, Escritorio B-02"
-          class="form-input"
-          [class.error]="deskForm.get('name')?.invalid && deskForm.get('name')?.touched"
-        />
-      </div>
+        <div class="form-section">
+          <label class="form-label">Nombre del Mesa *</label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="p. ej., Escritorio A-01, Escritorio B-02"
+            class="form-input"
+            [class.error]="deskForm.get('name')?.invalid && deskForm.get('name')?.touched"
+          />
+        </div>
 
-      <div class="form-section">
-        <label class="form-label">LISTA DE EQUIPOS</label>
-        <input
-          type="text"
-          formControlName="equipmentList"
-          placeholder="p. ej., Monitor, Teclado, Ratón"
-          class="form-input"
-        />
-      </div>
+        <div class="form-section">
+          <label class="form-label">Lista de Equipos</label>
+          <input
+            type="text"
+            formControlName="equipmentList"
+            placeholder="p. ej., Monitor, Teclado, Ratón"
+            class="form-input"
+          />
+        </div>
 
-      <div class="checkbox-group">
-        <input
-          type="checkbox"
-          formControlName="isActive"
-          id="deskActive"
-          class="form-input checkbox-input"
-        />
-        <label for="deskActive" class="checkbox-label">ACTIVO</label>
-      </div>
-
-      <div class="modal-actions">
+        <div class="checkbox-group">
+          <input
+            type="checkbox"
+            formControlName="isActive"
+            id="deskActive"
+            class="form-input checkbox-input"
+          />
+          <label for="deskActive" class="checkbox-label">ACTIVO</label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <div class="btn-group">
         <button
           type="button"
           (click)="closeDeskDialog()"
-          class="modal-action-btn secondary"
+          class="btn"
         >
           Cancelar
         </button>
         <button
           type="submit"
           [disabled]="deskForm.invalid"
-          class="modal-action-btn primary"
+          class="btn btn-primary"
         >
           {{ editingDesk ? 'Actualizar' : 'Crear' }}
         </button>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 
@@ -599,32 +610,44 @@
   (click)="closeDeleteDialog()"
 >
   <div
-    class="modal-dialog"
+    class="modal-box delete-modal"
     (click)="$event.stopPropagation()"
   >
-    <div class="delete-dialog-header">
-      <span class="delete-icon material-symbols-outlined">warning</span>
+    <div class="modal-header">
       <h3 class="modal-title">Eliminar {{ deleteItemType }}</h3>
-    </div>
-
-    <p class="delete-message">
-      ¿Está seguro de que desea eliminar <strong>{{ deleteItemName }}</strong>? Esta acción no se puede deshacer.
-    </p>
-
-    <div class="modal-actions">
       <button
         (click)="closeDeleteDialog()"
-        class="modal-action-btn secondary"
+        class="modal-close"
       >
-        Cancelar
+        <span class="material-symbols-outlined">close</span>
       </button>
-      <button
-        (click)="confirmDelete()"
-        class="modal-action-btn primary"
-        style="background-color: var(--error); color: var(--on-error);"
-      >
-        Eliminar
-      </button>
+    </div>
+
+    <div class="modal-content">
+      <div class="warning-section">
+        <span>⚠</span>
+        <p>
+          Esta acción eliminará permanentemente
+          <strong>{{ deleteItemName }}</strong>. Esto no se puede deshacer.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+
+      <div class="btn-group">
+        <button
+          (click)="closeDeleteDialog()"
+          class="btn"
+        >
+          Cancelar
+        </button>
+        <button
+          (click)="confirmDelete()"
+          class="btn btn-delete"
+        >
+          Eliminar
+        </button>
+      </div>
     </div>
   </div>
 </div>

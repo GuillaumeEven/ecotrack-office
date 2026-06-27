@@ -1,11 +1,11 @@
 <!-- Edit Modal -->
 <div class="modal-overlay" *ngIf="showEditModal" (click)="showEditModal = false">
-  <div class="modal" (click)="$event.stopPropagation()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3 class="modal-title">Editar Usuario</h3>
       <button class="modal-close" (click)="showEditModal = false">✕</button>
     </div>
-    <div class="modal-body">
+    <div class="modal-content">
       <form [formGroup]="editForm" (ngSubmit)="onSaveEdit()">
         <div class="form-group">
           <label>Nombre</label>
@@ -25,27 +25,27 @@
             <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
           </select>
         </div>
-        <div class="modal-footer">
-          <button type="button" (click)="showEditModal = false" class="btn">
-            Cancelar
-          </button>
-          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
-            Guardar
-          </button>
-        </div>
       </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="showEditModal = false" class="btn">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
+        Guardar
+      </button>
     </div>
   </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
 <div class="modal-overlay" *ngIf="showDeleteModal" (click)="showDeleteModal = false">
-  <div class="modal" (click)="$event.stopPropagation()">
+  <div class="modal-box delete-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h3 class="modal-title" style="color: var(--error)">Eliminar Usuario</h3>
+      <h3 class="modal-title">Eliminar Usuario</h3>
       <button class="modal-close" (click)="showDeleteModal = false">✕</button>
     </div>
-    <div class="modal-body">
+    <div class="modal-content">
       <div class="warning-section">
         <span>⚠</span>
         <p>
@@ -54,11 +54,13 @@
           >'s data (GDPR). Esto no se puede deshacer.
         </p>
       </div>
-      <div class="modal-footer">
+    </div>
+    <div class="modal-footer">
+      <div class="btn-group">
         <button (click)="showDeleteModal = false" class="btn">
           Cancelar
         </button>
-        <button (click)="onConfirmDelete()" class="btn btn-danger">
+        <button (click)="onConfirmDelete()" class="btn btn-delete">
           Eliminar
         </button>
       </div>

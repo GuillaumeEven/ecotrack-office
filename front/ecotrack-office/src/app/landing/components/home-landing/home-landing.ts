@@ -47,7 +47,7 @@ export class HomeLanding implements OnInit {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      passwordHash: ['', [Validators.required]],
+      passwordHash: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]],
 
       // Datos si crea empresa nueva (Paso 2)

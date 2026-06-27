@@ -271,7 +271,7 @@ export class AssetsMgmt implements OnInit {
 
   // 🆕 Abre el modal de confirmación con resumen de elementos hijos afectados
   openDeleteDialog(type: 'floor' | 'room' | 'desk', id: number, name?: string) {
-    this.deleteItemType = type;
+    this.deleteItemType = type == 'floor' ? 'piso' : type == 'room' ? 'sala' : 'escritorio';
     this.deleteItemId = id;
     this.deleteItemName = name || 'este elemento';
     this.isDeleteDialogOpen = true;

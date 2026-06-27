@@ -12,6 +12,6 @@ export interface IncidentResponse {
   status: IncidentStatus;
   createdAt: string;
   resolvedAt: string | null;
-  userId: number;
   resourceId: number;
+  userId: number;
 }

@@ -22,6 +22,7 @@ import com.ediae.ecotrack_office.shared.exception.ApplicationException;
 import com.ediae.ecotrack_office.shared.exception.ErrorCode;
 import com.ediae.ecotrack_office.shared.exception.ForbiddenException;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
+import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
@@ -153,9 +154,10 @@ public class ReservationService {
             throw new NotFoundException("No se ha encontrado una reserva con id: " + id);
         }
         ReservationEntity reservation = entity.get();
+        Role currentRol = userRepository.findById(currentUserId).get().getRole();
 
         // Authorization check should be in controller using RoleGuard
-        if (!reservation.getUser().getId().equals(currentUserId)) {
+        if (!reservation.getUser().getId().equals(currentUserId) && currentRol.equals(Role.EMPLOYEE)) {
             throw new ForbiddenException("No tienes permisos para eliminar esta reserva.");
         }
 

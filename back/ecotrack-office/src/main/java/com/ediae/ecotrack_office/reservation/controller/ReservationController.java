@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ediae.ecotrack_office.reservation.dto.ReservationCreateDto;
 import com.ediae.ecotrack_office.reservation.dto.ReservationResponseDto;
+import com.ediae.ecotrack_office.reservation.dto.ReservationResponseWithNameDto;
 import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
 import com.ediae.ecotrack_office.reservation.mapper.ReservationMapper;
 import com.ediae.ecotrack_office.reservation.model.ReservationModel;
@@ -115,7 +116,7 @@ public class ReservationController {
     // --- ENDPOINTS SOLO PARA ADMIN Y TECNICOS
 
     @GetMapping("/all")
-    public ResponseEntity <List <ReservationResponseDto>> getAllReservationsFromTheOranizationUser (Authentication auth) {
+    public ResponseEntity <List <ReservationResponseWithNameDto>> getAllReservationsFromTheOranizationUser (Authentication auth) {
 
         boolean isAdminOrTech = roleGuard.hasAnyRole(auth, Role.ADMIN, Role.TECHNICIAN);
 
@@ -123,10 +124,10 @@ public class ReservationController {
             Long userId = (Long) auth.getPrincipal();
             UserModel user = userService.getUserById(userId);
             List <ReservationModel> models = service.getAllReservationsByOrganizationId(user.getOrganizationId());
-            List <ReservationResponseDto> dtos = new ArrayList <>();
+            List <ReservationResponseWithNameDto> dtos = new ArrayList <>();
             for (ReservationModel model : models) {
 
-                dtos.add(ReservationMapper.toResponseDto(model));
+                dtos.add(ReservationMapper.toResponseWithNameDto(model));
             }
             return ResponseEntity.ok(dtos);
         } else {

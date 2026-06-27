@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IncidentService } from '../../services/incident';
-import { AuthService } from '../../services/auth.service'; // Importo el servicio común de auth
+import { AuthService } from '../../services/auth.service';
 import { IncidentResponse } from '../../models/incident.model';
+import { ResourceService } from '../../services/resource.service';
 
 @Component({
   selector: 'app-incidencias',
@@ -11,7 +12,6 @@ import { IncidentResponse } from '../../models/incident.model';
   imports: [CommonModule, ReactiveFormsModule, DatePipe],
   templateUrl: './incidencias.html',
 })
-
 export class IncidenciasComponent implements OnInit {
   incidents: IncidentResponse[] = [];
   incidentForm!: FormGroup;
@@ -19,12 +19,16 @@ export class IncidenciasComponent implements OnInit {
   isSaving = false;
   errorMessage: string | null = null;
   successMessage: string | null = null;
-  userRole: string = 'USER'; // Rol por defecto
+  userRole: string = 'USER';
+  resourceNames: Map<number, string> = new Map();
+  protected readonly String = String;
 
   constructor(
     private fb: FormBuilder,
     private incidentService: IncidentService,
-    private authService: AuthService // Inyecto el control de acceso
+    private authService: AuthService,
+    private resourceService: ResourceService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -46,20 +50,46 @@ export class IncidenciasComponent implements OnInit {
     this.incidentForm = this.fb.group({
       description: ['', [Validators.required, Validators.minLength(10)]],
       resourceId: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      userId: ['1', [Validators.required]] // ID temporal para el MVP
+      userId: ['1', [Validators.required]]
+    });
+  }
+
+  /**
+   * 🔄 MOTOR DE TRADUCCIÓN EXACTO DE LA BASE DE DATOS
+   * Traduce los IDs incrementales de MySQL en los nombres normativos del MVP.
+   */
+  getResourceName(id: number): string {
+    return this.resourceNames.get(id) || `Cargando...`;
+  }
+
+  private loadResourceName(id: number): void {
+    if (this.resourceNames.has(id)) return;
+
+    this.resourceService.getResourceById(id).subscribe({
+      next: (data) => {
+        this.resourceNames.set(id, data.name);
+        this.cdr.markForCheck();  // ← Force Angular à redessiner
+      },
+      error: () => {
+        this.resourceNames.set(id, `Recurso Externo #${id}`);
+        this.cdr.markForCheck();
+      }
     });
   }
 
   loadIncidents(): void {
     this.isLoading = true;
     this.incidentService.getAll().subscribe({
-      next: (data: IncidentResponse[]) => {
+      next: (data) => {
         this.incidents = data;
+        data.forEach(incident => this.loadResourceName(incident.resourceId));
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.errorMessage = 'No se pudieron cargar las incidencias desde el servidor.';
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -88,6 +118,7 @@ export class IncidenciasComponent implements OnInit {
       error: () => {
         this.isSaving = false;
         this.errorMessage = 'Error al enviar la incidencia.';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -99,7 +130,23 @@ export class IncidenciasComponent implements OnInit {
       },
       error: () => {
         this.errorMessage = 'No se pudo resolver la incidencia.';
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  onDelete(id: number): void {
+    if (confirm('¿Estás seguro de que deseas eliminar esta incidencia permanentemente?')) {
+      this.incidentService.delete(id).subscribe({
+        next: () => {
+          this.successMessage = 'Incidencia eliminada correctamente.';
+          this.loadIncidents();
+        },
+        error: () => {
+          this.errorMessage = 'No se pudo eliminar la incidencia.';
+          this.cdr.detectChanges();
+        }
+      });
+    }
   }
 }
