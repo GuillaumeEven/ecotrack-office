@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class DeskService {
+
   private readonly BASE_URL = `${environment.apiUrl}/desks`;
 
   constructor(private httpClient: HttpClient) {}
