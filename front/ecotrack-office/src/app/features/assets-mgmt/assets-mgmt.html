@@ -51,7 +51,7 @@
               <th>
                 Es activo
               </th>
-              <th class="text-center">
+              <th class="actions">
                 Acciones
               </th>
             </tr>
@@ -75,7 +75,7 @@
                   {{ floor.isActive ? 'Activo' : 'Inactivo' }}
                 </span>
               </td>
-              <td>
+              <td class="actions">
                 <div class="actions-cell">
                   <button
                     (click)="openFloorDialog(floor)"
@@ -148,7 +148,7 @@
               <th>
                 Escritorios
               </th>
-              <th class="text-center">
+              <th class="actions">
                 Acciones
               </th>
             </tr>
@@ -178,7 +178,7 @@
               <td class="muted">
                 {{ getDeskCount(room.id) || 0 }}
               </td>
-              <td>
+              <td class="actions">
                 <div class="actions-cell">
                   <button
                     (click)="openRoomDialog(room)"
@@ -196,7 +196,7 @@
               </td>
             </tr>
             <tr *ngIf="filteredRooms.length === 0">
-              <td colspan="5" class="empty-state">
+              <td colspan="6" class="empty-state">
                 No se encontraron Salas.
               </td>
             </tr>
@@ -246,7 +246,7 @@
               <th>
                 Estado
               </th>
-              <th class="text-center">
+              <th class="actions">
                 Acciones
               </th>
             </tr>
@@ -279,7 +279,7 @@
                   {{ getDeskAvailability(desk.id) ? 'Disponible' : 'Averiado' }}
                 </span>
               </td>
-              <td>
+              <td class="actions">
                 <div class="actions-cell">
                   <button
                     (click)="openDeskDialog(desk)"
@@ -297,7 +297,7 @@
               </td>
             </tr>
             <tr *ngIf="filteredDesks.length === 0">
-              <td colspan="4" class="empty-state">
+              <td colspan="6" class="empty-state">
                 No se encontraron Escritorios.
               </td>
             </tr>

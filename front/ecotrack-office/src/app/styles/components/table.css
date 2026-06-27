@@ -58,7 +58,7 @@ tbody tr:hover {
 .actions-cell {
   display: flex;
   justify-content: center;
-  gap: var(--spacing-sm);
+  /* gap: var(--spacing-sm); */
 }
 
 .pagination {

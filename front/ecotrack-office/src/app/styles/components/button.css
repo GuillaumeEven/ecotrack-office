@@ -146,7 +146,7 @@
    ============================================================================ */
 
 .action-btn {
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-xs);
   border: none;
   background: transparent;
   border-radius: var(--radius-md);
