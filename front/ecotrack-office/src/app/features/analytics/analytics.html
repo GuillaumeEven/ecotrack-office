@@ -26,7 +26,7 @@
       <div>
         <h4 style="margin: 0; font-weight: bold; color: white;">Impacto Ecológico en el Rango Seleccionado</h4>
         <p style="margin: 0.25rem 0 0 0; font-size: 0.95rem;">
-          El ahorro conseguido en este periodo equivale al impacto de haber plantado <strong>{{ equivalences.treesPlanted }} árboles</strong>. 
+          El ahorro conseguido en este periodo equivale al impacto de haber plantado <strong>{{ equivalences.treesPlanted }} árboles</strong>.
           Además, la optimización financiera equivale a haber mantenido la oficina **totalmente cerrada y apagada durante {{ equivalences.officeShutdownDays }} días**.
         </p>
       </div>
@@ -40,8 +40,9 @@
           <span class="material-symbols-outlined icon-co2">eco</span>
         </div>
         <div class="card-body-metric">
-          <h2 class="metric-value">{{ accumulatedTotals.co2Saved == 0 ? '-' : (accumulatedTotals.co2Saved | number:'1.2-2') }} <span class="metric-unit">kg CO₂</span></h2>
-          <p class="footer-success">✓ Basado en el filtro seleccionado</p>
+          <h2 class="metric-value">{{ accumulatedTotals.co2Saved == 0 ? '--' : (accumulatedTotals.co2Saved | number:'1.2-2') }} <span class="metric-unit">kg CO₂</span></h2>
+          <p class="footer-success" *ngIf="!showNoReportMessage">✓ Basado en el filtro seleccionado</p>
+          <p class="footer-success" *ngIf="showNoReportMessage" style="color: #fbbf24; font-size: 0.9rem;">📊 Genera un informe para calcular tus ahorros</p>
         </div>
       </div>
 
@@ -51,8 +52,9 @@
           <span class="material-symbols-outlined icon-money">payments</span>
         </div>
         <div class="card-body-metric">
-          <h2 class="metric-value">€{{ accumulatedTotals.financialSaved | number:'1.2-2' }}</h2>
-          <p class="card-footer-text">Optimización de recursos del periodo</p>
+          <h2 class="metric-value">{{ accumulatedTotals.financialSaved == 0 ? '--' : '€' + (accumulatedTotals.financialSaved | number:'1.2-2') }}</h2>
+          <p class="card-footer-text" *ngIf="!showNoReportMessage">Optimización de recursos del periodo</p>
+          <p class="card-footer-text" *ngIf="showNoReportMessage" style="color: #fbbf24; font-size: 0.9rem;">📊 Sin datos hoy - compila métricas</p>
         </div>
       </div>
 
@@ -62,8 +64,9 @@
           <span class="material-symbols-outlined icon-spots">date_range</span>
         </div>
         <div class="card-body-metric">
-          <h2 class="metric-value">{{ accumulatedTotals.activeReservationsCount }} <span class="metric-unit">reservas</span></h2>
-          <p class="card-footer-text">{{ accumulatedTotals.checkInsCount }} check-ins completados</p>
+          <h2 class="metric-value">{{ accumulatedTotals.activeReservationsCount == 0 ? '--' : accumulatedTotals.activeReservationsCount }} <span class="metric-unit">reservas</span></h2>
+          <p class="card-footer-text" *ngIf="!showNoReportMessage">{{ accumulatedTotals.checkInsCount == 0 ? '--' : accumulatedTotals.checkInsCount }} check-ins completados</p>
+          <p class="card-footer-text" *ngIf="showNoReportMessage" style="color: #fbbf24; font-size: 0.9rem;">📊 Aún no hay ocupación registrada</p>
         </div>
       </div>
 

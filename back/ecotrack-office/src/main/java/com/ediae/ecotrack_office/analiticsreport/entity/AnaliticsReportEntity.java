@@ -1,8 +1,6 @@
 package com.ediae.ecotrack_office.analiticsreport.entity;
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 
 import jakarta.persistence.Column;
@@ -39,7 +37,7 @@ public class AnaliticsReportEntity {
     @Column(name = "empty_rooms", nullable = false)
     private Integer emptyRooms;
 
-    @CreationTimestamp
+    // @CreationTimestamp // Todo prod
     @Column(name = "generated_at", nullable = false, updatable = false)
     private LocalDateTime generatedAt;
 

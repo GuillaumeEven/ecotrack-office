@@ -23,6 +23,10 @@ export class AnalyticsComponent implements OnInit {
   allReports: MappedReport[] = [];
   displayedReports: MappedReport[] = [];
   activeFilter: 'day' | 'week' | 'month' | 'all' = 'all';
+  today: string = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+  todayReportExists: boolean = false; // Indica si ya existe un informe para hoy
+  todayReport: MappedReport | null = null; // Almacena el informe de hoy si existe
+  showNoReportMessage: boolean = false; // Indica si debe mostrarse el mensaje "No informe para hoy"
 
   // Totales dinámicos que se muestran en las tarjetas de arriba
   accumulatedTotals = {
@@ -81,17 +85,17 @@ export class AnalyticsComponent implements OnInit {
           new Date(b.compiledAt).getTime() - new Date(a.compiledAt).getTime()
         );
 
-
-        // const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
-        // const todayReportExists = this.allReports.some(report => report.compiledAt.startsWith(today));
-        // if (!todayReportExists) {
-        //   this.compileMetrics(today);
-        // }
-        // this.allReports.sort((a, b) => b.id - a.id);
+        // check if a report for today already exists
+        this.todayReportExists = this.allReports.some(report => report.compiledAt.startsWith(this.today));
+        if (this.todayReportExists) {
+          this.todayReport = this.allReports.find(report => report.compiledAt.startsWith(this.today)) || null;
+        } else {
+          this.todayReport = null;
+        }
 
         // Aplico el filtro activo para mostrar los datos correctos en la tabla y recalcular los totales
         this.applyFilter(this.activeFilter);
-        this.cdr.detectChanges(); // Forzar la detección de cambios para actualizar la vista
+        this.cdr.markForCheck(); // Marcar componente como changed, sin forzar detección inmediata
 
         this.isLoading = false;
       },
@@ -107,33 +111,35 @@ export class AnalyticsComponent implements OnInit {
 
     // 1. Filtrar el historial de abajo por cantidad de informes diarios
     if (filterType === 'day') {
-      // encuentro si hay un informe para hoy y lo muestro, si no, muestro el más reciente
-      const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
-      const todayReport = this.allReports.find(report => report.compiledAt.startsWith(today));
-      if (todayReport) {
-        this.displayedReports = [todayReport];
+      // Mostrar reporte de hoy si existe, si no mostrar vacio (con --)
+      if (this.todayReportExists && this.todayReport) {
+        this.displayedReports = [this.todayReport];
+        this.showNoReportMessage = false;
       } else {
-        //crear un nuevo informe con id 0
-        const newReport = {
-          id: 0,
-          compiledAt: today,
-          co2Saved: 0,
-          financialSaved: 0,
-          totalReservations: 0,
-          activeReservationsCount: 0,
-          checkInsCount: 0
-        };
-        this.displayedReports = [newReport];
-        // this.displayedReports = this.allReports.slice(0, 1); // Mostrar el informe más reciente si no hay uno para hoy
+        this.displayedReports = [];
+        this.showNoReportMessage = true; // Mostrar mensaje "No informe para hoy"
       }
-
-      // this.displayedReports = this.allReports.slice(0, 1);
     } else if (filterType === 'week') {
-      this.displayedReports = this.allReports.slice(0, 7);
+      // this.displayedReports incluye los reports que tienen fecha dentro de los últimos 7 días, incluyendo hoy
+      this.displayedReports = this.allReports.filter(report => {
+        const reportDate = new Date(report.compiledAt);
+        const sevenDaysAgo = new Date(this.today);
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6); // Incluye hoy y los últimos 6 días
+        return reportDate >= sevenDaysAgo && reportDate <= new Date(this.today);
+      });
+      this.showNoReportMessage = false;
     } else if (filterType === 'month') {
-      this.displayedReports = this.allReports.slice(0, 30);
+      // this.displayedReports incluye los reports que tienen fecha dentro de los últimos 30 días, incluyendo hoy
+      this.displayedReports = this.allReports.filter(report => {
+        const reportDate = new Date(report.compiledAt);
+        const thirtyDaysAgo = new Date(this.today);
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29); // Incluye hoy y los últimos 29 días
+        return reportDate >= thirtyDaysAgo && reportDate <= new Date(this.today);
+      });
+      this.showNoReportMessage = false;
     } else {
       this.displayedReports = [...this.allReports];
+      this.showNoReportMessage = false;
     }
 
     // 2. Recalcular las tarjetas de arriba usando SOLO los datos visibles del filtro
@@ -155,25 +161,21 @@ export class AnalyticsComponent implements OnInit {
   }
 
   compileMetrics(): void {
-    const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
     // Check if a report for today already exists in this.allReports
-    const existingTodayReport = this.allReports.find(report =>
-      report.compiledAt.startsWith(today)
-    );
 
-    if (existingTodayReport) {
+    if (this.todayReportExists && this.todayReport) {
       // Delete the existing report first
-      this.analyticsService.delete(existingTodayReport.id).subscribe({
+      this.analyticsService.delete(this.todayReport.id).subscribe({
         next: () => {
           // After deletion, create the new report
-          this.analyticsService.generate({ dateReport: today }).subscribe({
+          this.analyticsService.generate({ dateReport: this.today }).subscribe({
             next: () => {
-              console.log('Report replaced for', today);
-              this.loadAnalytics(); // Reload to reflect changes
+              console.log('Report recreated for', this.todayReport?.compiledAt);
+              this.loadAnalytics(); // Reload to show new data
             },
             error: (err) => {
-              console.error('Error creating new report:', err);
+              console.error('Error creating report after deletion:', err);
             }
           });
         },
@@ -183,9 +185,9 @@ export class AnalyticsComponent implements OnInit {
       });
     } else {
       // No report for today, just create a new one
-      this.analyticsService.generate({ dateReport: today }).subscribe({
+      this.analyticsService.generate({ dateReport: this.today }).subscribe({
         next: () => {
-          console.log('Report created for', today);
+          console.log('Report created for', this.today);
           this.loadAnalytics(); // Reload to show new data
         },
         error: (err) => {
