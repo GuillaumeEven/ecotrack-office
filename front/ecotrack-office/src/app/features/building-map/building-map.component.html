@@ -1,0 +1,239 @@
+<div class="main-container">
+  <!-- Header -->
+  <header class="component-header">
+    <h1>Mapa del Edificio</h1>
+    <h2>Explora y reserva plantas, salas y escritorios.</h2>
+  </header>
+  <div class="content-wrapper">
+
+    <!-- Main Grid: Filters + Desks -->
+    <div class="main-grid">
+      <!-- Filters Column -->
+      <div class="filters-column">
+        <!-- Floor Selector -->
+        <section class="section">
+          <h3>
+            <span class="material-symbols-outlined text-primary">layers</span>
+            Seleccionar Planta
+          </h3>
+
+            <div class="btn-floor-list">
+              <button
+                *ngFor="let floorWithStatus of allFloorsWithStatus"
+                (click)="onFloorSelect(floorWithStatus.floor.id)"
+                [class.active]="selectedFloorId === floorWithStatus.floor.id"
+                [ngClass]="getFloorStatusClass(floorWithStatus)"
+                class="btn-floor">
+                <strong>{{ floorWithStatus.floor.name || `Floor ${floorWithStatus.floor.level}` }}</strong>
+                <span
+                  class="status-badge"
+                  [ngClass]="getFloorStatusClass(floorWithStatus).split('-')[1]"
+                  [title]="getStatusText(getFloorStatus(floorWithStatus))"
+                ></span>
+                <br>
+                <small>{{ floorWithStatus.floor.isActive ? 'Activo' : 'Inactivo' }}</small>
+              </button>
+            </div>
+        </section>
+
+        <!-- Date & Filters -->
+        <section class="section">
+          <h3>
+            <span class="material-symbols-outlined">filter_list</span>
+            Fecha
+          </h3>
+
+          <div class="form-group">
+            <label class="form-label">Seleccionar Fecha</label>
+            <input
+              type="date"
+              [value]="selectedDate | date:'yyyy-MM-dd'"
+              (change)="onDateChange($event)"
+              class="form-input"/>
+          </div>
+
+          <div *ngIf="loading.floors" class="loading">Cargando estado de la planta...</div>
+          <div *ngIf="errors.floors" class="error">{{ errors.floors }}</div>
+        </section>
+      </div>
+
+      <!-- Rooms & Desks Column -->
+      <div class="rooms-desks-column">
+        <!-- Rooms Section -->
+        <section class="section">
+          <h3>
+            <span class="material-symbols-outlined">meeting_room</span>
+            Salas
+          </h3>
+
+          <div *ngIf="!selectedFloorId" class="loading">
+            Selecciona una planta para ver las salas
+          </div>
+
+          <div *ngIf="selectedFloorId">
+            <div *ngIf="loading.floors" class="loading">Cargando...</div>
+            <div *ngIf="errors.floors" class="error">{{ errors.floors }}</div>
+
+            <div class="btn-room-grid" *ngIf="getSelectedFloor()">
+              <button
+                *ngFor="let roomWithStatus of getSelectedFloor()!.rooms"
+                (click)="onRoomSelect(roomWithStatus.room.id)"
+                [class.active]="selectedRoomId === roomWithStatus.room.id"
+                [ngClass]="getRoomStatusClass(roomWithStatus)"
+                [title]="getStatusText(roomWithStatus.roomStatus)"
+                class="btn-room">
+                <strong>{{ roomWithStatus.room.name }}</strong>
+                <span class="status-badge" [ngClass]="getRoomStatusClass(roomWithStatus).split('-')[1]"></span>
+                <br>
+                <small>
+                  Cap: {{ roomWithStatus.room.capacity }} | {{ getOccupancyPercent(roomWithStatus) }}
+                </small>
+              </button>
+            </div>
+
+            <div
+              *ngIf="getSelectedFloor() && getSelectedFloor()!.rooms.length === 0 && !loading.floors && !errors.floors"
+              class="loading">
+              No se encontraron salas.
+            </div>
+          </div>
+        </section>
+
+        <!-- Desks Section - Cinema Style -->
+        <section class="desks-cinema">
+          <div class="cinema-header">
+            <h2>Disponibilidad de Escritorios</h2>
+            <p *ngIf="selectedDate">
+              Fecha: {{ selectedDate | date: 'EEEE, MMMM d, yyyy' }}
+            </p>
+          </div>
+
+          <div *ngIf="selectedRoomId && !isMeetingRoom(getSelectedRoom()!)" class="legend">
+            <div class="legend-item">
+              <div class="legend-color available"></div>
+              <span class="legend-text">DISPONIBLE</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color: #2196f3; box-shadow: 0 0 8px rgba(33, 150, 243, 0.6);"></div>
+              <span class="legend-text">MI RESERVA</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background-color: #ff9800;"></div>
+              <span class="legend-text">OTRA RESERVA</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color out-of-service"></div>
+              <span class="legend-text">AVERIADO</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color unavailable"></div>
+              <span class="legend-text">NO DISPONIBLE</span>
+            </div>
+          </div>
+
+          <div class="desks-grid-wrapper">
+            <div *ngIf="!selectedRoomId" class="empty-state">
+              <p>Selecciona una sala para ver escritorios</p>
+            </div>
+
+            <div *ngIf="selectedRoomId && getSelectedFloor()" class="desks-grid">
+              <button
+                *ngFor="let deskWithStatus of getDesksByRoom(selectedRoomId)"
+                [ngClass]="getDeskStatusClass(deskWithStatus)"
+                [title]="getDeskTooltip(deskWithStatus)"
+                [disabled]="isSelectedRoomUnavailable()"
+                (click)="openDeskDialog(deskWithStatus)"
+                class="desk-btn {{ canCancelReservation(deskWithStatus) ? 'clickable' : '' }}">
+                {{ deskWithStatus.desk.name }}
+              </button>
+            </div>
+
+            <!-- Meeting Room Display (single button for the entire room) -->
+            <div *ngIf="selectedRoomId && getSelectedFloor() && getSelectedRoom() && isMeetingRoom(getSelectedRoom()!)" class="meeting-room-container">
+              <div class="meeting-room-info">
+                <h3>{{ getSelectedRoom()?.room?.name }}</h3>
+                <p class="capacity">Capacidad: {{ getSelectedRoom()?.room?.capacity }} personas</p>
+                <p [ngClass]="'status-' + getSelectedRoom()?.roomStatus?.toLowerCase()">
+                  Estado: {{ getStatusText(getSelectedRoom()?.roomStatus!) }}
+                </p>
+              </div>
+              <button
+                *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.AVAILABLE"
+                (click)="openMeetingRoomReservationDialog(getSelectedRoom()!)"
+                class="btn btn-primary">
+                Reservar Sala de Reuniones
+              </button>
+              <button
+                *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.RESERVED"
+                (click)="openMeetingRoomReservationDialog(getSelectedRoom()!)"
+                class="btn">
+                Reservado
+              </button>
+              <button
+                *ngIf="getSelectedRoom()?.roomStatus === ResourceStatus.UNAVAILABLE"
+                disabled
+                class="btn">
+                No Disponible
+              </button>
+            </div>
+
+            <div
+              *ngIf="selectedRoomId && getSelectedFloor() && getDesksByRoom(selectedRoomId).length === 0 && !isMeetingRoom(getSelectedRoom()!) && !loading.floors && !errors.floors"
+              class="empty-state">
+              <p>No se encontraron escritorios para esta sala.</p>
+            </div>
+
+            <div *ngIf="loading.floors" class="empty-state">
+              <p>Cargando estado de la planta...</p>
+            </div>
+
+            <div *ngIf="errors.floors" class="empty-state">
+              <p>{{ errors.floors }}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Debug Info -->
+    <div class="debug-section">
+      <h3>Información de Depuración</h3>
+      <div class="debug-grid">
+        <div class="debug-item">
+          <strong>Planta:</strong>
+          {{ selectedFloorId || 'Ninguno' }}
+        </div>
+        <div class="debug-item">
+          <strong>Sala:</strong>
+          {{ selectedRoomId || 'Ninguno' }}
+        </div>
+        <div class="debug-item">
+          <strong>Fecha:</strong>
+          {{ selectedDate | date:'yyyy-MM-dd' }}
+        </div>
+        <div class="debug-item">
+          <strong>Salas Cargadas:</strong>
+          {{ getSelectedFloor()?.rooms?.length || 0 }}
+        </div>
+        <div class="debug-item" *ngIf="selectedRoomId">
+          <strong>Escritorios en la Sala:</strong>
+          {{ getDesksByRoom(selectedRoomId).length }}
+        </div>
+        <div class="debug-item" *ngIf="selectedRoomId && getRoomById(selectedRoomId)">
+          <strong>Tasa de Ocupación:</strong>
+          {{ getOccupancyPercent(getRoomById(selectedRoomId)!) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Desk Reservation Dialog -->
+<app-desk-reservation-modal
+  [isOpen]="isModalOpen"
+  [deskWithStatus]="selectedDeskForModal"
+  [selectedDate]="selectedDate"
+  [isMeetingRoom]="isModalForMeetingRoom"
+  (close)="closeDeskDialog()"
+  (reserved)="onReservationSuccess()">
+</app-desk-reservation-modal>

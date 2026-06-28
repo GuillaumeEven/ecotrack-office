@@ -1,6 +1,4 @@
-import { ResourceResponse } from "./resource.model";
-
-export interface ReservationResponse {
+export interface ReservationResponseModel {
 
     id: number;
     date: string;
@@ -11,7 +9,7 @@ export interface ReservationResponse {
     resourceEquipmentList: string;
 }
 
-export interface ReservationResponseWithName {
+export interface ReservationResponseWithNameModel {
 
     id: number;
     date: string;
@@ -22,3 +20,14 @@ export interface ReservationResponseWithName {
     resourceName: string;
     resourceEquipmentList: string;
 }
+
+export type ReservationModel = {
+  id: number;
+  deskId: number;
+  roomId: number;
+  floorId: number;
+  userId: number;
+  startDate: string; // ISO date format: "2026-06-09"
+  endDate: string;
+  status: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
+};

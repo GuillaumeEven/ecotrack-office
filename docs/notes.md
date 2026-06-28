@@ -177,3 +177,7 @@ Cambios del 28 de junio:
 - config spring en shared/config
 - analitics por analytics
 - guards and notificationservice location
+- unir los models, components y services en carpeta
+- crear un index por carpeta
+- hacer los imports màs cortos por el uso de los index
+- configure paths in tsconfig.app.json (llamar a @services...)

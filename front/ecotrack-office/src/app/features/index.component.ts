@@ -1,0 +1,11 @@
+export { AnalyticsComponent } from './analytics/analytics.component';
+export { AssetsMgmtComponent } from './assets-mgmt/assets-mgmt.component';
+export { BuildingMapComponent } from './building-map/building-map.component';
+export { IncidentsComponent } from './incidents/incidents.component';
+export { LandingComponent } from './landing/landing.component';
+export { LoginComponent } from './login/login.component';
+export { UserManagementComponent } from './user-management/user-management.component';
+export { UserProfileComponent } from './user-profile/user-profile.component';
+export { OrganizationComponent } from './organization/organization.component';
+export { ReservationComponent } from './reservation/reservation.component';
+export { DeskReservationModalComponent } from './building-map/modals/desk-reservation-modal.component';

@@ -1,4 +1,4 @@
-package com.ediae.ecotrack_office.config;
+package com.ediae.ecotrack_office.shared.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

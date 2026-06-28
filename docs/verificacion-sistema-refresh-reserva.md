@@ -72,8 +72,8 @@ onReserve(): void {
 **Template (building-map.component.html):**
 ```html
 <app-desk-reservation-dialog
-  [isOpen]="isDialogOpen"
-  [deskWithStatus]="selectedDeskForDialog"
+  [isOpen]="isModalOpen"
+  [deskWithStatus]="selectedDeskForModal"
   [selectedDate]="selectedDate"
   (close)="closeDeskDialog()"
   (reserved)="onReservationSuccess()">  <!-- ← ESCUCHA EL EVENTO -->
