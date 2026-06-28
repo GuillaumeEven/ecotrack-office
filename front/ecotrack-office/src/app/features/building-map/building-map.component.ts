@@ -71,7 +71,7 @@ export class BuildingMapComponent implements OnInit {
 
     const dateISO = this.formatDateToISO(this.selectedDate);
 
-    this.floorService.getFloorsWithStatus(1, dateISO).subscribe({
+    this.floorService.getFloorsWithStatus(dateISO).subscribe({
       next: (data) => {
         this.allFloorsWithStatus = data;
 
