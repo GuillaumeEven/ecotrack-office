@@ -366,26 +366,26 @@
             class="form-input checkbox-input"
           />
         </div>
-      </form>
-    </div>
 
-    <div class="modal-footer">
-      <div class="btn-group">
-        <button
-          type="button"
-          (click)="closeFloorDialog()"
-          class="btn"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          [disabled]="floorForm.invalid"
-          class="btn btn-primary"
-        >
-          {{ editingFloor ? 'Actualizar' : 'Crear' }}
-        </button>
-      </div>
+        <div class="modal-footer">
+          <div class="btn-group">
+            <button
+              type="button"
+              (click)="closeFloorDialog()"
+              class="btn"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              [disabled]="floorForm.invalid"
+              class="btn btn-primary"
+            >
+              {{ editingFloor ? 'Actualizar' : 'Crear' }}
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -492,26 +492,27 @@
         />
         <label for="roomActive" class="checkbox-label">ACTIVO</label>
       </div>
+
+      <div class="modal-footer">
+        <div class="btn-group">
+          <button
+            type="button"
+            (click)="closeRoomDialog()"
+            class="btn"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            [disabled]="roomForm.invalid"
+            class="btn btn-primary"
+          >
+            {{ editingRoom ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </div>
     </form>
   </div>
-  <div class="modal-footer">
-      <div class="btn-group">
-        <button
-          type="button"
-          (click)="closeRoomDialog()"
-          class="btn"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          [disabled]="roomForm.invalid"
-          class="btn btn-primary"
-        >
-          {{ editingRoom ? 'Actualizar' : 'Crear' }}
-        </button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -580,25 +581,26 @@
           />
           <label for="deskActive" class="checkbox-label">ACTIVO</label>
         </div>
+
+        <div class="modal-footer">
+          <div class="btn-group">
+            <button
+              type="button"
+              (click)="closeDeskDialog()"
+              class="btn"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              [disabled]="deskForm.invalid"
+              class="btn btn-primary"
+            >
+              {{ editingDesk ? 'Actualizar' : 'Crear' }}
+            </button>
+          </div>
+        </div>
       </form>
-    </div>
-    <div class="modal-footer">
-      <div class="btn-group">
-        <button
-          type="button"
-          (click)="closeDeskDialog()"
-          class="btn"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          [disabled]="deskForm.invalid"
-          class="btn btn-primary"
-        >
-          {{ editingDesk ? 'Actualizar' : 'Crear' }}
-        </button>
-      </div>
     </div>
   </div>
 </div>

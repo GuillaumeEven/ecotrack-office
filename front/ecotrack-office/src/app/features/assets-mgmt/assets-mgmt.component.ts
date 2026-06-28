@@ -416,7 +416,7 @@ export class AssetsMgmtComponent implements OnInit {
     } else {
       this.roomForm.reset({
         name: '',
-        floorId: '',
+        floorId: this.selectedFloorId || '',
         roomType: '',
         capacity: '',
         surfaceArea: '',
@@ -443,7 +443,7 @@ export class AssetsMgmtComponent implements OnInit {
     } else {
       this.deskForm.reset({
         name: '',
-        roomId: '',
+        roomId: this.selectedRoomId || '',
         equipmentList: '',
         isActive: true,
       });
@@ -469,12 +469,12 @@ export class AssetsMgmtComponent implements OnInit {
   }
 
   closeRoomDialog() {
-    this.roomForm.reset({ floorId: '', name: '', type: '' });
+    this.roomForm.reset({ floorId: this.selectedFloorId || '', name: '', type: '' });
     this.isRoomDialogOpen = false;
   }
 
   closeDeskDialog() {
-    this.deskForm.reset({ name: '', roomId: '', equipmentList: '', isActive: true });
+    this.deskForm.reset({ name: '', roomId: this.selectedRoomId || '', equipmentList: '', isActive: true });
     this.isDeskDialogOpen = false;
   }
 
@@ -515,9 +515,9 @@ export class AssetsMgmtComponent implements OnInit {
         this.cdr.markForCheck();
 
         // Auto-select first floor
-        if (result.floors.length > 0) {
-          this.selectedFloorId = result.floors[0].id;
-        }
+        // if (result.floors.length > 0) {
+        //   this.selectedFloorId = result.floors[0].id;
+        // }
       },
       error: (err) => {
         this.errorMessage = 'Error loading data';
