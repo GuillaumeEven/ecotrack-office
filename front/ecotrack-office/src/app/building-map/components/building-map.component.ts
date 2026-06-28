@@ -75,7 +75,6 @@ export class BuildingMapComponent implements OnInit {
     this.floorService.getFloorsWithStatus(1, dateISO).subscribe({
       next: (data) => {
         this.allFloorsWithStatus = data;
-        console.log('Loaded floors with status:', this.allFloorsWithStatus);
 
         // Auto-select first floor
         if (this.allFloorsWithStatus.length > 0 && !this.selectedFloorId) {
