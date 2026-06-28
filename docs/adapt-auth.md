@@ -130,7 +130,7 @@ Sigue en uso en UserController para endpoints admin-only.
 Aunque están autenticados por SecurityConfig, no todos aplican filtros de rol en controller/service. Ejemplos visibles:
 - varias operaciones en OrganizationController;
 - varias operaciones en IncidentController;
-- varias operaciones en AnaliticsController;
+- varias operaciones en AnalyticsController;
 - algunas operaciones en RoomController y DeskController (PUT/DELETE según método).
 
 ---

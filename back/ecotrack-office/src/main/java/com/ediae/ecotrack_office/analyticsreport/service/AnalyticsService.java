@@ -1,4 +1,4 @@
-package com.ediae.ecotrack_office.analiticsreport.service;
+package com.ediae.ecotrack_office.analyticsreport.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,12 +8,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportGenerateDto;
-import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportRequestDto;
-import com.ediae.ecotrack_office.analiticsreport.entity.AnaliticsReportEntity;
-import com.ediae.ecotrack_office.analiticsreport.mapper.AnaliticsReportMapper;
-import com.ediae.ecotrack_office.analiticsreport.model.AnaliticsReportModel;
-import com.ediae.ecotrack_office.analiticsreport.repository.AnaliticsReportRepository;
+import com.ediae.ecotrack_office.analyticsreport.dto.AnalyticsReportGenerateDto;
+import com.ediae.ecotrack_office.analyticsreport.dto.AnalyticsReportRequestDto;
+import com.ediae.ecotrack_office.analyticsreport.entity.AnalyticsReportEntity;
+import com.ediae.ecotrack_office.analyticsreport.mapper.AnalyticsReportMapper;
+import com.ediae.ecotrack_office.analyticsreport.model.AnalyticsReportModel;
+import com.ediae.ecotrack_office.analyticsreport.repository.AnalyticsReportRepository;
 import com.ediae.ecotrack_office.assets.dto.DeskWithStatusDto;
 import com.ediae.ecotrack_office.assets.dto.FloorWithStatusDto;
 import com.ediae.ecotrack_office.assets.dto.RoomWithStatusDto;
@@ -25,11 +25,11 @@ import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
-public class AnaliticsService {
+public class AnalyticsService {
 
-    private final AnaliticsReportRepository analiticsReportRepository;
+    private final AnalyticsReportRepository analyticsReportRepository;
     private final OrganizationRepository organizationRepository;
-    private final AnaliticsReportMapper analiticsReportMapper;
+    private final AnalyticsReportMapper analyticsReportMapper;
     // private final UserRepository userRepository;
 
     @Autowired
@@ -42,22 +42,22 @@ public class AnaliticsService {
     private ResourceStatusCalculatorService resourceStatusCalculatorService;
 
     // Constructor estándar para inyectar las dependencias
-    public AnaliticsService(AnaliticsReportRepository analiticsReportRepository,
+    public AnalyticsService(AnalyticsReportRepository analyticsReportRepository,
                             OrganizationRepository organizationRepository,
-                            AnaliticsReportMapper analiticsReportMapper) {
-        this.analiticsReportRepository = analiticsReportRepository;
+                            AnalyticsReportMapper analyticsReportMapper) {
+        this.analyticsReportRepository = analyticsReportRepository;
         this.organizationRepository = organizationRepository;
-        this.analiticsReportMapper = analiticsReportMapper;
+        this.analyticsReportMapper = analyticsReportMapper;
     }
 
     // 1. OBTENER TODOS LOS REPORTES (Bucle tradicional)
-    public List<AnaliticsReportModel> getAllReports() {
-        List<AnaliticsReportEntity> listaEntidades = analiticsReportRepository.findAll();
-        List<AnaliticsReportModel> listaModelos = new ArrayList<>();
+    public List<AnalyticsReportModel> getAllReports() {
+        List<AnalyticsReportEntity> listaEntidades = analyticsReportRepository.findAll();
+        List<AnalyticsReportModel> listaModelos = new ArrayList<>();
 
         // Recorro la lista de la base de datos uno a uno y los convierto a modelos usando el Mapper
-        for (AnaliticsReportEntity entidad : listaEntidades) {
-            AnaliticsReportModel modelo = analiticsReportMapper.toModel(entidad);
+        for (AnalyticsReportEntity entidad : listaEntidades) {
+            AnalyticsReportModel modelo = analyticsReportMapper.toModel(entidad);
             listaModelos.add(modelo);
         }
 
@@ -65,8 +65,8 @@ public class AnaliticsService {
     }
 
     // 2. OBTENER UN REPORTE POR SU ID
-    public AnaliticsReportModel getReportById(Long id) {
-        Optional<AnaliticsReportEntity> resultado = analiticsReportRepository.findById(id);
+    public AnalyticsReportModel getReportById(Long id) {
+        Optional<AnalyticsReportEntity> resultado = analyticsReportRepository.findById(id);
 
         // Si no existe en la base de datos, lanzo una excepción personalizada de "No encontrado"
         if (resultado.isEmpty()) {
@@ -74,13 +74,13 @@ public class AnaliticsService {
         }
 
         // Si existe, lo saco de la Optional, lo convierto a modelo y lo devuelvo
-        AnaliticsReportEntity entidad = resultado.get();
-        return analiticsReportMapper.toModel(entidad);
+        AnalyticsReportEntity entidad = resultado.get();
+        return analyticsReportMapper.toModel(entidad);
     }
 
 
     // 3. CREAR UN NUEVO REPORTE
-    public AnaliticsReportModel createReport(AnaliticsReportRequestDto dto) {
+    public AnalyticsReportModel createReport(AnalyticsReportRequestDto dto) {
         // Busco si existe la organización que manda en el DTO
         Optional<OrganizationEntity> resultadoOrg = organizationRepository.findById(dto.organizationId());
         if (resultadoOrg.isEmpty()) {
@@ -89,20 +89,20 @@ public class AnaliticsService {
         OrganizationEntity organizacion = resultadoOrg.get();
 
         // Convierto el DTO a Entidad limpia
-        AnaliticsReportEntity entidad = analiticsReportMapper.toEntity(dto);
+        AnalyticsReportEntity entidad = analyticsReportMapper.toEntity(dto);
 
         // Le asigno la organización a la entidad antes de guardarla, porque el Mapper no tiene esa información
         entidad.setOrganization(organizacion);
 
         // Guardo en la base de datos
-        AnaliticsReportEntity guardado = analiticsReportRepository.save(entidad);
+        AnalyticsReportEntity guardado = analyticsReportRepository.save(entidad);
 
         // Devuelvo el resultado pasado a modelo
-        return analiticsReportMapper.toModel(guardado);
+        return analyticsReportMapper.toModel(guardado);
     }
 
 
-    public AnaliticsReportModel generateReport(Long userId, AnaliticsReportGenerateDto dto) {
+    public AnalyticsReportModel generateReport(Long userId, AnalyticsReportGenerateDto dto) {
 
         Long organizationId = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + userId))
@@ -149,7 +149,7 @@ public class AnaliticsService {
                 .orElseThrow(() -> new NotFoundException("Organización no encontrada con ID: " + organizationId));
 
         // Convierto el DTO a Entidad limpia
-        AnaliticsReportEntity entidad = new AnaliticsReportEntity();
+        AnalyticsReportEntity entidad = new AnalyticsReportEntity();
         entidad.setCo2SavingsKg(co2SavingsKg);
         entidad.setEnergySavingsEuros(energySavingsEuros);
         entidad.setTotalReservations(totalReservations);
@@ -162,22 +162,22 @@ public class AnaliticsService {
         // entidad.setOrganization(organizacion);
 
         // Guardo en la base de datos
-        AnaliticsReportEntity guardado = analiticsReportRepository.save(entidad);
+        AnalyticsReportEntity guardado = analyticsReportRepository.save(entidad);
 
         // Devuelvo el resultado pasado a modelo
-        return analiticsReportMapper.toModel(guardado);
+        return analyticsReportMapper.toModel(guardado);
     }
 
 
 
     // 4. EDITAR UN REPORTE EXISTENTE
-    public AnaliticsReportModel editReport(Long id, AnaliticsReportRequestDto dto) {
+    public AnalyticsReportModel editReport(Long id, AnalyticsReportRequestDto dto) {
         // 1. Busco el reporte original que queremos modificar
-        Optional<AnaliticsReportEntity> resultadoReporte = analiticsReportRepository.findById(id);
+        Optional<AnalyticsReportEntity> resultadoReporte = analyticsReportRepository.findById(id);
         if (resultadoReporte.isEmpty()) {
             throw new NotFoundException("Reporte de analítica no encontrado con ID: " + id);
         }
-        AnaliticsReportEntity entidad = resultadoReporte.get();
+        AnalyticsReportEntity entidad = resultadoReporte.get();
 
         // 2. Busco la organización para asegurarnos de que existe
         Optional<OrganizationEntity> resultadoOrg = organizationRepository.findById(dto.organizationId());
@@ -195,14 +195,14 @@ public class AnaliticsService {
         entidad.setOrganization(organizacion); // Actualizo la organización
 
         // 4. Guardo los cambios sobre la misma entidad
-        AnaliticsReportEntity modificado = analiticsReportRepository.save(entidad);
+        AnalyticsReportEntity modificado = analyticsReportRepository.save(entidad);
 
-        return analiticsReportMapper.toModel(modificado);
+        return analyticsReportMapper.toModel(modificado);
     }
 
     // 5. ELIMINAR UN REPORTE
     public void deleteReport(Long id) {
-        Optional<AnaliticsReportEntity> resultado = analiticsReportRepository.findById(id);
+        Optional<AnalyticsReportEntity> resultado = analyticsReportRepository.findById(id);
 
         // Compruebo si existe antes de intentar borrar
         if (resultado.isEmpty()) {
@@ -210,6 +210,6 @@ public class AnaliticsService {
         }
 
         // Si existe, lo borro por su ID
-        analiticsReportRepository.deleteById(id);
+        analyticsReportRepository.deleteById(id);
     }
 }

@@ -1,4 +1,4 @@
-create table analitics_report (
+create table analytics_report (
     co_2_savings_kg float(53) not null,
     confirmed_check_ins integer not null,
     empty_rooms integer not null,
@@ -99,7 +99,7 @@ alter table organizations
 alter table usr_users
     add constraint UKg0jloiasku8a7gat4lu7866r6 unique (email);
 
-alter table analitics_report
+alter table analytics_report
     add constraint FK8mmh578bxyo81iqeddjg3m4ag
     foreign key (organization_id)
     references organizations (id);

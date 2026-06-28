@@ -1,6 +1,6 @@
-package com.ediae.ecotrack_office.analiticsreport.dto;
+package com.ediae.ecotrack_office.analyticsreport.dto;
 
-public record AnaliticsReportRequestDto(
+public record AnalyticsReportRequestDto(
     Double co2SavingsKg,
     Double energySavingsEuros,
     Integer totalReservations,

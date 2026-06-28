@@ -1,12 +1,12 @@
-package com.ediae.ecotrack_office.analiticsreport.model;
+package com.ediae.ecotrack_office.analyticsreport.model;
 
 import java.time.LocalDateTime;
 
-public class AnaliticsReportModel {
+public class AnalyticsReportModel {
     private Long id;
     private Double co2Saved;
     private LocalDateTime createdAt;
-    private Long organizationId; 
+    private Long organizationId;
 
     // Campos añadidos para completar el modelo con las métricas de analítica para el frontend
     private Double co2SavingsKg;
@@ -16,7 +16,7 @@ public class AnaliticsReportModel {
     private Integer emptyRooms;
 
     // Constructor vacío
-    public AnaliticsReportModel() {}
+    public AnalyticsReportModel() {}
 
     // Getters y Setters existentes
     public Long getId() { return id; }

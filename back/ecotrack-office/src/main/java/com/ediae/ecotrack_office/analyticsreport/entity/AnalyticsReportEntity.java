@@ -1,4 +1,4 @@
-package com.ediae.ecotrack_office.analiticsreport.entity;
+package com.ediae.ecotrack_office.analyticsreport.entity;
 import java.time.LocalDateTime;
 
 import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
@@ -13,8 +13,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "analitics_report")
-public class AnaliticsReportEntity {
+@Table(name = "analytics_report")
+public class AnalyticsReportEntity {
 
     // Atributos
 
@@ -47,9 +47,9 @@ public class AnaliticsReportEntity {
 
     // Constructores
 
-    public AnaliticsReportEntity() {}
+    public AnalyticsReportEntity() {}
 
-    public AnaliticsReportEntity(Double co2SavingsKg, Double energySavingsEuros, Integer totalReservations, Integer confirmedCheckIns, Integer emptyRooms, LocalDateTime generatedAt, OrganizationEntity organization) {
+    public AnalyticsReportEntity(Double co2SavingsKg, Double energySavingsEuros, Integer totalReservations, Integer confirmedCheckIns, Integer emptyRooms, LocalDateTime generatedAt, OrganizationEntity organization) {
         this.co2SavingsKg = co2SavingsKg;
         this.energySavingsEuros = energySavingsEuros;
         this.totalReservations = totalReservations;
@@ -59,7 +59,7 @@ public class AnaliticsReportEntity {
         this.organization = organization;
     }
 
-    public AnaliticsReportEntity(Double co2SavingsKg, Double energySavingsEuros, Integer totalReservations, Integer confirmedCheckIns, Integer emptyRooms, OrganizationEntity organization) {
+    public AnalyticsReportEntity(Double co2SavingsKg, Double energySavingsEuros, Integer totalReservations, Integer confirmedCheckIns, Integer emptyRooms, OrganizationEntity organization) {
         this.co2SavingsKg = co2SavingsKg;
         this.energySavingsEuros = energySavingsEuros;
         this.totalReservations = totalReservations;

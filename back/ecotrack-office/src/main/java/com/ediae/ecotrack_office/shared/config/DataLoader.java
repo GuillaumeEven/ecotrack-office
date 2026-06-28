@@ -1,4 +1,4 @@
-package com.ediae.ecotrack_office.config;
+package com.ediae.ecotrack_office.shared.config;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,8 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ediae.ecotrack_office.analiticsreport.entity.AnaliticsReportEntity;
-import com.ediae.ecotrack_office.analiticsreport.repository.AnaliticsReportRepository;
+import com.ediae.ecotrack_office.analyticsreport.entity.AnalyticsReportEntity;
+import com.ediae.ecotrack_office.analyticsreport.repository.AnalyticsReportRepository;
 import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 import com.ediae.ecotrack_office.assets.entity.FloorEntity;
 import com.ediae.ecotrack_office.assets.entity.RoomEntity;
@@ -48,7 +48,7 @@ public class DataLoader implements CommandLineRunner {
     private final DeskRepository deskRepository;
     private final ReservationRepository reservationRepository;
     private final IncidentRepository incidentRepository;
-    private final AnaliticsReportRepository analiticsReportRepository; // Atributo añadido
+    private final AnalyticsReportRepository analyticsReportRepository; // Atributo añadido
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder passwordEncoder;
 
@@ -59,7 +59,7 @@ public class DataLoader implements CommandLineRunner {
             DeskRepository deskRepository,
             ReservationRepository reservationRepository,
             IncidentRepository incidentRepository,
-            AnaliticsReportRepository analiticsReportRepository, // Repositorio inyectado
+            AnalyticsReportRepository analyticsReportRepository, // Repositorio inyectado
             JdbcTemplate jdbcTemplate,
             PasswordEncoder passwordEncoder) {
         this.organizationRepository = organizationRepository;
@@ -69,7 +69,7 @@ public class DataLoader implements CommandLineRunner {
         this.deskRepository = deskRepository;
         this.reservationRepository = reservationRepository;
         this.incidentRepository = incidentRepository;
-        this.analiticsReportRepository = analiticsReportRepository; // Asignación
+        this.analyticsReportRepository = analyticsReportRepository; // Asignación
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
     }
@@ -102,7 +102,7 @@ public class DataLoader implements CommandLineRunner {
     private void resetDatabase() {
         jdbcTemplate.execute("SET FOREIGN_KEY_CHECKS = 0");
 
-        jdbcTemplate.execute("TRUNCATE TABLE analitics_report");
+        jdbcTemplate.execute("TRUNCATE TABLE analytics_report");
         jdbcTemplate.execute("TRUNCATE TABLE incidents");
         jdbcTemplate.execute("TRUNCATE TABLE reservation");
         jdbcTemplate.execute("TRUNCATE TABLE ast_desks");
@@ -490,7 +490,7 @@ public class DataLoader implements CommandLineRunner {
             int checkins = random.nextInt(7) + 24; // Entre 24 y 30 check-ins confirmados
 
             // 4. Guardo el registro diario en la entidad
-            AnaliticsReportEntity dailyReport = new AnaliticsReportEntity(
+            AnalyticsReportEntity dailyReport = new AnalyticsReportEntity(
                     co2,
                     energy,
                     reservations,
@@ -499,7 +499,7 @@ public class DataLoader implements CommandLineRunner {
                     reportDate,
                     org);
 
-            analiticsReportRepository.save(dailyReport);
+            analyticsReportRepository.save(dailyReport);
         }
 
         log.info("¡Historial de 60 días inyectado con éxito en MySQL!");
