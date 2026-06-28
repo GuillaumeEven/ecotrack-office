@@ -1,27 +1,27 @@
 package com.ediae.ecotrack_office.analiticsreport.service;
 
-import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportRequestDto;
-import com.ediae.ecotrack_office.analiticsreport.entity.AnaliticsReportEntity;
-import com.ediae.ecotrack_office.analiticsreport.model.AnaliticsReportModel;
-import com.ediae.ecotrack_office.analiticsreport.mapper.AnaliticsReportMapper;
-import com.ediae.ecotrack_office.analiticsreport.repository.AnaliticsReportRepository;
-import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
-import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
-import com.ediae.ecotrack_office.shared.exception.NotFoundException;
-
-import org.springframework.stereotype.Service;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportGenerateDto;
+import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportRequestDto;
+import com.ediae.ecotrack_office.analiticsreport.entity.AnaliticsReportEntity;
+import com.ediae.ecotrack_office.analiticsreport.mapper.AnaliticsReportMapper;
+import com.ediae.ecotrack_office.analiticsreport.model.AnaliticsReportModel;
+import com.ediae.ecotrack_office.analiticsreport.repository.AnaliticsReportRepository;
 import com.ediae.ecotrack_office.assets.dto.DeskWithStatusDto;
 import com.ediae.ecotrack_office.assets.dto.FloorWithStatusDto;
 import com.ediae.ecotrack_office.assets.dto.RoomWithStatusDto;
 import com.ediae.ecotrack_office.assets.repository.ResourceRepository;
 import com.ediae.ecotrack_office.assets.service.ResourceStatusCalculatorService;
+import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
+import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
+import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
@@ -78,14 +78,31 @@ public class AnaliticsService {
         return analiticsReportMapper.toModel(entidad);
     }
 
+
     // 3. CREAR UN NUEVO REPORTE
-    public AnaliticsReportModel createReport(Long userId, AnaliticsReportRequestDto dto) {
+    public AnaliticsReportModel createReport(AnaliticsReportRequestDto dto) {
         // Busco si existe la organización que manda en el DTO
-        // Optional<OrganizationEntity> resultadoOrg = organizationRepository.findById(dto.organizationId());
-        // if (resultadoOrg.isEmpty()) {
-        //     throw new NotFoundException("Organización no encontrada con ID: " + dto.organizationId());
-        // }
-        // OrganizationEntity organizacion = resultadoOrg.get();
+        Optional<OrganizationEntity> resultadoOrg = organizationRepository.findById(dto.organizationId());
+        if (resultadoOrg.isEmpty()) {
+            throw new NotFoundException("Organización no encontrada con ID: " + dto.organizationId());
+        }
+        OrganizationEntity organizacion = resultadoOrg.get();
+
+        // Convierto el DTO a Entidad limpia
+        AnaliticsReportEntity entidad = analiticsReportMapper.toEntity(dto);
+
+        // Le asigno la organización a la entidad antes de guardarla, porque el Mapper no tiene esa información
+        entidad.setOrganization(organizacion);
+
+        // Guardo en la base de datos
+        AnaliticsReportEntity guardado = analiticsReportRepository.save(entidad);
+
+        // Devuelvo el resultado pasado a modelo
+        return analiticsReportMapper.toModel(guardado);
+    }
+
+
+    public AnaliticsReportModel generateReport(Long userId, AnaliticsReportGenerateDto dto) {
 
         Long organizationId = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + userId))
@@ -99,26 +116,6 @@ public class AnaliticsService {
        Integer totalReservations = 0;
        Integer confirmedCheckIns = 0;
        Integer emptyRooms = 0;
-
-        // Lógica para calcular métricas de analítica
-
-       // For cada floor
-          // For each room tipo desk in floor
-            // if desk libre
-             // anadimos 0.5 kg de CO2 por desk libre
-             // anadimos por 0.1 euros por desk libre
-            // if reservado
-                // totalReservations++
-            // if ocupacion rate = 0.0
-                // emptyRooms++
-
-
-        // for each room tipo meeting in floor
-            // if meeting libre
-             // anadimos 1.0 kg de CO2 por meeting libre
-             // anadimos por 0.2 euros por meeting libre
-            // if reservado
-                // totalReservations++
 
         for (FloorWithStatusDto floor : floorData) {
             for (RoomWithStatusDto room : floor.getRooms()) {
@@ -159,6 +156,7 @@ public class AnaliticsService {
         entidad.setConfirmedCheckIns(confirmedCheckIns);
         entidad.setEmptyRooms(emptyRooms);
         entidad.setOrganization(organizacion);
+        entidad.setGeneratedAt(LocalDateTime.now());
 
         // // Le asigno la organización a la entidad antes de guardarla, porque el Mapper no tiene esa información
         // entidad.setOrganization(organizacion);
@@ -169,6 +167,8 @@ public class AnaliticsService {
         // Devuelvo el resultado pasado a modelo
         return analiticsReportMapper.toModel(guardado);
     }
+
+
 
     // 4. EDITAR UN REPORTE EXISTENTE
     public AnaliticsReportModel editReport(Long id, AnaliticsReportRequestDto dto) {

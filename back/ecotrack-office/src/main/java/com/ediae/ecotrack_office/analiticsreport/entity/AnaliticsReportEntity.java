@@ -57,10 +57,19 @@ public class AnaliticsReportEntity {
         this.totalReservations = totalReservations;
         this.confirmedCheckIns = confirmedCheckIns;
         this.emptyRooms = emptyRooms;
-        this.generatedAt = LocalDateTime.now(); // Se asigna la fecha y hora actual al crear la entidad
+        this.generatedAt = generatedAt; // Se asigna la fecha y hora proporcionada al crear la entidad
         this.organization = organization;
     }
 
+    public AnaliticsReportEntity(Double co2SavingsKg, Double energySavingsEuros, Integer totalReservations, Integer confirmedCheckIns, Integer emptyRooms, OrganizationEntity organization) {
+        this.co2SavingsKg = co2SavingsKg;
+        this.energySavingsEuros = energySavingsEuros;
+        this.totalReservations = totalReservations;
+        this.confirmedCheckIns = confirmedCheckIns;
+        this.emptyRooms = emptyRooms;
+        this.generatedAt = LocalDateTime.now(); // Se asigna la fecha y hora actual al crear la entidad
+        this.organization = organization;
+    }
     //Getter y Setter
 
     public Long getId() {

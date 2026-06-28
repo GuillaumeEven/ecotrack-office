@@ -26,6 +26,10 @@ export class AnalyticsService {
     return this.http.post<AnalyticsReportResponse>(this.BASE_URL, report);
   }
 
+  generate(report: AnalyticsReportRequest): Observable<AnalyticsReportResponse> {
+    return this.http.post<AnalyticsReportResponse>(`${this.BASE_URL}/generate`, report);
+  }
+
   update(id: number, report: AnalyticsReportRequest): Observable<AnalyticsReportResponse> {
     return this.http.put<AnalyticsReportResponse>(`${this.BASE_URL}/${id}`, report);
   }

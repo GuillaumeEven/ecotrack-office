@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportGenerateDto;
 import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportRequestDto;
 import com.ediae.ecotrack_office.analiticsreport.model.AnaliticsReportModel;
 import com.ediae.ecotrack_office.analiticsreport.service.AnaliticsService;
@@ -48,14 +49,21 @@ public class AnaliticsController {
 
     // 3. ENDPOINT PARA CREAR UN NUEVO REPORTE (POST)
     @PostMapping
-    public ResponseEntity<AnaliticsReportModel> createReport(Authentication auth,@RequestBody AnaliticsReportRequestDto dto) {
+    public ResponseEntity<AnaliticsReportModel> createReport(@RequestBody AnaliticsReportRequestDto dto) {
+        AnaliticsReportModel nuevoReporte = analiticsService.createReport(dto);
+        return ResponseEntity.ok(nuevoReporte); // Devuelve un 200 OK con el reporte creado
+    }
+
+    // 3. ENDPOINT PARA CREAR UN NUEVO REPORTE (POST)
+    @PostMapping("/generate")
+    public ResponseEntity<AnaliticsReportModel> generateReport(Authentication auth,@RequestBody AnaliticsReportGenerateDto dto) {
 
         logger.info("Creando un nuevo reporte de analítica para la organización del usuario autenticado.");
 
 
         Long userId = (Long) auth.getPrincipal()
 ;
-        AnaliticsReportModel nuevoReporte = analiticsService.createReport(userId, dto);
+        AnaliticsReportModel nuevoReporte = analiticsService.generateReport(userId, dto);
         return ResponseEntity.ok(nuevoReporte); // Devuelve un 200 OK con el reporte creado
     }
 

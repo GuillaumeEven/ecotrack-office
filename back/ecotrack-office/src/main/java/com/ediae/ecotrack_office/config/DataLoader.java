@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ediae.ecotrack_office.analiticsreport.entity.AnaliticsReportEntity;
+import com.ediae.ecotrack_office.analiticsreport.repository.AnaliticsReportRepository;
 import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 import com.ediae.ecotrack_office.assets.entity.FloorEntity;
 import com.ediae.ecotrack_office.assets.entity.RoomEntity;
@@ -32,10 +34,6 @@ import com.ediae.ecotrack_office.reservation.repository.ReservationRepository;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.enums.Role;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
-
-// Imports para la gestión de analíticas históricas
-import com.ediae.ecotrack_office.analiticsreport.entity.AnaliticsReportEntity;
-import com.ediae.ecotrack_office.analiticsreport.repository.AnaliticsReportRepository;
 
 @Component
 @Profile("dev")
@@ -465,7 +463,7 @@ public class DataLoader implements CommandLineRunner {
         for (int i = 60; i >= 1; i--) {
             // Resto 'i' días a la fecha actual del sistema para ir hacia atrás en el
             // tiempo
-            LocalDateTime reportDate = LocalDateTime.now().minusDays(i);
+            LocalDateTime reportDate = LocalDateTime.now().minusDays(i+1);
 
             // 1. Simulación del algoritmo: salas vacías de 1 a 3 (eliminamos el 0 para la
             // demo)

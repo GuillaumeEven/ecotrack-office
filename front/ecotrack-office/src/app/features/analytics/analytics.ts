@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { AnalyticsService } from '../../services/analytics';
 import { AuthService } from '../../services/auth.service';
@@ -44,7 +44,8 @@ export class AnalyticsComponent implements OnInit {
 
   constructor(
     private analyticsService: AnalyticsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -75,10 +76,22 @@ export class AnalyticsComponent implements OnInit {
           checkInsCount: report.confirmedCheckIns ?? report.confirmed_check_ins ?? 0
         }));
 
-        this.allReports.sort((a, b) => b.id - a.id);
+        // Ordenar por fecha descendente (el más reciente en posición 0)
+        this.allReports.sort((a, b) =>
+          new Date(b.compiledAt).getTime() - new Date(a.compiledAt).getTime()
+        );
+
+
+        // const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+        // const todayReportExists = this.allReports.some(report => report.compiledAt.startsWith(today));
+        // if (!todayReportExists) {
+        //   this.compileMetrics(today);
+        // }
+        // this.allReports.sort((a, b) => b.id - a.id);
 
         // Aplico el filtro activo para mostrar los datos correctos en la tabla y recalcular los totales
         this.applyFilter(this.activeFilter);
+        this.cdr.detectChanges(); // Forzar la detección de cambios para actualizar la vista
 
         this.isLoading = false;
       },
@@ -92,9 +105,29 @@ export class AnalyticsComponent implements OnInit {
   applyFilter(filterType: 'day' | 'week' | 'month' | 'all'): void {
     this.activeFilter = filterType;
 
-    // 1. Filtrar el historial de abajo por cantidad de informes diarios 
+    // 1. Filtrar el historial de abajo por cantidad de informes diarios
     if (filterType === 'day') {
-      this.displayedReports = this.allReports.slice(0, 1);
+      // encuentro si hay un informe para hoy y lo muestro, si no, muestro el más reciente
+      const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+      const todayReport = this.allReports.find(report => report.compiledAt.startsWith(today));
+      if (todayReport) {
+        this.displayedReports = [todayReport];
+      } else {
+        //crear un nuevo informe con id 0
+        const newReport = {
+          id: 0,
+          compiledAt: today,
+          co2Saved: 0,
+          financialSaved: 0,
+          totalReservations: 0,
+          activeReservationsCount: 0,
+          checkInsCount: 0
+        };
+        this.displayedReports = [newReport];
+        // this.displayedReports = this.allReports.slice(0, 1); // Mostrar el informe más reciente si no hay uno para hoy
+      }
+
+      // this.displayedReports = this.allReports.slice(0, 1);
     } else if (filterType === 'week') {
       this.displayedReports = this.allReports.slice(0, 7);
     } else if (filterType === 'month') {
@@ -122,51 +155,43 @@ export class AnalyticsComponent implements OnInit {
   }
 
   compileMetrics(): void {
-    // 1. Simulamos las salas cerradas de 1 a 3 (eliminamos el 0 para que siempre muestre impacto)
-    const emptyRooms = Math.floor(Math.random() * 3) + 1; // Genera 1, 2 o 3
+    const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
-    // 2. Aplicamos la escala de costes reales según el tipo de sala cerrada
-    let co2 = 0;
-    let energy = 0;
+    // Check if a report for today already exists in this.allReports
+    const existingTodayReport = this.allReports.find(report =>
+      report.compiledAt.startsWith(today)
+    );
 
-    if (emptyRooms === 1) {
-      co2 = 1.50;
-      energy = 5.00;
-    } else if (emptyRooms === 2) {
-      co2 = 2.30;
-      energy = 8.00;
-    } else if (emptyRooms === 3) {
-      co2 = 3.80;
-      energy = 13.00;
+    if (existingTodayReport) {
+      // Delete the existing report first
+      this.analyticsService.delete(existingTodayReport.id).subscribe({
+        next: () => {
+          // After deletion, create the new report
+          this.analyticsService.generate({ dateReport: today }).subscribe({
+            next: () => {
+              console.log('Report replaced for', today);
+              this.loadAnalytics(); // Reload to reflect changes
+            },
+            error: (err) => {
+              console.error('Error creating new report:', err);
+            }
+          });
+        },
+        error: (err) => {
+          console.error('Error deleting old report:', err);
+        }
+      });
+    } else {
+      // No report for today, just create a new one
+      this.analyticsService.generate({ dateReport: today }).subscribe({
+        next: () => {
+          console.log('Report created for', today);
+          this.loadAnalytics(); // Reload to show new data
+        },
+        error: (err) => {
+          console.error('Error creating report:', err);
+        }
+      });
     }
-
-    // 3. Ocupación realista con la escala de puestos de trabajo y reservas diarias, para que no se generen métricas irreales
-    const reservations = Math.floor(Math.random() * 9) + 28; // Entre 28 y 36 reservas diarias
-    const checkins = Math.floor(Math.random() * 7) + 24;     // Entre 24 y 30 check-ins reales
-
-    // 4. Empaqueto el DTO respetando ambas nomenclaturas para el backend
-    const payload = {
-      co2SavingsKg: co2,
-      co2_savings_kg: co2,
-      energySavingsEuros: energy,
-      energy_savings_euros: energy,
-      totalReservations: reservations,
-      total_reservations: reservations,
-      confirmedCheckIns: checkins,
-      confirmed_check_ins: checkins,
-      emptyRooms: emptyRooms,
-      empty_rooms: emptyRooms,
-      organizationId: 1,
-      organization_id: 1
-    };
-
-    this.analyticsService.create(payload as any).subscribe({
-      next: () => {
-        this.loadAnalytics(); // Recarga todo el histórico de MySQL y recalcula totales
-      },
-      error: () => {
-        this.errorMessage = 'Error al compilar la actualización de métricas.';
-      }
-    });
   }
 }
