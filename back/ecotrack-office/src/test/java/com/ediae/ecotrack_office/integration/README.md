@@ -11,6 +11,11 @@ Estos tests verifican que los endpoints reales funcionan correctamente, integran
 - Autenticación y autorización
 - Mapeos de DTOs
 
+Actualmente la configuración de tests usa:
+- Perfiles activos: `test` + `dev`
+- H2 en memoria con compatibilidad MySQL (`MODE=MySQL`)
+- `DataLoader` del perfil `dev` para sembrar datos base
+
 ## 🏗️ Estructura
 
 ```
@@ -91,11 +96,22 @@ mockMvc.perform(get("/api/v1/floors/status")
     .andExpect(status().isOk());
 ```
 
+### Método 1b: Helper ADMIN
+Para endpoints que exigen rol ADMIN:
+
+```java
+mockMvc.perform(post("/api/v1/desks")
+    .with(getAuthAdminWithUserId(1L))
+    .contentType("application/json")
+    .content(objectMapper.writeValueAsString(dto)))
+    .andExpect(status().isOk());
+```
+
 ### Método 2: Login real (con token JWT)
 Para tests del endpoint de login:
 
 ```java
-String token = loginAndGetToken("admin@ecotrack.com", "password123");
+String token = loginAndGetToken("admin@ecotrack.local", "password");
 
 mockMvc.perform(get("/api/v1/floors")
     .header("Authorization", "Bearer " + token)
@@ -118,7 +134,8 @@ mockMvc.perform(
     get("/api/v1/endpoint")  // POST, PUT, DELETE también disponibles
         .contentType("application/json")
         .content(objectMapper.writeValueAsString(dto))
-        .with(getAuthWithUserId(1L))  // si necesita auth
+    .with(getAuthWithUserId(1L))  // usuario autenticado
+    // .with(getAuthAdminWithUserId(1L))  // si requiere ADMIN
 )
 .andExpect(status().isOk())  // Verificar HTTP status
 .andExpect(jsonPath("$.campo").value("esperado"));  // Verificar respuesta JSON
@@ -149,14 +166,22 @@ No testees todos los escenarios posibles. Enfócate en:
 
 ## 🗄️ Base de Datos de Test
 
-Los tests usan **H2 en memoria** (configurado en `application-test.yml`):
+Los tests usan **H2 en memoria** con compatibilidad MySQL (configurado en `application-test.yml` / `application-test.properties`):
 
 ```yaml
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+        url: jdbc:h2:mem:testdb;MODE=MySQL
     driver-class-name: org.h2.Driver
 ```
+
+Además, la clase base usa:
+
+```java
+@ActiveProfiles({"test", "dev"})
+```
+
+Esto permite que el `DataLoader` (perfil `dev`) siembre usuarios, pisos, salas, desks, reservas e incidentes que usan los tests.
 
 **Ventajas:**
 - ✅ Rápido (en memoria)
@@ -170,6 +195,7 @@ spring:
 - ✅ Login exitoso con credenciales válidas
 - ✅ Validación de email inválido
 - ✅ Validación de campos requeridos
+- ℹ️ Credenciales seed actuales: `admin@ecotrack.local` / `password`
 
 ### FloorControllerIntegrationTest  
 - ✅ GET todos los pisos
@@ -181,16 +207,17 @@ spring:
 ### DeskControllerIntegrationTest
 - ✅ CRUD de desks
 - ✅ Desks por sala
-- ✅ Estado de desks (ocupados/disponibles)
+- ✅ Incidentes por desk (`GET /api/v1/desks/{id}/incidents`)
 - ✅ Validación de permisos (ADMIN)
 
 ### ReservationControllerIntegrationTest
 - ✅ Crear reservación
 - ✅ Obtener mis reservaciones
 - ✅ Actualizar/cancelar
-- ✅ Validación de conflictos
 - ✅ Validación de fecha (no pasadas)
 - ✅ Privacidad (usuario solo ve sus propias reservaciones)
+
+> Nota: algunos tests reflejan el comportamiento actual del backend aunque no sea el ideal REST (por ejemplo, `DELETE /reservations/{id}` retorna `200` con booleano).
 
 ## 📊 Cobertura
 
@@ -235,8 +262,8 @@ mvn test -Ddebug  # Modo debug
 - [ ] Testea al menos 1 error/validación
 - [ ] Verifica HTTP status (`isOk()`, `isNotFound()`, etc.)
 - [ ] Verifica respuesta JSON con `jsonPath()`
-- [ ] Autenticación correcta (con `getAuthWithUserId()` o login)
-- [ ] Sin hardcoded IDs (usar fixture factories si es posible)
+- [ ] Autenticación correcta (`getAuthWithUserId()`, `getAuthAdminWithUserId()` o login)
+- [ ] Si usas IDs hardcodeados, documenta que provienen del seed (`DataLoader`)
 
 ## 🎓 Recursos
 
@@ -248,5 +275,5 @@ mvn test -Ddebug  # Modo debug
 ---
 
 **Hecho por:** Equipo de EcoTrack  
-**Última actualización:** 28/06/2024  
-**Versión:** 1.0
+**Última actualización:** 28/06/2026  
+**Versión:** 1.1
