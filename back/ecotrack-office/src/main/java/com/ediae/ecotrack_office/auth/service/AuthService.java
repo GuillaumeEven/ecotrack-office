@@ -1,14 +1,16 @@
 package com.ediae.ecotrack_office.auth.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ediae.ecotrack_office.auth.dto.LoginRequestDto;
 import com.ediae.ecotrack_office.auth.dto.LoginResponseDto;
+import com.ediae.ecotrack_office.shared.exception.ApplicationException;
+import com.ediae.ecotrack_office.shared.exception.ErrorCode;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
 import com.ediae.ecotrack_office.users.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-    
+
 
 @Service
 public class AuthService {
@@ -35,14 +37,14 @@ public class AuthService {
 
         // 2. Verificamos que el usuario está activo
         if (!user.getIsActive()) {
-            throw new IllegalArgumentException("El usuario está desactivado");
+            throw new ApplicationException(ErrorCode.FORBIDDEN, "El usuario está desactivado");
         }
 
         // 3. Verificamos la contraseña de forma segura
         // 🆕 Cambiado de .equals() al método matches() de BCrypt
         if (!passwordEncoder.matches(dto.password(), user.getPasswordHash())) {
             // Nota de TFM: Por seguridad, si falla la contraseña, es mejor lanzar "Credenciales incorrectas"
-            throw new IllegalArgumentException("Credenciales incorrectas");
+            throw new ApplicationException(ErrorCode.INVALID_CREDENTIALS, "Credenciales incorrectas");
         }
 
         // 4. Generamos el token con el id y el rol del usuario

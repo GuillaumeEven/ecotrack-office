@@ -13,6 +13,8 @@ import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
 import com.ediae.ecotrack_office.shared.context.RequestContext;
 import com.ediae.ecotrack_office.shared.dto.PageResponseDto;
+import com.ediae.ecotrack_office.shared.exception.ApplicationException;
+import com.ediae.ecotrack_office.shared.exception.ErrorCode;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.dto.ChangePasswordRequestDto;
 import com.ediae.ecotrack_office.users.dto.UserCreateRequestDto;
@@ -79,17 +81,17 @@ public class UserService {
     // ─────────────────────────────────────────────
     public UserModel createUser(UserRequestDto dto) {
         if (userRepository.existsByEmail(dto.email())) {
-            throw new RuntimeException("Ya existe un usuario con el email: " + dto.email());
+            throw new ApplicationException(ErrorCode.DUPLICATE_RESOURCE, "Ya existe un usuario con el email: " + dto.email());
         }
 
         OrganizationEntity organization = organizationRepository.findById(dto.organizationId())
                 .orElseThrow(() -> new NotFoundException("Organización no encontrada con id: " + dto.organizationId()));
 
         UserEntity entity = userMapper.toEntityFromDto(dto, organization);
-        
+
         // 🆕 HASHEAR CONTRASEÑA AQUÍ
         entity.setPasswordHash(passwordEncoder.encode(dto.password()));
-        
+
         entity.setIsActive(true);
         entity.setCreatedAt(LocalDateTime.now());
         entity.setConsentGiven(false);
@@ -106,17 +108,17 @@ public class UserService {
     // ─────────────────────────────────────────────
     public UserModel createUserWithCif(UserCreateRequestDto dto) {
         if (userRepository.existsByEmail(dto.email())) {
-            throw new RuntimeException("Ya existe un usuario con el email: " + dto.email());
+            throw new ApplicationException(ErrorCode.DUPLICATE_RESOURCE, "Ya existe un usuario con el email: " + dto.email());
         }
 
         OrganizationEntity organization = organizationRepository.findByCif(dto.cif())
                 .orElseThrow(() -> new NotFoundException("Organización no encontrada con CIF: " + dto.cif()));
 
         UserEntity entity = userMapper.fromCreateDtoEntity(dto, organization);
-        
+
         // 🆕 HASHEAR CONTRASEÑA AQUÍ
         entity.setPasswordHash(passwordEncoder.encode(dto.password()));
-        
+
         entity.setIsActive(true);
         entity.setCreatedAt(LocalDateTime.now());
 
@@ -212,9 +214,9 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
         if(userRepository.findByEmail(dto.email()).isPresent()){
 
-            throw new IllegalArgumentException("Este email ya está en uso.");
-        }        
-        
+            throw new ApplicationException(ErrorCode.DUPLICATE_RESOURCE, "Este email ya está en uso.");
+        }
+
         entity.setFirstName(dto.firstName().trim());
         entity.setLastName(dto.lastName().trim());
         entity.setEmail(dto.email().trim());
@@ -240,7 +242,7 @@ public class UserService {
 
         // 🆕 Cambiado de .equals() a passwordEncoder.matches()
         if (!passwordEncoder.matches(dto.currentPassword(), entity.getPasswordHash())) {
-            throw new IllegalArgumentException("La contraseña actual no es correcta");
+            throw new ApplicationException(ErrorCode.INVALID_INPUT, "La contraseña actual no es correcta");
         }
 
         // 🆕 Cambiado a passwordEncoder.encode() para guardar el nuevo hash seguro

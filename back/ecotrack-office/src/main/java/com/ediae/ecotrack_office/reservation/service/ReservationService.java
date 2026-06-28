@@ -96,7 +96,7 @@ public class ReservationService {
         Optional <ReservationEntity> entity = repository.findById(id);
         if (entity.isEmpty()) {
 
-            throw new RuntimeException("No se ha encontrado una reserva con id: " + id);
+            throw new NotFoundException("No se ha encontrado una reserva con id: " + id);
         }
         return ReservationMapper.fromEntity(entity.get());
     }
@@ -113,7 +113,7 @@ public class ReservationService {
 
         // Load entities from IDs
         var user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + dto.getUserId()));
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + dto.getUserId()));
 
         var resource = resourceRepository.findById(dto.getResourceId())
                 .orElseThrow(() -> new NotFoundException("Recurso no encontrado con id: " + dto.getResourceId()));
@@ -125,7 +125,7 @@ public class ReservationService {
         return ReservationMapper.fromEntity(savedEntity);
     }
 
-    
+
     public ReservationModel updateReservationById (Long id, ReservationUpdateDto dto) {
 
         // 🆕 Validación: no se puede mover una reserva al pasado
@@ -139,7 +139,7 @@ public class ReservationService {
         Optional <ReservationEntity> initialEntity = repository.findById(id);
         if(initialEntity.isEmpty()) {
 
-            throw new RuntimeException("No se ha econtrado una reserva con id: " + id);
+            throw new NotFoundException("No se ha econtrado una reserva con id: " + id);
         }
         ReservationEntity entity = initialEntity.get();
         entity.setDate(dto.getDate());
@@ -172,7 +172,7 @@ public class ReservationService {
         Optional <ReservationEntity> entity = repository.findById(id);
         if (entity.isEmpty()) {
 
-            throw new RuntimeException("No se ha encontrado una reserva con id: " + id);
+            throw new NotFoundException("No se ha encontrado una reserva con id: " + id);
         }
         repository.deleteById(id);
         if (repository.findById(id).isEmpty()) return true;

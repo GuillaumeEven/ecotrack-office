@@ -16,6 +16,9 @@ import com.ediae.ecotrack_office.organization.entity.OrganizationEntity;
 import com.ediae.ecotrack_office.organization.mapper.OrganizationMapper;
 import com.ediae.ecotrack_office.organization.model.OrganizationModel;
 import com.ediae.ecotrack_office.organization.repository.OrganizationRepository;
+import com.ediae.ecotrack_office.shared.exception.ApplicationException;
+import com.ediae.ecotrack_office.shared.exception.ErrorCode;
+import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 
 @Service
 public class OrganizationService {
@@ -24,7 +27,7 @@ public class OrganizationService {
     private OrganizationRepository repository;
 
     public List <OrganizationModel> getAllOrganizations () {
-        
+
         List <OrganizationEntity> entities = repository.findAll();
         List <OrganizationModel> models = new ArrayList <>();
         for (OrganizationEntity entity : entities) {
@@ -39,7 +42,7 @@ public class OrganizationService {
         Optional <OrganizationEntity> entity = repository.findById(id);
         if (entity.isEmpty()) {
 
-            throw new RuntimeException("No se ha encontrado una organización con id: " + id);
+            throw new NotFoundException("No se ha encontrado una organización con id: " + id);
         }
         return OrganizationMapper.fromEntity(entity.get());
     }
@@ -48,7 +51,7 @@ public class OrganizationService {
 
         if (repository.findByCif(dto.getCif()).isPresent() || repository.findByEmail(dto.getEmail()).isPresent()) {
 
-            throw new RuntimeException ("Ya existe una organización con este CIF o email.");
+            throw new ApplicationException(ErrorCode.DUPLICATE_RESOURCE, "Ya existe una organización con este CIF o email.");
         }
         OrganizationModel model = OrganizationMapper.fromCreateDto(dto);
         OrganizationEntity entity = OrganizationMapper.toEntity(model);
@@ -67,12 +70,12 @@ public class OrganizationService {
         Optional <OrganizationEntity> initialEntity = repository.findById(id);
         if(initialEntity.isEmpty()) {
 
-            throw new RuntimeException("No se ha encontrado una organización con id: " + id);
+            throw new NotFoundException("No se ha encontrado una organización con id: " + id);
         }
         OrganizationEntity entity = initialEntity.get();
         if((repository.findByCif(dto.getCif()).isPresent() && !(dto.getCif().equals(entity.getCif()))) || (repository.findByEmail(dto.getEmail()).isPresent() && !(dto.getEmail().equals(entity.getEmail())))) {
 
-            throw new RuntimeException("Ya existe una organización con este CIF o email.");
+            throw new ApplicationException(ErrorCode.DUPLICATE_RESOURCE, "Ya existe una organización con este CIF o email.");
         }
         entity.setName(dto.getName());
         entity.setAddress(dto.getAddress());
@@ -87,7 +90,7 @@ public class OrganizationService {
         Optional <OrganizationEntity> initialEntity = repository.findById(id);
         if (initialEntity.isEmpty()) {
 
-            throw new RuntimeException("No se ha encontrado una organización con id: " + id);
+            throw new NotFoundException("No se ha encontrado una organización con id: " + id);
         }
         OrganizationEntity entity = initialEntity.get();
         entity.setIsActive(false);
@@ -100,7 +103,7 @@ public class OrganizationService {
         Optional <OrganizationEntity> entity = repository.findById(id);
         if (entity.isEmpty()) {
 
-            throw new RuntimeException("No se ha encontrado una organización con id: " + id);
+            throw new NotFoundException("No se ha encontrado una organización con id: " + id);
         }
         repository.deleteById(id);
         if(repository.findById(id).isEmpty()) return true;
