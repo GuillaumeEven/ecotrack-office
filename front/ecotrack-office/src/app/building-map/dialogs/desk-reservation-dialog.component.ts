@@ -120,10 +120,8 @@ export class DeskReservationDialogComponent implements OnInit {
           const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
           this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" se ha reservado con éxtio!`;
           this.notificationService.success(this.successMessage);
-          setTimeout(() => {
-            this.onClose();
-            this.reserved.emit();
-          }, 1500);
+          this.onClose();
+          this.reserved.emit();
         },
         error: (error) => {
           this.isLoading = false;
@@ -158,10 +156,8 @@ export class DeskReservationDialogComponent implements OnInit {
           const resourceType = this.isMeetingRoom ? 'Meeting Room' : 'Desk';
           this.successMessage = `La reserva de ${resourceType} "${this.deskWithStatus?.desk?.name}" se ha cancelado correctamente!`;
           this.notificationService.success(this.successMessage);
-          setTimeout(() => {
-            this.onClose();
-            this.reserved.emit(); // Emit event to trigger refresh
-          }, 1500);
+          this.onClose();
+          this.reserved.emit(); // Emit event to trigger refresh
         },
         error: (error) => {
           this.isLoading = false;
