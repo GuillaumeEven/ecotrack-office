@@ -16,6 +16,7 @@ interface MappedReport {
   selector: 'app-analytics',
   standalone: true,
   imports: [CommonModule, DecimalPipe],
+  styleUrls: ['./analytics.component.css'],
   templateUrl: './analytics.component.html',
 })
 export class AnalyticsComponent implements OnInit {

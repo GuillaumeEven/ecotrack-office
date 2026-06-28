@@ -23,6 +23,7 @@ th {
   text-align: left;
   padding: var(--spacing-md);
   border-bottom: var(--border-width-1) solid var(--outline-variant);
+  text-align: center;
 }
 
 td {
@@ -30,6 +31,7 @@ td {
   border-bottom: var(--border-width-1) solid var(--outline-variant);
   font: var(--font-body-md);
   color: var(--on-surface);
+  text-align: center;
 }
 
 th.actions,
