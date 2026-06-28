@@ -184,9 +184,17 @@ public class ResourceStatusCalculatorService {
             RoomEntity meetingRoom = allMeetingRooms.get(i);
             RoomWithStatusDto meetingRoomDto = convertRoomToWithStatusDto(meetingRoom, date);
 
-            // First MEETING_ROOM: if not reserved, AVAILABLE
+            // Preserve OUT_OF_SERVICE and UNAVAILABLE statuses - don't override them
+            ResourceStatus currentStatus = meetingRoomDto.getRoomStatus();
+            if (currentStatus == ResourceStatus.OUT_OF_SERVICE || currentStatus == ResourceStatus.UNAVAILABLE) {
+                result.add(meetingRoomDto);
+                previousMeetingRoom = meetingRoomDto;
+                continue;
+            }
+
+            // First MEETING_ROOM: if available, keep it AVAILABLE
             if (i == 0) {
-                if (meetingRoomDto.getRoomStatus() != ResourceStatus.RESERVED) {
+                if (currentStatus != ResourceStatus.RESERVED) {
                     meetingRoomDto = new RoomWithStatusDto(
                             meetingRoomDto.getRoom(),
                             meetingRoomDto.getDesks(),
@@ -196,9 +204,9 @@ public class ResourceStatusCalculatorService {
                             meetingRoomDto.getReservationId()
                     );
                 }
-            } else if (previousMeetingRoom != null && previousMeetingRoom.getRoomStatus() == ResourceStatus.RESERVED) {
-                // If previous MEETING_ROOM is RESERVED, this one becomes AVAILABLE (if not reserved itself)
-                if (meetingRoomDto.getRoomStatus() != ResourceStatus.RESERVED) {
+            } else if (previousMeetingRoom != null && (previousMeetingRoom.getRoomStatus() == ResourceStatus.RESERVED || previousMeetingRoom.getRoomStatus() == ResourceStatus.OUT_OF_SERVICE)) {
+                // If previous MEETING_ROOM is RESERVED or OUT_OF_SERVICE, this one becomes AVAILABLE (if not reserved itself)
+                if (currentStatus != ResourceStatus.RESERVED) {
                     meetingRoomDto = new RoomWithStatusDto(
                             meetingRoomDto.getRoom(),
                             meetingRoomDto.getDesks(),
@@ -328,12 +336,20 @@ public class ResourceStatusCalculatorService {
 
     /**
      * Calculates status for MEETING_ROOM
+     * - If incident exists → OUT_OF_SERVICE (highest priority)
      * - If released reservation exists → UNAVAILABLE
      * - If confirmed reservation exists → RESERVED
      * - Otherwise → AVAILABLE
      */
     private ResourceStatus calculateMeetingRoomStatus(RoomEntity room, LocalDate date) {
         List<ReservationEntity> roomReservations = reservationRepository.findByResourceId(room.getId());
+
+        // Check for incidents that make the room unavailable (highest priority)
+        boolean hasIncident = incidentRepository.findByResourceId(room.getId()).stream()
+                .anyMatch(i -> i.getStatus() == IncidentStatus.IN_PROGRESS);
+        if (hasIncident) {
+            return ResourceStatus.OUT_OF_SERVICE;
+        }
 
         // Check for RELEASED reservations (locked, unavailable)
         boolean hasReleasedReservation = roomReservations.stream()

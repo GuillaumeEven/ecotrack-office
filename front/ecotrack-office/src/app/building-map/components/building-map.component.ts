@@ -75,7 +75,6 @@ export class BuildingMapComponent implements OnInit {
     this.floorService.getFloorsWithStatus(1, dateISO).subscribe({
       next: (data) => {
         this.allFloorsWithStatus = data;
-        console.log('Floors with status loaded:', this.allFloorsWithStatus);
 
         // Auto-select first floor
         if (this.allFloorsWithStatus.length > 0 && !this.selectedFloorId) {
@@ -340,14 +339,14 @@ export class BuildingMapComponent implements OnInit {
    */
   getFloorStatusClass(floor: FloorWithStatus): string {
     const status = this.getFloorStatus(floor);
-    return `status-${status.toLowerCase()}`;
+    return `status-${status.toLowerCase().replace(/_/g, '-')}`;
   }
 
   /**
    * Get CSS class for room status indicator
    */
   getRoomStatusClass(room: RoomWithStatus): string {
-    return `status-${room.roomStatus.toLowerCase()}`;
+    return `status-${room.roomStatus.toLowerCase().replace(/_/g, '-')}`;
   }
 
   /**
