@@ -1,6 +1,7 @@
 <header class="main-header">
     <div class="header-container">
         <div class="header-brand-group">
+            <img class="brand-logo" src="/images/favicon.png" alt="EcoTrack logo" />
             <span class="brand-title">EcoTrack - Office</span>
             </div>
         <div class="header-actions">
@@ -181,7 +182,7 @@
 
                                         @if(registerForm.get('passwordHash')?.hasError('required')) {
 
-                                            <small class="error-message">La contraseña es obligatoria.</small>                                            
+                                            <small class="error-message">La contraseña es obligatoria.</small>
                                         }
                                         @if(registerForm.get('passwordHash')?.hasError('minlength')) {
 

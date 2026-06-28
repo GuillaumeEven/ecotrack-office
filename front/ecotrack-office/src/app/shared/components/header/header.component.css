@@ -37,8 +37,18 @@ header > div {
 }
 
 .logo-section a {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
   text-decoration: none;
   color: inherit;
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
 }
 
 .logo-section span {
