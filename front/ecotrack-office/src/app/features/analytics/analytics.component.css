@@ -99,6 +99,16 @@
 
 .card-body-metric {
   margin-top: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-body-metric h2 {
+  margin: 0;
+  font: var(--font-headline-lg);
+  color: var(--on-surface);
 }
 
 .metric-value {
@@ -164,13 +174,13 @@
   width: 100%;
 }
 
-.font-medium { 
-  font-weight: var(--font-weight-medium); 
+.font-medium {
+  font-weight: var(--font-weight-medium);
 }
 
-.font-money-table { 
-  font-weight: var(--font-weight-semibold); 
-  color: var(--on-surface); 
+.font-money-table {
+  font-weight: var(--font-weight-semibold);
+  color: var(--on-surface);
 }
 
 .date-cell {

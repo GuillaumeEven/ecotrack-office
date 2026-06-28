@@ -16,6 +16,7 @@ interface MappedReport {
   selector: 'app-analytics',
   standalone: true,
   imports: [CommonModule, DecimalPipe],
+  styleUrls: ['./analytics.component.css'],
   templateUrl: './analytics.component.html',
 })
 export class AnalyticsComponent implements OnInit {
@@ -72,12 +73,12 @@ export class AnalyticsComponent implements OnInit {
       next: (data: AnalyticsReportResponse[]) => {
         this.allReports = data.map((report: any) => ({
           id: report.id,
-          compiledAt: report.generatedAt || report.generated_at || report.createdAt || report.created_at,
-          co2Saved: report.co2SavingsKg ?? report.co2_savings_kg ?? report.co_2_savings_kg ?? 0,
-          financialSaved: report.energySavingsEuros ?? report.energy_savings_euros ?? 0,
-          totalReservations: report.totalReservations ?? report.total_reservations ?? 0, // Campo nativo guardado por si acaso
-          activeReservationsCount: report.totalReservations ?? report.total_reservations ?? 0,
-          checkInsCount: report.confirmedCheckIns ?? report.confirmed_check_ins ?? 0
+          compiledAt: report.createdAt,
+          co2Saved: report.co2SavingsKg ?? 0,
+          financialSaved: report.energySavingsEuros ?? 0,
+          totalReservations: report.totalReservations ?? 0,
+          activeReservationsCount: report.totalReservations ?? 0,
+          checkInsCount: report.confirmedCheckIns ?? 0
         }));
 
         // Ordenar por fecha descendente (el más reciente en posición 0)

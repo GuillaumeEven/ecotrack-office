@@ -51,8 +51,15 @@ public class AnalyticsService {
     }
 
     // 1. OBTENER TODOS LOS REPORTES (Bucle tradicional)
-    public List<AnalyticsReportModel> getAllReports() {
-        List<AnalyticsReportEntity> listaEntidades = analyticsReportRepository.findAll();
+    public List<AnalyticsReportModel> getAllReports(Long userId) {
+
+        // Obtengo la organización del usuario
+        Long organizationId = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + userId))
+                .getOrganization()
+                .getId();
+
+        List<AnalyticsReportEntity> listaEntidades = analyticsReportRepository.findByOrganizationId(organizationId);
         List<AnalyticsReportModel> listaModelos = new ArrayList<>();
 
         // Recorro la lista de la base de datos uno a uno y los convierto a modelos usando el Mapper
@@ -157,9 +164,6 @@ public class AnalyticsService {
         entidad.setEmptyRooms(emptyRooms);
         entidad.setOrganization(organizacion);
         entidad.setGeneratedAt(LocalDateTime.now());
-
-        // // Le asigno la organización a la entidad antes de guardarla, porque el Mapper no tiene esa información
-        // entidad.setOrganization(organizacion);
 
         // Guardo en la base de datos
         AnalyticsReportEntity guardado = analyticsReportRepository.save(entidad);

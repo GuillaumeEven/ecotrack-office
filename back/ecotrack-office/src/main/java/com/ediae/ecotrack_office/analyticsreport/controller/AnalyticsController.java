@@ -24,8 +24,6 @@ public class AnalyticsController {
 
     private final AnalyticsService analyticsService;
 
-    // private final Authentication authentication;
-
     // Constructor tradicional para inyectar el servicio
     public AnalyticsController(AnalyticsService analyticsService) {
         this.analyticsService = analyticsService;
@@ -33,8 +31,11 @@ public class AnalyticsController {
 
     // 1. ENDPOINT PARA LISTAR TODOS LOS REPORTES (GET)
     @GetMapping
-    public ResponseEntity<List<AnalyticsReportModel>> getAllReports() {
-        List<AnalyticsReportModel> lista = analyticsService.getAllReports();
+    public ResponseEntity<List<AnalyticsReportModel>> getAllReports(Authentication auth) {
+
+        Long userId = (Long) auth.getPrincipal();
+
+        List<AnalyticsReportModel> lista = analyticsService.getAllReports(userId);
         return ResponseEntity.ok(lista); // Devuelve un 200 OK con la lista
     }
 
