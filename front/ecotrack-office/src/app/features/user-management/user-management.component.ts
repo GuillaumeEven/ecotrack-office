@@ -163,6 +163,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   // ─── Acciones de fila ─────────────────────────────────────────────────────
 
   openEditModal(user: UserResponse): void {
+    console.log('Opening edit modal for user:', user);
     this.selectedUser = user;
     this.editForm.patchValue({
       firstName: user.firstName,
@@ -175,6 +176,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   onSaveEdit(): void {
+    console.log('onSaveEdit called with form value:', this.editForm.value);
     if (!this.selectedUser || this.editForm.invalid) return;
     this.userService.updateUser(this.selectedUser.id, this.editForm.value).subscribe({
       next: () => {
