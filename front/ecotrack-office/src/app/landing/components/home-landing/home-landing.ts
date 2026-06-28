@@ -9,7 +9,7 @@ import { ThemeService } from '../../../services/theme.service';
 import { CreateUserRequest } from '@models/user.model';
 import { CreateOrganizationRequest, OrganizationResponse } from '@models/organization.model';
 import { switchMap, catchError, throwError } from 'rxjs';
-import { NotificationService } from '@core/services/notification.service';
+import { NotificationService } from '../../../services/notification.service';
 
 // Definimos los pasos posibles para controlar el flujo visual
 type RegistroPaso = 'USUARIO' | 'EMPRESA_NUEVA' | 'EMPRESA_EXISTENTE';

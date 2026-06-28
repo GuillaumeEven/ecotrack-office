@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { UserService } from '../../services/user.service';
 import { UserResponse } from '../../models/user.model';
 import { ChangePasswordModalComponent } from './components/change-password-modal.component';
-import { NotificationService } from '@core/services/notification.service';
+import { NotificationService } from '../../services/notification.service';
 
 export type ProfileSection = 'personal' | 'security' | 'notifications';
 

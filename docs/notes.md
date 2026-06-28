@@ -176,3 +176,4 @@ Buenas chicos aquí os dejo mi propuesta. Fata poner algunas cosas de las tablas
 Cambios del 28 de junio:
 - config spring en shared/config
 - analitics por analytics
+- guards and notificationservice location

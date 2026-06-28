@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DeskWithStatus, ResourceStatus } from '../models';
 import { ReservationService } from '../services';
 import { AuthService } from '../../services/auth.service';
-import { NotificationService } from '@core/services/notification.service';
+import { NotificationService } from '../../services/notification.service';
 import { throwError } from 'rxjs';
 
 @Component({

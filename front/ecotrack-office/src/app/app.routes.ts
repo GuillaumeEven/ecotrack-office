@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { LoginComponent } from './features/auth/login/login.component';
-import { authGuard } from './guards/auth.guard';
-import { adminGuard } from './guards/admin.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 import { HomeLanding } from './landing/components/home-landing/home-landing';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
 import { BuildingMapComponent } from './building-map/components/building-map.component';

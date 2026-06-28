@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReservationResponse, ReservationResponseWithName } from '@models/reservation.model';
 import { ReservationService } from '../services/reservation.service';
-import { NotificationService } from '@core/services/notification.service';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-reservation',
@@ -32,7 +32,7 @@ export class Reservation implements OnInit{
   role: string = '';
 
   ngOnInit(): void {
-    
+
     this.role = localStorage.getItem('user_role') || '';
     this.loadReservations();
     this.calculateMinDate();
@@ -130,8 +130,8 @@ export class Reservation implements OnInit{
     const newStatus = this.selectedReservation.status;
     const newUserId = this.selectedReservation.userId;
     this.closeEditModal();
-    this.reservationService.updateReservation(idRecurso, 
-      
+    this.reservationService.updateReservation(idRecurso,
+
       {
         date: newDate,
         status: newStatus,

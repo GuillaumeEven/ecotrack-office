@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
-import { NotificationService } from '@core/services/notification.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-change-password-modal',
