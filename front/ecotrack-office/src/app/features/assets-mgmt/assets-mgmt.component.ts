@@ -60,7 +60,8 @@ export class AssetsMgmtComponent implements OnInit {
   deskForm!: FormGroup;
 
   // Delete modal properties
-  deleteItemType: string = '';
+  deleteItemType: 'floor' | 'room' | 'desk' | '' = '';
+  deleteItemTypeDisplay: string = ''; // For Spanish display
   deleteItemName: string = '';
   deleteItemId: number | null = null;
   deleteItemSummary: string = ''; // 🆕
@@ -269,7 +270,8 @@ export class AssetsMgmtComponent implements OnInit {
 
   // 🆕 Abre el modal de confirmación con resumen de elementos hijos afectados
   openDeleteDialog(type: 'floor' | 'room' | 'desk', id: number, name?: string) {
-    this.deleteItemType = type == 'floor' ? 'piso' : type == 'room' ? 'sala' : 'escritorio';
+    this.deleteItemType = type;
+    this.deleteItemTypeDisplay = type == 'floor' ? 'piso' : type == 'room' ? 'sala' : 'escritorio';
     this.deleteItemId = id;
     this.deleteItemName = name || 'este elemento';
     this.isDeleteDialogOpen = true;
