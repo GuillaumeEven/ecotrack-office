@@ -1,17 +1,65 @@
+# Project specific
 _bmad/
 _bmad-output/
 .claude/
+.gemini/
 .github/
-.DS_Store
 
-# Spring Boot backend
+# Environment variables
+.env
+.env.dev
+.env.prod
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+*~
+
+# IDE - VS Code
+*.vscode/
+*.code-workspace
+
+# IDE - IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+.factorypath
+
+# Backend - Maven/Spring Boot
 back/**/target/
-back/**/.env
 back/**/*.class
 back/**/*.jar
 back/**/*.war
 back/**/*.log
 back/**/spring-shell.log
+back/**/.classpath
+back/**/.project
+back/**/.settings/
+back/**/*.iml
 
-.env.dev
-.env.prod
+# Frontend - Angular/Node
+front/**/node_modules/
+front/**/dist/
+front/**/.angular/
+front/**/.eslintcache
+front/**/.nyc_output/
+front/**/coverage/
+front/**/*.code-workspace
+
+# Logs
+*.log
+*.ldb
+
+# Misc
+.DS_Store
+*.swp
+*.swo
