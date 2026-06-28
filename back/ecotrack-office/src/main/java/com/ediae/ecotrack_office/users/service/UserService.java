@@ -191,16 +191,22 @@ public class UserService {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-        // Anonimizamos todos los datos personales
-        entity.setEmail("deleted_" + id + "@deleted.local");
-        entity.setFirstName("DELETED");
-        entity.setLastName("DELETED");
-        entity.setPasswordHash("");
-        entity.setConsentGiven(false);
-        entity.setPreferencesJson(null);
-        entity.setIsActive(false);
+        if (entity.getRole() == Role.ADMIN) {
+            throw new ApplicationException(ErrorCode.FORBIDDEN, "No se puede eliminar un usuario con rol ADMIN");
+        }
 
-        userRepository.save(entity);
+        // // Anonimizamos todos los datos personales
+        // entity.setEmail("deleted_" + id + "@deleted.local");
+        // entity.setFirstName("DELETED");
+        // entity.setLastName("DELETED");
+        // entity.setPasswordHash("");
+        // entity.setConsentGiven(false);
+        // entity.setPreferencesJson(null);
+        // entity.setIsActive(false);
+
+        // userRepository.save(entity);
+
+        userRepository.deleteById(id);
 
         auditLogService.log("USER_DELETED", "USER", id, RequestContext.getUserId());
     }

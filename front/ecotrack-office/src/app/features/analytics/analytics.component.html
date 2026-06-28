@@ -47,9 +47,9 @@
       </div>
 
       <div *ngIf="userRole === 'ADMIN'" class="card metric-card card-money">
-        <div class="card-top">
-          <span class="card-label">AHORRO ECONÓMICO</span>
+        <div class="card-header">
           <span class="material-symbols-outlined icon-money">payments</span>
+          <span class="card-label">AHORRO ECONÓMICO</span>
         </div>
         <div class="card-body-metric">
           <h2 class="metric-value">{{ accumulatedTotals.financialSaved == 0 ? '--' : '€' + (accumulatedTotals.financialSaved | number:'1.2-2') }}</h2>
@@ -59,9 +59,9 @@
       </div>
 
       <div *ngIf="userRole === 'ADMIN'" class="card metric-card card-spots">
-        <div class="card-top">
-          <span class="card-label">RESERVAS EN EL PERIODO</span>
+        <div class="card-header">
           <span class="material-symbols-outlined icon-spots">date_range</span>
+          <span class="card-label">RESERVAS EN EL PERIODO</span>
         </div>
         <div class="card-body-metric">
           <h2 class="metric-value">{{ accumulatedTotals.activeReservationsCount == 0 ? '--' : accumulatedTotals.activeReservationsCount }} <span class="metric-unit">reservas</span></h2>
@@ -72,8 +72,8 @@
 
       <div *ngIf="userRole === 'ADMIN'" class="card history-card">
         <div class="card-header-dashboard">
-          <h3 class="history-title">Historial de Informes Compilados (Filtrado)</h3>
           <span class="material-symbols-outlined icon-variant">analytics</span>
+          <h3 class="history-title">Historial de Informes Compilados (Filtrado)</h3>
         </div>
 
         <div *ngIf="isLoading" class="skeleton-loader">
