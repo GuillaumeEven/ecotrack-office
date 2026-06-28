@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { FloorModel, FloorWithStatusModel } from '@models/index.model';
-import { UserService } from '@services/index.service';
+import { UserService } from './user.service';
 import { environment } from '@environments/environment';
 /**
  * Floor Service

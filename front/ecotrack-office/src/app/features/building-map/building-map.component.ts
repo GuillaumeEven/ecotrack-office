@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AuthService, FloorService } from '@services/index.service';
 import { FloorWithStatusModel, RoomWithStatusModel, DeskWithStatusModel, ResourceStatusModel } from '@models/index.model';
-import { DeskReservationModalComponent } from '@features/index.component';
+import { DeskReservationModalComponent } from './modals/desk-reservation-modal.component';
 
 /**
  * Building Map Component

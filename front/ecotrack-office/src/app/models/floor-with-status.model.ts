@@ -3,7 +3,10 @@
  * DTOs matching backend FloorWithStatusDto, RoomWithStatusDto, DeskWithStatusDto
  */
 
-import { ResourceStatusModel, FloorModel, DeskModel, RoomModel } from './index.model';
+import { ResourceStatusModel } from './resource-status.model';
+import { FloorModel } from './floor.model';
+import { DeskModel } from './desk.model';
+import { RoomModel } from './room.model';
 
 /**
  * Desk with calculated status for a specific date
