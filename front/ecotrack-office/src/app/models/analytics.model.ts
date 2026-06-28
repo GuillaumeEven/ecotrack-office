@@ -1,10 +1,5 @@
 export interface AnalyticsReportRequest {
-  co2SavingsKg: number;
-  energySavingsEuros: number;
-  totalReservations: number;
-  confirmedCheckIns: number;
-  emptyRooms: number;
-  organizationId: number;
+  dateReport: string; // Format: YYYY-MM-DD
 }
 
 export interface AnalyticsReportResponse {

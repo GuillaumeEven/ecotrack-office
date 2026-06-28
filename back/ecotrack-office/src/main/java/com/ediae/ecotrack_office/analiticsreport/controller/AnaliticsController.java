@@ -1,18 +1,32 @@
 package com.ediae.ecotrack_office.analiticsreport.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportGenerateDto;
 import com.ediae.ecotrack_office.analiticsreport.dto.AnaliticsReportRequestDto;
 import com.ediae.ecotrack_office.analiticsreport.model.AnaliticsReportModel;
 import com.ediae.ecotrack_office.analiticsreport.service.AnaliticsService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/analytics-reports") // Ruta unificada para la API de informes
 public class AnaliticsController {
 
     private final AnaliticsService analiticsService;
+
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AnaliticsController.class);
+
+    // private final Authentication authentication;
 
     // Constructor tradicional para inyectar el servicio
     public AnaliticsController(AnaliticsService analiticsService) {
@@ -37,6 +51,19 @@ public class AnaliticsController {
     @PostMapping
     public ResponseEntity<AnaliticsReportModel> createReport(@RequestBody AnaliticsReportRequestDto dto) {
         AnaliticsReportModel nuevoReporte = analiticsService.createReport(dto);
+        return ResponseEntity.ok(nuevoReporte); // Devuelve un 200 OK con el reporte creado
+    }
+
+    // 3. ENDPOINT PARA CREAR UN NUEVO REPORTE (POST)
+    @PostMapping("/generate")
+    public ResponseEntity<AnaliticsReportModel> generateReport(Authentication auth,@RequestBody AnaliticsReportGenerateDto dto) {
+
+        logger.info("Creando un nuevo reporte de analítica para la organización del usuario autenticado.");
+
+
+        Long userId = (Long) auth.getPrincipal()
+;
+        AnaliticsReportModel nuevoReporte = analiticsService.generateReport(userId, dto);
         return ResponseEntity.ok(nuevoReporte); // Devuelve un 200 OK con el reporte creado
     }
 
