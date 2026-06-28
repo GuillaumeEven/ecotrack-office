@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -88,6 +89,27 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, errorCode.getStatus());
     }
+
+        /**
+         * Maneja parámetros de request requeridos que faltan.
+         */
+        @ExceptionHandler(MissingServletRequestParameterException.class)
+        public ResponseEntity<ErrorResponse> handleMissingRequestParameter(
+                        MissingServletRequestParameterException ex,
+                        WebRequest request) {
+
+                ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
+
+                log.warn("Falta parámetro requerido: {}", ex.getParameterName());
+
+                ErrorResponse errorResponse = new ErrorResponse(
+                                errorCode.getStatus().value(),
+                                errorCode.getStatus().getReasonPhrase(),
+                                "Error de validación"
+                );
+
+                return new ResponseEntity<>(errorResponse, errorCode.getStatus());
+        }
 
     /**
      * Maneja excepciones no previstas.

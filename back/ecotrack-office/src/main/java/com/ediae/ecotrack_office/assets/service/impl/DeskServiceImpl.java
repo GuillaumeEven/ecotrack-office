@@ -15,8 +15,6 @@ import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
 import com.ediae.ecotrack_office.incident.model.IncidentModel;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
 public class DeskServiceImpl implements DeskService {
 
@@ -37,7 +35,7 @@ public class DeskServiceImpl implements DeskService {
     @Override
     public DeskModel getDeskById(Long deskId) {
         DeskEntity entity = deskRepository.findById(deskId)
-                .orElseThrow(() -> new EntityNotFoundException("Desk not found with id: " + deskId));
+                .orElseThrow(() -> new NotFoundException("Desk not found with id: " + deskId));
         DeskModel deskModel = deskMapper.fromEntity(entity);
         return deskModel;
     }
@@ -71,7 +69,7 @@ public class DeskServiceImpl implements DeskService {
     @Override
     public DeskModel updateDesk(Long deskId, DeskRequestDto deskRequestDto) {
         DeskEntity entity = deskRepository.findById(deskId)
-                .orElseThrow(() -> new EntityNotFoundException("Desk not found with id: " + deskId));
+                .orElseThrow(() -> new NotFoundException("Desk not found with id: " + deskId));
         DeskModel deskModel = deskMapper.fromRequestDto(deskRequestDto);
         deskMapper.updateEntityFromModel(deskModel, entity);
         DeskEntity updatedEntity = deskRepository.save(entity);
@@ -81,7 +79,7 @@ public class DeskServiceImpl implements DeskService {
     @Override
     public void deleteDeskById(Long deskId) {
         DeskEntity entity = deskRepository.findById(deskId)
-                .orElseThrow(() -> new EntityNotFoundException("Desk not found with id: " + deskId));
+                .orElseThrow(() -> new NotFoundException("Desk not found with id: " + deskId));
         deskRepository.delete(entity);
     }
 
