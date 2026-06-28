@@ -29,7 +29,7 @@ export class SidebarComponent {
   navItems: NavItem[] = [
     { icon: 'dashboard', label: 'Hacer reserva', route: '/home' },
     { icon: 'calendar_month', label: 'Reservas', route: '/reservation' },
-    { icon: 'confirmation_number', label: 'Incidencias', route: '/incidencias' },
+    { icon: 'confirmation_number', label: 'Incidencias', route: '/incidents' },
     { icon: 'group', label: 'Empleados', route: '/admin/user-management' },
     { icon: 'domain', label: 'Empresa', route: '/organization' },
     { icon: 'map', label: 'Gestionar espacio', route: '/assets'},
