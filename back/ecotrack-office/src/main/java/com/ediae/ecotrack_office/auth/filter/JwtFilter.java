@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ediae.ecotrack_office.auth.service.JwtService;
+import com.ediae.ecotrack_office.shared.context.RequestContext;
+import com.ediae.ecotrack_office.users.enums.Role;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,46 +34,53 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+        try {
+            if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-        filterChain.doFilter(request, response);
-        return;
-    }
+            // 1. Leemos el header Authorization
+            String authHeader = request.getHeader("Authorization");
 
-        // 1. Leemos el header Authorization
-        String authHeader = request.getHeader("Authorization");
+            // 2. Si no hay token o no empieza por "Bearer ", dejamos pasar
+            //    Spring Security ya bloqueará las rutas protegidas
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        // 2. Si no hay token o no empieza por "Bearer ", dejamos pasar
-        //    Spring Security ya bloqueará las rutas protegidas
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            // 3. Extraemos el token quitando el prefijo "Bearer "
+            String token = authHeader.substring(7);
+
+            // 4. Verificamos que el token es válido
+            if (!jwtService.isTokenValid(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            // 5. Extraemos el id y el rol del token
+            Long userId = jwtService.extractUserId(token);
+            String role = jwtService.extractRole(token);
+
+            // 6. Inicializamos RequestContext para que los services lo usen
+            RequestContext.set(userId, Role.valueOf(role));
+
+            // 7. Le decimos a Spring quién es el usuario autenticado
+            UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                    userId,
+                    null,
+                    List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // 8. Dejamos continuar la petición
             filterChain.doFilter(request, response);
-            return;
+        } finally {
+            // Limpiamos RequestContext al final de la petición para evitar memory leak
+            RequestContext.clear();
         }
-
-        // 3. Extraemos el token quitando el prefijo "Bearer "
-        String token = authHeader.substring(7);
-
-        // 4. Verificamos que el token es válido
-        if (!jwtService.isTokenValid(token)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-
-        // 5. Extraemos el id y el rol del token
-        Long userId = jwtService.extractUserId(token);
-        String role = jwtService.extractRole(token);
-
-        // 6. Le decimos a Spring quién es el usuario autenticado
-        UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(
-                userId,
-                null,
-                List.of(new SimpleGrantedAuthority("ROLE_" + role))
-            );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // 7. Dejamos continuar la petición
-        filterChain.doFilter(request, response);
     }
 }

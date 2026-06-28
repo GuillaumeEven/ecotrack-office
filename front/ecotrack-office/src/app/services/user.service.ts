@@ -81,6 +81,7 @@ export class UserService {
   }
 
   updateUser(id: number, data: Partial<UserResponse>): Observable<UserResponse> {
+    console.log(`Updating user with ID ${id}:`, data);
     return this.http.put<UserResponse>(`${this.BASE_URL}/${id}`, data);
   }
 

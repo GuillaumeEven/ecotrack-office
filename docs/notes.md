@@ -181,3 +181,5 @@ Cambios del 28 de junio:
 - crear un index por carpeta
 - hacer los imports màs cortos por el uso de los index
 - configure paths in tsconfig.app.json (llamar a @services...)
+
+desactivar user

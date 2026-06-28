@@ -60,7 +60,8 @@ export class AssetsMgmtComponent implements OnInit {
   deskForm!: FormGroup;
 
   // Delete modal properties
-  deleteItemType: string = '';
+  deleteItemType: 'floor' | 'room' | 'desk' | '' = '';
+  deleteItemTypeDisplay: string = ''; // For Spanish display
   deleteItemName: string = '';
   deleteItemId: number | null = null;
   deleteItemSummary: string = ''; // 🆕
@@ -269,7 +270,8 @@ export class AssetsMgmtComponent implements OnInit {
 
   // 🆕 Abre el modal de confirmación con resumen de elementos hijos afectados
   openDeleteDialog(type: 'floor' | 'room' | 'desk', id: number, name?: string) {
-    this.deleteItemType = type == 'floor' ? 'piso' : type == 'room' ? 'sala' : 'escritorio';
+    this.deleteItemType = type;
+    this.deleteItemTypeDisplay = type == 'floor' ? 'piso' : type == 'room' ? 'sala' : 'escritorio';
     this.deleteItemId = id;
     this.deleteItemName = name || 'este elemento';
     this.isDeleteDialogOpen = true;
@@ -416,7 +418,7 @@ export class AssetsMgmtComponent implements OnInit {
     } else {
       this.roomForm.reset({
         name: '',
-        floorId: '',
+        floorId: this.selectedFloorId || '',
         roomType: '',
         capacity: '',
         surfaceArea: '',
@@ -443,7 +445,7 @@ export class AssetsMgmtComponent implements OnInit {
     } else {
       this.deskForm.reset({
         name: '',
-        roomId: '',
+        roomId: this.selectedRoomId || '',
         equipmentList: '',
         isActive: true,
       });
@@ -469,12 +471,12 @@ export class AssetsMgmtComponent implements OnInit {
   }
 
   closeRoomDialog() {
-    this.roomForm.reset({ floorId: '', name: '', type: '' });
+    this.roomForm.reset({ floorId: this.selectedFloorId || '', name: '', type: '' });
     this.isRoomDialogOpen = false;
   }
 
   closeDeskDialog() {
-    this.deskForm.reset({ name: '', roomId: '', equipmentList: '', isActive: true });
+    this.deskForm.reset({ name: '', roomId: this.selectedRoomId || '', equipmentList: '', isActive: true });
     this.isDeskDialogOpen = false;
   }
 
@@ -515,9 +517,9 @@ export class AssetsMgmtComponent implements OnInit {
         this.cdr.markForCheck();
 
         // Auto-select first floor
-        if (result.floors.length > 0) {
-          this.selectedFloorId = result.floors[0].id;
-        }
+        // if (result.floors.length > 0) {
+        //   this.selectedFloorId = result.floors[0].id;
+        // }
       },
       error: (err) => {
         this.errorMessage = 'Error loading data';

@@ -71,8 +71,8 @@ export class FloorService {
    * @param date Date in format YYYY-MM-DD
    * @returns Observable of FloorWithStatusModel[] (all floors with global progressive logic applied)
    */
-  getFloorsWithStatus(organizationId: number = this.organizationId!, date: string): Observable<FloorWithStatusModel[]> {
-    const url = `${this.BASE_URL}/status/${organizationId}`;
+  getFloorsWithStatus(date: string): Observable<FloorWithStatusModel[]> {
+    const url = `${this.BASE_URL}/status`;
     const params = new HttpParams().set('date', date);
     return this.httpClient.get<FloorWithStatusModel[]>(url, { params });
   }

@@ -25,15 +25,15 @@
             <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
           </select>
         </div>
+        <div class="modal-footer">
+          <button type="button" (click)="showEditModal = false" class="btn">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
+            Guardar
+          </button>
+        </div>
       </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" (click)="showEditModal = false" class="btn">
-        Cancelar
-      </button>
-      <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid">
-        Guardar
-      </button>
     </div>
   </div>
 </div>
