@@ -24,8 +24,6 @@ public class AnalyticsController {
 
     private final AnalyticsService analyticsService;
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AnalyticsController.class);
-
     // private final Authentication authentication;
 
     // Constructor tradicional para inyectar el servicio
@@ -57,9 +55,6 @@ public class AnalyticsController {
     // 3. ENDPOINT PARA CREAR UN NUEVO REPORTE (POST)
     @PostMapping("/generate")
     public ResponseEntity<AnalyticsReportModel> generateReport(Authentication auth,@RequestBody AnalyticsReportGenerateDto dto) {
-
-        logger.info("Creando un nuevo reporte de analítica para la organización del usuario autenticado.");
-
 
         Long userId = (Long) auth.getPrincipal()
 ;

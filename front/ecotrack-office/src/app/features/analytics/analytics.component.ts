@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { AnalyticsService, AuthService } from '@services/index.service';
+import { AnalyticsService, AuthService, NotificationService } from '@services/index.service';
 import { AnalyticsReportResponse } from '@models/index.model';
 
 interface MappedReport {
@@ -48,6 +48,7 @@ export class AnalyticsComponent implements OnInit {
   constructor(
     private analyticsService: AnalyticsService,
     private authService: AuthService,
+    private notificationService: NotificationService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -170,27 +171,27 @@ export class AnalyticsComponent implements OnInit {
           // After deletion, create the new report
           this.analyticsService.generate({ dateReport: this.today }).subscribe({
             next: () => {
-              console.log('Report recreated for', this.todayReport?.compiledAt);
+              this.notificationService.success(`Informe recreado para ${this.todayReport?.compiledAt}`);
               this.loadAnalytics(); // Reload to show new data
             },
             error: (err) => {
-              console.error('Error creating report after deletion:', err);
+              this.notificationService.error('Error al crear el informe después de la eliminación');
             }
           });
         },
         error: (err) => {
-          console.error('Error deleting old report:', err);
+          this.notificationService.error('Error al eliminar el informe anterior');
         }
       });
     } else {
       // No report for today, just create a new one
       this.analyticsService.generate({ dateReport: this.today }).subscribe({
         next: () => {
-          console.log('Report created for', this.today);
+          this.notificationService.success(`Informe creado para ${this.today}`);
           this.loadAnalytics(); // Reload to show new data
         },
         error: (err) => {
-          console.error('Error creating report:', err);
+          this.notificationService.error('Error al crear el informe');
         }
       });
     }

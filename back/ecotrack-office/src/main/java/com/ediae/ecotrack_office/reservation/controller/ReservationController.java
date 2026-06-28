@@ -40,8 +40,6 @@ public class ReservationController {
     @Autowired
     private RoleGuard roleGuard;
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ReservationController.class);
-
     // --- ENDPOINTS PARA CUALQUIER USUARIO IDENTIFICADO ---
 
     @GetMapping("/user")
