@@ -397,7 +397,7 @@ public class ResourceStatusCalculatorService {
                 .collect(Collectors.toList());
 
         long reservedCount = deskDtos.stream()
-                .filter(d -> d.getCalculatedStatus() == ResourceStatus.RESERVED)
+                .filter(d -> d.getCalculatedStatus() == ResourceStatus.RESERVED || d.getCalculatedStatus() == ResourceStatus.OUT_OF_SERVICE)
                 .count();
         double occupancyRate = desks.isEmpty() ? 0.0 : (double) reservedCount / desks.size();
 
