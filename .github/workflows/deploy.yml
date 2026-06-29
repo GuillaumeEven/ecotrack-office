@@ -74,8 +74,8 @@ jobs:
 
       - name: Validate Docker Compose
         run: |
-          docker compose -f docker-compose.prod.yml config > /dev/null || exit 1
-          echo "✅ docker-compose.prod.yml is valid"
+          docker compose -f docker-compose.yml config > /dev/null || exit 1
+          echo "✅ docker-compose.yml is valid"
 
       - name: Validate required secrets
         env:
@@ -126,7 +126,7 @@ jobs:
       - name: Copy docker-compose files
         run: |
           scp -i ~/.ssh/deploy_key \
-            docker-compose.prod.yml \
+            docker-compose.yml \
             .env.prod \
             deployment/deploy.sh \
             deployment/backup.sh \
@@ -137,11 +137,11 @@ jobs:
           ssh -i ~/.ssh/deploy_key ${{ needs.setup.outputs.deploy_user }}@${{ needs.setup.outputs.deploy_host }} \
             "cd ~/ecotrack-office && \
              bash deploy.sh \
-               --registry=${{ env.REGISTRY }} \
-               --backend-image=${{ env.BACKEND_IMAGE }} \
-               --frontend-image=${{ env.FRONTEND_IMAGE }} \
-               --version=${{ github.sha }} \
-               --environment=${{ needs.setup.outputs.environment }}"
+               ${{ env.REGISTRY }} \
+               ${{ env.BACKEND_IMAGE }} \
+               ${{ env.FRONTEND_IMAGE }} \
+               ${{ github.sha }} \
+               ${{ needs.setup.outputs.environment }}"
 
       - name: Health check post-deploy
         run: |
@@ -195,7 +195,7 @@ jobs:
       - name: Execute rollback
         run: |
           ssh -i ~/.ssh/deploy_key ${{ needs.setup.outputs.deploy_user }}@${{ needs.setup.outputs.deploy_host }} \
-            "cd ~/ecotrack-office && (docker compose -f docker-compose.prod.yml down && docker compose -f docker-compose.prod.yml up -d) || (docker-compose -f docker-compose.prod.yml down && docker-compose -f docker-compose.prod.yml up -d)"
+            "cd ~/ecotrack-office && (docker compose -f docker-compose.yml down && docker compose -f docker-compose.yml up -d) || (docker-compose -f docker-compose.yml down && docker-compose -f docker-compose.yml up -d)"
           echo "⚠️ Rollback executed! Check the previous version."
 
       - name: Cleanup SSH

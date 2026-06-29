@@ -52,7 +52,7 @@ cd "$DEPLOYMENT_DIR"
 
 BACKUP_FILE="$BACKUP_DIR/ecotrack_db_backup_$(date +'%Y%m%d_%H%M%S').sql"
 
-if docker-compose -f docker-compose.prod.yml ps mysql 2>/dev/null | grep -q "Up"; then
+if docker-compose -f docker-compose.yml ps mysql 2>/dev/null | grep -q "Up"; then
     log "Creating database dump..."
 
     # Get MySQL credentials from .env.prod
@@ -60,7 +60,7 @@ if docker-compose -f docker-compose.prod.yml ps mysql 2>/dev/null | grep -q "Up"
     DB_PASSWORD=$(grep "^DB_PASSWORD=" .env.prod 2>/dev/null | cut -d= -f2 || echo "")
     DB_NAME=$(grep "^DB_NAME=" .env.prod 2>/dev/null | cut -d= -f2 || echo "ecotrack")
 
-    if docker-compose -f docker-compose.prod.yml exec -T mysql \
+    if docker-compose -f docker-compose.yml exec -T mysql \
         mysqldump -u"$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" > "$BACKUP_FILE" 2>/dev/null; then
         log "✓ Database backup created: $BACKUP_FILE"
 
@@ -84,17 +84,17 @@ log "=== Backing up Docker volumes ==="
 VOLUME_BACKUP_DIR="$BACKUP_DIR/volumes_$(date +'%Y%m%d_%H%M%S')"
 mkdir -p "$VOLUME_BACKUP_DIR"
 
-if docker volume inspect ecotrack-office_mysql_data_prod &>/dev/null; then
+if docker volume inspect ecotrack_office_mysql_data &>/dev/null; then
     log "Creating volume backup..."
     docker run --rm \
-        -v ecotrack-office_mysql_data_prod:/data \
+        -v ecotrack_office_mysql_data:/data \
         -v "$VOLUME_BACKUP_DIR":/backup \
         alpine:latest \
         tar czf /backup/mysql_data.tar.gz -C /data . 2>/dev/null || \
         warning "Failed to backup volume (it may be in use)"
     log "✓ Volume backup created"
 else
-    warning "Volume not found, skipping volume backup"
+    warning "Volume not found (ecotrack_office_mysql_data), skipping volume backup"
 fi
 
 # ============================================================================

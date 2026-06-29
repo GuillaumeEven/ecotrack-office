@@ -62,10 +62,10 @@ fi
 log "✓ docker-compose is installed"
 
 # Check required files
-if [[ ! -f "$DEPLOYMENT_DIR/docker-compose.prod.yml" ]]; then
-    error "docker-compose.prod.yml not found in $DEPLOYMENT_DIR"
+if [[ ! -f "$DEPLOYMENT_DIR/docker-compose.yml" ]]; then
+    error "docker-compose.yml not found in $DEPLOYMENT_DIR"
 fi
-log "✓ docker-compose.prod.yml found"
+log "✓ docker-compose.yml found"
 
 if [[ ! -f "$DEPLOYMENT_DIR/.env.prod" ]]; then
     error ".env.prod not found in $DEPLOYMENT_DIR"
@@ -102,9 +102,9 @@ log "=== Stopping current services ==="
 
 cd "$DEPLOYMENT_DIR"
 
-if docker-compose -f docker-compose.prod.yml ps 2>/dev/null | grep -q "Up"; then
+if docker-compose -f docker-compose.yml ps 2>/dev/null | grep -q "Up"; then
     log "Stopping services gracefully..."
-    docker-compose -f docker-compose.prod.yml down --timeout=30
+    docker-compose -f docker-compose.yml down --timeout=30
     log "✓ Services stopped"
 else
     log "No running services to stop"
@@ -120,7 +120,7 @@ log "=== Starting new services ==="
 export DOCKER_REGISTRY="$REGISTRY/"
 export VERSION="$VERSION"
 
-docker-compose -f docker-compose.prod.yml up -d || error "Failed to start services"
+docker-compose -f docker-compose.yml up -d || error "Failed to start services"
 log "✓ Services started"
 
 # ============================================================================
@@ -133,7 +133,7 @@ RETRY_COUNT=0
 
 # Check MySQL
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    if docker-compose -f docker-compose.prod.yml exec -T mysql mysqladmin ping -h localhost &>/dev/null; then
+    if docker-compose -f docker-compose.yml exec -T mysql mysqladmin ping -h localhost &>/dev/null; then
         log "✓ MySQL is healthy"
         break
     fi
@@ -148,7 +148,7 @@ RETRY_COUNT=0
 
 # Check Backend
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    if docker-compose -f docker-compose.prod.yml exec -T backend curl -f http://localhost:8080/actuator/health &>/dev/null; then
+    if docker-compose -f docker-compose.yml exec -T backend curl -f http://localhost:8080/actuator/health &>/dev/null; then
         log "✓ Backend is healthy"
         break
     fi
@@ -163,7 +163,7 @@ RETRY_COUNT=0
 
 # Check Frontend
 while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-    if docker-compose -f docker-compose.prod.yml exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health &>/dev/null; then
+    if docker-compose -f docker-compose.yml exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health &>/dev/null; then
         log "✓ Frontend is healthy"
         break
     fi

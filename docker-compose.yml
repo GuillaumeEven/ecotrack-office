@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   # ============================================================================
-  # Spring Boot Backend
+  # Spring Boot Backend (single runtime profile: production)
   # ============================================================================
   backend:
     build:
@@ -45,11 +45,11 @@ services:
       DB_URL: jdbc:mysql://mysql:3306/${DB_NAME:-ecotrack}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
 
       # Spring configuration
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE:-dev}
+      SPRING_PROFILES_ACTIVE: prod
       SERVER_PORT: 8080
 
-      # JWT configuration (update these!)
-      JWT_SECRET: ${JWT_SECRET:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
+      # JWT configuration (required)
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
       JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
 
       # API configuration
@@ -68,9 +68,6 @@ services:
       retries: 3
       start_period: 40s
     restart: unless-stopped
-    # Enable hot-reload in dev (optional)
-    volumes:
-      - ${BACKEND_VOLUME_PATH:-.}/back/ecotrack-office/src:/app/src:ro
 
   # ============================================================================
   # Angular Frontend (Nginx)
