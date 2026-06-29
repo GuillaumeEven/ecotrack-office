@@ -113,7 +113,7 @@ jobs:
       # Notification
       # ========================================================================
       - name: Slack notification
-        if: always()
+        if: ${{ always() && secrets.SLACK_WEBHOOK != '' }}
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
@@ -124,4 +124,3 @@ jobs:
             Backend: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}
             Frontend: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
-        if: ${{ secrets.SLACK_WEBHOOK != '' }}

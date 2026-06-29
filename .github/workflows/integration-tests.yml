@@ -44,24 +44,36 @@ jobs:
           docker-compose exec -T mysql mysqladmin ping -u ecotrack_user -pecotrack_password || exit 1
 
           echo "=== Checking Backend health ==="
+          BACKEND_OK=0
           for i in {1..30}; do
             if docker-compose exec -T backend curl -f http://localhost:8080/actuator/health 2>/dev/null; then
               echo "Backend is healthy"
+              BACKEND_OK=1
               break
             fi
             echo "Attempt $i/30: Backend not ready yet..."
             sleep 2
           done
+          if [[ "$BACKEND_OK" -ne 1 ]]; then
+            echo "❌ Backend did not become healthy in time"
+            exit 1
+          fi
 
           echo "=== Checking Frontend health ==="
+          FRONTEND_OK=0
           for i in {1..30}; do
             if docker-compose exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health 2>/dev/null; then
               echo "Frontend is healthy"
+              FRONTEND_OK=1
               break
             fi
             echo "Attempt $i/30: Frontend not ready yet..."
             sleep 2
           done
+          if [[ "$FRONTEND_OK" -ne 1 ]]; then
+            echo "❌ Frontend did not become healthy in time"
+            exit 1
+          fi
 
       - name: Run API tests
         run: |
