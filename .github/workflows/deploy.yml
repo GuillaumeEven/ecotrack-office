@@ -65,6 +65,8 @@ jobs:
     name: Pre-Deployment Checks
     runs-on: ubuntu-latest
     needs: setup
+    environment:
+      name: ${{ needs.setup.outputs.environment }}
 
     steps:
       - name: Checkout code
@@ -76,16 +78,20 @@ jobs:
           echo "✅ docker-compose.prod.yml is valid"
 
       - name: Validate required secrets
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          if [[ -z "${{ secrets.DEPLOY_KEY }}" ]]; then
+          if [[ -z "$DEPLOY_KEY" ]]; then
             echo "❌ DEPLOY_KEY secret not set"
             exit 1
           fi
-          if [[ -z "${{ secrets.DB_PASSWORD }}" ]]; then
+          if [[ -z "$DB_PASSWORD" ]]; then
             echo "❌ DB_PASSWORD secret not set"
             exit 1
           fi
-          if [[ -z "${{ secrets.JWT_SECRET }}" ]]; then
+          if [[ -z "$JWT_SECRET" ]]; then
             echo "❌ JWT_SECRET secret not set"
             exit 1
           fi
