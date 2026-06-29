@@ -11,20 +11,20 @@ import com.ediae.ecotrack_office.assets.entity.RoomEntity;
 import com.ediae.ecotrack_office.assets.mapper.RoomMapper;
 import com.ediae.ecotrack_office.assets.model.RoomModel;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
-import com.ediae.ecotrack_office.assets.repository.FloorRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
 import com.ediae.ecotrack_office.assets.service.RoomService;
 import com.ediae.ecotrack_office.incident.mapper.IncidentMapper;
 import com.ediae.ecotrack_office.incident.model.IncidentModel;
+import com.ediae.ecotrack_office.shared.exception.BusinessRuleViolationException;
+import com.ediae.ecotrack_office.shared.exception.NotFoundException;
+
+import jakarta.validation.ConstraintDeclarationException;
 
 @Service
 public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
-
-    @Autowired
-    private FloorRepository floorRepository;
 
     @Autowired
     private DeskRepository deskRepository;
@@ -43,7 +43,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public RoomModel getRoomById(Long roomId) {
         RoomEntity entity = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
+                .orElseThrow(() -> new NotFoundException("Room not found with id: " + roomId));
         RoomModel roomModel = roomMapper.fromEntity(entity);
         return roomModel;
     }
@@ -59,7 +59,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public List<IncidentModel> getIncidentsByRoomId(Long roomId) {
         RoomEntity roomEntity = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
+                .orElseThrow(() -> new NotFoundException("Room not found with id: " + roomId));
         return roomEntity.getIncidents().stream()
                 .map(incidentEntity -> IncidentMapper.toModel(incidentEntity))
                 .toList();
@@ -80,18 +80,19 @@ public class RoomServiceImpl implements RoomService {
     @Transactional
     public RoomModel updateRoom(Long roomId, RoomRequestDto roomRequestDTO) {
         RoomEntity existingEntity = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
+                .orElseThrow(() -> new NotFoundException("Room not found with id: " + roomId));
 
         RoomModel updatedModel = roomMapper.fromRequestDto(roomRequestDTO);
 
         // validate capacity against existing desks
         int currentDeskCount = deskRepository.findByRoom_Id(roomId).size();
         if (updatedModel.getCapacity() != null && updatedModel.getCapacity() < currentDeskCount) {
-            throw new RuntimeException("Cannot set capacity lower than existing desks count (" + currentDeskCount + ")");
+            throw new BusinessRuleViolationException("Cannot reduce room capacity below current desk count. Current desk count: " + currentDeskCount);
         }
         // floor would not be changeable
         if (updatedModel.getFloorId() != null && !updatedModel.getFloorId().equals(existingEntity.getFloorId())) {
-            throw new RuntimeException("Cannot change floor of the room. Floor is immutable.");
+            throw new BusinessRuleViolationException(
+                    "Cannot change floor of the room. Floor is immutable.");
         }
 
         // apply field updates
@@ -104,11 +105,11 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void deleteRoomById(Long roomId) {
         RoomEntity existingEntity = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("Room not found with id: " + roomId));
+                .orElseThrow(() -> new NotFoundException("Room not found with id: " + roomId));
 
         // Check if there are desks associated with the room
         if (!deskRepository.findByRoom_Id(roomId).isEmpty()) {
-            throw new RuntimeException("Cannot delete room with associated desks. Please delete the desks first.");
+            throw new ConstraintDeclarationException("Cannot delete room with associated desks. Please delete the desks first.");
         }
 
         roomRepository.delete(existingEntity);

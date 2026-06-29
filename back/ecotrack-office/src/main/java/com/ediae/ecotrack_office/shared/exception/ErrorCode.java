@@ -34,6 +34,7 @@ public enum ErrorCode {
     DUPLICATE_RESOURCE(4002, HttpStatus.CONFLICT, "Recurso duplicado"),
     INVALID_STATE(4003, HttpStatus.BAD_REQUEST, "Estado inválido"),
     OPERATION_NOT_ALLOWED(4004, HttpStatus.BAD_REQUEST, "Operación no permitida"),
+    METHOD_NOT_ALLOWED(4005, HttpStatus.METHOD_NOT_ALLOWED, "Método no permitido"),
 
     // Errores del sistema
     DATABASE_ERROR(5001, HttpStatus.INTERNAL_SERVER_ERROR, "Error en la base de datos"),

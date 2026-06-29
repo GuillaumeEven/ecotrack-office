@@ -13,7 +13,6 @@ import com.ediae.ecotrack_office.assets.model.FloorModel;
 import com.ediae.ecotrack_office.assets.repository.FloorRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
 import com.ediae.ecotrack_office.assets.service.FloorService;
-import com.ediae.ecotrack_office.shared.exception.ConstraintViolationException;
 
 
 @Service
