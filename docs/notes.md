@@ -183,3 +183,6 @@ Cambios del 28 de junio:
 - configure paths in tsconfig.app.json (llamar a @services...)
 
 desactivar user
+
+
+docker compose exec -T mysql mysql -uecotrack_user -pecotrack_password -D ecotrack -e "SHOW TABLES; SELECT COUNT(*) AS users_count FROM users; SELECT email, role FROM users ORDER BY id LIMIT 5;"
