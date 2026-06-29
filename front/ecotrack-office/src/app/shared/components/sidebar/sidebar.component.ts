@@ -42,10 +42,10 @@ export class SidebarComponent {
   ];
 
   private filterNavItems(): void {
-    if (this.role !== 'ADMIN') {
-      this.navItems = this.navItems.filter(
-        item => item.label !== 'Empleados' && item.label !== 'Empresa' && item.label !== 'Gestionar espacio'
-      );
+    if (this.role === 'TECHNICIAN') {
+      this.navItems = this.navItems.filter(item => item.label !== 'Empleados' && item.label !== 'Empresa');
+    } else if (this.role === 'EMPLOYEE') {
+      this.navItems = this.navItems.filter(item => item.label !== 'Gestionar espacio');
     }
   }
 }

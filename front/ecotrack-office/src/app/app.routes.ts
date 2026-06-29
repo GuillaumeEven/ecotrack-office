@@ -14,6 +14,7 @@ import {
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
+import { adminOrTechGuard } from './core/guards/admin-or-tech.guard';
 
 export const routes: Routes = [
   // RUTAS PÚBLICAS
@@ -51,7 +52,7 @@ export const routes: Routes = [
       {
         path: 'assets',
         component: AssetsMgmtComponent,
-        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
+        canActivate: [adminOrTechGuard] // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN o TECHNICIAN
       },
       {
         path: 'incidents',
