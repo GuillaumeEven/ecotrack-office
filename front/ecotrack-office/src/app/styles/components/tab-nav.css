@@ -19,6 +19,7 @@
   border-bottom: 2px solid transparent;
   transition: all var(--transition-normal);
   white-space: nowrap;
+  border-radius: var(--radius-lg)
 }
 
 .tab-button:hover {
@@ -28,7 +29,6 @@
 .tab-button.active {
   background: var(--secondary-container);
   color: var(--primary);
-  border-bottom-color: var(--primary);
 }
 
 /* Secciones de tabs */
