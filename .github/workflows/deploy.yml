@@ -208,6 +208,9 @@ jobs:
 
     steps:
       - name: Slack notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        if: ${{ env.SLACK_WEBHOOK != '' }}
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
@@ -216,5 +219,4 @@ jobs:
             Commit: ${{ github.sha }}
             Ref: ${{ github.ref_name }}
             Author: ${{ github.actor }}
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
-        if: ${{ secrets.SLACK_WEBHOOK != '' }}
+          webhook_url: ${{ env.SLACK_WEBHOOK }}
