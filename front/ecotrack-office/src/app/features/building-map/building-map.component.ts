@@ -354,15 +354,15 @@ export class BuildingMapComponent implements OnInit {
   getStatusText(status: ResourceStatusModel): string {
     switch (status) {
       case ResourceStatusModel.AVAILABLE:
-        return 'Available';
+        return 'Disponible';
       case ResourceStatusModel.RESERVED:
-        return 'Reserved';
+        return 'Reservado';
       case ResourceStatusModel.OUT_OF_SERVICE:
-        return 'Out of service';
+        return 'Fuera de servicio';
       case ResourceStatusModel.UNAVAILABLE:
-        return 'Unavailable';
+        return 'No disponible';
       default:
-        return 'Unknown';
+        return 'Desconocido';
     }
   }
 
