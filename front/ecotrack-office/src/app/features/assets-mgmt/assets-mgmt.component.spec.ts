@@ -108,7 +108,7 @@ describe('AssetsMgmtComponent', () => {
     expect(callArgs[1]['name']).toBe('Meeting Room A');
     expect(callArgs[1]['roomType']).toBe('MEETING_ROOM');
     expect(callArgs[1]['isActive']).toBe(false);
-    expect(component.allRooms[0].isActive).toBe(false);
+    expect(roomServiceSpy.list).toHaveBeenCalledTimes(2);
     expect(component.isRoomDialogOpen).toBe(false);
   });
 

@@ -12,7 +12,7 @@ import com.ediae.ecotrack_office.assets.model.DeskModel;
 @Component
 public class DeskMapper {
 
-    public DeskModel fromEntity(DeskEntity entity) {
+    public static DeskModel fromEntity(DeskEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -26,7 +26,7 @@ public class DeskMapper {
         );
     }
 
-    public DeskEntity toEntity(DeskModel model) {
+    public static DeskEntity toEntity(DeskModel model) {
         if (model == null) {
             return null;
         }

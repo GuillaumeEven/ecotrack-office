@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ediae.ecotrack_office.assets.dto.RoomRequestDto;
 import com.ediae.ecotrack_office.assets.entity.RoomEntity;
+import com.ediae.ecotrack_office.assets.mapper.DeskMapper;
 import com.ediae.ecotrack_office.assets.mapper.RoomMapper;
+import com.ediae.ecotrack_office.assets.model.DeskModel;
 import com.ediae.ecotrack_office.assets.model.RoomModel;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
@@ -95,6 +97,20 @@ public class RoomServiceImpl implements RoomService {
                     "Cannot change floor of the room. Floor is immutable.");
         }
 
+        if (updatedModel.getIsActive() != null && !updatedModel.getIsActive() && existingEntity.getIsActive()) {
+            // Check if there are desks associated with the room
+            if (!deskRepository.findByRoom_Id(roomId).isEmpty()) {
+                List<DeskModel> desks = deskRepository.findByRoom_Id(roomId).stream()
+                        .map(DeskMapper::fromEntity)
+                        .toList();
+                for (DeskModel desk : desks) {
+                    if (desk.getIsActive()) {
+                        desk.setIsActive(false);
+                        deskRepository.save(DeskMapper.toEntity(desk));
+                    }
+                }
+            }
+        }
         // apply field updates
         roomMapper.updateEntityFromModel(updatedModel, existingEntity);
 

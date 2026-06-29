@@ -182,9 +182,9 @@ export class AssetsMgmtComponent implements OnInit {
       // Update
       this.floorService.update(this.editingFloor.id, floorData).subscribe({
         next: (updated) => {
-          const idx = this.allFloors.findIndex((f) => f.id === updated.id);
-          if (idx !== -1) this.allFloors[idx] = updated;
           this.closeFloorDialog();
+          this.loadAllData();
+          this.cdr.markForCheck();
         },
         error: (err) => (this.errorMessage = 'Error updating floor'),
       });
@@ -192,8 +192,9 @@ export class AssetsMgmtComponent implements OnInit {
       // Create
       this.floorService.create(floorData).subscribe({
         next: (created) => {
-          this.allFloors.push(created);
           this.closeFloorDialog();
+          this.loadAllData();
+          this.cdr.markForCheck();
         },
         error: (err) => (this.errorMessage = 'Error creating floor'),
       });
@@ -209,9 +210,8 @@ export class AssetsMgmtComponent implements OnInit {
     if (this.editingRoom) {
       this.roomService.update(this.editingRoom.id, roomData).subscribe({
         next: (updated) => {
-          const idx = this.allRooms.findIndex((r) => r.id === updated.id);
-          if (idx !== -1) this.allRooms[idx] = updated;
           this.closeRoomDialog();
+          this.loadAllData();
           this.cdr.markForCheck();
         },
         error: (err) => {
@@ -222,8 +222,8 @@ export class AssetsMgmtComponent implements OnInit {
     } else {
       this.roomService.create(roomData).subscribe({
         next: (created) => {
-          this.allRooms.push(created);
           this.closeRoomDialog();
+          this.loadAllData();
           this.cdr.markForCheck();
         },
         error: (err) => {
@@ -243,9 +243,8 @@ export class AssetsMgmtComponent implements OnInit {
     if (this.editingDesk) {
       this.deskService.update(this.editingDesk.id, deskData).subscribe({
         next: (updated) => {
-          const idx = this.allDesks.findIndex((d) => d.id === updated.id);
-          if (idx !== -1) this.allDesks[idx] = updated;
           this.closeDeskDialog();
+          this.loadAllData();
           this.cdr.markForCheck();
         },
         error: (err) => {
@@ -256,8 +255,8 @@ export class AssetsMgmtComponent implements OnInit {
     } else {
       this.deskService.create(deskData).subscribe({
         next: (created) => {
-          this.allDesks.push(created);
           this.closeDeskDialog();
+          this.loadAllData();
           this.cdr.markForCheck();
         },
         error: (err) => {

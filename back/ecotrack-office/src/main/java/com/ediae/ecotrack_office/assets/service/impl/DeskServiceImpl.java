@@ -28,7 +28,7 @@ public class DeskServiceImpl implements DeskService {
     public List<DeskModel> getDesks() {
         return deskRepository.findAll()
                 .stream()
-                .map(deskMapper::fromEntity)
+                .map(DeskMapper::fromEntity)
                 .toList();
     }
 
@@ -36,7 +36,7 @@ public class DeskServiceImpl implements DeskService {
     public DeskModel getDeskById(Long deskId) {
         DeskEntity entity = deskRepository.findById(deskId)
                 .orElseThrow(() -> new NotFoundException("Desk not found with id: " + deskId));
-        DeskModel deskModel = deskMapper.fromEntity(entity);
+        DeskModel deskModel = DeskMapper.fromEntity(entity);
         return deskModel;
     }
 
@@ -54,16 +54,16 @@ public class DeskServiceImpl implements DeskService {
     public List<DeskModel> getDesksByRoomId(Long roomId) {
         List<DeskEntity> entities = deskRepository.findByRoom_Id(roomId);
         return entities.stream()
-                .map(deskMapper::fromEntity)
+                .map(DeskMapper::fromEntity)
                 .toList();
     }
 
     @Override
     public DeskModel createDesk(DeskRequestDto deskRequestDto) {
         DeskModel deskModel = deskMapper.fromRequestDto(deskRequestDto);
-        DeskEntity entity = deskMapper.toEntity(deskModel);
+        DeskEntity entity = DeskMapper.toEntity(deskModel);
         DeskEntity savedEntity = deskRepository.save(entity);
-        return deskMapper.fromEntity(savedEntity);
+        return DeskMapper.fromEntity(savedEntity);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class DeskServiceImpl implements DeskService {
         DeskModel deskModel = deskMapper.fromRequestDto(deskRequestDto);
         deskMapper.updateEntityFromModel(deskModel, entity);
         DeskEntity updatedEntity = deskRepository.save(entity);
-        return deskMapper.fromEntity(updatedEntity);
+        return DeskMapper.fromEntity(updatedEntity);
     }
 
     @Override
