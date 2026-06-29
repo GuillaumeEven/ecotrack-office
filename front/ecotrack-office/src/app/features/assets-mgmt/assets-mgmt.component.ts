@@ -427,6 +427,8 @@ export class AssetsMgmtComponent implements OnInit {
       });
       // Enable floor selection when creating new room
       this.roomForm.get('floorId')?.enable();
+      // Enable room name when creating new room
+      this.roomForm.get('name')?.enable();
     }
     this.isRoomDialogOpen = true;
   }
@@ -512,6 +514,7 @@ export class AssetsMgmtComponent implements OnInit {
 
         // Load incidents for all desks (parallel calls)
         this.loadIncidentsForAllDesks();
+        this.loadIncidentsForAllRooms();
 
         this.isLoading = false;
         this.cdr.markForCheck();
@@ -582,7 +585,7 @@ export class AssetsMgmtComponent implements OnInit {
         // Map incidents back to rooms
         Object.entries(results).forEach(([key, incidents]) => {
           const roomId = parseInt(key.split('_')[1], 10);
-          this.incidentsByDeskId.set(roomId, incidents as any[]);
+          this.incidentsByRoomId.set(roomId, incidents as any[]);
         });
         this.cdr.markForCheck();
       },
@@ -643,6 +646,10 @@ export class AssetsMgmtComponent implements OnInit {
   }
 
   getRoomAvailability(roomId: number): boolean {
+    const room = this.allRooms.find((r) => r.id === roomId);
+    if (!room || !room.isActive) {
+      return false;
+    }
     const incidents = this.incidentsByRoomId.get(roomId) || [];
     return incidents.length === 0; // If there are no incidents, room is available
   }
