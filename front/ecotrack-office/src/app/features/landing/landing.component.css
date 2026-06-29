@@ -107,6 +107,13 @@ body {
     gap: var(--spacing-xl);
 }
 
+.brand-logo {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
 .brand-title {
     font-size: 24px;
     line-height: 32px;
