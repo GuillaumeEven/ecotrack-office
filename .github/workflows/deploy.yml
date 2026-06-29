@@ -72,7 +72,7 @@ jobs:
 
       - name: Validate Docker Compose
         run: |
-          docker-compose config -f docker-compose.prod.yml > /dev/null || exit 1
+          docker compose -f docker-compose.prod.yml config > /dev/null || exit 1
           echo "✅ docker-compose.prod.yml is valid"
 
       - name: Validate required secrets
@@ -189,7 +189,7 @@ jobs:
       - name: Execute rollback
         run: |
           ssh -i ~/.ssh/deploy_key ${{ needs.setup.outputs.deploy_user }}@${{ needs.setup.outputs.deploy_host }} \
-            "cd ~/ecotrack-office && docker-compose -f docker-compose.prod.yml down && docker-compose -f docker-compose.prod.yml up -d"
+            "cd ~/ecotrack-office && (docker compose -f docker-compose.prod.yml down && docker compose -f docker-compose.prod.yml up -d) || (docker-compose -f docker-compose.prod.yml down && docker-compose -f docker-compose.prod.yml up -d)"
           echo "⚠️ Rollback executed! Check the previous version."
 
       - name: Cleanup SSH
