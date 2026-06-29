@@ -33,7 +33,7 @@ enum RoomType {
 }
 
 ' User & Organization (usr_)
-class usr_user {
+class usr_users {
     - id : Long
     - email : String
     - password_hash : String
@@ -49,7 +49,7 @@ class usr_user {
     + getUsersByOrganization(Long organizationId, Pageable pageable): PageResponseDto<UserResponseDto>
 }
 
-class organization {
+class organizations {
     - id : Long
     - name : String
     - cif : String
@@ -63,7 +63,7 @@ class organization {
 }
 
 ' Physical Assets (ast_)
-class ast_floor {
+class ast_floors {
     - id : Long
     - level : Integer
     - is_active : Boolean
@@ -73,7 +73,7 @@ class ast_floor {
     + updateFloor(Long id, FloorReqestDto floorRequestDto): FloorModel
 }
 
-abstract class ast_resource {
+abstract class ast_resources {
     - id : Long
     - name : String
     - status : ResourceStatus
@@ -83,7 +83,7 @@ abstract class ast_resource {
     + getResourceById(Long resourceId): ResourceModel
 }
 
-class ast_room {
+class ast_rooms {
     - type : RoomType
     - surface_area : Double
     - floor_id : Long
@@ -92,7 +92,7 @@ class ast_room {
     + deleteRoomById(Long roomId): void
 }
 
-class ast_desk {
+class ast_desks {
     - room_id : Long
     + getDesksByRoomId(Long roomId): List<DeskModel>
     + createDesk(DeskRequestDto deskRequestDto): DeskModel
@@ -112,7 +112,7 @@ class reservation {
 }
 
 ' Analytic, Incident & AuditLog (anl_)
-class incident {
+class incidents {
     - id : Long
     - description : String
     - status : IncidentStatus
@@ -124,7 +124,7 @@ class incident {
     + resolveIncident(Long id): IncidentResponseDto
 }
 
-class analitic_report {
+class analytics_report {
     - id : Long
     - co2_savings_kg : Double
     - energy_savings_euros : Double
@@ -148,24 +148,24 @@ class anl_audit_log {
 }
 
 ' Inheritance
-ast_resource <|-- ast_desk
-ast_resource <|-- ast_room
+ast_resources <|-- ast_desks
+ast_resources <|-- ast_rooms
 
 ' Relationships
-usr_user "1" --> "0..*" reservation : makes
-usr_user "1" --> "0..*" incident : reports
-organization "1" --> "0..*" ast_floor : has
-organization "1" --> "1..*" usr_user : hire
-organization "1" --> "0..*" analitic_report : generates
+usr_users "1" --> "0..*" reservation : makes
+usr_users "1" --> "0..*" incidents : reports
+organizations "1" --> "0..*" ast_floors : has
+organizations "1" --> "1..*" usr_users : hire
+organizations "1" --> "0..*" analytics_report : generates
 
-ast_floor "1" --> "1..*" ast_room : contains
-ast_room "1" --> "0..*" ast_desk : groups
-ast_resource "1" --> "0..*" reservation : has
-ast_resource "1" --> "0..*" incident : has
+ast_floors "1" --> "1..*" ast_rooms : contains
+ast_rooms "1" --> "0..*" ast_desks : groups
+ast_resources "1" --> "0..*" reservation : has
+ast_resources "1" --> "0..*" incidents : has
 
-reservation "0..*" --> "1" ast_resource : books
+reservation "0..*" --> "1" ast_resources : books
 
-incident "0..*" --> "1" ast_resource : targets
+incidents "0..*" --> "1" ast_resources : targets
 
 @enduml
 ```
