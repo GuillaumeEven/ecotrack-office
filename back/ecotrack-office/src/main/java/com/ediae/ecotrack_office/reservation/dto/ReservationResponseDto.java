@@ -3,8 +3,6 @@ package com.ediae.ecotrack_office.reservation.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.ediae.ecotrack_office.assets.dto.ResourceResponseDto;
-import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
 import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
 
 public class ReservationResponseDto {
@@ -18,12 +16,13 @@ public class ReservationResponseDto {
     private Long userId;
     private String resourceName;
     private String resourceEquipmentList;
+    private String resourceType;
 
     // Constructores
 
     public ReservationResponseDto () {}
 
-    public ReservationResponseDto (Long id, LocalDate date, ReservationStatus status, LocalDateTime createdAt, Long userId, String resourceName, String resourceEquipmentList) {
+    public ReservationResponseDto (Long id, LocalDate date, ReservationStatus status, LocalDateTime createdAt, Long userId, String resourceName, String resourceEquipmentList, String resourceType) {
         this.id = id;
         this.date = date;
         this.status = status;
@@ -31,6 +30,7 @@ public class ReservationResponseDto {
         this.userId = userId;
         this.resourceName = resourceName;
         this.resourceEquipmentList = resourceEquipmentList;
+        this.resourceType = resourceType;
     }
 
     // Getter y Setter
@@ -96,5 +96,14 @@ public class ReservationResponseDto {
     public void setResourceEquipmentList (String resourceEquipmentList) {
 
         this.resourceEquipmentList = resourceEquipmentList;
+    }
+
+    public String getResourceType () {
+
+        return this.resourceType;
+    }
+    public void setResourceType (String resourceType) {
+
+        this.resourceType = resourceType;
     }
 }

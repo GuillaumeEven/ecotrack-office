@@ -5,6 +5,7 @@ export interface ReservationResponseModel {
     status: string;
     createdAt: string;
     userId: number;
+    resourceType?: string;
     resourceName: string;
     resourceEquipmentList: string;
 }
@@ -16,6 +17,7 @@ export interface ReservationResponseWithNameModel {
     status: string;
     createdAt: string;
     userId: number;
+    resourceType?: string;
     userFullName: string;
     resourceName: string;
     resourceEquipmentList: string;

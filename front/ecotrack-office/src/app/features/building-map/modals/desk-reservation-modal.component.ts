@@ -116,7 +116,7 @@ export class DeskReservationModalComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           const resourceType = this.isMeetingRoom ? 'Sala de reunión' : 'Escritorio';
-          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" se ha reservado con éxtio!`;
+          this.successMessage = `${resourceType} "${this.deskWithStatus?.desk?.name}" se ha reservado con éxito!`;
           this.notificationService.success(this.successMessage);
           this.onClose();
           this.reserved.emit();

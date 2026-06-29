@@ -144,7 +144,17 @@
           @for (reserva of activeReservations; track reserva.id) {
             <div class="booking-card">
               <div class="booking-card__image-wrapper">
-                <img class="booking-card__image" [alt]="reserva.resourceName" src="images/imagen-escritorio.webp">
+                <img
+                  class="booking-card__image"
+                  [alt]="reserva.resourceName"
+                  [src]="'images/' + (
+                    reserva.resourceType && reserva.resourceType.includes('desk')
+                      ? 'desk.jpg'
+                      : (reserva.resourceType && reserva.resourceType.includes('room')
+                          ? 'meeting-room.jpg'
+                          : 'imagen-escritorio.webp')
+                  )"
+                >
 
                 <!--POR SI QUIERO PONER EN LA FOTO HOY/MAÑANA BLABLABLA
                 <div class="booking-card__badge-time">{{ reserva.date }}</div>
