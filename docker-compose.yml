@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
 
   # ============================================================================
-  # Spring Boot Backend (single runtime profile: production)
+  # Spring Boot Backend (runtime profile configurable)
   # ============================================================================
   backend:
     build:
@@ -45,7 +45,8 @@ services:
       DB_URL: jdbc:mysql://mysql:3306/${DB_NAME:-ecotrack}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
 
       # Spring configuration
-      SPRING_PROFILES_ACTIVE: prod
+      # Local default is dev for seeded data; deployment overrides to prod.
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
       SERVER_PORT: 8080
 
       # JWT configuration (required)

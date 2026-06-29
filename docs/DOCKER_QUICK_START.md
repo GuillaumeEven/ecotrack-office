@@ -16,18 +16,18 @@
 cd ecotrack-office
 
 # Load development environment
-cp .env.dev .env
+cp .env.example .dockerenv
 
 # Build and start services
-docker-compose up -d
+docker compose --env-file .dockerenv up -d
 
 # Check status
-docker-compose ps
+docker compose --env-file .dockerenv ps
 
 # View logs
-docker-compose logs -f backend
-docker-compose logs -f frontend
-docker-compose logs -f mysql
+docker compose --env-file .dockerenv logs -f backend
+docker compose --env-file .dockerenv logs -f frontend
+docker compose --env-file .dockerenv logs -f mysql
 ```
 
 Access the application:
@@ -38,62 +38,59 @@ Access the application:
 ### 2. Production Environment (02 Switch)
 
 ```bash
-# Copy production environment (update with actual secrets)
-cp .env.prod .env
-
 # Update secrets from GitHub or environment variables
 export DB_PASSWORD="your_secure_password"
 export JWT_SECRET="your_jwt_secret"
 # ... (set other required variables)
 
-# Use production compose file
-docker-compose -f docker-compose.prod.yml up -d
+# Use production environment file
+docker compose --env-file .env.prod up -d
 
 # Check status
-docker-compose -f docker-compose.prod.yml ps
+docker compose --env-file .env.prod ps
 ```
 
 ## Common Commands
 
 ```bash
 # View service logs
-docker-compose logs -f <service_name>
+docker compose --env-file .dockerenv logs -f <service_name>
 
 # Rebuild services
-docker-compose build
+docker compose --env-file .dockerenv build
 
 # Force rebuild (no cache)
-docker-compose build --no-cache
+docker compose --env-file .dockerenv build --no-cache
 
 # Stop services (keep data)
-docker-compose down
+docker compose --env-file .dockerenv down
 
 # Stop and remove volumes (DELETE DATA!)
-docker-compose down -v
+docker compose --env-file .dockerenv down -v
 
 # Restart a service
-docker-compose restart <service_name>
+docker compose --env-file .dockerenv restart <service_name>
 
 # Access MySQL shell
-docker-compose exec mysql mysql -u ecotrack_user -p ecotrack
+docker compose --env-file .dockerenv exec mysql mysql -u ecotrack_user -p ecotrack
 
 # Access backend container
-docker-compose exec backend bash
+docker compose --env-file .dockerenv exec backend bash
 
 # Execute command in container
-docker-compose exec backend curl http://localhost:8080/actuator/health
+docker compose --env-file .dockerenv exec backend curl http://localhost:8080/actuator/health
 ```
 
 ## Troubleshooting
 
 ### Database connection failed
-- Check MySQL container is running: `docker-compose ps`
-- Verify credentials in .env file
-- Check logs: `docker-compose logs mysql`
+- Check MySQL container is running: `docker compose --env-file .dockerenv ps`
+- Verify credentials in .dockerenv file
+- Check logs: `docker compose --env-file .dockerenv logs mysql`
 
 ### Frontend can't reach backend API
 - Verify backend container is running and healthy
-- Check `CORS_ALLOWED_ORIGINS` in .env
+- Check `CORS_ALLOWED_ORIGINS` in .dockerenv
 - Check Nginx proxy config: `front/ecotrack-office/nginx.conf`
 
 ### Port already in use
@@ -106,7 +103,7 @@ kill -9 <PID>
 
 ### Rebuild everything from scratch
 ```bash
-docker-compose down -v
+docker compose --env-file .dockerenv down -v
 docker system prune -a
 docker-compose up -d
 ```

@@ -119,6 +119,7 @@ log "=== Starting new services ==="
 
 export DOCKER_REGISTRY="$REGISTRY/"
 export VERSION="$VERSION"
+export SPRING_PROFILES_ACTIVE="prod"
 
 docker-compose -f docker-compose.yml up -d || error "Failed to start services"
 log "✓ Services started"
