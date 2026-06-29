@@ -31,16 +31,16 @@
                 <p class="hero-description">Ecotrack - Office proporciona herramientas de nivel empresarial para la reserva de salas, la asignación de escritorios y el tratamiento de incidencias. Gestione su oficina física con la precisión de una plataforma digital.</p>
                 <div class="hero-actions">
                     <a class="btn-primary-action" href="#registration">Empezar ahora</a>
-                    <button class="btn-action">
-                        <span class="material-symbols-outlined">play_circle</span>
-                        Ver demo (si es que hacemos un video y se puede poner xd)
-                    </button>
                 </div>
             </div>
-            <div class="hero-image-block">
+                <div class="hero-image-block">
                 <div class="blur-blob blob-top"></div>
                 <div class="blur-blob blob-bottom"></div>
-                <img class="hero-image" alt="Vista inicial de la applicación una vez se ha iniciado sesión." src="images/imagen-app.webp"/>
+                <img
+                    class="hero-image"
+                    alt="Vista de la pagina de metrics"
+                    [src]="(currentTheme$ | async) === 'dark' ? 'images/dash-dark.webp' : 'images/dash-light.webp'"
+                />
             </div>
         </div>
     </section>
@@ -56,7 +56,12 @@
                         <h3 class="card-title">Mapas interactivos de reservas organizados por plantas</h3>
                         <p class="card-text">Mapas interactivos sencillos para la reserva de escritorios y salas de reuniones. Estos cuentan con una función de apertura de nuevas salas para el ahorro de energia.</p>
                     </div>
-                    <img class="card-image-cover" alt="Vista de un mapa interactivo de reservas" src="images/imagen-mapa.webp" loading="lazy"/>
+                    <img
+                        class="card-image-cover"
+                        alt="Vista inicial de la applicación una vez se ha iniciado sesión."
+                        loading="lazy"
+                        [src]="(currentTheme$ | async) === 'dark' ? 'images/map-dark.webp' : 'images/map-light.webp'"
+                    />
                 </div>
 
                 <div class="card-small bento-dark-card">
@@ -181,7 +186,7 @@
 
                                         @if(registerForm.get('passwordHash')?.hasError('required')) {
 
-                                            <small class="error-message">La contraseña es obligatoria.</small>                                            
+                                            <small class="error-message">La contraseña es obligatoria.</small>
                                         }
                                         @if(registerForm.get('passwordHash')?.hasError('minlength')) {
 
