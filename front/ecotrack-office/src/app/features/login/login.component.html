@@ -3,7 +3,7 @@
     <!-- Logo -->
     <div class="login-header">
       <h1>EcoTrack Office</h1>
-      <p>Sign in to your account</p>
+      <p>Accede a tu cuenta</p>
     </div>
 
     <!-- Card -->
@@ -11,7 +11,7 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <!-- Email -->
         <div class="form-group">
-          <label>Email Address</label>
+          <label class="form-label">Correo electrónico</label>
           <input
             type="email"
             formControlName="email"
@@ -22,13 +22,13 @@
             *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
             class="error-message"
           >
-            Please enter a valid email.
+            Por favor, introduce un correo electrónico válido.
           </p>
         </div>
 
         <!-- Password -->
         <div class="form-group">
-          <label>Password</label>
+          <label class="form-label">Contraseña</label>
           <input
             type="password"
             formControlName="password"
@@ -39,7 +39,7 @@
             *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
             class="error-message"
           >
-            Password is required.
+            Por favor, introduce una contraseña.
           </p>
         </div>
 
@@ -52,7 +52,7 @@
           [disabled]="form.invalid || isLoading"
           class="btn btn-primary btn-block"
         >
-          {{ isLoading ? 'Signing in...' : 'Sign in' }}
+          {{ isLoading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
         </button>
       </form>
     </div>

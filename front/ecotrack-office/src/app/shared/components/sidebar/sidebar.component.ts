@@ -44,7 +44,7 @@ export class SidebarComponent {
   private filterNavItems(): void {
     if (this.role !== 'ADMIN') {
       this.navItems = this.navItems.filter(
-        item => item.label !== 'Empleados' && item.label !== 'Empresa' && item.label !== 'Gestionar espacio' && item.label !== 'Analíticas'
+        item => item.label !== 'Empleados' && item.label !== 'Empresa' && item.label !== 'Gestionar espacio'
       );
     }
   }
