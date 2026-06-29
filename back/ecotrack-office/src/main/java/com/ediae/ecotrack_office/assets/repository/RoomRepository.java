@@ -14,6 +14,8 @@ import com.ediae.ecotrack_office.assets.enums.RoomType;
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
     List<RoomEntity> findByFloor_Id(Long floorId);
 
+    List<RoomEntity> findByFloor_IdAndIsActiveTrue(Long floorId);
+
     Long countByFloor_Id(Long floorId);
 
     Long countByFloor_IdAndStatus(Long floorId, ResourceStatus status);

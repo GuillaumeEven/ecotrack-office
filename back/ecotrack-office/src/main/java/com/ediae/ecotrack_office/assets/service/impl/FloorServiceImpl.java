@@ -7,12 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ediae.ecotrack_office.assets.dto.FloorRequestDto;
+import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 import com.ediae.ecotrack_office.assets.entity.FloorEntity;
+import com.ediae.ecotrack_office.assets.entity.RoomEntity;
 import com.ediae.ecotrack_office.assets.mapper.FloorMapper;
 import com.ediae.ecotrack_office.assets.model.FloorModel;
+import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.FloorRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
 import com.ediae.ecotrack_office.assets.service.FloorService;
+import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 
 
 @Service
@@ -23,6 +27,9 @@ public class FloorServiceImpl implements FloorService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private DeskRepository deskRepository;
 
     @Autowired
     private FloorMapper floorMapper;
@@ -64,14 +71,40 @@ public class FloorServiceImpl implements FloorService {
     @Override
     public FloorModel updateFloor(Long id, FloorRequestDto floorRequestDto) {
         FloorEntity existingEntity = floorRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Floor not found with id: " + id));
+            .orElseThrow(() -> new NotFoundException("Floor not found with id: " + id));
         FloorModel model = floorMapper.fromRequestDto(floorRequestDto);
         if (model.getName() == null) {
             model.setName("Floor " + model.getLevel());
         }
-        FloorEntity entity = floorMapper.toEntity(model);
-        entity.setId(existingEntity.getId());
-        FloorEntity updatedEntity = floorRepository.save(entity);
+        if (model.getIsActive() != null && !model.getIsActive().equals(existingEntity.getIsActive())) {
+            boolean targetActiveState = model.getIsActive();
+            List<RoomEntity> floorRooms = roomRepository.findByFloor_Id(id);
+
+            for (RoomEntity room : floorRooms) {
+                if (!Boolean.valueOf(targetActiveState).equals(room.getIsActive())) {
+                    room.setIsActive(targetActiveState);
+                    roomRepository.save(room);
+                }
+
+                List<DeskEntity> roomDesks = deskRepository.findByRoom_Id(room.getId());
+                for (DeskEntity desk : roomDesks) {
+                    if (!Boolean.valueOf(targetActiveState).equals(desk.getIsActive())) {
+                        desk.setIsActive(targetActiveState);
+                        deskRepository.save(desk);
+                    }
+                }
+            }
+        }
+
+        if (model.getLevel() != null) {
+            existingEntity.setLevel(model.getLevel());
+        }
+        existingEntity.setName(model.getName());
+        if (model.getIsActive() != null) {
+            existingEntity.setIsActive(model.getIsActive());
+        }
+
+        FloorEntity updatedEntity = floorRepository.save(existingEntity);
         return floorMapper.fromEntity(updatedEntity);
     }
 

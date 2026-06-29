@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ediae.ecotrack_office.assets.dto.RoomRequestDto;
+import com.ediae.ecotrack_office.assets.entity.DeskEntity;
 import com.ediae.ecotrack_office.assets.entity.RoomEntity;
-import com.ediae.ecotrack_office.assets.mapper.DeskMapper;
 import com.ediae.ecotrack_office.assets.mapper.RoomMapper;
-import com.ediae.ecotrack_office.assets.model.DeskModel;
 import com.ediae.ecotrack_office.assets.model.RoomModel;
 import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.RoomRepository;
@@ -97,17 +96,13 @@ public class RoomServiceImpl implements RoomService {
                     "Cannot change floor of the room. Floor is immutable.");
         }
 
-        if (updatedModel.getIsActive() != null && !updatedModel.getIsActive() && existingEntity.getIsActive()) {
-            // Check if there are desks associated with the room
-            if (!deskRepository.findByRoom_Id(roomId).isEmpty()) {
-                List<DeskModel> desks = deskRepository.findByRoom_Id(roomId).stream()
-                        .map(DeskMapper::fromEntity)
-                        .toList();
-                for (DeskModel desk : desks) {
-                    if (desk.getIsActive()) {
-                        desk.setIsActive(false);
-                        deskRepository.save(DeskMapper.toEntity(desk));
-                    }
+        if (updatedModel.getIsActive() != null && !updatedModel.getIsActive().equals(existingEntity.getIsActive())) {
+            boolean targetActiveState = updatedModel.getIsActive();
+            List<DeskEntity> desks = deskRepository.findByRoom_Id(roomId);
+            for (DeskEntity desk : desks) {
+                if (!Boolean.valueOf(targetActiveState).equals(desk.getIsActive())) {
+                    desk.setIsActive(targetActiveState);
+                    deskRepository.save(desk);
                 }
             }
         }
