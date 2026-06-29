@@ -21,23 +21,32 @@ th {
   letter-spacing: var(--letter-spacing-label);
   color: var(--on-surface-variant);
   text-align: left;
-  padding: var(--spacing-md);
+  padding: var(--spacing-xs);
   border-bottom: var(--border-width-1) solid var(--outline-variant);
   text-align: center;
 }
 
 td {
-  padding: var(--spacing-md);
+  /* padding: var(--spacing-md); */
   border-bottom: var(--border-width-1) solid var(--outline-variant);
   font: var(--font-body-md);
   color: var(--on-surface);
   text-align: center;
 }
 
+th,
+td {
+  vertical-align: middle;
+}
+
+thead tr,
+tbody tr {
+  height: 4rem;
+}
+
 th.actions,
 td.actions {
-  display: flex;
-  justify-content: flex-end;
+  text-align: right;
   padding-right: var(--spacing-lg);
 }
 

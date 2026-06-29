@@ -17,6 +17,7 @@ import { FloorModel, RoomModel, DeskModel, IncidentResponse } from '@models/inde
   selector: 'app-incidents',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DatePipe],
+  styleUrls: ['./incidents.component.css'],
   templateUrl: './incidents.component.html',
 })
 export class IncidentsComponent implements OnInit {
