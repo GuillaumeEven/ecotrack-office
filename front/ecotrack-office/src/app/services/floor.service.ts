@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, switchMap, throwError } from 'rxjs';
 
 import { FloorModel, FloorWithStatusModel } from '@models/index.model';
 import { UserService } from './user.service';
@@ -30,9 +30,26 @@ export class FloorService {
   /**
    * Fetch all floors for an organization
    */
-  list(organizationId: number = this.organizationId!): Observable<FloorModel[]> {
-    const url = `${this.BASE_URL}/organization/${organizationId}`;
-    return this.httpClient.get<FloorModel[]>(url);
+  list(organizationId?: number): Observable<FloorModel[]> {
+    const resolvedOrganizationId = organizationId ?? this.organizationId;
+
+    if (this.isValidOrganizationId(resolvedOrganizationId)) {
+      const url = `${this.BASE_URL}/organization/${resolvedOrganizationId}`;
+      return this.httpClient.get<FloorModel[]>(url);
+    }
+
+    // Fallback: resolve org id from profile if service is called before constructor subscription updates state.
+    return this.userService.getMe().pipe(
+      switchMap((user) => {
+        if (!this.isValidOrganizationId(user.organizationId)) {
+          return throwError(() => new Error('organizationId must be a valid number'));
+        }
+
+        this.organizationId = user.organizationId;
+        const url = `${this.BASE_URL}/organization/${user.organizationId}`;
+        return this.httpClient.get<FloorModel[]>(url);
+      })
+    );
   }
 
   /**
@@ -75,5 +92,9 @@ export class FloorService {
     const url = `${this.BASE_URL}/status`;
     const params = new HttpParams().set('date', date);
     return this.httpClient.get<FloorWithStatusModel[]>(url, { params });
+  }
+
+  private isValidOrganizationId(value: number | null | undefined): value is number {
+    return typeof value === 'number' && Number.isFinite(value);
   }
 }

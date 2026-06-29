@@ -8,6 +8,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -89,6 +90,30 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, errorCode.getStatus());
     }
+
+        /**
+         * Maneja errores de conversión de tipo en parámetros (query/path),
+         * por ejemplo organizationId=undefined cuando se espera Long.
+         */
+        @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+        public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(
+                        MethodArgumentTypeMismatchException ex,
+                        WebRequest request) {
+
+                ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
+                String message = "Parámetro '" + ex.getName() + "' inválido";
+
+                log.warn("Error de conversión de parámetro '{}': valor recibido='{}', tipo esperado='{}'",
+                                ex.getName(), ex.getValue(), ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
+
+                ErrorResponse errorResponse = new ErrorResponse(
+                                errorCode.getStatus().value(),
+                                errorCode.getStatus().getReasonPhrase(),
+                                message
+                );
+
+                return new ResponseEntity<>(errorResponse, errorCode.getStatus());
+        }
 
         /**
          * Maneja parámetros de request requeridos que faltan.

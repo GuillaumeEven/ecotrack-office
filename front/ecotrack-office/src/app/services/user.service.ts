@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { UserResponse,
   UserMeRequest,
   ChangePasswordRequest,
@@ -59,6 +59,10 @@ export class UserService {
     organizationId: number,
     filters: UserFilters = {},
   ): Observable<PageResponse<UserResponse>> {
+    if (!this.isValidOrganizationId(organizationId)) {
+      return throwError(() => new Error('organizationId must be a valid number'));
+    }
+
     let params = new HttpParams()
       .set('organizationId', String(organizationId))
       .set('page', String(filters.page ?? 0))
@@ -72,6 +76,10 @@ export class UserService {
   }
 
   getUserStats(organizationId: number): Observable<UserStats> {
+    if (!this.isValidOrganizationId(organizationId)) {
+      return throwError(() => new Error('organizationId must be a valid number'));
+    }
+
     const params = new HttpParams().set('organizationId', String(organizationId));
     return this.http.get<UserStats>(`${this.BASE_URL}/stats`, { params });
   }
@@ -95,5 +103,9 @@ export class UserService {
 
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.BASE_URL}/${id}`);
+  }
+
+  private isValidOrganizationId(value: number | null | undefined): value is number {
+    return typeof value === 'number' && Number.isFinite(value);
   }
 }
