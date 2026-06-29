@@ -11,6 +11,7 @@ _bmad-output/
 .env.prod
 .env.local
 .env.*.local
+.env.dev.local
 
 # OS
 .DS_Store
@@ -38,12 +39,6 @@ out/
 # ============================================================================
 # Environment & Secrets
 # ============================================================================
-.env
-.env.local
-.env.*.local
-.env.prod
-.env.dev.local
-.env.dev
 
 # Spring Boot backend
 back/**/target/
