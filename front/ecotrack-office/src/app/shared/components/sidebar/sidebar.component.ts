@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -17,6 +17,8 @@ export interface NavItem {
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
+  @Input() mobileOpen = false;
+  @Output() requestClose = new EventEmitter<void>();
 
   // get the logged-in user's role
   role: string = '';
@@ -47,5 +49,9 @@ export class SidebarComponent {
     } else if (this.role === 'EMPLOYEE') {
       this.navItems = this.navItems.filter(item => item.label !== 'Gestionar espacio' && item.label !== 'Empleados' && item.label !== 'Empresa');
     }
+  }
+
+  onRequestClose(): void {
+    this.requestClose.emit();
   }
 }

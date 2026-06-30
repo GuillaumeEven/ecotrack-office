@@ -21,13 +21,13 @@ th {
   letter-spacing: var(--letter-spacing-label);
   color: var(--on-surface-variant);
   text-align: left;
-  padding: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-bottom: var(--border-width-1) solid var(--outline-variant);
   text-align: center;
 }
 
 td {
-  /* padding: var(--spacing-md); */
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-bottom: var(--border-width-1) solid var(--outline-variant);
   font: var(--font-body-md);
   color: var(--on-surface);
@@ -58,11 +58,36 @@ tbody tr:hover {
   background-color: var(--surface-container-low);
 }
 
+/* Wrappers de scroll horizontal partagés dans l'app */
+.table-responsive,
+.table-container,
+.gtable-wrapper,
+.reservations-table-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Responsive table - show EMAIL column on desktop */
 @media (min-width: 1024px) {
   th.email-col,
   td.email-col {
     display: table-cell !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .table-responsive table,
+  .table-container table,
+  .gtable-wrapper table,
+  .reservations-table-scroll table {
+    min-width: 760px;
+  }
+
+  th,
+  td {
+    padding: 12px 16px;
   }
 }
 

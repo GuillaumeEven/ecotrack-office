@@ -29,6 +29,33 @@ header > div {
   margin: 0 auto;
 }
 
+.burger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: var(--border-width-1) solid var(--border-color);
+  background-color: var(--surface);
+  color: var(--on-surface);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.burger-btn:hover {
+  background-color: var(--surface-container);
+}
+
+.burger-btn:active {
+  transform: scale(0.95);
+}
+
+.burger-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* Logo/Brand */
 .logo-section {
   display: flex;
@@ -64,7 +91,28 @@ header > div {
   gap: var(--spacing-md);
 }
 
+.profile-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: var(--border-width-1) solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--on-surface);
+  background-color: var(--surface);
+  text-decoration: none;
+}
+
+.profile-btn span {
+  font-size: 18px;
+}
+
 .logout-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
   color: var(--primary);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-md);
@@ -74,6 +122,11 @@ header > div {
   background: transparent;
   transition: transform var(--transition-fast);
   border-radius: var(--radius-sm);
+}
+
+.logout-icon {
+  display: none;
+  font-size: 18px;
 }
 
 .logout-btn:hover {
@@ -123,6 +176,34 @@ header > div {
   font-size: 20px;
 }
 
+@media (max-width: 1023px) {
+  .logout-btn {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: var(--border-width-1) solid var(--border-color);
+    background-color: var(--surface);
+  }
+
+  .logout-label {
+    display: none;
+  }
+
+  .logout-icon {
+    display: inline-flex;
+  }
+
+  .theme-toggle-btn {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+  }
+
+  .theme-toggle-btn span {
+    font-size: 18px;
+  }
+}
+
 /* Avatar Link */
 .avatar-link {
   display: inline-block;
@@ -152,10 +233,12 @@ header > div {
   header > div {
     padding: 0 var(--spacing-md);
     height: 64px;
+    gap: var(--spacing-sm);
   }
 
   .logo-section {
     gap: var(--spacing-md);
+    margin-right: auto;
   }
 
   .logo-section span {
@@ -166,8 +249,27 @@ header > div {
     gap: var(--spacing-sm);
   }
 
+  .avatar-link {
+    display: none;
+  }
+
+  .profile-btn {
+    display: inline-flex;
+  }
+
   .logout-btn {
-    font-size: var(--font-size-sm);
-    padding: var(--spacing-xs) var(--spacing-xs);
+    width: 32px;
+    height: 32px;
+  }
+
+  .theme-toggle-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .burger-btn {
+    display: none;
   }
 }

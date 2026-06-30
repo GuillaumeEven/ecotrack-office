@@ -13,6 +13,13 @@
   position: relative;
 }
 
+@media (max-width: 640px) {
+  .layout-wrapper {
+    height: calc(100vh - 64px);
+    margin-top: 64px;
+  }
+}
+
 .layout-content {
   flex: 1;
   overflow-y: auto; /* El scroll privado de las vistas (reservas, profile) ocurre AQUÍ */

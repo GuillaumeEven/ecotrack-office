@@ -496,14 +496,34 @@
 .employee-cell__avatar {
     width: 32px;
     height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    flex: 0 0 32px;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     background-color: #e5eeff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 16px;
+    line-height: 1;
     color: #000000;
+}
+
+.reservations-table-scroll,
+.gtable-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.reservations-table-scroll table,
+.gtable-wrapper table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
 }
 
 .employee-cell__name { font-weight: 600; }
@@ -558,5 +578,10 @@
     .bookings-filters__grid,
     .active-reservations__grid {
         grid-template-columns: 1fr;
+    }
+
+    .reservations-table-scroll table,
+    .gtable-wrapper table {
+        min-width: 680px;
     }
 }

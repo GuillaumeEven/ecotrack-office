@@ -28,6 +28,22 @@
   gap: var(--spacing-gutter);
 }
 
+.form-column,
+.table-column {
+  min-width: 0;
+}
+
+.incidencias-grid .card {
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+.form-column .card form {
+  min-width: 320px;
+}
+
 @media (min-width: 1024px) {
   .incidencias-grid {
     grid-template-columns: 4fr 8fr;
@@ -91,7 +107,16 @@
 /* Utilidades de la Tabla */
 .table-responsive {
   overflow-x: auto;
+  overflow-y: hidden;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: var(--spacing-xs);
+}
+
+.table-responsive table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
 }
 
 .font-medium {
@@ -162,4 +187,10 @@
 
 .form-row:nth-child(4) {
   flex: 1 1 100%;
+}
+
+@media (max-width: 767px) {
+  .table-responsive table {
+    min-width: 720px;
+  }
 }

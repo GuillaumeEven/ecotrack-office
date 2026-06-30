@@ -1,4 +1,14 @@
-<aside>
+<div
+  class="sidebar-backdrop"
+  [class.open]="mobileOpen"
+  (click)="onRequestClose()"
+  aria-hidden="true"
+></div>
+
+<aside
+  id="app-sidebar-nav"
+  [class.mobile-open]="mobileOpen"
+>
   <!-- Workspace identity AQUÍ SI QUEREMOS PONER EL NOMBRE DE LA PERSONA QUE ESTÁ LOGUEADA Y SU ROL
   <div class="workspace-identity">
     <div class="flex">
@@ -20,6 +30,7 @@
       [routerLink]="item.route"
       routerLinkActive="router-link-active"
       [routerLinkActiveOptions]="{ exact: true }"
+      (click)="onRequestClose()"
     >
       <span class="material-symbols-outlined">{{ item.icon }}</span>
       <span>{{ item.label }}</span>

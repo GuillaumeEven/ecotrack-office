@@ -12,8 +12,23 @@
   display: block;
 }
 
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 28, 48, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+  z-index: calc(var(--z-sidebar) - 1);
+}
+
+.sidebar-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 aside {
-  display: none;
+  display: flex;
   flex-direction: column;
   height: 100vh;
   position: fixed;
@@ -25,12 +40,22 @@ aside {
   border-right: var(--border-width-1) solid var(--border-color);
   z-index: var(--z-sidebar);
   padding-top: 96px; /* 24 * 4px = 96px, altura del header */
+  transform: translateX(-100%);
+  transition: transform var(--transition-normal);
+}
+
+aside.mobile-open {
+  transform: translateX(0);
 }
 
 /* Mostrar solo en pantallas lg (1024px) */
 @media (min-width: 1024px) {
+  .sidebar-backdrop {
+    display: none;
+  }
+
   aside {
-    display: flex;
+    transform: translateX(0);
   }
 }
 

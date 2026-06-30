@@ -137,7 +137,8 @@
     </div>
 
     <!-- Table content -->
-    <table *ngIf="!isLoading">
+    <div *ngIf="!isLoading" class="table-responsive">
+    <table>
       <thead>
         <tr>
           <th>Nombre</th>
@@ -207,6 +208,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <!-- Pagination -->
     <div

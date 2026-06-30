@@ -1,7 +1,13 @@
-<app-header />
+<app-header
+  [mobileMenuOpen]="isMobileMenuOpen"
+  (menuToggle)="toggleMobileMenu()"
+/>
 
 <div class="layout-wrapper">
-  <app-sidebar />
+  <app-sidebar
+    [mobileOpen]="isMobileMenuOpen"
+    (requestClose)="closeMobileMenu()"
+  />
 
   <main class="layout-content">
     <router-outlet />

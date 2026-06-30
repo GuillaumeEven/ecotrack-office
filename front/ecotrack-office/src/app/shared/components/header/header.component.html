@@ -1,5 +1,20 @@
 <header>
   <div>
+    <button
+      class="burger-btn"
+      type="button"
+      (click)="onMenuToggle()"
+      [attr.aria-expanded]="mobileMenuOpen"
+      aria-controls="app-sidebar-nav"
+      aria-label="Abrir o cerrar menú de navegación"
+    >
+      @if (mobileMenuOpen) {
+        <span class="material-symbols-outlined">close</span>
+      } @else {
+        <span class="material-symbols-outlined">menu</span>
+      }
+    </button>
+
     <!-- Logo  -->
     <div class="logo-section">
       <a [routerLink]="['/home']" aria-label="Ir a la página principal">
@@ -14,6 +29,14 @@
 
     <!-- Usuario y cerrar sesión -->
     <div class="user-actions">
+      <a
+        [routerLink]="['/profile']"
+        class="profile-btn"
+        aria-label="Ir al perfil de usuario"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
+      </a>
+
       <!-- COMENTO ESTO POR SI QUEREMOS IMPLEMENTAR LA BÚSQUEDA MÁS ADELANTE
       <div class="relative hidden sm:block">
         <span class="material-symbols-outlined">search</span>
@@ -27,8 +50,11 @@
       <button
         (click)="onLogout()"
         class="logout-btn"
+        type="button"
+        aria-label="Cerrar sesión"
       >
-        Cerrar sesión
+        <span class="material-symbols-outlined logout-icon" aria-hidden="true">logout</span>
+        <span class="logout-label">Cerrar sesión</span>
       </button>
       <a
         [routerLink]="['/profile']"
