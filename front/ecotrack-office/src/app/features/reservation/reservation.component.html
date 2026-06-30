@@ -24,44 +24,6 @@
       </div>
     }
 
-    <!-- EL FILTRO ME LO GUARDO PARA CUANDO LO TENGA TODO LISTO IMPLEMENTAR
-    <div class="bookings-filters">
-      <div class="bookings-filters__grid">
-        <div class="bookings-filters__group">
-          <label class="bookings-filters__label">STATUS</label>
-          <select class="bookings-filters__select">
-            <option>All Statuses</option>
-            <option>Confirmed</option>
-            <option>Pending</option>
-            <option>Cancelled</option>
-          </select>
-        </div>
-
-        <div class="bookings-filters__group">
-          <label class="bookings-filters__label">DATE</label>
-          <div class="bookings-filters__input-wrapper">
-            <span class="material-symbols-outlined bookings-filters__icon">calendar_today</span>
-            <input class="bookings-filters__input" type="date"/>
-          </div>
-        </div>
-
-        <div class="bookings-filters__group">
-          <label class="bookings-filters__label">RESOURCE TYPE</label>
-          <select class="bookings-filters__select">
-            <option>All Rooms</option>
-            <option>Conference Rooms</option>
-            <option>Hot Desks</option>
-            <option>Quiet Zones</option>
-          </select>
-        </div>
-
-        <div class="bookings-filters__group bookings-filters__group--actions">
-          <button class="bookings-filters__btn-apply">Apply Filters</button>
-        </div>
-      </div>
-    </div>
-    -->
-
     @if (currentTab === 'ALL_STAFF') {
       <section class="global-history">
         <div class="active-reservations__header">
@@ -156,9 +118,6 @@
                   )"
                 >
 
-                <!--POR SI QUIERO PONER EN LA FOTO HOY/MAÑANA BLABLABLA
-                <div class="booking-card__badge-time">{{ reserva.date }}</div>
-                -->
               </div>
 
               <div class="booking-card__content">
@@ -197,28 +156,6 @@
             </div>
           }
         </div>
-
-          <!-- PODRÍA SER GRACIOSO METERLO PERO SI SOBRA TIEMPO
-          <div class="stats-card">
-            <div class="stats-card__background-icon">
-              <span class="material-symbols-outlined">event_available</span>
-            </div>
-            <div class="stats-card__top">
-              <h3 class="stats-card__label">Usage This Month</h3>
-              <div class="stats-card__value">24.5<span class="stats-card__unit">Hrs</span></div>
-            </div>
-            <div class="stats-card__bottom">
-              <div class="stats-card__progress-info">
-                <span>Quota used</span>
-                <span>82%</span>
-              </div>
-              <div class="stats-card__progress-bar">
-                <div class="stats-card__progress-fill" style="width: 82%"></div>
-              </div>
-              <p class="stats-card__footer-text">Top resources: Room B, Desk 4</p>
-            </div>
-          </div>
-          -->
       </section>
 
       <section class="global-history">

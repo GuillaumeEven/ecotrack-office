@@ -74,7 +74,6 @@ export class IncidentsComponent implements OnInit {
     });
   }
 
-  // Load all floors at initialization
   loadFloors(): void {
     this.floorService.list().subscribe({
       next: (data) => {
@@ -87,25 +86,21 @@ export class IncidentsComponent implements OnInit {
     });
   }
 
-  // Wrapper method for template change event
   selectFloor(valueStr: string): void {
     const value = valueStr ? Number(valueStr) : null;
     this.onFloorSelected(value);
   }
 
-  // Wrapper method for template change event
   selectRoom(valueStr: string): void {
     const value = valueStr ? Number(valueStr) : null;
     this.onRoomSelected(value);
   }
 
-  // Wrapper method for template change event
   selectDesk(valueStr: string): void {
     const value = valueStr ? Number(valueStr) : null;
     this.onDeskSelected(value);
   }
 
-  // When a floor is selected, load its rooms
   onFloorSelected(floorId: number | null): void {
     this.selectedFloorId = floorId;
     this.selectedRoomId = null;
@@ -130,7 +125,6 @@ export class IncidentsComponent implements OnInit {
     });
   }
 
-  // When a room is selected, conditionally load desks
   onRoomSelected(roomId: number | null): void {
     this.selectedRoomId = roomId;
     this.selectedDeskId = null;
@@ -138,22 +132,20 @@ export class IncidentsComponent implements OnInit {
     this.desks = [];
 
     if (roomId === null) {
-      // "Ninguna sala" selected - no resource selected
+
       this.cdr.detectChanges();
       return;
     }
 
     const selectedRoom = this.rooms.find(r => r.id === roomId);
 
-    // If it's a meeting room, don't load desks
     if (selectedRoom && selectedRoom.roomType === 'MEETING_ROOM') {
-      // For meeting rooms, the resource is the room itself
+
       this.selectedResourceId = roomId;
       this.cdr.detectChanges();
       return;
     }
 
-    // If it's a desk area, load its desks
     if (selectedRoom && selectedRoom.roomType === 'DESK_AREA') {
       this.deskService.listByRoom(roomId).subscribe({
         next: (data) => {
@@ -168,15 +160,14 @@ export class IncidentsComponent implements OnInit {
     }
   }
 
-  // When a desk is selected or "Sala entera" is clicked
   onDeskSelected(deskId: number | null): void {
     this.selectedDeskId = deskId;
 
     if (deskId === null) {
-      // "Sala entera" selected
+
       this.selectedResourceId = this.selectedRoomId;
     } else {
-      // Individual desk selected
+
       this.selectedResourceId = deskId;
     }
 
@@ -216,7 +207,7 @@ export class IncidentsComponent implements OnInit {
   }
 
   /**
-   * 🔄 MOTOR DE TRADUCCIÓN EXACTO DE LA BASE DE DATOS
+   * MOTOR DE TRADUCCIÓN EXACTO DE LA BASE DE DATOS
    * Traduce los IDs incrementales de MySQL en los nombres normativos del MVP.
    */
   getResourceName(id: number): string {
