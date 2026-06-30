@@ -47,17 +47,6 @@
   }
 }
 
-<<<<<<< HEAD
-=======
-/* Card */
-/* .card {
-  background-color: var(--surface);
-  border: var(--border-width-1) solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-} */
-
->>>>>>> cf57739604ec4df00102189ad837fa521319b90e
 /* Identity Card */
 .identity-card {
   display: flex;
