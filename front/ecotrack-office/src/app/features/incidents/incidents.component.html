@@ -42,7 +42,6 @@
               <label class="form-label required">ESCRITORIO</label>
               <select #deskSelect (change)="selectDesk(deskSelect.value)"
                 [value]="selectedDeskId || ''" class="form-input">
-                <option value="">Sala entera</option>
                 <option *ngFor="let desk of desks" [value]="desk.id">{{ desk.name }}</option>
               </select>
             </div>
