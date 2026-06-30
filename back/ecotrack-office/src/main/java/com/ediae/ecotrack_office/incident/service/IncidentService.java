@@ -17,20 +17,28 @@ import com.ediae.ecotrack_office.incident.model.IncidentModel;
 import com.ediae.ecotrack_office.incident.repository.IncidentRepository;
 import com.ediae.ecotrack_office.shared.exception.NotFoundException;
 import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.ediae.ecotrack_office.users.repository.UserRepository;
 
 @Service
 public class IncidentService {
 
+    private final UserRepository userRepository;
     private final IncidentRepository incidentRepository;
 
     // Constructor limpio para inyectar la dependencia del repositorio
-    public IncidentService(IncidentRepository incidentRepository) {
+    public IncidentService(IncidentRepository incidentRepository, UserRepository userRepository) {
         this.incidentRepository = incidentRepository;
+        this.userRepository = userRepository;
     }
 
     // 1. OBTENER TODAS LAS INCIDENCIAS (GET con bucle tradicional)
-    public List<IncidentResponseDto> getAllIncidents() {
-        List<IncidentEntity> listaEntidades = incidentRepository.findAll();
+    public List<IncidentResponseDto> getAllIncidents(Long userId) {
+        Long organizationId = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + userId))
+                .getOrganization()
+                .getId();
+
+        List<IncidentEntity> listaEntidades = incidentRepository.findByUserOrganizationId(organizationId);
         List<IncidentResponseDto> listaDtos = new ArrayList<>();
 
         // Recorro las entidades una a una pasándolas por el mapeador

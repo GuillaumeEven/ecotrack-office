@@ -17,4 +17,6 @@ public interface IncidentRepository extends JpaRepository<IncidentEntity, Long> 
 
     // Buscar incidencias por el id del recurso asociado
     List<IncidentEntity> findByResourceId(Long resourceId);
+
+    List<IncidentEntity> findByUserOrganizationId(Long organizationId);
 }
