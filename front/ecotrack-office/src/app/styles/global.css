@@ -129,54 +129,6 @@ pre {
   margin-bottom: var(--spacing-md);
 }
 
-/* ---------- Barras de Desplazamiento Personalizadas ---------- */
-/* ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--surface);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #888;
-} */
-
-/* ---------- Utilidades Globales Mínimas ---------- */
-/* .text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.italic {
-  font-style: italic;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-} */
-
 /* ---------- Focus Visible para Accesibilidad ---------- */
 :focus-visible {
   outline: 2px solid var(--primary);
@@ -207,16 +159,11 @@ pre {
   align-items: center;
   padding: var(--spacing-xs);
   border-radius: var(--radius-md);
-  /* margin-bottom: var(--spacing-md); */
 }
 
 .warning-section {
   background-color: var(--warning-section);
 }
-/*
-.info-section {
-  background-color: var(--info-section);
-} */
 
 .warning-section span {
   font-size: var(--font-size-2xl);
@@ -233,13 +180,3 @@ pre {
 .warning-section strong {
   font-weight: var(--font-weight-semibold);
 }
-
-/* ---------- Font de Material Symbols Variaciones ---------- */
-/* .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-} */

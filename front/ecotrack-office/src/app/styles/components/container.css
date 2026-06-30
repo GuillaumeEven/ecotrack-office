@@ -67,17 +67,3 @@
     width: 100%;
   }
 }
-
-
-
-/* .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
-} */
-/*
-@media (min-width: var(--breakpoint-md)) {
-  .container {
-    padding: 0 var(--spacing-lg);
-  }
-} */
