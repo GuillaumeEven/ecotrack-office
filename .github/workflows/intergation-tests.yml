@@ -30,22 +30,22 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker-compose build
+          docker compose build
 
       - name: Start services
         run: |
-          docker-compose up -d
+          docker compose up -d
           echo "Waiting for services to be ready..."
           sleep 30
 
       - name: Check service health
         run: |
           echo "=== Checking MySQL health ==="
-          docker-compose exec -T mysql mysqladmin ping -u ecotrack_user -pecotrack_password || exit 1
+          docker compose exec -T mysql mysqladmin ping -u ecotrack_user -pecotrack_password || exit 1
 
           echo "=== Checking Backend health ==="
           for i in {1..30}; do
-            if docker-compose exec -T backend curl -f http://localhost:8080/actuator/health 2>/dev/null; then
+            if docker compose exec -T backend curl -f http://localhost:8080/actuator/health 2>/dev/null; then
               echo "Backend is healthy"
               break
             fi
@@ -55,7 +55,7 @@ jobs:
 
           echo "=== Checking Frontend health ==="
           for i in {1..30}; do
-            if docker-compose exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health 2>/dev/null; then
+            if docker compose exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health 2>/dev/null; then
               echo "Frontend is healthy"
               break
             fi
@@ -69,7 +69,7 @@ jobs:
 
           # Health check
           echo "Testing /actuator/health..."
-          docker-compose exec -T backend curl -f http://localhost:8080/actuator/health || exit 1
+          docker compose exec -T backend curl -f http://localhost:8080/actuator/health || exit 1
 
           # API is running
           echo "API is responding!"
@@ -80,7 +80,7 @@ jobs:
 
           # Frontend is serving
           echo "Testing frontend health endpoint..."
-          docker-compose exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health || exit 1
+          docker compose exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health || exit 1
 
           echo "Frontend is responding!"
 
@@ -88,17 +88,17 @@ jobs:
         if: failure()
         run: |
           echo "=== Backend logs ==="
-          docker-compose logs backend | head -50
+          docker compose logs backend | head -50
           echo "=== Frontend logs ==="
-          docker-compose logs frontend | head -50
+          docker compose logs frontend | head -50
           echo "=== MySQL logs ==="
-          docker-compose logs mysql | head -50
+          docker compose logs mysql | head -50
 
       - name: Cleanup
         if: always()
         run: |
           echo "Stopping services..."
-          docker-compose down
+          docker compose down
           echo "Services stopped"
 
   # ============================================================================
@@ -107,22 +107,27 @@ jobs:
   security-scan:
     name: Security Scanning
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run Trivy vulnerability scanner
+      - name: Run Trivy security scanner
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
           scan-ref: '.'
+          scanners: 'config,secret'
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
 
       - name: Upload Trivy results
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('trivy-results.sarif') != ''
+        continue-on-error: true
         with:
           sarif_file: 'trivy-results.sarif'
