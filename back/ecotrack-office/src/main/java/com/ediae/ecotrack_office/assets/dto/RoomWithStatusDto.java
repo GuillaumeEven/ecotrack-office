@@ -9,8 +9,8 @@ public class RoomWithStatusDto {
     private List<DeskWithStatusDto> desks;
     private Double occupancyRate;
     private ResourceStatus roomStatus;
-    private String reservedBy; // For meeting rooms: email of user who reserved
-    private Long reservationId; // For meeting rooms: ID of the reservation
+    private String reservedBy;
+    private Long reservationId;
 
     public RoomWithStatusDto() {
     }

@@ -37,7 +37,6 @@ public class AnalyticsReportEntity {
     @Column(name = "empty_rooms", nullable = false)
     private Integer emptyRooms;
 
-    // @CreationTimestamp // Todo prod
     @Column(name = "generated_at", nullable = false, updatable = false)
     private LocalDateTime generatedAt;
 
@@ -55,7 +54,7 @@ public class AnalyticsReportEntity {
         this.totalReservations = totalReservations;
         this.confirmedCheckIns = confirmedCheckIns;
         this.emptyRooms = emptyRooms;
-        this.generatedAt = generatedAt; // Se asigna la fecha y hora proporcionada al crear la entidad
+        this.generatedAt = generatedAt; 
         this.organization = organization;
     }
 
@@ -65,9 +64,10 @@ public class AnalyticsReportEntity {
         this.totalReservations = totalReservations;
         this.confirmedCheckIns = confirmedCheckIns;
         this.emptyRooms = emptyRooms;
-        this.generatedAt = LocalDateTime.now(); // Se asigna la fecha y hora actual al crear la entidad
+        this.generatedAt = LocalDateTime.now();
         this.organization = organization;
     }
+    
     //Getter y Setter
 
     public Long getId() {

@@ -10,7 +10,6 @@ import com.ediae.ecotrack_office.incident.model.IncidentModel;
 
 public class IncidentMapper {
 
-    // 1. Traduce de Entidad de Base de Datos a Modelo de Negocio
     public static IncidentModel toModel(IncidentEntity entity) {
         if (entity == null) return null;
         IncidentModel model = new IncidentModel();
@@ -24,7 +23,6 @@ public class IncidentMapper {
         return model;
     }
 
-    // 2. Traduce de Modelo de Negocio al Record DTO de salida (Frontend)
     public static IncidentResponseDto toResponseDto(IncidentModel model) {
         if (model == null) return null;
         return new IncidentResponseDto(
@@ -38,7 +36,6 @@ public class IncidentMapper {
         );
     }
 
-    // 3. Convierte el sobre de entrada (Request) en un Modelo de Negocio
     public static IncidentModel requestToModel(IncidentRequestDto dto) {
         if (dto == null) return null;
         IncidentModel model = new IncidentModel();
@@ -50,7 +47,6 @@ public class IncidentMapper {
         return model;
     }
 
-    // 4. Traduce el Modelo de Negocio a una Entidad limpia para la base de datos
     public static IncidentEntity toEntity(IncidentModel model) {
         if (model == null) return null;
         IncidentEntity entity = new IncidentEntity();

@@ -15,10 +15,8 @@ public class AnalyticsReportModel {
     private Integer confirmedCheckIns;
     private Integer emptyRooms;
 
-    // Constructor vacío
     public AnalyticsReportModel() {}
 
-    // Getters y Setters existentes
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -31,7 +29,6 @@ public class AnalyticsReportModel {
     public Long getOrganizationId() { return organizationId; }
     public void setOrganizationId(Long organizationId) { this.organizationId = organizationId; }
 
-    // Nuevos Getters y Setters para las métricas de analítica
     public Double getCo2SavingsKg() { return co2SavingsKg; }
     public void setCo2SavingsKg(Double co2SavingsKg) { this.co2SavingsKg = co2SavingsKg; }
 

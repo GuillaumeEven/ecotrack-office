@@ -50,10 +50,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ─────────────────────────────────────────────
-    // GET — lista paginada de usuarios por organización
-    // Solo ADMIN (se verifica en el Controller)
-    // ─────────────────────────────────────────────
     public PageResponseDto<UserResponseDto> getUsersByOrganization(Long organizationId, Pageable pageable) {
         Page<UserEntity> page = userRepository.findByOrganizationId(organizationId, pageable);
 
@@ -64,10 +60,6 @@ public class UserService {
         return new PageResponseDto<>(page, content);
     }
 
-    // ─────────────────────────────────────────────
-    // GET — un usuario por id
-    // Solo ADMIN (se verifica en el Controller)
-    // ─────────────────────────────────────────────
     public UserModel getUserById(Long id) {
         return userMapper.toModel(
                 userRepository.findById(id)
@@ -75,10 +67,6 @@ public class UserService {
         );
     }
 
-    // ─────────────────────────────────────────────
-    // POST — crear usuario
-    // Solo ADMIN (se verifica en el Controller)
-    // ─────────────────────────────────────────────
     public UserModel createUser(UserRequestDto dto) {
         if (userRepository.existsByEmail(dto.email())) {
             throw new ApplicationException(ErrorCode.DUPLICATE_RESOURCE, "Ya existe un usuario con el email: " + dto.email());
@@ -89,7 +77,6 @@ public class UserService {
 
         UserEntity entity = userMapper.toEntityFromDto(dto, organization);
 
-        // 🆕 HASHEAR CONTRASEÑA AQUÍ
         entity.setPasswordHash(passwordEncoder.encode(dto.password()));
 
         entity.setIsActive(true);
@@ -102,10 +89,6 @@ public class UserService {
         return userMapper.toModel(saved);
     }
 
-    // ─────────────────────────────────────────────
-    // POST — crear usuario
-    // Público para poder hacer el registro
-    // ─────────────────────────────────────────────
     public UserModel createUserWithCif(UserCreateRequestDto dto) {
         if (userRepository.existsByEmail(dto.email())) {
             throw new ApplicationException(ErrorCode.DUPLICATE_RESOURCE, "Ya existe un usuario con el email: " + dto.email());
@@ -116,7 +99,6 @@ public class UserService {
 
         UserEntity entity = userMapper.fromCreateDtoEntity(dto, organization);
 
-        // 🆕 HASHEAR CONTRASEÑA AQUÍ
         entity.setPasswordHash(passwordEncoder.encode(dto.password()));
 
         entity.setIsActive(true);
@@ -126,26 +108,18 @@ public class UserService {
         return userMapper.toModel(saved);
     }
 
-    // ─────────────────────────────────────────────
-    // PUT — el ADMIN modifica cualquier usuario
-    // Si cambia el rol, se registra en el audit log
-    // ─────────────────────────────────────────────
     public UserModel updateUser(Long id, UserRequestDto dto) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-        // 🆕 Preservamos los valores no mutables o requeridos que Angular no maneja en el form común
         var previousRole = entity.getRole();
         var currentConsent = entity.getConsentGiven();
         var createdAt = entity.getCreatedAt();
 
-        // El mapper actualiza los campos comunes
         userMapper.updateEntityFromDto(dto, entity);
 
-        // El rol solo lo gestiona el ADMIN desde este método
         entity.setRole(dto.role());
 
-        // 🆕 Forzamos a mantener los valores previos si el mapper los ha machacado con null
         if (entity.getConsentGiven() == null) {
             entity.setConsentGiven(currentConsent != null ? currentConsent : false);
         }
@@ -155,23 +129,18 @@ public class UserService {
 
         UserEntity saved = userRepository.save(entity);
 
-        // Si el rol cambió, lo registramos en el audit log
         if (!previousRole.equals(dto.role())) {
             auditLogService.log(
-                "ROLE_CHANGED",   // qué pasó
-                "USER",           // sobre qué tipo de objeto
-                id,               // id del usuario afectado
-                RequestContext.getUserId() // id del admin que lo hizo
+                "ROLE_CHANGED",
+                "USER",
+                id,
+                RequestContext.getUserId()
             );
         }
 
         return userMapper.toModel(saved);
     }
 
-    // ─────────────────────────────────────────────
-    // PATCH — desactivar usuario
-    // Solo ADMIN (se verifica en el Controller)
-    // ─────────────────────────────────────────────
     public void deactivateUser(Long id) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
@@ -182,11 +151,6 @@ public class UserService {
         auditLogService.log("USER_DEACTIVATED", "USER", id, RequestContext.getUserId());
     }
 
-    // ─────────────────────────────────────────────
-    // DELETE — GDPR erasure
-    // Solo ADMIN (se verifica en el Controller)
-    // No borra la fila, anonimiza los datos personales
-    // ─────────────────────────────────────────────
     public void deleteUser(Long id) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
@@ -195,26 +159,11 @@ public class UserService {
             throw new ApplicationException(ErrorCode.FORBIDDEN, "No se puede eliminar un usuario con rol ADMIN");
         }
 
-        // // Anonimizamos todos los datos personales
-        // entity.setEmail("deleted_" + id + "@deleted.local");
-        // entity.setFirstName("DELETED");
-        // entity.setLastName("DELETED");
-        // entity.setPasswordHash("");
-        // entity.setConsentGiven(false);
-        // entity.setPreferencesJson(null);
-        // entity.setIsActive(false);
-
-        // userRepository.save(entity);
-
         userRepository.deleteById(id);
 
         auditLogService.log("USER_DELETED", "USER", id, RequestContext.getUserId());
     }
 
-    // ─────────────────────────────────────────────
-    // PATCH — el usuario edita sus propios datos
-    // Cualquier usuario autenticado
-    // ─────────────────────────────────────────────
     public UserModel updateMe(Long id, UserMeRequestDto dto) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
@@ -238,20 +187,14 @@ public class UserService {
         return userMapper.toModel(userRepository.save(entity));
     }
 
-    // ─────────────────────────────────────────────
-    // PATCH — el usuario cambia su propia contraseña
-    // Cualquier usuario autenticado
-    // ─────────────────────────────────────────────
     public void changePassword(Long id, ChangePasswordRequestDto dto) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));
 
-        // 🆕 Cambiado de .equals() a passwordEncoder.matches()
         if (!passwordEncoder.matches(dto.currentPassword(), entity.getPasswordHash())) {
             throw new ApplicationException(ErrorCode.INVALID_INPUT, "La contraseña actual no es correcta");
         }
 
-        // 🆕 Cambiado a passwordEncoder.encode() para guardar el nuevo hash seguro
         entity.setPasswordHash(passwordEncoder.encode(dto.newPassword()));
         userRepository.save(entity);
 
@@ -303,10 +246,6 @@ public class UserService {
         return new UserStatsDto(total, active, newThisMonth);
     }
 
-    // ─────────────────────────────────────────────
-    // PATCH — reactivar usuario
-    // Solo ADMIN (se verifica en el Controller)
-    // ─────────────────────────────────────────────
     public void reactivateUser(Long id) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + id));

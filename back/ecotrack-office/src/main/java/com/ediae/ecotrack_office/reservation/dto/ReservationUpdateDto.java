@@ -1,11 +1,8 @@
 package com.ediae.ecotrack_office.reservation.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-import com.ediae.ecotrack_office.assets.entity.ResourceEntity;
 import com.ediae.ecotrack_office.reservation.entity.ReservationStatus;
-import com.ediae.ecotrack_office.users.entity.UserEntity;
 
 public class ReservationUpdateDto {
 

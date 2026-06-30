@@ -47,10 +47,6 @@ public class UserMapper {
         return entity;
     }
 
-    /**
-     * Crea una entidad nueva directamente desde el DTO de creación.
-     * Evita construir un UserModel intermedio innecesario en createUser().
-     */
     public UserEntity toEntityFromDto(UserRequestDto dto, OrganizationEntity organization) {
         if (dto == null) return null;
 
@@ -65,10 +61,6 @@ public class UserMapper {
         return entity;
     }
 
-    /**
-     * Actualiza los campos modificables de una entidad existente desde el DTO.
-     * El rol NO se mapea aquí por seguridad: se controla en el Service según permisos.
-     */
     public void updateEntityFromDto(UserRequestDto dto, UserEntity entity) {
         if (dto == null || entity == null) return;
 

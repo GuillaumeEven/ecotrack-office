@@ -1,8 +1,5 @@
 package com.ediae.ecotrack_office.shared.exception;
 
-/**
- * Excepción lanzada cuando se viola una regla de negocio o de dominio.
- */
 public class BusinessRuleViolationException extends ApplicationException {
 
     public BusinessRuleViolationException() {

@@ -25,13 +25,11 @@ public class IncidentService {
     private final UserRepository userRepository;
     private final IncidentRepository incidentRepository;
 
-    // Constructor limpio para inyectar la dependencia del repositorio
     public IncidentService(IncidentRepository incidentRepository, UserRepository userRepository) {
         this.incidentRepository = incidentRepository;
         this.userRepository = userRepository;
     }
 
-    // 1. OBTENER TODAS LAS INCIDENCIAS (GET con bucle tradicional)
     public List<IncidentResponseDto> getAllIncidents(Long userId) {
         Long organizationId = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + userId))
@@ -41,7 +39,6 @@ public class IncidentService {
         List<IncidentEntity> listaEntidades = incidentRepository.findByUserOrganizationId(organizationId);
         List<IncidentResponseDto> listaDtos = new ArrayList<>();
 
-        // Recorro las entidades una a una pasándolas por el mapeador
         for (IncidentEntity entidad : listaEntidades) {
             IncidentModel modelo = IncidentMapper.toModel(entidad);
             IncidentResponseDto dto = IncidentMapper.toResponseDto(modelo);
@@ -51,13 +48,12 @@ public class IncidentService {
         return listaDtos;
     }
 
-    // 2. CREAR NUEVA INCIDENCIA (POST con mapeo manual)
     public IncidentResponseDto createIncident(IncidentRequestDto requestDto) {
-        // Convertimos el sobre de entrada a nuestro modelo y luego a entidad
+
         IncidentModel model = IncidentMapper.requestToModel(requestDto);
         IncidentEntity entity = IncidentMapper.toEntity(model);
 
-        // CONEXIÓN SIMPLE: Creo los objetos de relación con los IDs del DTO, sin necesidad de consultar la base de datos para obtener las entidades completas
+        // Usamos la conexión simple
         UserEntity usuario = new UserEntity();
         usuario.setId(requestDto.userId());
         entity.setUser(usuario);
@@ -66,15 +62,12 @@ public class IncidentService {
         recurso.setId(requestDto.resourceId());
         entity.setResource(recurso);
 
-        // Guardo en la base de datos
         IncidentEntity savedEntity = incidentRepository.save(entity);
 
-        // Mapeo de vuelta para devolver el DTO de respuesta
         IncidentModel modeloGuardado = IncidentMapper.toModel(savedEntity);
         return IncidentMapper.toResponseDto(modeloGuardado);
     }
 
-    // 3. RESOLVER INCIDENCIA (PATCH con mapeo manual y actualización de campos específicos)
     public IncidentResponseDto resolveIncident(Long id) {
         Optional<IncidentEntity> resultado = incidentRepository.findById(id);
 
@@ -84,7 +77,6 @@ public class IncidentService {
 
         IncidentEntity entity = resultado.get();
 
-        // Modificamos los valores de cierre
         entity.setStatus(IncidentStatus.RESOLVED);
         entity.setResolvedAt(LocalDateTime.now());
 
@@ -94,7 +86,6 @@ public class IncidentService {
         return IncidentMapper.toResponseDto(modelo);
     }
 
-    // 4. ELIMINAR INCIDENCIA (DELETE con comprobación previa)
     public void deleteIncident(Long id) {
         Optional<IncidentEntity> resultado = incidentRepository.findById(id);
 
@@ -105,7 +96,6 @@ public class IncidentService {
         incidentRepository.deleteById(id);
     }
 
-    // 5. ACTUALIZAR / EDITAR INCIDENCIA (PUT tradicional)
     public IncidentResponseDto updateIncident(Long id, IncidentRequestDto requestDto) {
         Optional<IncidentEntity> resultado = incidentRepository.findById(id);
 
@@ -115,10 +105,8 @@ public class IncidentService {
 
         IncidentEntity entity = resultado.get();
 
-        // Modifico el texto plano
         entity.setDescription(requestDto.description());
 
-        // Asocio usuario y recurso por su ID.
         UserEntity usuario = new UserEntity();
         usuario.setId(requestDto.userId());
         entity.setUser(usuario);

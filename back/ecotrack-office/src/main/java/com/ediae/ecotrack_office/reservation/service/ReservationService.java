@@ -8,10 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ediae.ecotrack_office.assets.repository.DeskRepository;
 import com.ediae.ecotrack_office.assets.repository.ResourceRepository;
-import com.ediae.ecotrack_office.assets.repository.RoomRepository;
-import com.ediae.ecotrack_office.assets.service.ResourceStatusCalculatorService;
 import com.ediae.ecotrack_office.reservation.dto.ReservationCreateDto;
 import com.ediae.ecotrack_office.reservation.dto.ReservationUpdateDto;
 import com.ediae.ecotrack_office.reservation.entity.ReservationEntity;
@@ -30,15 +27,6 @@ public class ReservationService {
 
     @Autowired
     private ReservationRepository repository;
-
-    @Autowired
-    private ResourceStatusCalculatorService resourceStatusCalculatorService;
-
-    @Autowired
-    private DeskRepository deskRepository;
-
-    @Autowired
-    private RoomRepository roomRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -103,7 +91,6 @@ public class ReservationService {
 
     public ReservationModel createReservation (ReservationCreateDto dto) {
 
-        // 🆕 Validación: no se puede reservar en el pasado
         if (dto.getDate().isBefore(LocalDate.now())) {
             throw new ApplicationException(
                 ErrorCode.BUSINESS_RULE_VIOLATION,
@@ -111,14 +98,12 @@ public class ReservationService {
             );
         }
 
-        // Load entities from IDs
         var user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new NotFoundException("Usuario no encontrado con id: " + dto.getUserId()));
 
         var resource = resourceRepository.findById(dto.getResourceId())
                 .orElseThrow(() -> new NotFoundException("Recurso no encontrado con id: " + dto.getResourceId()));
 
-        // Create entity directly
         ReservationEntity entity = new ReservationEntity(dto.getDate(), dto.getStatus(), user, resource);
         ReservationEntity savedEntity = repository.save(entity);
 
@@ -128,7 +113,6 @@ public class ReservationService {
 
     public ReservationModel updateReservationById (Long id, ReservationUpdateDto dto) {
 
-        // 🆕 Validación: no se puede mover una reserva al pasado
         if (dto.getDate().isBefore(LocalDate.now())) {
             throw new ApplicationException(
                 ErrorCode.BUSINESS_RULE_VIOLATION,
@@ -156,7 +140,6 @@ public class ReservationService {
         ReservationEntity reservation = entity.get();
         Role currentRol = userRepository.findById(currentUserId).get().getRole();
 
-        // Authorization check should be in controller using RoleGuard
         if (!reservation.getUser().getId().equals(currentUserId) && currentRol.equals(Role.EMPLOYEE)) {
             throw new ForbiddenException("No tienes permisos para eliminar esta reserva.");
         }

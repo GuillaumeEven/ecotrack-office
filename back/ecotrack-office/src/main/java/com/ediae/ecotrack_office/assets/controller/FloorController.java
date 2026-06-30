@@ -78,9 +78,8 @@ public class FloorController {
 
     @PostMapping
     public ResponseEntity<FloorResponseDto> createFloor(@RequestBody FloorRequestDto floorRequestDto, Authentication auth) {
-        // check if admin
+
         roleGuard.requireAnyRole(auth, Role.ADMIN);
-        // add the organizationId from the authenticated user to the floorRequestDto
         Long userId = (Long) auth.getPrincipal();
         Long organizationId = userService.getOrganizationIdByUserId(userId);
         floorRequestDto.setOrganizationId(organizationId);
@@ -90,9 +89,8 @@ public class FloorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<FloorResponseDto> updateFloor(@PathVariable Long id, @RequestBody FloorRequestDto floorRequestDto, Authentication auth) {
-        // check if admin
+
         roleGuard.requireAnyRole(auth, Role.ADMIN);
-        // add the organizationId from the authenticated user to the floorRequestDto
         Long userId = (Long) auth.getPrincipal();
         Long organizationId = userService.getOrganizationIdByUserId(userId);
         floorRequestDto.setOrganizationId(organizationId);
@@ -101,9 +99,8 @@ public class FloorController {
     }
 
     @DeleteMapping("/{id}")
-    // @PreAuthorize("hasRole('ADMIN')") TODO a mirar
     public ResponseEntity<Void> deleteFloor(@PathVariable Long id, Authentication auth) {
-        // check if admin
+
         roleGuard.requireAnyRole(auth, Role.ADMIN);
         floorService.deleteFloor(id);
         return ResponseEntity.noContent().build();
