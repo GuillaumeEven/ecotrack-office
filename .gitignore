@@ -3,14 +3,17 @@ _bmad/
 _bmad-output/
 .claude/
 .gemini/
-.github/
+.github/skills/
 
 # Environment variables
 .env
+.dockerenv
+.dockerenv.*
 .env.dev
 .env.prod
 .env.local
 .env.*.local
+.env.dev.local
 
 # OS
 .DS_Store
@@ -35,6 +38,11 @@ out/
 .factorypath
 
 # Backend - Maven/Spring Boot
+# ============================================================================
+# Environment & Secrets
+# ============================================================================
+
+# Spring Boot backend
 back/**/target/
 back/**/*.class
 back/**/*.jar
@@ -63,3 +71,38 @@ front/**/*.code-workspace
 .DS_Store
 *.swp
 *.swo
+
+# Frontend
+front/**/dist/
+front/**/node_modules/
+front/**/.angular/
+front/**/.env
+
+# ============================================================================
+# Docker & Containerization
+# ============================================================================
+# Docker compose overrides (local)
+docker-compose.override.yml
+
+# Docker build artifacts
+.docker/
+
+# ============================================================================
+# IDE & Editor
+# ============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.env.local.*.js
+
+# ============================================================================
+# Logs
+# ============================================================================
+*.log
+*.logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -65,7 +65,7 @@
 
 /* Card */
 /* .card {
-  background-color: var(--surface-container-lowest);
+  background-color: var(--surface);
   border: var(--border-width-1) solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
