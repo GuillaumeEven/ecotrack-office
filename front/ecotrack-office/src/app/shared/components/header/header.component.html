@@ -3,52 +3,30 @@
     <!-- Logo  -->
     <div class="logo-section">
       <a [routerLink]="['/home']" aria-label="Ir a la página principal">
-        <img
-          class="brand-logo"
-          src="/images/favicon.png"
-          alt="EcoTrack logo"
-        />
+        <img class="brand-logo" src="/images/favicon.png" alt="EcoTrack logo" />
         <span>EcoTrack Office</span>
       </a>
     </div>
 
     <!-- Usuario y cerrar sesión -->
     <div class="user-actions">
-      <!-- COMENTO ESTO POR SI QUEREMOS IMPLEMENTAR LA BÚSQUEDA MÁS ADELANTE
-      <div class="relative hidden sm:block">
-        <span class="material-symbols-outlined">search</span>
-        <input
-          type="text"
-          placeholder="Search..."
-          class="search-input"
-        />
-      </div>
-      -->
-      <button
-        (click)="onLogout()"
-        class="logout-btn"
-      >
+
+      <button (click)="onLogout()" class="logout-btn">
         Cerrar sesión
       </button>
-      <a
-        [routerLink]="['/profile']"
-        class="avatar-link"
-        aria-label="Ir al perfil de usuario">
+      <a [routerLink]="['/profile']" class="avatar-link" aria-label="Ir al perfil de usuario">
         <img
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzmUZQ5PFwSaq7CQiv8mbs2sjHy-BJWI7JEAdTOqiooNU3ZdUcj0NAfVv2iNQMkC5FpUA58ZEIPhNinldPTwoCGI5JPr60SPzZ5t1citFachxqRQQt9bE5QK7Jl_n2msUoOwwturFie7jR0tAx_Ev_9uxKIwvsaJkFk8DF3-uuKi80PKcusGw8RDK0-Z89gQpKf8zqPSs9BZyJr4Xe5d7S6LDLOTTeri4MHPu1iyuzCPsIyJxLdp0Xuj_HL9OQuzi192AedbeZ1Cj5"
-          alt="User profile photo"
-        />
+          alt="User profile photo" />
       </a>
       <!-- Botón de Toggle Tema -->
-      <button
-        (click)="toggleTheme()"
-        class="theme-toggle-btn"
+      <button (click)="toggleTheme()" class="theme-toggle-btn"
         [attr.aria-label]="(currentTheme$ | async) === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
         type="button">
         @if ((currentTheme$ | async) === 'dark') {
-          <span class="material-symbols-outlined">light_mode</span>
+        <span class="material-symbols-outlined">light_mode</span>
         } @else {
-          <span class="material-symbols-outlined">dark_mode</span>
+        <span class="material-symbols-outlined">dark_mode</span>
         }
       </button>
     </div>

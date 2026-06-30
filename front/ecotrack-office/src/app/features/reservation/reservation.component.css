@@ -1,62 +1,4 @@
 /* ==========================================================================
-   1. CONTENEDOR PRINCIPAL Y MAQUETACIÓN GLOBAL
-   ========================================================================== */
-
-/* ==========================================================================
-   2. CABECERA DE LA PÁGINA (Título y Selector alineados)
-   ========================================================================== */
-/* .bookings-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 32px;
-    gap: 16px;
-}
-
-.bookings-header__title {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -0.01em;
-    font-weight: 600;
-    color: #0b1c30;
-    margin: 0;
-}
-
-.bookings-header__subtitle {
-    color: #45464d;
-    margin-top: 8px;
-    margin-bottom: 0;
-    font-size: 14px;
-} */
-/*
-.bookings-tabs {
-    display: flex;
-    background-color: #e5eeff;
-    border-radius: 8px;
-    padding: 4px;
-} */
-/*
-.bookings-tabs__btn {
-    padding: 6px 16px;
-    font-size: 14px;
-    line-height: 20px;
-    border-radius: 6px;
-    border: none;
-    background: transparent;
-    color: #45464d;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.bookings-tabs__btn--active {
-    background-color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-weight: 700;
-    color: #000000;
-} */
-
-/* ==========================================================================
    3. BARRA DE FILTROS (Grid en 4 Columnas forzado)
    ========================================================================== */
 .bookings-filters {
@@ -145,17 +87,6 @@
 .active-reservations__header {
     margin-bottom: 24px;
 }
-
-/* .active-reservations__title {
-    font-size: 18px;
-    line-height: 24px;
-    font-weight: 600;
-    color: #0b1c30;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-} */
 
 .active-reservations__indicator-dot {
     width: 8px;

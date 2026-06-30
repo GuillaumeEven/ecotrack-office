@@ -1,49 +1,12 @@
 <aside>
-  <!-- Workspace identity AQUÍ SI QUEREMOS PONER EL NOMBRE DE LA PERSONA QUE ESTÁ LOGUEADA Y SU ROL
-  <div class="workspace-identity">
-    <div class="flex">
-      <div class="avatar">
-        <span class="material-symbols-outlined">corporate_fare</span>
-      </div>
-      <div>
-        <h3>Office Admin</h3>
-        <p>Floor 4 - Main Wing</p>
-      </div>
-    </div>
-  </div>
-  -->
 
-  <!-- Main nav -->
   <nav>
-    <a
-      *ngFor="let item of navItems"
-      [routerLink]="item.route"
-      routerLinkActive="router-link-active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
+    <a *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="router-link-active"
+      [routerLinkActiveOptions]="{ exact: true }">
       <span class="material-symbols-outlined">{{ item.icon }}</span>
       <span>{{ item.label }}</span>
     </a>
   </nav>
 
-  <!-- New Booking CTA ESTO YA LO TENEMOS EN HACER RESERVA
-  <div class="cta-section">
-    <button>
-      New Booking
-    </button>
-  </div>
-  -->
 
-  <!-- Bottom nav ESTO PUEDE SER PARA FUTURO
-  <div class="bottom-nav">
-    <a
-      *ngFor="let item of bottomItems"
-      [routerLink]="item.route"
-      routerLinkActive="router-link-active"
-    >
-      <span class="material-symbols-outlined">{{ item.icon }}</span>
-      <span>{{ item.label }}</span>
-    </a>
-  </div>
-  -->
 </aside>

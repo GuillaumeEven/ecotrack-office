@@ -90,12 +90,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSignOutAll(): void {
-    // TODO: llamar al AuthService para revocar todas las sesiones
+
     console.log('Sign out all');
   }
 
   onChangePhoto(): void {
-    // TODO: abrir file picker y llamar al endpoint de upload
+    
     console.log('Change photo');
   }
 }

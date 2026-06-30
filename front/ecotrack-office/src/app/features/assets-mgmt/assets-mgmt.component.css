@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 /* Gestión de Recursos - Estilos */
 
 /* Encabezado de página */
@@ -78,6 +80,7 @@
   color: var(--on-surface-variant);
 } */
 
+>>>>>>> cf57739604ec4df00102189ad837fa521319b90e
 .empty-state {
   text-align: center;
   padding: var(--spacing-lg);

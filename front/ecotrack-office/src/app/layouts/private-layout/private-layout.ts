@@ -13,4 +13,4 @@ import { SidebarComponent } from '@shared/components/sidebar/sidebar.component';
   templateUrl: './private-layout.html',
   styleUrls: ['./private-layout.css'],
 })
-export class PrivateLayout {}
+export class PrivateLayout { }

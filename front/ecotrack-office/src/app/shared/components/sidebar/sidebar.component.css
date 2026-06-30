@@ -24,17 +24,15 @@ aside {
   background-color: var(--surface-container-low);
   border-right: var(--border-width-1) solid var(--border-color);
   z-index: var(--z-sidebar);
-  padding-top: 96px; /* 24 * 4px = 96px, altura del header */
+  padding-top: 96px;
 }
 
-/* Mostrar solo en pantallas lg (1024px) */
 @media (min-width: 1024px) {
   aside {
     display: flex;
   }
 }
 
-/* Main Navigation */
 nav {
   flex: 1;
   overflow-y: scroll;
@@ -61,7 +59,6 @@ nav a:focus-visible {
   outline-offset: -2px;
 }
 
-/* Active Link */
 nav a.router-link-active {
   background-color: var(--secondary-container);
   color: var(--on-secondary-container);
@@ -82,7 +79,6 @@ nav a span:last-child {
   font: var(--font-title-md);
 }
 
-/* Bottom Navigation */
 .bottom-nav {
   border-top: var(--border-width-1) solid var(--border-color);
   padding-top: var(--spacing-md);
@@ -124,7 +120,6 @@ nav a span:last-child {
   font: var(--font-title-md);
 }
 
-/* Workspace Identity (commented section) */
 .workspace-identity {
   padding: 0 var(--spacing-md);
   margin-bottom: var(--spacing-xl);
@@ -161,7 +156,6 @@ nav a span:last-child {
   margin: 0;
 }
 
-/* CTA Button */
 .cta-section {
   padding: 0 var(--spacing-sm);
   margin-bottom: var(--spacing-lg);

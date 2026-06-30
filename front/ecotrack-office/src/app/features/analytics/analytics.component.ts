@@ -86,7 +86,7 @@ export class AnalyticsComponent implements OnInit {
           new Date(b.compiledAt).getTime() - new Date(a.compiledAt).getTime()
         );
 
-        // check if a report for today already exists
+        // Comprobamos de que no hay un report para la fehca de hoy
         this.todayReportExists = this.allReports.some(report => report.compiledAt.startsWith(this.today));
         if (this.todayReportExists) {
           this.todayReport = this.allReports.find(report => report.compiledAt.startsWith(this.today)) || null;
@@ -163,17 +163,17 @@ export class AnalyticsComponent implements OnInit {
 
   compileMetrics(): void {
 
-    // Check if a report for today already exists in this.allReports
+    // Comprueba si existe ya un reporte para hoy en this.allReports
 
     if (this.todayReportExists && this.todayReport) {
-      // Delete the existing report first
+      // Primero borra el report de hoy si existe
       this.analyticsService.delete(this.todayReport.id).subscribe({
         next: () => {
-          // After deletion, create the new report
+          // Después de borrarlo crea uno
           this.analyticsService.generate({ dateReport: this.today }).subscribe({
             next: () => {
               this.notificationService.success(`Informe recreado para ${this.todayReport?.compiledAt}`);
-              this.loadAnalytics(); // Reload to show new data
+              this.loadAnalytics(); // Recargamos para ver el nuevo reporte
             },
             error: (err) => {
               this.notificationService.error('Error al crear el informe después de la eliminación');
@@ -185,11 +185,11 @@ export class AnalyticsComponent implements OnInit {
         }
       });
     } else {
-      // No report for today, just create a new one
+      // Si no hay reporte para la fecha de hoy lo creamos
       this.analyticsService.generate({ dateReport: this.today }).subscribe({
         next: () => {
           this.notificationService.success(`Informe creado para ${this.today}`);
-          this.loadAnalytics(); // Reload to show new data
+          this.loadAnalytics(); // Recargamos para que salga el nuevo reporte
         },
         error: (err) => {
           this.notificationService.error('Error al crear el informe');

@@ -11,7 +11,7 @@ export class IncidentService {
 
   private readonly BASE_URL = `${environment.apiUrl}/incidents`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<IncidentResponse[]> {
     return this.http.get<IncidentResponse[]>(this.BASE_URL);
