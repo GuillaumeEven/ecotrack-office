@@ -1,29 +1,49 @@
-
+/* ============================================================================
+   VARIABLES CSS GLOBALES - KINETIC ENTERPRISE DESIGN SYSTEM
+   ============================================================================
+   Basadas en DESIGN.md - Colores, tipografía y espaciados profesionales
+   para el sistema de gestión de espacios de trabajo.
+   ============================================================================ */
 
 :root {
+  /* ---------- PALETA DE COLORES - KINETIC ENTERPRISE ---------- */
 
-  --primary: #000000;
-  --secondary: #006a61;
-  --secondary-container: #86f2e4;
-  --tertiary-fixed-dim: #adc6ff;
-  --surface: #f8f9ff;
-  --surface-variant: #d3e4fe;
-  --on-surface: #0b1c30;
-  --delete-button: #ffb4ab;
-  --delete-button-hover: #93000a;
-  --warning-section: #ba1a1a1a;
-  --info-section: #dae2fd;
-  --card-bg: #dce9ff;
+  /* Colores usados */
+  --primary: #000000; /* Usado: Botones, enlaces y elementos interactivos */
+  --secondary: #006a61; /* Usado: enlaces hover */
+  --secondary-container: #86f2e4; /* Usado: como secondary surface */
+  --tertiary-fixed-dim: #adc6ff; /* Usado: como tertiary surface */
+  --surface: #f8f9ff; /* Usado: Fondo principal de la aplicación */
+  --surface-container-lowest: #ffffff; /* Usado: Fondo de tarjetas y contenedores */
+  --surface-variant: #d3e4fe; /* Usado: code blocks */
+  --on-surface: #0b1c30; /* Usado: Texto principal y elementos interactivos */
+  --modal-background: #f8f9ff; /* Usado: Fondo de modales y overlays */
+  --delete-button: #ffb4ab; /* Usado: Botón de eliminar y acciones destructivas */
+  --delete-button-hover: #93000a; /* Usado: Hover del botón de eliminar */
+  --warning-section: #ba1a1a1a; /* Usado: Fondo de secciones de advertencia */
+  --info-section: #dae2fd; /* Usado: Fondo de secciones de información */
+  --card-bg: #dce9ff;  /* Usado: Fondo de tarjetas y contenedores */
   --hover: #dce9ff;
 
+  /* Colores Primarios */
   --on-primary: #ffffff;
+  --primary-container: #131b2e;
   --on-primary-container: #7c839b;
+  --inverse-primary: #bec6e0;
+  --primary-fixed: #dae2fd;
+  --primary-fixed-dim: #bec6e0;
+  --on-primary-fixed: #131b2e;
+  --on-primary-fixed-variant: #3f465c;
+
+  /* Colores Secundarios (Energetic Teal) */
   --on-secondary: #ffffff;
   --on-secondary-container: #006f66;
   --secondary-fixed: #89f5e7;
+  --secondary-fixed-dim: #6bd8cb;
   --on-secondary-fixed: #00201d;
   --on-secondary-fixed-variant: #005049;
 
+  /* Colores Terciarios */
   --tertiary: #000000;
   --on-tertiary: #ffffff;
   --tertiary-container: #001a42;
@@ -32,94 +52,50 @@
   --on-tertiary-fixed: #001a42;
   --on-tertiary-fixed-variant: #004395;
 
+  /* Colores de Error (Rojo) */
   --error: #ba1a1a;
   --on-error: #ffffff;
   --error-container: #ffdad6;
   --on-error-container: #93000a;
 
+  /* Superficies y Fondos */
+  --surface-dim: #cbdbf5;
+  --surface-bright: #f8f9ff;
   --surface-container-low: #eff4ff;
   --surface-container: #e5eeff;
   --surface-container-high: #dce9ff;
-
+  --surface-container-highest: #d3e4fe;
+  --inverse-surface: #213145;
+  --inverse-on-surface: #eaf1ff;
   --on-surface-variant: #45464d;
 
+  /* Bordes y Outlines */
   --outline: #76777d;
   --outline-variant: #c6c6cd;
-  --border-color: #c6c6cd;
+  --border-color: #c6c6cd;  /* Alias para componentes */
+  --surface-tint: #565e74;
 
-  --status-available: #10b981;
-  --status-occupied: #f59e0b;
-  --status-reserved: #ef4444;
-  --status-unavailable: #999999;
-  --status-selected: #3b82f6;
+  /* Background */
+  --background: #f8f9ff;
+  --on-background: #0b1c30;
 
+  /* Estados y Funcionales */
+  --status-available: #10b981;      /* Emerald Green - Disponible */
+  --status-occupied: #f59e0b;       /* Amber - Reservado */
+  --status-reserved: #ef4444;       /* Crimson - Mantenimiento */
+  --status-unavailable: #999999;    /* Gris - No disponible */
+  --status-selected: #3b82f6;       /* Cinema Blue - Seleccionado */
+
+  /* Colores Heredados (compatibilidad) */
   --danger: #ba1a1a;
   --warning: #f59e0b;
   --success: #10b981;
 
-
-
-html.dark {
-  --primary: #bec6e0;
-  --on-primary: #131b2e;
-  --secondary: #6bd8cb;
-  --secondary-container: #005049;
-  --tertiary-fixed-dim: #001a42;
-  --surface: #0f1419;
-  --surface-variant: #47484e;
-  --on-surface: #e1e6ff;
-  --info-section: #0f172a;
-  --hover: #25292f;
-
-  --primary: #bec6e0;
-  --on-primary: #131b2e;
-  --on-primary-container: #bec6e0;
-
-  --secondary: #6bd8cb;
-  --on-secondary: #003a35;
-  --secondary-container: #005049;
-  --on-secondary-container: #89f5e7;
-  --secondary-fixed: #89f5e7;
-
-  --on-secondary-fixed: #00201d;
-  --on-secondary-fixed-variant: #005049;
-
-  --tertiary: #adc6ff;
-  --on-tertiary: #001a42;
-  --tertiary-container: #004395;
-  --on-tertiary-container: #001a42;
-  --tertiary-fixed: #d8e2ff;
-  --tertiary-fixed-dim: #001a42;
-  --on-tertiary-fixed: #001a42;
-  --on-tertiary-fixed-variant: #004395;
-
-  --error: #ffb4ab;
-  --on-error: #690005;
-  --error-container: #93000a;
-  --on-error-container: #ffdad6;
-
-  --surface: #0f1419;
-  --surface-container-low: #171c22;
-  --surface-container: #1b2127;
-  --surface-container-high: #25292f;
-  --card-bg: #25292f;
-  --surface-variant: #47484e;
-  --on-surface: #e1e6ff;
-  --on-surface-variant: #c6c6cd;
-
-  --outline: #90909a;
-  --outline-variant: #47484e;
-  --border-color: #47484e;
-  --status-available: #6ee7b7;
-  --status-occupied: #fbbf24;
-  --status-reserved: #f87171;
-  --status-unavailable: #737373;
-  --status-selected: #60a5fa;
-}
-
+  /* ---------- TIPOGRAFÍA - INTER ---------- */
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
 
+  /* Font Sizes */
   --font-size-xs: 11px;
   --font-size-sm: 12px;
   --font-size-base: 14px;
@@ -130,12 +106,19 @@ html.dark {
   --font-size-3xl: 32px;
   --font-size-4xl: 48px;
 
+  /* Font Weights */
+  --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
+  /* Line Heights */
+  --line-height-tight: 1.25;
   --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
 
+  /* Material 3 Typography Scale */
+  --font-display-lg: 700 var(--font-size-4xl) / 56px var(--font-family-base);
   --font-headline-lg: 600 var(--font-size-2xl) / 40px var(--font-family-base);
   --font-headline-md: 600 var(--font-size-2xl) / 32px var(--font-family-base);
   --font-headline-sm: 600 var(--font-size-lg) / 32px var(--font-family-base);
@@ -146,38 +129,153 @@ html.dark {
 
   --font-body-lg: 400 var(--font-size-md) / 24px var(--font-family-base);
   --font-body-md: 400 var(--font-size-base) / 20px var(--font-family-base);
+  --font-body-sm: 400 var(--font-size-sm) / 16px var(--font-family-base);
 
   --font-label-sm: 600 var(--font-size-md) / 16px var(--font-family-base);
   --letter-spacing-label: 0.05em;
 
+  /* ---------- ESPACIADOS - 8px SOFT GRID ---------- */
   --spacing-base: 4px;
   --spacing-xs: 8px;
   --spacing-sm: 16px;
   --spacing-md: 24px;
   --spacing-lg: 32px;
   --spacing-xl: 48px;
+  --spacing-2xl: 64px;
 
+  /* Gutter y contenedor */
   --spacing-gutter: 24px;
   --container-max: 1440px;
 
+  /* ---------- SOMBRAS - TONAL LAYERS & AMBIENT ---------- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08);  /* Level 2 - Interactive hover */
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);          /* Level 3 - Modals */
 
-  --radius-sm: 0.125rem;
-  --radius-md: 0.25rem;
-  --radius-lg: 0.5rem;
-  --radius-full: 9999px;
+  /* ---------- BORDES Y RADIUS ---------- */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;    /* 2px */
+  --radius-md: 0.25rem;     /* 4px - Small components */
+  --radius-lg: 0.5rem;      /* 8px - Cards */
+  --radius-xl: 0.75rem;     /* 12px */
+  --radius-full: 9999px;    /* Pill shapes */
 
   --border-width-1: 1px;
   --border-width-2: 2px;
 
+  /* Z-Index Scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
   --z-sidebar: 400;
+  --z-fixed: 300;
   --z-header: 1000;
   --z-modal: 1100;
+  --z-popover: 1200;
+  --z-tooltip: 1300;
 
+  /* ---------- TRANSITIONS & ANIMATIONS ---------- */
   --transition-fast: 150ms ease-in-out;
   --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- BREAKPOINTS (Mobile-First) ---------- */
+  --breakpoint-sm: 640px;
   --breakpoint-md: 1024px;
+  --breakpoint-lg: 1280px;
+}
+
+/* ---------- MODO OSCURO ---------- */
+html.dark {
+
+  /* Colores usados */
+  --primary: #bec6e0;
+  --on-primary: #131b2e;
+  --secondary: #6bd8cb;
+  --secondary-container: #005049;
+  --tertiary-fixed-dim: #001a42;
+  --surface: #0f1419;
+  --surface-container-lowest: #0a0e13;
+  --surface-variant: #47484e;
+  --on-surface: #e1e6ff;
+  --modal-background: #1b2127;
+  --info-section: #0f172a;
+  --hover: #25292f;
+
+
+  /* Colores Primarios */
+  --primary: #bec6e0;
+  --on-primary: #131b2e;
+  --primary-container: #3f465c;
+  --on-primary-container: #bec6e0;
+  --inverse-primary: #565e74;
+  --primary-fixed: #dae2fd;
+  --primary-fixed-dim: #bec6e0;
+  --on-primary-fixed: #131b2e;
+  --on-primary-fixed-variant: #3f465c;
+
+  /* Colores Secundarios (Energetic Teal) */
+  --secondary: #6bd8cb;
+  --on-secondary: #003a35;
+  --secondary-container: #005049;
+  --on-secondary-container: #89f5e7;
+  --secondary-fixed: #89f5e7;
+  --secondary-fixed-dim: #6bd8cb;
+  --on-secondary-fixed: #00201d;
+  --on-secondary-fixed-variant: #005049;
+
+  /* Colores Terciarios */
+  --tertiary: #adc6ff;
+  --on-tertiary: #001a42;
+  --tertiary-container: #004395;
+  --on-tertiary-container: #001a42;
+  --tertiary-fixed: #d8e2ff;
+  --tertiary-fixed-dim: #001a42;
+  /* --tertiary-fixed-dim: #adc6ff; */
+  --on-tertiary-fixed: #001a42;
+  --on-tertiary-fixed-variant: #004395;
+
+  /* Colores de Error (Rojo) */
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  /* Superficies y Fondos */
+  --surface: #0f1419;
+  --surface-dim: #0f1419;
+  --surface-bright: #3a4146;
+  --surface-container-lowest: #0a0e13;
+  --surface-container-low: #171c22;
+  --surface-container: #1b2127;
+  --surface-container-high: #25292f;
+  --surface-container-highest: #303639;
+  --card-bg: #25292f;
+  --inverse-surface: #e1e6ff;
+  --inverse-on-surface: #213145;
+  --surface-variant: #47484e;
+  --on-surface: #e1e6ff;
+  --on-surface-variant: #c6c6cd;
+
+  /* Bordes y Outlines */
+  --outline: #90909a;
+  --outline-variant: #47484e;
+  --border-color: #47484e;
+  --surface-tint: #bec6e0;
+
+  /* Background */
+  --background: #0f1419;
+  --on-background: #e1e6ff;
+
+  /* Estados y Funcionales */
+  --status-available: #6ee7b7;
+  --status-occupied: #fbbf24;
+  --status-reserved: #f87171;
+  --status-unavailable: #737373;
+  --status-selected: #60a5fa;
 }
