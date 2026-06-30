@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div *ngIf="userRole === 'TECH' || userRole === 'ADMIN'" class="table-column">
+      <div *ngIf="userRole === 'TECHNICIAN' || userRole === 'ADMIN'" class="table-column">
         <div class="card">
           <div class="card-header">
             <span class="material-symbols-outlined icon-variant">build_circle</span>
@@ -119,7 +119,7 @@
                   <td class="actions">
                     <div class="actions-cell">
                       <button
-                        *ngIf="String(item.status) === 'IN_PROGRESS' && (userRole === 'TECH' || userRole === 'ADMIN')"
+                        *ngIf="String(item.status) === 'IN_PROGRESS' && (userRole === 'TECHNICIAN' || userRole === 'ADMIN')"
                         (click)="onResolve(item.id)"
                         class="action-btn"
                         title="Marcar como resuelto"
