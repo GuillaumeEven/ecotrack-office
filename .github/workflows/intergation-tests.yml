@@ -53,24 +53,60 @@ jobs:
           docker compose exec -T mysql mysqladmin ping -u ecotrack_user -pecotrack_password || exit 1
 
           echo "=== Checking Backend health ==="
+          backend_ok=false
           for i in {1..30}; do
             if docker compose exec -T backend curl -f http://localhost:8080/actuator/health 2>/dev/null; then
               echo "Backend is healthy"
+              backend_ok=true
               break
             fi
+
+            backend_state=$(docker compose ps --format json backend | sed -n 's/.*"State":"\([^"]*\)".*/\1/p' | head -1)
+            if [ "$backend_state" = "exited" ] || [ "$backend_state" = "dead" ]; then
+              echo "Backend container is $backend_state, failing fast"
+              docker compose ps
+              docker compose logs backend | tail -200
+              exit 1
+            fi
+
             echo "Attempt $i/30: Backend not ready yet..."
             sleep 2
           done
 
+          if [ "$backend_ok" != "true" ]; then
+            echo "Backend did not become healthy after retries"
+            docker compose ps
+            docker compose logs backend | tail -200
+            exit 1
+          fi
+
           echo "=== Checking Frontend health ==="
+          frontend_ok=false
           for i in {1..30}; do
             if docker compose exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health 2>/dev/null; then
               echo "Frontend is healthy"
+              frontend_ok=true
               break
             fi
+
+            frontend_state=$(docker compose ps --format json frontend | sed -n 's/.*"State":"\([^"]*\)".*/\1/p' | head -1)
+            if [ "$frontend_state" = "exited" ] || [ "$frontend_state" = "dead" ]; then
+              echo "Frontend container is $frontend_state, failing fast"
+              docker compose ps
+              docker compose logs frontend | tail -200
+              exit 1
+            fi
+
             echo "Attempt $i/30: Frontend not ready yet..."
             sleep 2
           done
+
+          if [ "$frontend_ok" != "true" ]; then
+            echo "Frontend did not become healthy after retries"
+            docker compose ps
+            docker compose logs frontend | tail -200
+            exit 1
+          fi
 
       - name: Run API tests
         run: |
