@@ -45,7 +45,7 @@ export class SidebarComponent {
     if (this.role === 'TECHNICIAN') {
       this.navItems = this.navItems.filter(item => item.label !== 'Empleados' && item.label !== 'Empresa');
     } else if (this.role === 'EMPLOYEE') {
-      this.navItems = this.navItems.filter(item => item.label !== 'Gestionar espacio');
+      this.navItems = this.navItems.filter(item => item.label !== 'Gestionar espacio' && item.label !== 'Empleados' && item.label !== 'Empresa');
     }
   }
 }
