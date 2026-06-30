@@ -53,11 +53,11 @@ public class ReservationEntity {
     public ReservationEntity () {}
 
     public ReservationEntity (LocalDate date, ReservationStatus status, UserEntity user, ResourceEntity resource) {
+        
         this.date = date;
         this.status = status;
         this.user = user;
         this.resource = resource;
-        // createdAt is automatically set by @CreationTimestamp on insert
     }
 
     // Getter y Setter

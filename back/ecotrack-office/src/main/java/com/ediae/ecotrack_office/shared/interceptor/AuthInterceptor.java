@@ -18,9 +18,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception {
 
-        String path = request.getRequestURI();
-        String method = request.getMethod();
-
+        
         String userIdHeader = request.getHeader("X-User-Id");
         String userRoleHeader = request.getHeader("X-User-Role");
 
@@ -28,16 +26,16 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (userIdHeader != null && userRoleHeader != null) {
             try {
                 Long id = Long.parseLong(userIdHeader);
-                Role role = Role.valueOf(userRoleHeader); // "ADMIN" → Role.ADMIN
+                Role role = Role.valueOf(userRoleHeader);
                 RequestContext.set(id, role);
             } catch (Exception e) {
                 // Si los headers tienen un formato incorrecto, rechazamos la petición
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                return false; // false = no sigas, no llegues al controller
+                return false;
             }
         }
 
-        return true; // true = todo bien, sigue hacia el controller
+        return true;
     }
 
     // Se ejecuta SIEMPRE al final de la petición, aunque haya fallado
