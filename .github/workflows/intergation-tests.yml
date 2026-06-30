@@ -93,9 +93,26 @@ jobs:
         run: |
           echo "=== Testing Frontend ==="
 
-          # Frontend is serving
+          # Frontend may take a bit longer to boot; retry before failing.
           echo "Testing frontend health endpoint..."
-          docker compose exec -T frontend wget --quiet --tries=1 --spider http://localhost:8080/health || exit 1
+          frontend_ok=false
+          for i in {1..30}; do
+            code=$(docker compose exec -T frontend sh -lc "wget -qO- --server-response http://127.0.0.1:8080/health 2>&1 | awk '/^  HTTP\// {print \$2}' | tail -1" || true)
+            if [ "$code" = "200" ] || [ "$code" = "301" ] || [ "$code" = "302" ]; then
+              echo "Frontend health endpoint reachable with status $code"
+              frontend_ok=true
+              break
+            fi
+            echo "Attempt $i/30: Frontend not ready yet (status: ${code:-N/A})..."
+            sleep 2
+          done
+
+          if [ "$frontend_ok" != "true" ]; then
+            echo "Frontend failed health check after retries"
+            docker compose ps
+            docker compose logs frontend | tail -200
+            exit 1
+          fi
 
           echo "Frontend is responding!"
 
