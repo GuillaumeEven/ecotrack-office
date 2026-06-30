@@ -574,7 +574,7 @@ body {
     font-size: 12px;
     margin-top: 2px;
 }
-
+/*
 .btn-submit-form {
     width: 100%;
     background-color: var(--color-primary);
@@ -596,7 +596,7 @@ body {
     background-color: #cccccc;
     cursor: not-allowed;
     box-shadow: none;
-}
+} */
 
 .form-terms-text {
     font-size: 14px;
