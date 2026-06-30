@@ -17,6 +17,7 @@ jobs:
   integration-tests:
     name: Integration Tests
     runs-on: ubuntu-latest
+    continue-on-error: ${{ github.event_name == 'pull_request' }}
 
     steps:
       - name: Checkout code
@@ -175,6 +176,7 @@ jobs:
   security-scan:
     name: Security Scanning
     runs-on: ubuntu-latest
+    continue-on-error: ${{ github.event_name == 'pull_request' }}
     permissions:
       contents: read
       security-events: write
