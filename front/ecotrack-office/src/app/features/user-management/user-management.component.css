@@ -11,6 +11,10 @@
   margin-bottom: var(--spacing-xl);
 }
 
+.kpi-scroll-responsive {
+  width: 100%;
+}
+
 /* .card {
   background-color: var(--surface-container-lowest);
   border: var(--border-width-1) solid var(--outline-variant);
@@ -49,6 +53,41 @@
   }
   50% {
     opacity: 0.5;
+  }
+}
+
+@media (max-width: 1023px) {
+  .kpi-scroll-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .kpi-grid {
+    min-width: 860px;
+    grid-template-columns: repeat(3, minmax(250px, 1fr));
+  }
+
+  .user-table {
+    min-width: 860px;
+  }
+
+  .pagination-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (min-width: 1024px) {
+  .kpi-grid {
+    min-width: 0;
+  }
+
+  .user-table {
+    min-width: 0;
   }
 }
 

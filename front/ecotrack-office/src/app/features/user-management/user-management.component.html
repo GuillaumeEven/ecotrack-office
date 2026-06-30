@@ -78,27 +78,29 @@
 
   <div class="component-body">
   <!-- KPI Cards -->
-  <div class="kpi-grid">
-    <div class="card">
-      <p class="kpi-label">Total usuarios</p>
-      <div *ngIf="isLoadingStats" class="skeleton"></div>
-      <p *ngIf="!isLoadingStats" class="kpi-value">
-        {{ stats.totalUsers }}
-      </p>
-    </div>
-    <div class="card">
-      <p class="kpi-label">Activos Ahora</p>
-      <div *ngIf="isLoadingStats" class="skeleton"></div>
-      <p *ngIf="!isLoadingStats" class="kpi-value secondary">
-        {{ stats.activeUsers }}
-      </p>
-    </div>
-    <div class="card">
-      <p class="kpi-label">Nuevos este mes</p>
-      <div *ngIf="isLoadingStats" class="skeleton"></div>
-      <p *ngIf="!isLoadingStats" class="kpi-value">
-        +{{ stats.newThisMonth }}
-      </p>
+  <div class="kpi-scroll-responsive">
+    <div class="kpi-grid">
+      <div class="card">
+        <p class="kpi-label">Total usuarios</p>
+        <div *ngIf="isLoadingStats" class="skeleton"></div>
+        <p *ngIf="!isLoadingStats" class="kpi-value">
+          {{ stats.totalUsers }}
+        </p>
+      </div>
+      <div class="card">
+        <p class="kpi-label">Activos Ahora</p>
+        <div *ngIf="isLoadingStats" class="skeleton"></div>
+        <p *ngIf="!isLoadingStats" class="kpi-value secondary">
+          {{ stats.activeUsers }}
+        </p>
+      </div>
+      <div class="card">
+        <p class="kpi-label">Nuevos este mes</p>
+        <div *ngIf="isLoadingStats" class="skeleton"></div>
+        <p *ngIf="!isLoadingStats" class="kpi-value">
+          +{{ stats.newThisMonth }}
+        </p>
+      </div>
     </div>
   </div>
 
@@ -138,7 +140,7 @@
 
     <!-- Table content -->
     <div *ngIf="!isLoading" class="table-responsive">
-    <table>
+    <table class="user-table">
       <thead>
         <tr>
           <th>Nombre</th>
@@ -213,7 +215,7 @@
     <!-- Pagination -->
     <div
       *ngIf="!isLoading && totalElements > 0"
-      class="pagination"
+      class="pagination pagination-scroll"
     >
       <p>
         Mostrando {{ showingFrom }}–{{ showingTo }} de {{ totalElements }}
