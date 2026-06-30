@@ -10,7 +10,7 @@ import {
   OrganizationComponent,
   AssetsMgmtComponent,
   ReservationComponent
- } from './features/index.component'; // Importamos UserProfileComponent desde index.component.ts
+} from './features/index.component';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { PrivateLayout } from './layouts/private-layout/private-layout';
@@ -21,7 +21,7 @@ export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
 
-  // RUTAS PRIVADAS (Toda la sección requiere estar autenticado)
+  // RUTAS PRIVADAS
   {
     path: '',
     component: PrivateLayout,
@@ -47,12 +47,12 @@ export const routes: Routes = [
       {
         path: 'organization',
         component: OrganizationComponent,
-        canActivate: [adminGuard], // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
+        canActivate: [adminGuard], // Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN
       },
       {
         path: 'assets',
         component: AssetsMgmtComponent,
-        canActivate: [adminOrTechGuard] // 🛡️ Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN o TECHNICIAN
+        canActivate: [adminOrTechGuard] // Filtro extra: Además de estar logueado (por el padre), debe ser ADMIN o TECHNICIAN
       },
       {
         path: 'incidents',

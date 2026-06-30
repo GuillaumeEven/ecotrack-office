@@ -15,7 +15,7 @@ export class DeskService {
 
   private readonly BASE_URL = `${environment.apiUrl}/desks`;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   /**
    * Fetch all desks

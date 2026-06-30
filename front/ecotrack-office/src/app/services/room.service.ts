@@ -14,7 +14,7 @@ import { environment } from '@environments/environment';
 export class RoomService {
   private readonly BASE_URL = `${environment.apiUrl}/rooms`;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   /**
    * Fetch all rooms

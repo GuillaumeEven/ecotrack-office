@@ -13,11 +13,9 @@ import { ToastContainerComponent } from '@shared/components/toast-container/toas
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  /**
-   * ThemeService se inyecta para inicializar el tema al arrancar la app
-   */
+
   constructor(
     public authService: AuthService,
     private themeService: ThemeService
-  ) {}
+  ) { }
 }

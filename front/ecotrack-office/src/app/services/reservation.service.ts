@@ -2,7 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { ReservationResponseModel,
+import {
+  ReservationResponseModel,
   ReservationResponseWithNameModel
 } from '@models/reservation.model';
 import { environment } from '@environments/environment';
@@ -16,23 +17,20 @@ export class ReservationService {
 
   private readonly BASE_URL = `${environment.apiUrl}/reservations`;
 
-  // private readonly API_URL = 'http://localhost:8080/api/v1/reservations';
 
-  getReservationsByUser() : Observable<ReservationResponseModel[]> {
+  getReservationsByUser(): Observable<ReservationResponseModel[]> {
 
     return this.http.get<ReservationResponseModel[]>(`${this.BASE_URL}/user`);
   }
 
-  //TODO: CAMBIAR POR LA LLAMADA REAL
 
-  getAllReservations() : Observable<ReservationResponseWithNameModel[]> {
+  getAllReservations(): Observable<ReservationResponseWithNameModel[]> {
 
     return this.http.get<ReservationResponseWithNameModel[]>(`${this.BASE_URL}/all`);
   }
 
   create(userId: number, resourceId: number, date: string): Observable<ReservationResponseModel> {
     const url = this.BASE_URL;
-    // Match the exact payload structure from Postman that works (status CONFIRMED)
     const payload = {
       date,
       status: 'CONFIRMED',

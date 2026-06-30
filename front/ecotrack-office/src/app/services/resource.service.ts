@@ -11,7 +11,7 @@ export class ResourceService {
 
   private readonly BASE_URL = `${environment.apiUrl}/resources`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getResourceById(resourceId: number): Observable<ResourceResponse> {
     return this.http.get<ResourceResponse>(`${this.BASE_URL}/${resourceId}`);

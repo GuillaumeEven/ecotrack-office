@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { UserResponse,
+import {
+  UserResponse,
   UserMeRequest,
   ChangePasswordRequest,
-  CreateUserRequest } from '@models/index.model';
+  CreateUserRequest
+} from '@models/index.model';
 import { environment } from '@environments/environment';
 
 export interface PageResponse<T> {
@@ -32,10 +34,9 @@ export interface UserFilters {
 export class UserService {
   private readonly BASE_URL = `${environment.apiUrl}/users`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  // ─── Endpoints /me ────────────────────────────────────────────────────────
-
+  // ─── Endpoints de usuario ────────────────────────────────────────────────
   getMe(): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${this.BASE_URL}/me`);
   }
@@ -48,7 +49,7 @@ export class UserService {
     return this.http.patch<void>(`${this.BASE_URL}/me/password`, data);
   }
 
-  registerAndAssociate (data: CreateUserRequest): Observable<UserResponse> {
+  registerAndAssociate(data: CreateUserRequest): Observable<UserResponse> {
 
     return this.http.post<UserResponse>(`${this.BASE_URL}/public/create-user`, data);
   }

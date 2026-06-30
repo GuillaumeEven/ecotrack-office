@@ -26,70 +26,67 @@ import jakarta.validation.ConstraintViolationException;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+        private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    /**
-     * Maneja excepciones de negocio (ApplicationException y subclases).
-     */
-    @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<ErrorResponse> handleApplicationException(
-            ApplicationException ex,
-            WebRequest request) {
+        /**
+         * Maneja excepciones de negocio (ApplicationException y subclases).
+         */
+        @ExceptionHandler(ApplicationException.class)
+        public ResponseEntity<ErrorResponse> handleApplicationException(
+                        ApplicationException ex,
+                        WebRequest request) {
 
-        ErrorCode errorCode = ex.getErrorCode();
+                ErrorCode errorCode = ex.getErrorCode();
 
-        log.warn("Excepción de aplicación ({}): {}", errorCode.name(), ex.getMessage(), ex);
+                log.warn("Excepción de aplicación ({}): {}", errorCode.name(), ex.getMessage(), ex);
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                errorCode.getStatus().value(),
-                errorCode.getStatus().getReasonPhrase(),
-                ex.getMessage()
-        );
+                ErrorResponse errorResponse = new ErrorResponse(
+                                errorCode.getStatus().value(),
+                                errorCode.getStatus().getReasonPhrase(),
+                                ex.getMessage());
 
-        return new ResponseEntity<>(errorResponse, errorCode.getStatus());
-    }
+                return new ResponseEntity<>(errorResponse, errorCode.getStatus());
+        }
 
-    /**
-     * Maneja errores de validación en @RequestBody.
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            WebRequest request) {
+        /**
+         * Maneja errores de validación en @RequestBody.
+         */
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
+                        MethodArgumentNotValidException ex,
+                        WebRequest request) {
 
-        ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
+                ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
 
-        log.warn("Error de validación en RequestBody: {}", ex.getMessage());
+                log.warn("Error de validación en RequestBody: {}", ex.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                errorCode.getStatus().value(),
-                errorCode.getStatus().getReasonPhrase(),
-                "Error de validación"
-        );
+                ErrorResponse errorResponse = new ErrorResponse(
+                                errorCode.getStatus().value(),
+                                errorCode.getStatus().getReasonPhrase(),
+                                "Error de validación");
 
-        return new ResponseEntity<>(errorResponse, errorCode.getStatus());
-    }
+                return new ResponseEntity<>(errorResponse, errorCode.getStatus());
+        }
 
-    /**
-     * Maneja errores de validación de parámetros, path variables, etc.
-     */
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleConstraintViolation(
-            ConstraintViolationException ex,
-            WebRequest request) {
+        /**
+         * Maneja errores de validación de parámetros, path variables, etc.
+         */
+        @ExceptionHandler(ConstraintViolationException.class)
+        public ResponseEntity<ErrorResponse> handleConstraintViolation(
+                        ConstraintViolationException ex,
+                        WebRequest request) {
 
-        ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
+                ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
 
-        log.warn("Error de validación (constraint violation) en parámetros: {}", ex.getMessage());
+                log.warn("Error de validación (constraint violation) en parámetros: {}", ex.getMessage());
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                errorCode.getStatus().value(),
-                errorCode.getStatus().getReasonPhrase(),
-                "Error de validación"
-        );
+                ErrorResponse errorResponse = new ErrorResponse(
+                                errorCode.getStatus().value(),
+                                errorCode.getStatus().getReasonPhrase(),
+                                "Error de validación");
 
-        return new ResponseEntity<>(errorResponse, errorCode.getStatus());
-    }
+                return new ResponseEntity<>(errorResponse, errorCode.getStatus());
+        }
 
         /**
          * Maneja errores de conversión de tipo en parámetros (query/path),
@@ -104,13 +101,13 @@ public class GlobalExceptionHandler {
                 String message = "Parámetro '" + ex.getName() + "' inválido";
 
                 log.warn("Error de conversión de parámetro '{}': valor recibido='{}', tipo esperado='{}'",
-                                ex.getName(), ex.getValue(), ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
+                                ex.getName(), ex.getValue(),
+                                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
 
                 ErrorResponse errorResponse = new ErrorResponse(
                                 errorCode.getStatus().value(),
                                 errorCode.getStatus().getReasonPhrase(),
-                                message
-                );
+                                message);
 
                 return new ResponseEntity<>(errorResponse, errorCode.getStatus());
         }
@@ -130,30 +127,28 @@ public class GlobalExceptionHandler {
                 ErrorResponse errorResponse = new ErrorResponse(
                                 errorCode.getStatus().value(),
                                 errorCode.getStatus().getReasonPhrase(),
-                                "Error de validación"
-                );
+                                "Error de validación");
 
                 return new ResponseEntity<>(errorResponse, errorCode.getStatus());
         }
 
-    /**
-     * Maneja excepciones no previstas.
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception ex,
-            WebRequest request) {
+        /**
+         * Maneja excepciones no previstas.
+         */
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ErrorResponse> handleGenericException(
+                        Exception ex,
+                        WebRequest request) {
 
-        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+                ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
 
-        log.error("Excepción no prevista: {}", ex.getMessage(), ex);
+                log.error("Excepción no prevista: {}", ex.getMessage(), ex);
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                errorCode.getStatus().value(),
-                errorCode.getStatus().getReasonPhrase(),
-                "Error interno del servidor"
-        );
+                ErrorResponse errorResponse = new ErrorResponse(
+                                errorCode.getStatus().value(),
+                                errorCode.getStatus().getReasonPhrase(),
+                                "Error interno del servidor");
 
-        return new ResponseEntity<>(errorResponse, errorCode.getStatus());
-    }
+                return new ResponseEntity<>(errorResponse, errorCode.getStatus());
+        }
 }
