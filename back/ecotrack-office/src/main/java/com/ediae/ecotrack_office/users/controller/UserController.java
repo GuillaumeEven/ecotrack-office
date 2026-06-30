@@ -52,15 +52,13 @@ public class UserController {
     
     // ─── Endpoints /me (cualquier usuario autenticado) ───────────────────────
 
-    // GET /api/v1/users/me
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getMe(Authentication auth) {
-        // El JwtFilter ya verificó el token y guardó el userId como principal
+
         Long userId = (Long) auth.getPrincipal();
         return ResponseEntity.ok(userService.getUserById(userId).toResponseDto());
     }
 
-    // PATCH /api/v1/users/me
     @PatchMapping("/me")
     public ResponseEntity<UserResponseDto> updateMe(
             Authentication auth,
@@ -69,7 +67,6 @@ public class UserController {
         return ResponseEntity.ok(userService.updateMe(userId, dto).toResponseDto());
     }
 
-    // PATCH /api/v1/users/me/password
     @PatchMapping("/me/password")
     public ResponseEntity<Void> changePassword(
             Authentication auth,
@@ -81,7 +78,6 @@ public class UserController {
 
     // ─── Endpoints de administración (solo ADMIN) ─────────────────────────────
 
-    // GET /api/v1/users?organizationId=1&page=0&size=10&search=jose&role=ADMIN&isActive=true
     @GetMapping
     public ResponseEntity<PageResponseDto<UserResponseDto>> getUsers(
             Authentication auth,
@@ -96,7 +92,6 @@ public class UserController {
         );
     }
 
-    // GET /api/v1/users/stats?organizationId=1
     @GetMapping("/stats")
     public ResponseEntity<UserStatsDto> getUserStats(
             Authentication auth,
@@ -105,7 +100,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserStats(organizationId));
     }
 
-    // PATCH /api/v1/users/{id}/reactivate
     @PatchMapping("/{id}/reactivate")
     public ResponseEntity<Void> reactivateUser(
             Authentication auth,
@@ -115,7 +109,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // GET /api/v1/users/{id}
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(
             Authentication auth,
@@ -124,7 +117,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id).toResponseDto());
     }
 
-    // POST /api/v1/users
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(
             Authentication auth,
@@ -134,24 +126,16 @@ public class UserController {
                 .body(userService.createUser(dto).toResponseDto());
     }
 
-    // PUT /api/v1/users/{id}
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(
             Authentication auth,
             @PathVariable Long id,
             @Valid @RequestBody UserRequestDto dto) {
-                System.out.println("=== DEBUGEANDO EL PUT ===");
-    System.out.println("¿Auth es nulo?: " + (auth == null));
-    if (auth != null) {
-        System.out.println("Usuario principal: " + auth.getPrincipal());
-        System.out.println("Authorities reales en el PUT: " + auth.getAuthorities());
-    }
-    System.out.println("=========================");
+
         adminGuard.requireAdmin(auth);
         return ResponseEntity.ok(userService.updateUser(id, dto).toResponseDto());
     }
 
-    // PATCH /api/v1/users/{id}/deactivate
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateUser(
             Authentication auth,
@@ -161,7 +145,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE /api/v1/users/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
             Authentication auth,

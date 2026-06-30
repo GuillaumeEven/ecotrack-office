@@ -1,8 +1,5 @@
 package com.ediae.ecotrack_office.shared.exception;
 
-/**
- * Excepción lanzada cuando un recurso no es encontrado.
- */
 public class NotFoundException extends ApplicationException {
 
     public NotFoundException() {

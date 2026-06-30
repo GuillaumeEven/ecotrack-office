@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-// <T> significa que funciona con cualquier tipo: UserResponseDto, ReservationResponseDto...
 public class PageResponseDto<T> {
 
-    private List<T> content;       // los elementos de esta página
-    private int currentPage;       // página actual (empieza en 0)
-    private int totalPages;        // total de páginas
-    private long totalElements;    // total de elementos en toda la base de datos
+    private List<T> content;
+    private int currentPage;
+    private int totalPages;
+    private long totalElements;
 
     // Spring necesita un constructor vacío para poder crear el objeto
     public PageResponseDto() {}

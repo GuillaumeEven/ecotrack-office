@@ -24,56 +24,50 @@ public class AnalyticsController {
 
     private final AnalyticsService analyticsService;
 
-    // Constructor tradicional para inyectar el servicio
     public AnalyticsController(AnalyticsService analyticsService) {
         this.analyticsService = analyticsService;
     }
 
-    // 1. ENDPOINT PARA LISTAR TODOS LOS REPORTES (GET)
     @GetMapping
     public ResponseEntity<List<AnalyticsReportModel>> getAllReports(Authentication auth) {
 
         Long userId = (Long) auth.getPrincipal();
 
         List<AnalyticsReportModel> lista = analyticsService.getAllReports(userId);
-        return ResponseEntity.ok(lista); // Devuelve un 200 OK con la lista
+        return ResponseEntity.ok(lista);
     }
 
-    // 2. ENDPOINT PARA BUSCAR UN REPORTE POR ID (GET)
     @GetMapping("/{id}")
     public ResponseEntity<AnalyticsReportModel> getReportById(@PathVariable Long id) {
         AnalyticsReportModel reporte = analyticsService.getReportById(id);
-        return ResponseEntity.ok(reporte); // Devuelve un 200 OK con el reporte encontrado
+        return ResponseEntity.ok(reporte);
     }
 
-    // 3. ENDPOINT PARA CREAR UN NUEVO REPORTE (POST)
+    // Endpoint para crear un nuevo reporte hardcodeado
     @PostMapping
     public ResponseEntity<AnalyticsReportModel> createReport(@RequestBody AnalyticsReportRequestDto dto) {
         AnalyticsReportModel nuevoReporte = analyticsService.createReport(dto);
-        return ResponseEntity.ok(nuevoReporte); // Devuelve un 200 OK con el reporte creado
+        return ResponseEntity.ok(nuevoReporte);
     }
 
-    // 3. ENDPOINT PARA CREAR UN NUEVO REPORTE (POST)
+    // Endpoint para crear un nuevo reporte según las reservas del día
     @PostMapping("/generate")
     public ResponseEntity<AnalyticsReportModel> generateReport(Authentication auth,@RequestBody AnalyticsReportGenerateDto dto) {
 
-        Long userId = (Long) auth.getPrincipal()
-;
+        Long userId = (Long) auth.getPrincipal();
         AnalyticsReportModel nuevoReporte = analyticsService.generateReport(userId, dto);
-        return ResponseEntity.ok(nuevoReporte); // Devuelve un 200 OK con el reporte creado
+        return ResponseEntity.ok(nuevoReporte);
     }
 
-    // 4. ENDPOINT PARA EDITAR UN REPORTE EXISTENTE (PUT)
     @PutMapping("/{id}")
     public ResponseEntity<AnalyticsReportModel> editReport(@PathVariable Long id, @RequestBody AnalyticsReportRequestDto dto) {
         AnalyticsReportModel reporteEditado = analyticsService.editReport(id, dto);
-        return ResponseEntity.ok(reporteEditado); // Devuelve un 200 OK con los cambios guardados
+        return ResponseEntity.ok(reporteEditado);
     }
 
-    // 5. ENDPOINT PARA ELIMINAR UN REPORTE (DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReport(@PathVariable Long id) {
         analyticsService.deleteReport(id);
-        return ResponseEntity.noContent().build(); // Devuelve un 204 (No Content), que es el estándar para borrados exitosos
+        return ResponseEntity.noContent().build();
     }
 }

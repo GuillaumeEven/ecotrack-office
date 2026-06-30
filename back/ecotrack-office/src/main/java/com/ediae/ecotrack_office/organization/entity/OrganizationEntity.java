@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.ediae.ecotrack_office.users.entity.UserEntity;
+import com.ediae.ecotrack_office.assets.entity.FloorEntity;
+import com.ediae.ecotrack_office.analyticsreport.entity.AnalyticsReportEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,10 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
-
-// import com.ediae.ecotrack_office.floors.model.Floor;
-// import com.ediae.ecotrack_office.analytics.model.AnalyticsReport;
 
 @Entity
 @Table(name = "organizations")
@@ -48,6 +46,12 @@ public class OrganizationEntity {
 
     @OneToMany(mappedBy = "organization")
     private List<UserEntity> users;
+
+    @OneToMany(mappedBy = "organization")
+    private List<AnalyticsReportEntity> analyticsReport;
+
+    @OneToMany(mappedBy = "organization")
+    private List<FloorEntity> floors;
 
     public Long getId() {
         return id;

@@ -4,10 +4,6 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-/**
- * DTO estándar para las respuestas de error de la API.
- * Se devuelve en el cuerpo de toda respuesta de error.
- */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse implements Serializable {
     private static final long serialVersionUID = 1L;

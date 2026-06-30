@@ -28,26 +28,22 @@ public class IncidentController {
         this.incidentService = incidentService;
     }
 
-    // GET: Obtener el listado completo
     @GetMapping
     public ResponseEntity<List<IncidentResponseDto>> getAll(Authentication auth) {
         Long userId = (Long) auth.getPrincipal();
         return ResponseEntity.ok(incidentService.getAllIncidents(userId));
     }
 
-    // POST: Crear una nueva incidencia
     @PostMapping
     public ResponseEntity<IncidentResponseDto> create(@RequestBody IncidentRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(incidentService.createIncident(requestDto));
     }
 
-    // PATCH: Cerrar una incidencia existente
     @PatchMapping("/{id}/resolve")
     public ResponseEntity<IncidentResponseDto> resolve(@PathVariable Long id) {
         return ResponseEntity.ok(incidentService.resolveIncident(id));
     }
 
-    // DELETE: Borrar una incidencia
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         incidentService.deleteIncident(id);

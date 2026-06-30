@@ -44,7 +44,7 @@ public class ResourceEntity {
     private String equipmentList;
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonIgnore // no queremos que se serialice la lista de incidentes al convertir ResourceEntity a JSON, para evitar problemas de recursión infinita
+    @JsonIgnore
     private List<IncidentEntity> incidents = new ArrayList<>();
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE, orphanRemoval = true)
