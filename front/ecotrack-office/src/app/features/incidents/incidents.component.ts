@@ -150,6 +150,8 @@ export class IncidentsComponent implements OnInit {
       this.deskService.listByRoom(roomId).subscribe({
         next: (data) => {
           this.desks = data;
+          this.selectedDeskId = data.length > 0 ? data[0].id : null;
+          this.selectedResourceId = this.selectedDeskId;
           this.cdr.detectChanges();
         },
         error: () => {
