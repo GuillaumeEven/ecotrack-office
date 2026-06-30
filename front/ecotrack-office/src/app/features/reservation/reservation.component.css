@@ -455,7 +455,7 @@
 }
 
 .history-pagination {
-    background-color: var(--surface-container-lowest);
+    background-color: var(--surface);
     padding: 16px 24px;
     display: flex;
     align-items: center;
