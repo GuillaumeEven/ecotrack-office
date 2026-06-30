@@ -25,8 +25,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Copy environment file
-        run: cp .env.dev .env
+      - name: Prepare CI environment file
+        run: |
+          cat > .env << 'EOF'
+          DB_NAME=ecotrack
+          DB_USERNAME=ecotrack_user
+          DB_PASSWORD=ecotrack_password
+          MYSQL_ROOT_PASSWORD=root_password
+          SPRING_PROFILES_ACTIVE=dev
+          JWT_SECRET=0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+          JWT_EXPIRATION=86400000
+          EOF
 
       - name: Build Docker images
         run: |
