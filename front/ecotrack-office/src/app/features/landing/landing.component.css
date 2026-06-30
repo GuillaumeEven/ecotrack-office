@@ -569,7 +569,7 @@ body {
     gap: var(--spacing-md);
 }
 
-.form-group {
+/* .form-group {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -581,8 +581,8 @@ body {
     letter-spacing: 0.05em;
     font-weight: 600;
     color: var(--color-on-surface-variant);
-}
-
+} */
+/*
 .form-input {
     width: 100%;
     background-color: #ffffff;
@@ -596,13 +596,13 @@ body {
 .form-input:focus {
     box-shadow: 0 0 0 2px var(--color-secondary);
     border-color: var(--color-secondary);
-}
+} */
 
 /* Validaciones Reactivas de Angular unificadas */
-input.ng-invalid.ng-touched {
+/* input.ng-invalid.ng-touched {
     border-color: #dc3545;
     background-color: #fff8f8;
-}
+} */
 
 .error-message {
     color: #dc3545;
