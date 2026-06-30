@@ -17,7 +17,7 @@
           </div>
 
           <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
-            <!-- Floor Selection -->
+            <!-- Selección de piso -->
             <div class="form-group">
               <label class="form-label required">PISO</label>
               <select #floorSelect (change)="selectFloor(floorSelect.value)"
@@ -27,7 +27,7 @@
               </select>
             </div>
 
-            <!-- Room Selection -->
+            <!-- Selección de sala -->
             <div class="form-group">
               <label class="form-label required">SALA</label>
               <select #roomSelect (change)="selectRoom(roomSelect.value)"
@@ -37,7 +37,7 @@
               </select>
             </div>
 
-            <!-- Desk Selection (only for desk areas) -->
+            <!-- Selección de escritorio -->
             <div class="form-group" *ngIf="desks.length > 0">
               <label class="form-label required">ESCRITORIO</label>
               <select #deskSelect (change)="selectDesk(deskSelect.value)"

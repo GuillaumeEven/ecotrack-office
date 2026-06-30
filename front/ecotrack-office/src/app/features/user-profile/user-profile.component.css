@@ -8,22 +8,6 @@
    - Utiliza un grid de 12 columnas para layout bento
    ============================================================================ */
 
-/* Header */
-/* .page-header {
-  margin-bottom: var(--spacing-xl);
-}
-
-.page-header h1 {
-  font: var(--font-headline-lg);
-  color: var(--on-surface);
-  margin-bottom: var(--spacing-xs);
-}
-
-.page-header p {
-  color: var(--on-surface-variant);
-  font: var(--font-body-lg);
-} */
-
 /* Bento Grid */
 .bento-grid {
   display: grid;
@@ -62,14 +46,6 @@
     grid-column: span 8;
   }
 }
-
-/* Card */
-/* .card {
-  background-color: var(--surface-container-lowest);
-  border: var(--border-width-1) solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-} */
 
 /* Identity Card */
 .identity-card {
@@ -192,129 +168,6 @@
   color: var(--on-surface-variant);
 }
 
-/* Form Sections */
-/* .form-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: var(--border-width-1) solid var(--border-color);
-}
-
-.section-header h3 {
-  font: var(--font-headline-md);
-  color: var(--on-surface);
-  margin: 0;
-} */
-
-/* Form Grid */
-/* form {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: var(--spacing-md);
-}
-
-@media (min-width: 768px) {
-  form {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-}
-
-.form-group.col-span-full {
-  grid-column: 1 / -1;
-}
-
-label {
-  font-size: var(--font-size-xs);
-  text-transform: uppercase;
-}
-
-.error-text {
-  color: var(--error);
-  font-size: var(--font-size-xs);
-}
-
-.feedback-msg {
-  grid-column: 1 / -1;
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-}
-
-.feedback-msg.success {
-  color: var(--success);
-  background-color: rgba(16, 185, 129, 0.1);
-  border-left: 3px solid var(--success);
-}
-
-.feedback-msg.error {
-  color: var(--error);
-  background-color: rgba(239, 68, 68, 0.1);
-  border-left: 3px solid var(--error);
-} */
-
-/* Form Actions */
-/* .form-actions {
-  grid-column: 1 / -1;
-  padding-top: var(--spacing-md);
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-sm);
-}
-
-button.secondary-btn {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  color: var(--on-surface-variant);
-  border: var(--border-width-1) solid var(--border-color);
-  border-radius: var(--radius-lg);
-  background: transparent;
-  cursor: pointer;
-  font-weight: var(--font-weight-bold);
-  transition: background-color var(--transition-fast);
-}
-
-button.secondary-btn:hover {
-  background-color: var(--surface-container-low);
-}
-
-button.primary-btn {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  background-color: var(--primary);
-  color: var(--on-primary);
-  border: none;
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  font-weight: var(--font-weight-bold);
-  transition: all var(--transition-fast);
-}
-
-button.primary-btn:hover:not(:disabled) {
-  opacity: 0.9;
-}
-
-button.primary-btn:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-button.primary-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-} */
-
 /* Security Section */
 .security-item {
   display: flex;
@@ -365,28 +218,6 @@ button.primary-btn:disabled {
   font: var(--font-body-md);
   color: var(--on-surface-variant);
 }
-/*
-.security-item button {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-weight: var(--font-weight-bold);
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
-}
-
-.security-item button.primary {
-  color: var(--on-tertiary-container);
-}
-
-.security-item button.error {
-  color: var(--error);
-}
-
-.security-item button:hover {
-  background-color: var(--surface-container-high);
-} */
 
 /* Skeleton Loading */
 .skeleton {
@@ -409,39 +240,3 @@ button.primary-btn:disabled {
   width: 160px;
   margin: 0 auto var(--spacing-xs);
 }
-
-/* Responsive */
-/* @media (max-width: 640px) { */
-  /* .profile-container {
-    padding: 0 var(--spacing-md) var(--spacing-lg);
-  } */
-/*
-  .page-header h1 {
-    font: var(--font-title-lg);
-  }
-
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-sm);
-  }
-
-  .form-actions {
-    flex-direction: column-reverse;
-  }
-
-  button.secondary-btn,
-  button.primary-btn {
-    width: 100%;
-  }
-
-  .security-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-md);
-  }
-
-  .security-item button {
-    width: 100%;
-  }
-} */

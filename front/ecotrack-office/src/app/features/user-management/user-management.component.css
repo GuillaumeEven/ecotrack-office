@@ -11,13 +11,6 @@
   margin-bottom: var(--spacing-xl);
 }
 
-/* .card {
-  background-color: var(--surface-container-lowest);
-  border: var(--border-width-1) solid var(--outline-variant);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md);
-} */
-
 .kpi-label {
   font: var(--font-label-sm);
   letter-spacing: var(--letter-spacing-label);
