@@ -517,11 +517,6 @@ export class AssetsMgmtComponent implements OnInit {
 
         this.isLoading = false;
         this.cdr.markForCheck();
-
-        // Auto-select first floor
-        // if (result.floors.length > 0) {
-        //   this.selectedFloorId = result.floors[0].id;
-        // }
       },
       error: (err) => {
         this.errorMessage = 'Error loading data';
@@ -554,6 +549,7 @@ export class AssetsMgmtComponent implements OnInit {
           const deskId = parseInt(key.split('_')[1], 10);
           this.incidentsByDeskId.set(deskId, incidents as any[]);
         });
+        console.log('Loaded incidents for desks:', this.incidentsByDeskId);
         this.cdr.markForCheck();
       },
       error: () => {
@@ -640,8 +636,8 @@ export class AssetsMgmtComponent implements OnInit {
 
   getDeskAvailability(deskId: number): boolean {
     const incidents = this.incidentsByDeskId.get(deskId) || [];
-    console.log(`Desk ID: ${deskId}, Incidents: ${incidents.length}`);
-    return incidents.length === 0; // If there are no incidents, desk is available
+    const hasInProgressIncident = incidents.some((incident) => incident.status === 'IN_PROGRESS');
+    return !hasInProgressIncident; // Desk is unavailable only if an incident is IN_PROGRESS
   }
 
   getRoomAvailability(roomId: number): boolean {
