@@ -51,7 +51,27 @@ EcoTrack Office es un Trabajo Final de Master centrado en optimizar el uso de es
 
 ### Backend local
 
-1. Copia el archivo de ejemplo:
+```
+Frontend   Angular SPA + Angular Material + mapa SVG interactivo
+Backend    Spring Boot REST API (Java)
+Database   MySQL
+Auth       JWT (sin estado, cookies HttpOnly)
+```
+
+## Instalación y desarrollo
+
+### Configurar variables de entorno
+
+Debes tener una base de datos MySQL dedicada al proyecto.
+
+```yml
+# .dockerenv
+DB_USERNAME=yourUsername
+DB_PASSWORD=YourPassword
+DB_URL=jdbc:mysql://localhost:3306/yourDatabaseName
+```
+
+### Back-end
 
 ```bash
 cp back/ecotrack-office/.env.example back/ecotrack-office/.env
