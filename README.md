@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-	<img src="front/ecotrack-office/public/images/dash-dark.webp" alt="EcoTrack dashboard" width="860"/>
+	<img src="front/ecotrack-office/public/images/dash-dark.webp" alt="EcoTrack dashboard" width="480"/>
 </p>
 
 ---
