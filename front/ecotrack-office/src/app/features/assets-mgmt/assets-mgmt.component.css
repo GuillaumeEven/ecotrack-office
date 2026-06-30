@@ -54,7 +54,7 @@
 
 /* Tabla */
 /* .table-container {
-  background-color: var(--surface-container-lowest);
+  background-color: var(--surface);
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-lg);
   overflow: hidden;

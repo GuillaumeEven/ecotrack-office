@@ -48,7 +48,7 @@
 
 /* Sections */
 .section {
-  background-color: var(--surface-container-lowest, #f5f5f5);
+  background-color: var(--surface, #f5f5f5);
   border: 1px solid var(--outline-variant, #ccc);
   border-radius: 12px;
   padding: 1rem;
@@ -420,7 +420,7 @@
 .debug-section {
   margin-top: 1.5rem;
   padding: 1rem;
-  background-color: var(--surface-container-lowest, #f5f5f5);
+  background-color: var(--surface, #f5f5f5);
   border: 1px solid var(--outline-variant, #ccc);
   border-radius: 12px;
 }
