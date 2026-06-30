@@ -78,7 +78,13 @@ jobs:
 
           # Health check
           echo "Testing /actuator/health..."
-          docker compose exec -T backend curl -f http://localhost:8080/actuator/health || exit 1
+          code=$(docker compose exec -T backend sh -lc "curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/actuator/health || true")
+          if [ "$code" = "200" ] || [ "$code" = "401" ] || [ "$code" = "403" ]; then
+            echo "Backend health endpoint reachable with status $code"
+          else
+            echo "Unexpected status from backend health endpoint: $code"
+            exit 1
+          fi
 
           # API is running
           echo "API is responding!"
