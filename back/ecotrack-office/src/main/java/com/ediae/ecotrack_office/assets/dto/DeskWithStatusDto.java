@@ -7,7 +7,7 @@ public class DeskWithStatusDto {
     private DeskResponseDto desk;
     private ResourceStatus calculatedStatus;
     private String reservedBy;
-    private Long reservationId; // ID of the reservation (for cancellation)
+    private Long reservationId;
 
     public DeskWithStatusDto() {
     }

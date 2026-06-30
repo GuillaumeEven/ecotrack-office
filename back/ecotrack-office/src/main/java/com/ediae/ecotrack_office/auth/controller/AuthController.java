@@ -22,8 +22,6 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // POST /api/v1/auth/login
-    // Ruta pública — no requiere autenticación
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto dto) {
         return ResponseEntity.ok(authService.login(dto));

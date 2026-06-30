@@ -11,8 +11,6 @@ import com.ediae.ecotrack_office.organization.model.OrganizationModel;
 @Component
 public class OrganizationMapper {
 
-    // Médoto para pasar de OrganizationEntity a OrganizationModel
-
     public static OrganizationModel fromEntity (OrganizationEntity entity) {
 
         return new OrganizationModel(
@@ -26,8 +24,6 @@ public class OrganizationMapper {
             entity.getCreatedAt()
         );
     }
-
-    // Método para pasar de OrganizationModel a OrganizationEntity
 
     public static OrganizationEntity toEntity (OrganizationModel model) {
         
@@ -43,8 +39,6 @@ public class OrganizationMapper {
         return entity;
     }
 
-    // Método para pasar de OrganizationCreateDto a OrganizationModel
-
     public static OrganizationModel fromCreateDto (OrganizationCreateDto createDto) {
 
         return new OrganizationModel (
@@ -59,8 +53,6 @@ public class OrganizationMapper {
          );
     }
 
-    // Método para pasar de un OrganizationUpdateDto a OrganizationModel
-
     public static OrganizationModel fromUpdateDto (OrganizationUpdateDto updateDto) {
 
         return new OrganizationModel (
@@ -74,8 +66,6 @@ public class OrganizationMapper {
             null
          );
     }
-
-    // Método para pasar de OrganizationModel a OrganizationResponseDto
 
     public static OrganizationResponseDto toResponseDto (OrganizationModel model) {
 

@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class AnalyticsReportMapper {
 
-    // 1. De Entidad a Modelo (Para la lógica interna de la aplicación)
-    // Ahora sí se copian todas las métricas reales para que viajen al frontend
     public AnalyticsReportModel toModel(AnalyticsReportEntity entity) {
         if (entity == null) {
             return null;
@@ -31,7 +29,6 @@ public class AnalyticsReportMapper {
         return model;
     }
 
-    // 2. De RequestDTO a Entidad (Para los POST de creación)
     public AnalyticsReportEntity toEntity(AnalyticsReportRequestDto dto) {
         if (dto == null) {
             return null;
@@ -46,7 +43,6 @@ public class AnalyticsReportMapper {
         return entity;
     }
 
-    // 3. De Modelo a ResponseDTO (Para las respuestas de la API)
     public AnalyticsReportResponseDto toResponseDto(AnalyticsReportEntity entity) {
         if (entity == null) {
             return null;

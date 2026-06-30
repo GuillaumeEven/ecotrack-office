@@ -1,8 +1,5 @@
 package com.ediae.ecotrack_office.organization.dto;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 public class OrganizationUpdateDto {
 
     // Atributos

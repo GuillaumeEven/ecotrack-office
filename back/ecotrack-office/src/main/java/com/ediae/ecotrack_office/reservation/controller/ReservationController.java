@@ -40,8 +40,6 @@ public class ReservationController {
     @Autowired
     private RoleGuard roleGuard;
 
-    // --- ENDPOINTS PARA CUALQUIER USUARIO IDENTIFICADO ---
-
     @GetMapping("/user")
     public ResponseEntity <List <ReservationResponseDto>> getReservationsByUserId (Authentication auth) {
 
@@ -55,19 +53,6 @@ public class ReservationController {
         return ResponseEntity.ok(dtos);
     }
 
-    //TODO: ¿POR QUÉ AQUÍ NO TENEMOS AUTH??
-
-    // @GetMapping("/floor/{id}/date/{date}")
-    // public ResponseEntity <List <ReservationResponseDto>> getReservationsByFloorIdAndDate (@PathVariable Long id, @PathVariable String date) {
-
-    //     List <ReservationModel> models = service.getReservationsByFloorIdAndDate(id, date);
-    //     List <ReservationResponseDto> dtos = new ArrayList <>();
-    //     for (ReservationModel model : models) {
-    //         dtos.add(ReservationMapper.toResponseDto(model));
-    //     }
-    //     return ResponseEntity.ok(dtos);
-    // }
-
     @GetMapping("/{id}")
     public ResponseEntity <ReservationResponseDto> getReservationById (Authentication auth, @PathVariable Long id) {
 
@@ -75,9 +60,8 @@ public class ReservationController {
         return ResponseEntity.ok(ReservationMapper.toResponseDto(model));
     }
 
-    //TODO: ¿AQUÍ TAMBIÉN HARÍA FALTA AUTH NO?
     @PostMapping
-    public ReservationResponseDto createReservation (@RequestBody ReservationCreateDto dto) {
+    public ReservationResponseDto createReservation (Authentication auth, @RequestBody ReservationCreateDto dto) {
 
         System.out.println("Received DTO: " + dto);
         System.out.println("Date: " + dto.getDate() + " Type: " + dto.getDate().getClass());
