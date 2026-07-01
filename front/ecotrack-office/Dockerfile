@@ -29,8 +29,8 @@ WORKDIR /usr/share/nginx/html
 # Copy built app from builder
 COPY --from=builder /build/dist/ecotrack-office/browser .
 
-# Copy Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy Nginx template; official entrypoint will inject env vars at startup
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Create non-root user for security
 RUN addgroup -g 1000 appuser && \
