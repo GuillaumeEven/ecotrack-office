@@ -14,7 +14,7 @@ services:
       - key: MYSQL_USER
         value: ecotrack_user
       - key: MYSQL_PASSWORD
-        value: VerySecret
+        value: Soleil!05
       - key: MYSQL_ROOT_PASSWORD
         value: root_password
     persistentDisk:
@@ -34,9 +34,9 @@ services:
       - key: DB_USERNAME
         value: ecotrack_user
       - key: DB_PASSWORD
-        value: VerySecret
+        value: Soleil!05
       - key: JWT_SECRET
-        value: "REPLACE_WITH_SECURE_SECRET"
+        value: 0bf7375a552cb4b139d6526752b95d25b158dfc6850e5ae31dc8ee6ecd54f8fe
       - key: SPRING_PROFILES_ACTIVE
         value: prod
 
