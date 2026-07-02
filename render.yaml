@@ -1,0 +1,52 @@
+services:
+  - type: managed_postgres # placeholder to satisfy schema; will use docker mysql service below
+    name: placeholder
+
+  - type: docker
+    name: ecotrack-mysql
+    env: docker
+    plan: free
+    branch: render
+    image: mysql:8.0
+    envVars:
+      - key: MYSQL_DATABASE
+        value: ecotrack
+      - key: MYSQL_USER
+        value: ecotrack_user
+      - key: MYSQL_PASSWORD
+        value: VerySecret
+      - key: MYSQL_ROOT_PASSWORD
+        value: root_password
+    persistentDisk:
+      sizeGb: 10
+      mountPath: /var/lib/mysql
+
+  - type: docker
+    name: ecotrack-backend
+    env: docker
+    plan: free
+    branch: render
+    dockerContext: ./back/ecotrack-office
+    dockerfilePath: ./back/ecotrack-office/Dockerfile
+    envVars:
+      - key: DB_URL
+        value: "jdbc:mysql://ecotrack-mysql:3306/ecotrack?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC"
+      - key: DB_USERNAME
+        value: ecotrack_user
+      - key: DB_PASSWORD
+        value: VerySecret
+      - key: JWT_SECRET
+        value: "REPLACE_WITH_SECURE_SECRET"
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+  - type: docker
+    name: ecotrack-frontend
+    env: docker
+    plan: free
+    branch: render
+    dockerContext: ./front/ecotrack-office
+    dockerfilePath: ./front/ecotrack-office/Dockerfile
+    envVars:
+      - key: API_BASE_URL
+        value: "http://ecotrack-backend:8080/api/"
