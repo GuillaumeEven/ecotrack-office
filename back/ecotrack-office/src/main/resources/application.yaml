@@ -19,14 +19,14 @@ spring:
         persistence:
           schema-generation:
             scripts:
-              action: create
-              # action: none
+              # action: create
+              action: none
               create-target: schema.sql
       hibernate:
         format_sql: false
   flyway:
-    # enabled: true
-    enabled: false
+    enabled: true
+    # enabled: false
     locations: classpath:db/migration
     baseline-on-migrate: true
     out-of-order: true
