@@ -40,6 +40,23 @@ for i in 1 2 3; do
   if mysql --connect-timeout=5 -h "${DB_HOST}" -P "${DB_PORT:-3306}" -u "${DB_USERNAME}" -p"${DB_PASSWORD:-}" -e "SELECT 1;" "${DB_NAME:-}" >"$tmpout" 2>&1; then
     echo "Connection OK"
     sed -n '1,200p' "$tmpout" || true
+    # Optionally apply schema.sql if requested
+    if [ "${APPLY_SCHEMA:-false}" = "true" ]; then
+      if [ -f "/schema.sql" ]; then
+        echo "APPLY_SCHEMA=true -> applying /schema.sql against ${DB_HOST}/${DB_NAME}"
+        if mysql -h "${DB_HOST}" -P "${DB_PORT:-3306}" -u "${DB_USERNAME}" -p"${DB_PASSWORD:-}" "${DB_NAME:-}" < /schema.sql >"$tmpout" 2>&1; then
+          echo "Schema applied successfully"
+          sed -n '1,200p' "$tmpout" || true
+        else
+          echo "Schema application failed. Output:"
+          sed -n '1,200p' "$tmpout" || true
+          rm -f "$tmpout"
+          exit 3
+        fi
+      else
+        echo "/schema.sql not found in image"
+      fi
+    fi
     rm -f "$tmpout"
     exit 0
   else
