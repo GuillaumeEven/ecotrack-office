@@ -1,11 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 : "Check required env vars"
-: "DB_HOST, DB_PORT (optional), DB_USER, DB_PASSWORD, DB_NAME"
+: "DB_HOST, DB_PORT (optional), DB_USERNAME, DB_PASSWORD, DB_NAME"
 
 DB_PORT=${DB_PORT:-3306}
 
-echo "Testing DB connection to ${DB_HOST}:${DB_PORT} as ${DB_USER}..."
-
-set -euo pipefail
+echo "Testing DB connection to ${DB_HOST}:${DB_PORT} as ${DB_USERNAME:-<unset>}..."
 
 echo "---- Render DB check: environment ----"
 echo "DB_HOST=${DB_HOST:-<unset>}"
