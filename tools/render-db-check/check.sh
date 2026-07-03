@@ -1,6 +1,3 @@
-#!/bin/sh
-set -e
-
 : "Check required env vars"
 : "DB_HOST, DB_PORT (optional), DB_USER, DB_PASSWORD, DB_NAME"
 
@@ -8,21 +5,35 @@ DB_PORT=${DB_PORT:-3306}
 
 echo "Testing DB connection to ${DB_HOST}:${DB_PORT} as ${DB_USER}..."
 
-# Show outbound public IP (useful to whitelist on remote DB)
+set -euo pipefail
+
+echo "---- Render DB check: environment ----"
+echo "DB_HOST=${DB_HOST:-<unset>}"
+echo "DB_PORT=${DB_PORT:-3306}"
+echo "DB_NAME=${DB_NAME:-<unset>}"
+echo "DB_USERNAME=${DB_USERNAME:-<unset>}"
+echo "DB_URL=${DB_URL:-<unset>}"
+echo "(DB_PASSWORD is hidden)"
+echo "---- end env ----"
+
 echo "Detecting outbound public IP..."
-if command -v curl >/dev/null 2>&1; then
-  curl -s https://ifconfig.me || curl -s https://ifconfig.co || echo "IP lookup failed"
+if ip=$(curl -fsS https://ifconfig.me 2>/dev/null); then
+  echo "$ip"
+elif ip=$(curl -fsS https://ifconfig.co 2>/dev/null); then
+  echo "$ip"
 else
-  echo "curl not available to detect IP"
+  echo "(no public IP detected)"
 fi
 
-# Try a simple query
-if mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p"${DB_PASSWORD}" -e "SELECT 1;" "${DB_NAME}" >/dev/null 2>&1; then
-  echo "Connection OK"
-  exit 0
-else
-  echo "Connection FAILED"
-  # show verbose attempt for logs
-  mysql -h "${DB_HOST}" -P "${DB_PORT}" -u "${DB_USER}" -p"${DB_PASSWORD}" -e "SELECT 1;" "${DB_NAME}" || true
+if [ -z "${DB_HOST:-}" ]; then
+  echo "ERROR: DB_HOST is not set. Aborting."
   exit 2
 fi
+
+echo "Testing mysql connection to ${DB_HOST}:${DB_PORT:-3306} as ${DB_USERNAME:-<unset>}..."
+mysql -h "${DB_HOST}" -P "${DB_PORT:-3306}" -u "${DB_USERNAME}" -p"${DB_PASSWORD:-}" -e "SELECT 1;" "${DB_NAME:-}"
+
+echo "==> Completed"
+exit 0
+
+# Try a simple query
