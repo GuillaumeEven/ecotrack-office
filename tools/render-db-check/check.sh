@@ -32,9 +32,26 @@ if [ -z "${DB_HOST:-}" ]; then
 fi
 
 echo "Testing mysql connection to ${DB_HOST}:${DB_PORT:-3306} as ${DB_USERNAME:-<unset>}..."
-mysql -h "${DB_HOST}" -P "${DB_PORT:-3306}" -u "${DB_USERNAME}" -p"${DB_PASSWORD:-}" -e "SELECT 1;" "${DB_NAME:-}"
 
-echo "==> Completed"
-exit 0
+# Try multiple attempts with short timeout to detect intermittent failures
+tmpout=$(mktemp)
+for i in 1 2 3; do
+  echo "Attempt $i: $(date -u +'%FT%T%z')"
+  if mysql --connect-timeout=5 -h "${DB_HOST}" -P "${DB_PORT:-3306}" -u "${DB_USERNAME}" -p"${DB_PASSWORD:-}" -e "SELECT 1;" "${DB_NAME:-}" >"$tmpout" 2>&1; then
+    echo "Connection OK"
+    sed -n '1,200p' "$tmpout" || true
+    rm -f "$tmpout"
+    exit 0
+  else
+    rc=$?
+    echo "Attempt $i failed (exit $rc). Output:"
+    sed -n '1,200p' "$tmpout" || true
+    # exponential backoff
+    sleep $((i * 2))
+  fi
+done
+echo "All attempts failed"
+rm -f "$tmpout"
+exit 2
 
 # Try a simple query
