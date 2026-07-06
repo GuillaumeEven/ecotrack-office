@@ -2,6 +2,8 @@ services:
   mysql:
     image: mysql:8.0
     container_name: ecotrack-mysql-prod
+    mem_limit: 320m
+    mem_reservation: 160m
     command:
       - --mysqlx=0
       - --innodb-buffer-pool-size=64M
@@ -37,6 +39,8 @@ services:
       context: ./back/ecotrack-office
       dockerfile: Dockerfile
     container_name: ecotrack-backend-prod
+    mem_limit: 420m
+    mem_reservation: 220m
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -47,14 +51,16 @@ services:
       JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
       JAVA_TOOL_OPTIONS: >-
-        -XX:MaxRAMPercentage=60.0
-        -XX:InitialRAMPercentage=20.0
-        -XX:+UseG1GC
-        -XX:MaxGCPauseMillis=200
+        -Xms96m
+        -Xmx192m
+        -XX:MaxMetaspaceSize=96m
+        -XX:MaxDirectMemorySize=32m
+        -XX:+UseSerialGC
         -XX:+HeapDumpOnOutOfMemoryError
         -Djava.security.egd=file:/dev/./urandom
-      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: ${HIKARI_MAX_POOL_SIZE:-8}
-      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: ${HIKARI_MIN_IDLE:-2}
+      SPRING_MAIN_LAZY_INITIALIZATION: "true"
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: ${HIKARI_MAX_POOL_SIZE:-4}
+      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: ${HIKARI_MIN_IDLE:-1}
       SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: ${HIKARI_CONNECTION_TIMEOUT:-30000}
       SPRING_FLYWAY_ENABLED: ${SPRING_FLYWAY_ENABLED:-true}
       MANAGEMENT_HEALTH_DB_ENABLED: "false"
