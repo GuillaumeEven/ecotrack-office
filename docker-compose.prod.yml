@@ -3,13 +3,15 @@ services:
     image: mysql:8.0
     container_name: ecotrack-mysql-prod
     command:
-      - --default-authentication-plugin=mysql_native_password
-      - --innodb-buffer-pool-size=128M
-      - --max-connections=60
-      - --table-open-cache=256
-      - --tmp-table-size=16M
-      - --max-heap-table-size=16M
-      - --thread-cache-size=8
+      - --mysqlx=0
+      - --innodb-buffer-pool-size=64M
+      - --innodb-log-buffer-size=8M
+      - --performance_schema=OFF
+      - --max-connections=30
+      - --table-open-cache=128
+      - --tmp-table-size=8M
+      - --max-heap-table-size=8M
+      - --thread-cache-size=4
       - --skip-name-resolve
     environment:
       MYSQL_DATABASE: ${DB_NAME}
@@ -21,11 +23,11 @@ services:
       - mysql_prod_data:/var/lib/mysql
       - ./back/ecotrack-office/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
-      interval: 15s
-      timeout: 8s
-      retries: 8
-      start_period: 45s
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 12
+      start_period: 90s
     restart: unless-stopped
     networks:
       - ecotrack-prod-network
