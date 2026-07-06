@@ -1,0 +1,73 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ecotrack-mysql-prod
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --innodb-buffer-pool-size=128M
+      - --max-connections=60
+      - --table-open-cache=256
+      - --tmp-table-size=16M
+      - --max-heap-table-size=16M
+      - --thread-cache-size=8
+      - --skip-name-resolve
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_INITDB_SKIP_TZINFO: "yes"
+    volumes:
+      - mysql_prod_data:/var/lib/mysql
+      - ./back/ecotrack-office/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 15s
+      timeout: 8s
+      retries: 8
+      start_period: 45s
+    restart: unless-stopped
+    networks:
+      - ecotrack-prod-network
+
+  backend:
+    build:
+      context: ./back/ecotrack-office
+      dockerfile: Dockerfile
+    container_name: ecotrack-backend-prod
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: jdbc:mysql://mysql:3306/${DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SERVER_PORT: 8080
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      JAVA_TOOL_OPTIONS: >-
+        -XX:MaxRAMPercentage=60.0
+        -XX:InitialRAMPercentage=20.0
+        -XX:+UseG1GC
+        -XX:MaxGCPauseMillis=200
+        -XX:+HeapDumpOnOutOfMemoryError
+        -Djava.security.egd=file:/dev/./urandom
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: ${HIKARI_MAX_POOL_SIZE:-8}
+      SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: ${HIKARI_MIN_IDLE:-2}
+      SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: ${HIKARI_CONNECTION_TIMEOUT:-30000}
+      SPRING_FLYWAY_ENABLED: ${SPRING_FLYWAY_ENABLED:-true}
+    ports:
+      - "${BACKEND_HOST_PORT:-8080}:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - ecotrack-prod-network
+
+networks:
+  ecotrack-prod-network:
+    driver: bridge
+
+volumes:
+  mysql_prod_data:
+    driver: local
