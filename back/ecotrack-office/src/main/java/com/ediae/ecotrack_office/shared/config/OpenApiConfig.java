@@ -66,7 +66,7 @@ public class OpenApiConfig {
                         .description("Ruta de la petición HTTP"))
                 .addProperty("details", new Schema<>()
                         .type("array")
-                        .items(new Schema<>().$ref("FieldError"))
+                        .items(new Schema<>().$ref("#/components/schemas/FieldError"))
                         .description("Detalles de validación (solo en errores de validación)"))
                 .addProperty("traceId", new Schema<>()
                         .type("string")

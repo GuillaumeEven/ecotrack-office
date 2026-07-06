@@ -30,7 +30,7 @@ spring:
     repair-on-migration-script-change: true
 springdoc:
   swagger-ui:
-    path: /index.html
+    path: /swagger-ui/index.html
     operationsSorter: method
 
 jwt:
