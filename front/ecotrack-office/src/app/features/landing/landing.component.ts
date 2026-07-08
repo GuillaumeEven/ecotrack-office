@@ -120,21 +120,10 @@ export class LandingComponent implements OnInit {
     const datosForm = this.registerForm.value;
 
     if (this.pasoActual === 'EMPRESA_NUEVA') {
-      console.log('1. Enviando a API para CREAR empresa:', {
-        name: datosForm.companyName,
-        cif: datosForm.companyCif,
-        address: datosForm.companyAddress,
-        email: datosForm.companyEmail
-      });
+      console.log('1. Enviando a API para CREAR empresa.');
 
       // Aquí iría el subscribe de tu servicio de empresa, y en el éxito ejecutas el del usuario:
-      console.log('2. Empresa creada con éxito. Creando usuario administrador:', {
-        firstName: datosForm.firstName,
-        lastName: datosForm.lastName,
-        email: datosForm.email,
-        passwordHash: datosForm.passwordHash,
-        rol: 'Admin'
-      });
+      console.log('2. Empresa creada con éxito. Creando usuario administrador.');
 
       const payloadOrg: CreateOrganizationRequest = {
 
@@ -152,7 +141,7 @@ export class LandingComponent implements OnInit {
         }),
         switchMap((empresaCreada: OrganizationResponse) => {
 
-          console.log('Empresa creada con éxito:', empresaCreada);
+          console.log('Empresa creada con éxito.');
           const payloadUsr: CreateUserRequest = {
 
             firstName: datosForm.firstName,

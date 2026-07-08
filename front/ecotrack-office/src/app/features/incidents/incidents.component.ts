@@ -56,6 +56,7 @@ export class IncidentsComponent implements OnInit {
     this.initForm();
     this.loadFloors();
     this.loadIncidents();
+    this.cdr.markForCheck();
   }
 
   getUserRole(): void {
